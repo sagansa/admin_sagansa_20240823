@@ -84,29 +84,66 @@ class PaymentReceiptResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    ImageInput::make('image'),
 
                     Radio::make('payment_for')
-                        // ->placeholder('Payment for')
                         ->options([
                             '1' => 'fuel service',
                             '2' => 'daily salary',
                             '3' => 'invoice',
                         ])
                         ->inline()
-                        // ->default(3)
-                        ->hiddenLabel()
-                        // ->inlineLabel(false)
-                        ->reactive(),
-                        // ->afterStateUpdated(function (Get $get, Set $set) {
-                        //     $resource = new PaymentReceiptResource();
-                        //     $resource->calculateTotalAmount($get, $set);
-                        // }),
+                        ->reactive()
+                        ->afterStateUpdated(function ($state, $set) {
+                            if ($state == '1') {
+                                $items = FuelService::where('status', '1')->where('payment_type_id', '1')->get()->map(function ($item) {
+                                    return ['fuel_service_id' => $item->id];
+                                })->toArray();
+                                self::updateInstanceStatusAndCalculateTotalAmount($items, $set, FuelService::class, 'fuel_service_id');
+                            } elseif ($state == '2') {
+                                $items = DailySalary::where('status', '3')->where('payment_type_id', '1')->get()->map(function ($item) {
+                                    return ['daily_salary_id' => $item->id];
+                                })->toArray();
+                                self::updateInstanceStatusAndCalculateTotalAmount($items, $set, DailySalary::class, 'daily_salary_id');
+                            } elseif ($state == '3') {
+                                $items = InvoicePurchase::all()->map(function ($item) {
+                                    return ['invoice_purchase_id' => $item->id];
+                                })->toArray();
+                                self::updateInstanceStatusAndCalculateTotalAmount($items, $set, InvoicePurchase::class, 'invoice_purchase_id');
+                            }
+                        }),
+
+                    Select::make('supplier_id')
+                        ->relationship('supplier', 'name')
+                        ->required()
+
+                ]),
+            ]),
+
+            Section::make()->schema([
+                self::getInvoicePurchasesRepeater()
+                ])
+                ->visible(fn ($get) => $get('payment_for') == '3')
+                ->hidden(fn ($operation) => $operation === 'edit' || $operation === 'view'),
+
+            Section::make()->schema([
+                self::getDailySalariesRepeater()
+                ])
+                ->visible(fn ($get) => $get('payment_for') == '2')
+                ->hidden(fn ($operation) => $operation === 'edit' || $operation === 'view'),
+
+            Section::make()->schema([
+                self::getFuelServicesRepeater()
+                ])
+                ->visible(fn ($get) => $get('payment_for') == '1')
+                ->hidden(fn ($operation) => $operation === 'edit' || $operation === 'view'),
+
+            Section::make()->schema([
+                Grid::make(['default' => 1])->schema([
 
                     TextInput::make('total_amount')
                         ->hiddenLabel()
-                        // ->inline()
-                        // ->readOnly()
+                        ->readOnly()
+                        ->default(0)
                         ->placeholder('Total Amount')
                         ->required()
                         ->numeric()
@@ -119,24 +156,14 @@ class PaymentReceiptResource extends Resource
                         ->numeric()
                         ->placeholder('Transfer Amount'),
 
-                    ImageInput::make('image_adjust'),
+                    ImageInput::make('image_adjust')
+                        ->hidden(fn ($operation) => $operation === 'create'),
 
-                    Notes::make('notes'),
+                    Notes::make('notes')
+                        ->hidden(fn ($operation) => $operation === 'create'),
 
                 ]),
             ]),
-
-            Section::make()->schema([
-                self::getInvoicePurchasesRepeater()
-            ])->visible(fn ($get) => $get('payment_for') == '3'),
-
-            Section::make()->schema([
-                self::getDailySalariesRepeater()
-            ])->visible(fn ($get) => $get('payment_for') == '2'),
-
-            Section::make()->schema([
-                self::getFuelServicesRepeater()
-            ])->visible(fn ($get) => $get('payment_for') == '1'),
         ]);
     }
 
@@ -149,6 +176,8 @@ class PaymentReceiptResource extends Resource
 
                 ImageColumn::make('image_adjust')->visibility('public'),
 
+                TextColumn::make('supplier.name'),
+
                 TextColumn::make('payment_for')
                     ->formatStateUsing(
                         fn(string $state): string => match ($state) {
@@ -156,32 +185,6 @@ class PaymentReceiptResource extends Resource
                             '2' => 'daily salary',
                             '3' => 'invoice purchase',
                     }),
-
-               TextColumn::make('dailySalaryPaymentReceipts')
-                    ->label('Detail Payments')
-                    ->html()
-                    ->formatStateUsing(function (PaymentReceipt $record) {
-                        if ($record->payment_for == 2) {
-                            $dailySalaryPaymentReceipts = $record->dailySalaries()->get();
-                            return implode('<br>', $dailySalaryPaymentReceipts->map(function ($item) {
-                                $amount = number_format($item->amount, 0, ',', '.');
-                                return "{$item->createdBy->name} | {$item->date} | {$item->store->nickname} | Rp {$amount}";
-                            })->toArray());
-                        } elseif ($record->payment_for == 3) {
-                            $invoicePurchasePaymentReceipts = $record->invoicePurchases()->get();
-                            return implode('<br>', $invoicePurchasePaymentReceipts->map(function ($item) {
-                                $amount = number_format($item->amount, 0, ',', '.');
-                                return "{$item->vehicle->license_plate} | {$item->date} | {$item->supplier->name} | Rp {$amount}";
-                            })->toArray());
-                        }elseif ($record->payment_for == 1) {
-                            $fuelServicePaymentReceipts = $record->fuelServices()->get();
-                            return implode('<br>', $fuelServicePaymentReceipts->map(function ($item) {
-                                $amount = number_format($item->amount, 0, ',', '.');
-                                return "{$item->store->nickname} | {$item->date} | {$item->supplier->name} | Rp {$amount}";
-                            })->toArray());
-                        }
-                    })
-                    ->extraAttributes(['class' => 'whitespace-pre-wrap']),
 
                 CurrencyColumn::make('total_amount'),
 
@@ -192,9 +195,9 @@ class PaymentReceiptResource extends Resource
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->visible(fn ($record) => self::getDifference($record) !== 0),
+                    ->visible(fn ($record) => self::calculateDifference($record) !== 0),
                 Tables\Actions\ViewAction::make()
-                    ->visible(fn ($record) => self::getDifference($record) === 0),
+                    ->visible(fn ($record) => self::calculateDifference($record) === 0),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -207,9 +210,9 @@ class PaymentReceiptResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // RelationManagers\FuelServicesRelationManager::class,
-            // RelationManagers\DailySalariesRelationManager::class,
-            // RelationManagers\InvoicePurchasesRelationManager::class,
+            RelationManagers\FuelServicesRelationManager::class,
+            RelationManagers\DailySalariesRelationManager::class,
+            RelationManagers\InvoicePurchasesRelationManager::class,
         ];
     }
 
@@ -274,60 +277,68 @@ class PaymentReceiptResource extends Resource
                     ->options($options),
             ])
             ->afterStateUpdated(function ($state, $set) {
-                $totalAmount = 0;
-                foreach ($state as $item) {
-                    $dailySalary = DailySalary::find($item['daily_salary_id']);
-                    if ($dailySalary) {
-                        $totalAmount += $dailySalary->amount;
-                        // Update the status of the DailySalary to 2
-                        $dailySalary->status = 2;
-                        $dailySalary->save();
-                    }
-                }
-                $set('total_amount', $totalAmount);
+                self::updateInstanceStatusAndCalculateTotalAmount($state, $set, DailySalary::class, 'daily_salary_id');
             });
-            // ->afterStateUpdated(function (Get $get, Set $set) {
-            //     self::calculateTotalAmount($get, $set);
-            // });
-
     }
 
     public static function getFuelServicesRepeater(): Repeater
     {
-        $fuelServices = FuelService::all()
-            ->map(function ($item) {
-                return [
-                    'fuel_service_id' => $item->id,
-                    'amount' => $item->amount,
-                ];
-            })->toArray();
+        $options = FuelService::where('status', '1')
+            ->where('payment_type_id', '1')
+            ->get()
+            ->mapWithKeys(function ($fuelService) {
+                return [$fuelService->id => $fuelService->fuel_service_name];
+            })->all();
 
-        return Repeater::make('fuelServices')
-            ->label('')
-            ->default($fuelServices)
-            ->relationship('fuelServices')
+        return TableRepeater::make('fuelServicePaymentReceipts')
+            ->hiddenLabel()
+            ->relationship()
             ->schema([
                 Select::make('fuel_service_id')
+                    ->label('Fuel Service')
                     ->native(false)
-                    ->options(FuelService::pluck('fuel_service', 'id')),
-                TextInput::make('amount')
-            ]);
+                    ->required()
+                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                    ->options($options),
+            ])
+            ->afterStateUpdated(function ($state, $set) {
+                self::updateInstanceStatusAndCalculateTotalAmount($state, $set, FuelService::class, 'fuel_service_id');
+            });
     }
 
-    protected static function calculateTotalAmount($state, $set)
+    public static function calculateDifference($record)
+    {
+        return $record->total_amount - $record->transfer_amount;
+    }
+
+
+    protected static function calculateTotalAmount($state, $model, $field)
     {
         $totalAmount = 0;
         foreach ($state as $item) {
-            $dailySalary = DailySalary::find($item['daily_salary_id']);
-            if ($dailySalary) {
-                $totalAmount += $dailySalary->amount;
+            $instance = $model::find($item[$field]);
+            if ($instance) {
+                $totalAmount += $instance->amount;
+                // Update the status of the instance to 2
+                $instance->status = 2;
+                $instance->save();
+            }
+        }
+        return $totalAmount;
+    }
+
+    protected static function updateInstanceStatusAndCalculateTotalAmount($items, $set, $model, $field)
+    {
+        $totalAmount = 0;
+        foreach ($items as $item) {
+            $instance = $model::find($item[$field]);
+            if ($instance) {
+                $totalAmount += $instance->amount;
+                // Update the status of the instance to 2
+                $instance->status = 2;
+                $instance->save();
             }
         }
         $set('total_amount', $totalAmount);
     }
-
-    public static function getDifference($record)
-    {
-        return $record->total_amount - $record->transfer_amount;
-    }
-    }
+}

@@ -45,4 +45,9 @@ class FuelService extends Model
     {
         return $this->belongsTo(User::class, 'approved_by_id');
     }
+
+    public function getFuelServiceNameAttribute()
+    {
+        return $this->vehicle->no_register . ' | ' . $this->amount . ' | ' . $this->created_at . ' | ' . $this->createdBy->name;
+    }
 }

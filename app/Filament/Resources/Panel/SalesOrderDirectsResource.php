@@ -24,6 +24,8 @@ use App\Models\DeliveryAddress;
 use App\Models\TransferToAccount;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Placeholder;
+use Illuminate\Support\HtmlString;
 
 class SalesOrderDirectsResource extends Resource
 {
@@ -208,6 +210,10 @@ class SalesOrderDirectsResource extends Resource
                 ->preload()
                 ->native(false),
 
+            Placeholder::make('delivery_address')
+                ->hidden(fn ($operation) => $operation === 'create')
+                ->content(fn (SalesOrderDirect $record): string => $record->deliveryAddress->delivery_address_name),
+
             Select::make('delivery_address_id')
                 ->label('Delivery Address')
                 ->required()
@@ -225,10 +231,9 @@ class SalesOrderDirectsResource extends Resource
                 )
                 ->getOptionLabelFromRecordUsing(fn (DeliveryAddress $record) => "{$record->delivery_address_name}")
                 ->searchable()
+                ->hidden(fn () => !Auth::user()->hasRole('customer'))
                 ->disabled(fn (SalesOrderDirect $salesOrderDirect) =>
-                    Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2
-                    || Auth::user()->hasRole('admin')
-                    || Auth::user()->hasRole('storage-staff'))
+                    Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2)
                 ->preload()
                 ->native(false)
                 ->createOptionForm(
@@ -265,32 +270,29 @@ class SalesOrderDirectsResource extends Resource
                     '2' => 'valid',
                 ]),
 
-            Select::make('delivery_status')
+            Placeholder::make('delivery_status')
                 ->hidden(fn ($operation) => $operation === 'create')
-                ->disabled(fn () => Auth::user()->hasRole('customer') || Auth::user()->hasRole('admin'))
+                ->label('Delivery Status')
+                ->content(fn (SalesOrderDirect $record): HtmlString => new HtmlString(match ($record->delivery_status) {
+                    1 => '<span class="badge badge-warning">belum dikirim</span>',
+                    3 => '<span class="badge badge-success">sudah dikirim</span>',
+                    4 => '<span class="badge badge-info">siap dikirim</span>',
+                    5 => '<span class="badge badge-danger">perbaiki</span>',
+                    6 => '<span class="badge badge-secondary">dikembalikan</span>',
+                    // default => '<span class="badge badge-dark">unknown</span>',
+                })),
+
+            Select::make('delivery_status')
+                ->hidden(fn ($operation) => $operation === 'create' || !Auth::user()->hasRole('storage-staff'))
                 ->required()
-                ->live()
                 ->native(false)
-
-                ->options(
-                    Auth::user()->hasRole('admin') ? [
-                        '1' => 'belum dikirim',
-                        '2' => 'valid',
-                        '3' => 'sudah dikirim',
-                        '4' => 'siap dikirim',
-                        '5' => 'perbaiki',
-                        '6' => 'dikembalikan'
-                        ] : (
-                    Auth::user()->hasRole('storage-staff') ? [
-                        '1' => 'belum dikirim',
-                        '3' => 'sudah dikirim',
-                        '4' => 'siap dikirim',
-                        '5' => 'perbaiki',
-                        '6' => 'dikembalikan'
-                        ] : [
-
-                        ]
-                    )
+                ->options([
+                    '1' => 'belum dikirim',
+                    '3' => 'sudah dikirim',
+                    '4' => 'siap dikirim',
+                    '5' => 'perbaiki',
+                    '6' => 'dikembalikan'
+                    ]
                 ),
 
             FileUpload::make('image_delivery')

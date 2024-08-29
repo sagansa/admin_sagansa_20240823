@@ -16,13 +16,13 @@ class EditPermitEmployee extends EditRecord
         return [Actions\DeleteAction::make()];
     }
 
-    protected function mutateFormDataBeforeSave(array $data): array
-    {
-        if (Auth::user()->hasRole('admin')) {
-            $data['assigned_by_id'] = Auth::id();
-        }
+    // protected function mutateFormDataBeforeSave(array $data): array
+    // {
+    //     if (Auth::user()->hasRole('admin')) {
+    //         $data['assigned_by_id'] = Auth::id();
+    //     }
 
-        return $data;
-    }
+    //     return $data;
+    // }
 
 }

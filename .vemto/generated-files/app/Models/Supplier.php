@@ -9,7 +9,18 @@ class Supplier extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'address',
+        'province_id',
+        'district_id',
+        'bank_id',
+        'bank_account_name',
+        'bank_account_no',
+        'status',
+        'image',
+        'user_id',
+    ];
 
     public function province()
     {

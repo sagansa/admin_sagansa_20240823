@@ -18,6 +18,7 @@ use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\DailySalaryResource\Pages;
+use App\Filament\Tables\DailySalaryTable;
 use App\Models\PaymentType;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -89,23 +90,9 @@ class DailySalaryResource extends Resource
     {
         return $table
             ->poll('60s')
-            ->columns([
-                TextColumn::make('createdBy.name')
-                    ->label('For'),
-
-                TextColumn::make('store.name'),
-
-                TextColumn::make('shiftStore.name'),
-
-                TextColumn::make('date'),
-
-                CurrencyColumn::make('amount'),
-
-                PaymentStatusColumn::make('status'),
-
-                TextColumn::make('paymentType.name'),
-
-            ])
+            ->columns(
+                DailySalaryTable::schema()
+            )
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make()->visible(fn ($record) => auth()->user()->can('update', $record)),

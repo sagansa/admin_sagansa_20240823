@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\PaymentStatusColumn;
+use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\PaymentStatusSelectInput;
@@ -28,6 +29,8 @@ use App\Filament\Resources\Panel\FuelServiceResource\RelationManagers;
 use App\Models\PaymentType;
 use App\Models\Supplier;
 use App\Models\Vehicle;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Radio;
 use Illuminate\Support\Facades\Auth;
 
 class FuelServiceResource extends Resource
@@ -63,30 +66,17 @@ class FuelServiceResource extends Resource
 
                     ImageInput::make('image'),
 
-                    Select::make('fuel_service')
-                        ->placeholder('Fuel/Service')
+                    DateInput::make('date')
+                        ->required(),
+
+                    Radio::make('fuel_service')
+                        ->inline()
                         ->hiddenLabel()
                         ->required()
-                        ->searchable()
-                        ->preload()
-                        ->native(false)
                         ->options([
                             '1' => 'fuel',
                             '2' => 'service',
                         ]),
-
-                    Select::make('supplier_id')
-                        ->required()
-                        ->placeholder('Supplier')
-                        ->hiddenLabel()
-                        ->relationship(
-                            name: 'supplier',
-                            modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', '3'),
-                        )
-                        ->getOptionLabelFromRecordUsing(fn (Supplier $record) => "{$record->name}")
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
 
                     Select::make('vehicle_id')
                         ->required()
@@ -101,6 +91,18 @@ class FuelServiceResource extends Resource
                         ->preload()
                         ->native(false),
 
+                    Select::make('supplier_id')
+                        ->required()
+                        ->placeholder('Supplier')
+                        ->hiddenLabel()
+                        ->relationship(
+                            name: 'supplier',
+                            modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', '3'),
+                        )
+                        ->getOptionLabelFromRecordUsing(fn (Supplier $record) => "{$record->name}")
+                        ->searchable()
+                        ->native(false),
+
                     Select::make('payment_type_id')
                         ->required()
                         ->placeholder('Payment Type')
@@ -110,19 +112,21 @@ class FuelServiceResource extends Resource
                             modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
                         )
                         ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
-                        ->searchable()
+                        // ->searchable()
                         ->preload()
                         ->native(false),
 
                     TextInput::make('km')
                         ->placeholder('km')
                         ->hiddenLabel()
+                        ->suffix('km')
                         ->required()
                         ->numeric(),
 
                     TextInput::make('liter')
                         ->placeholder('liter')
                         ->hiddenLabel()
+                        ->suffix('liter')
                         ->nullable()
                         ->numeric(),
 
@@ -164,6 +168,8 @@ class FuelServiceResource extends Resource
 
                 TextColumn::make('supplier.name'),
 
+                TextColumn::make('date'),
+
                 TextColumn::make('vehicle.no_register'),
 
                 TextColumn::make('paymentType.name'),
@@ -189,7 +195,7 @@ class FuelServiceResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('id', 'desc');
+            ->defaultSort('date', 'desc');
     }
 
     public static function getRelations(): array

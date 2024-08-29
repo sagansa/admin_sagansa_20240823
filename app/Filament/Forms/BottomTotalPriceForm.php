@@ -5,6 +5,7 @@ namespace App\Filament\Forms;
 use App\Models\SalesOrderOnline;
 use Filament\Forms\Components\{RichEditor, TextInput};
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 class BottomTotalPriceForm
 {
@@ -18,7 +19,6 @@ class BottomTotalPriceForm
                 ->default(0)
                 ->minValue(0)
                 ->prefix('Rp ')
-                ->visible(fn () => request()->routeIs('sales-order-direct*'))
                 ->reactive(),
 
             TextInput::make('total_price')

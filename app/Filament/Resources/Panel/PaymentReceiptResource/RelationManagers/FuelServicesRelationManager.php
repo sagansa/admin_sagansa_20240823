@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
 
+use App\Filament\Columns\CurrencyColumn;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -23,96 +24,96 @@ class FuelServicesRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'image';
 
-    public function form(Form $form): Form
-    {
-        return $form->schema([
-            Grid::make(['default' => 1])->schema([
-                Select::make('supplier_id')
-                    ->required()
-                    ->relationship('supplier', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->native(false),
+    // public function form(Form $form): Form
+    // {
+    //     return $form->schema([
+    //         Grid::make(['default' => 1])->schema([
+    //             Select::make('supplier_id')
+    //                 ->required()
+    //                 ->relationship('supplier', 'name')
+    //                 ->searchable()
+    //                 ->preload()
+    //                 ->native(false),
 
-                Select::make('vehicle_id')
-                    ->required()
-                    ->relationship('vehicle', 'image')
-                    ->searchable()
-                    ->preload()
-                    ->native(false),
+    //             Select::make('vehicle_id')
+    //                 ->required()
+    //                 ->relationship('vehicle', 'no_register')
+    //                 ->searchable()
+    //                 ->preload()
+    //                 ->native(false),
 
-                Select::make('payment_type_id')
-                    ->required()
-                    ->relationship('paymentType', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->native(false),
+    //             Select::make('payment_type_id')
+    //                 ->required()
+    //                 ->relationship('paymentType', 'name')
+    //                 ->searchable()
+    //                 ->preload()
+    //                 ->native(false),
 
-                FileUpload::make('image')
-                    ->rules(['image'])
-                    ->nullable()
-                    ->maxSize(1024)
-                    ->image()
-                    ->imageEditor()
-                    ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+    //             FileUpload::make('image')
+    //                 ->rules(['image'])
+    //                 ->nullable()
+    //                 ->maxSize(1024)
+    //                 ->image()
+    //                 ->imageEditor()
+    //                 ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
 
-                TextInput::make('km')
-                    ->required()
-                    ->numeric()
-                    ->step(1),
+    //             TextInput::make('km')
+    //                 ->required()
+    //                 ->numeric()
+    //                 ->step(1),
 
-                TextInput::make('liter')
-                    ->nullable()
-                    ->numeric()
-                    ->step(1),
+    //             TextInput::make('liter')
+    //                 ->nullable()
+    //                 ->numeric()
+    //                 ->step(1),
 
-                TextInput::make('amount')
-                    ->required()
-                    ->numeric()
-                    ->step(1),
+    //             TextInput::make('amount')
+    //                 ->required()
+    //                 ->numeric()
+    //                 ->step(1),
 
-                RichEditor::make('notes')
-                    ->nullable()
-                    ->string()
-                    ->fileAttachmentsVisibility('public'),
+    //             RichEditor::make('notes')
+    //                 ->nullable()
+    //                 ->string()
+    //                 ->fileAttachmentsVisibility('public'),
 
-                Select::make('created_by_id')
-                    ->required()
-                    ->searchable()
-                    ->preload()
-                    ->native(false),
+    //             Select::make('created_by_id')
+    //                 ->required()
+    //                 ->searchable()
+    //                 ->preload()
+    //                 ->native(false),
 
-                Select::make('approved_by_id')
-                    ->required()
-                    ->relationship('createdBy', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->native(false),
+    //             Select::make('approved_by_id')
+    //                 ->required()
+    //                 ->relationship('createdBy', 'name')
+    //                 ->searchable()
+    //                 ->preload()
+    //                 ->native(false),
 
-                Select::make('fuel_service')
-                    ->required()
-                    ->searchable()
-                    ->preload()
-                    ->native(false)
-                    ->options([
-                        '1' => 'fuel',
-                        '2' => 'service',
-                    ]),
+    //             Select::make('fuel_service')
+    //                 ->required()
+    //                 ->searchable()
+    //                 ->preload()
+    //                 ->native(false)
+    //                 ->options([
+    //                     '1' => 'fuel',
+    //                     '2' => 'service',
+    //                 ]),
 
-                Select::make('status')
-                    ->required()
-                    ->searchable()
-                    ->preload()
-                    ->native(false)
-                    ->options([
-                        '1' => 'belum diperiksa',
-                        '2' => 'valid',
-                        '3' => 'perbaiki ',
-                        '4' => 'periksa ulang',
-                    ]),
-            ]),
-        ]);
-    }
+    //             Select::make('status')
+    //                 ->required()
+    //                 ->searchable()
+    //                 ->preload()
+    //                 ->native(false)
+    //                 ->options([
+    //                     '1' => 'belum diperiksa',
+    //                     '2' => 'valid',
+    //                     '3' => 'perbaiki ',
+    //                     '4' => 'periksa ulang',
+    //                 ]),
+    //         ]),
+    //     ]);
+    // }
 
     public function table(Table $table): Table
     {
@@ -120,25 +121,22 @@ class FuelServicesRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('supplier.name'),
 
-                TextColumn::make('vehicle.image'),
-
-                TextColumn::make('paymentType.name'),
-
-                ImageColumn::make('image')->visibility('public'),
+                TextColumn::make('vehicle.no_register'),
 
                 TextColumn::make('km'),
 
                 TextColumn::make('liter'),
 
-                TextColumn::make('amount'),
-
-                TextColumn::make('notes')->limit(255),
-
-                TextColumn::make('created_by_id'),
+                CurrencyColumn::make('amount'),
 
                 TextColumn::make('createdBy.name'),
 
-                TextColumn::make('fuel_service'),
+                TextColumn::make('fuel_service')
+                    ->formatStateUsing(
+                        fn(string $state): string => match ($state) {
+                            '1' => 'fuel',
+                            '2' => 'service',
+                        }),
 
                 TextColumn::make('status'),
             ])

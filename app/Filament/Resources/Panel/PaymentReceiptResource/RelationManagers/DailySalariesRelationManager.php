@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
 
+use App\Filament\Tables\DailySalaryTable;
 use App\Filament\Forms\StatusInput;
 use Filament\Forms;
 use Filament\Tables;
@@ -83,21 +84,10 @@ class DailySalariesRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->columns([
-                TextColumn::make('store.name'),
 
-                TextColumn::make('shiftStore.name'),
-
-                TextColumn::make('date'),
-
-                TextColumn::make('amount'),
-
-                TextColumn::make('paymentType.name'),
-
-                TextColumn::make('status'),
-
-                TextColumn::make('createdBy.name'),
-            ])
+            ->columns(
+                DailySalaryTable::schema()
+            )
 
             ->filters([])
             ->headerActions([
