@@ -1,0 +1,311 @@
+<?php
+
+namespace App\Filament\Resources\Panel;
+
+use App\Filament\Columns\DeliveryStatusColumn;
+use App\Filament\Columns\StatusColumn;
+use App\Filament\Forms\BottomTotalPriceForm;
+use App\Filament\Forms\DeliveryAddressForm;
+use App\Filament\Resources\Panel\SalesOrderDirectsResource\Pages;
+use App\Models\SalesOrderDirect;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
+use App\Filament\Forms\SalesProductForm;
+use App\Models\DeliveryAddress;
+use App\Models\TransferToAccount;
+use Filament\Tables\Columns\Summarizers\Sum;
+use Illuminate\Database\Eloquent\Builder;
+
+class SalesOrderDirectsResource extends Resource
+{
+    protected static ?string $model = SalesOrderDirect::class;
+
+    protected static ?string $navigationGroup = 'Sales Transaction';
+
+    protected static ?string $pluralLabel = 'Order';
+
+    protected static ?int $navigationSort = 1;
+
+    public static function form(Form $form): Form
+    {
+        return $form->schema([
+
+            Section::make()
+                ->schema(static::getDetailsFormHeadSchema())
+                ->columns(2),
+
+            Section::make('Detail Order')->schema([
+                SalesProductForm::getItemsRepeater()
+            ]),
+            // ->disabled(fn (SalesOrderDirect $record) => $record->payment_status === 2),
+
+            Section::make()
+                 ->schema(BottomTotalPriceForm::schema())
+            ])
+        ->disabled(fn (?SalesOrderDirect $record) => $record !== null && $record->payment_status == 2 && $record->delivery_status == 2);
+    }
+
+    public static function table(Table $table): Table
+    {
+        $query = SalesOrderDirect::query();
+
+        if (Auth::user()->hasRole('customer')) {
+            $query->where('ordered_by_id', Auth::id());
+        } elseif (Auth::user()->hasRole('storage-staff')) {
+            $query->where('payment_status', 2);
+        }
+
+        $query->where('for', 1);
+
+        return $table
+            ->query($query)
+            ->columns([
+
+                TextColumn::make('image_payment')
+                    ->label('Payment'),
+
+                TextColumn::make('image_delivery')
+                    ->label('delivery'),
+
+                TextColumn::make('delivery_date')
+                    ->label('Date'),
+
+                TextColumn::make('deliveryService.name'),
+
+                TextColumn::make('deliveryAddress.name'),
+
+                TextColumn::make('transferToAccount.name'),
+
+                StatusColumn::make('payment_status'),
+
+                DeliveryStatusColumn::make('delivery_status'),
+
+                TextColumn::make('shipping_cost')
+                    ->label('Shipping Cost')
+                    ->formatStateUsing(fn (SalesOrderDirect $record) => 'Rp ' . number_format($record->shipping_cost, 0, ',', '.'))
+                    ->summarize(Sum::make()
+                        ->numeric(
+                            thousandsSeparator: '.'
+                        )
+                        ->label('')
+                        ->prefix('Rp ')),
+
+                TextColumn::make('total_price')
+                    ->visible(fn ($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('customer'))
+                    ->label('Total Price')
+                    ->formatStateUsing(fn (SalesOrderDirect $record) => 'Rp ' . number_format($record->total_price, 0, ',', '.'))
+                    ->summarize(Sum::make()
+                        ->numeric(
+                            thousandsSeparator: '.'
+                        )
+                        ->label('')
+                        ->prefix('Rp ')),
+
+                TextColumn::make('receipt_no'),
+
+                TextColumn::make('orderedBy.name')
+                    ->visible(fn () => Auth::user()->hasRole('admin') || Auth::user()->hasRole('storage-staff')),
+
+                TextColumn::make('assignedBy.name')
+                    ->visible(fn () => Auth::user()->hasRole('admin')),
+
+
+            ])
+            ->filters([
+                //
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ])
+            ->defaultSort('delivery_date', 'desc');;
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            // ProductsRelationManager::class,
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListSalesOrderDirects::route('/'),
+            'create' => Pages\CreateSalesOrderDirects::route('/create'),
+            'edit' => Pages\EditSalesOrderDirects::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getDetailsFormHeadSchema(): array
+    {
+        $options = [
+            '1' => 'belum dikirim',
+            '3' => 'sudah dikirim',
+            '4' => 'siap dikirim',
+            '5' => 'perbaiki',
+            '6' => 'dikembalikan'
+        ];
+
+        if (Auth::user()->hasRole('admin')) {
+            $options['2'] = 'valid';
+        }
+
+        return [
+            FileUpload::make('image_payment') // user
+                ->label('Payment')
+                ->disabled(fn (SalesOrderDirect $salesOrderDirect) =>
+                    Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2
+                    || Auth::user()->hasRole('admin')
+                    || Auth::user()->hasRole('storage-staff')
+                )
+                ->rules(['image'])
+                ->nullable()
+                ->maxSize(1024)
+                ->image()
+                ->imageEditor()
+                ->columnSpan([
+                    'full'
+                ])
+                ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+
+            Select::make('store_id')
+                ->required(fn () => Auth::user()->hasRole('admin'))
+                ->hidden(fn () => Auth::user()->hasRole('customer'))
+                ->disabled(fn () => Auth::user()->hasRole('storage-staff'))
+                ->relationship('store', 'nickname')
+                ->preload()
+                ->native(false),
+
+            DatePicker::make('delivery_date')
+                ->required()
+                ->label('Delivery Date')
+                ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2 || Auth::user()->hasRole('storage-staff'))
+                ->default('today')
+                ->rules(['date'])
+                ->required()
+                ->native(false),
+
+            Select::make('delivery_service_id')
+                ->required()
+                ->label('Delivery Service')
+                ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2 || Auth::user()->hasRole('storage-staff'))
+                ->relationship('deliveryService', 'name')
+                ->searchable()
+                ->preload()
+                ->native(false),
+
+            Select::make('delivery_address_id')
+                ->label('Delivery Address')
+                ->required()
+                ->relationship(
+                    name: 'deliveryAddress',
+                    modifyQueryUsing: function (Builder $query) {
+                        if (Auth::user()->hasRole('admin')) {
+                            $query->get();
+                        } elseif (Auth::user()->hasRole('storage-staff')) {
+                            $query->get();
+                        } elseif (Auth::user()->hasRole('customer')) {
+                            $query->where('user_id', Auth::id());
+                        }
+                    }
+                )
+                ->getOptionLabelFromRecordUsing(fn (DeliveryAddress $record) => "{$record->delivery_address_name}")
+                ->searchable()
+                ->disabled(fn (SalesOrderDirect $salesOrderDirect) =>
+                    Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2
+                    || Auth::user()->hasRole('admin')
+                    || Auth::user()->hasRole('storage-staff'))
+                ->preload()
+                ->native(false)
+                ->createOptionForm(
+                    DeliveryAddressForm::schema()
+                ),
+
+            Select::make('transfer_to_account_id')
+                ->required()
+                ->label('Transfer To Account')
+                ->hidden(fn () => Auth::user()->hasRole('storage-staff'))
+                ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 1)
+                ->relationship('transferToAccount', 'name')
+                ->options(TransferToAccount::where('status', 1)
+                    ->get()
+                    ->mapWithKeys(function ($item) {
+                        return [$item->id => $item->transfer_name];
+                    }))
+                ->native(false),
+
+            TextInput::make('receipt_no')
+                ->disabled(fn () => Auth::user()->hasRole('customer') || Auth::user()->hasRole('admin'))
+                ->hidden(fn ($operation) => $operation === 'create' && fn(SalesOrderDirect $salesOrderDirect) => $salesOrderDirect->deliveryStatus == 3)
+                ->required(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('storage-staff') && $salesOrderDirect->delivery_status == 3),
+
+            Select::make('payment_status')
+                ->required(fn () => Auth::user()->hasRole('admin'))
+                ->hidden(fn ($operation) => $operation === 'create' || Auth::user()->hasRole('storage-staff'))
+                ->disabled(fn () => Auth::user()->hasRole('customer'))
+                ->native(false)
+                ->reactive()
+                ->live()
+                ->options([
+                    '1' => 'belum diperiksa',
+                    '2' => 'valid',
+                ]),
+
+            Select::make('delivery_status')
+                ->hidden(fn ($operation) => $operation === 'create')
+                ->disabled(fn () => Auth::user()->hasRole('customer') || Auth::user()->hasRole('admin'))
+                ->required()
+                ->live()
+                ->native(false)
+
+                ->options(
+                    Auth::user()->hasRole('admin') ? [
+                        '1' => 'belum dikirim',
+                        '2' => 'valid',
+                        '3' => 'sudah dikirim',
+                        '4' => 'siap dikirim',
+                        '5' => 'perbaiki',
+                        '6' => 'dikembalikan'
+                        ] : (
+                    Auth::user()->hasRole('storage-staff') ? [
+                        '1' => 'belum dikirim',
+                        '3' => 'sudah dikirim',
+                        '4' => 'siap dikirim',
+                        '5' => 'perbaiki',
+                        '6' => 'dikembalikan'
+                        ] : [
+
+                        ]
+                    )
+                ),
+
+            FileUpload::make('image_delivery')
+                ->hidden(fn () => Auth::user()->hasRole('customer'))
+                ->disabled(fn () => Auth::user()->hasRole('admin'))
+                ->label('Delivered')
+                ->rules(['image'])
+                ->nullable()
+                ->maxSize(1024)
+                ->image()
+                ->imageEditor()
+                ->columnSpan([
+                    'full'
+                ])
+                ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+        ];
+    }
+}
