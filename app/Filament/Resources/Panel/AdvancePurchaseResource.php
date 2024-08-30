@@ -21,6 +21,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\AdvancePurchaseResource\Pages;
+use App\Filament\Tables\AdvancePurchaseTable;
 use App\Models\CashAdvance;
 use Filament\Forms\Components\Repeater;
 use App\Models\Product;
@@ -76,21 +77,7 @@ class AdvancePurchaseResource extends Resource
     {
         return $table
             ->poll('60s')
-            ->columns([
-                ImageColumn::make('image')->visibility('public'),
-
-                TextColumn::make('store.nickname'),
-
-                TextColumn::make('date'),
-
-                TextColumn::make('total_price')->numeric(
-                    thousandsSeparator: '.'
-                )->prefix('Rp '),
-
-                TextColumn::make('user.name'),
-
-                StatusColumn::make('status'),
-            ])
+            ->columns(AdvancePurchaseTable::schema())
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -209,6 +196,10 @@ class AdvancePurchaseResource extends Resource
                     ->default(1)
                     ->minValue(1)
                     ->required()
+                    ->suffix(function (Get $get) {
+                        $product = Product::find($get('product_id'));
+                        return $product ? $product->unit->unit : '';
+                    })
                     ->debounce(1000) // Menambahkan penundaan 500ms
                     ->columnSpan([
                         'md' => 2,

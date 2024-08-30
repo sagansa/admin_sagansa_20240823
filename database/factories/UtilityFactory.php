@@ -27,7 +27,7 @@ class UtilityFactory extends Factory
             'name' => fake()->name(),
             'category' => fake()->numberBetween(0, 127),
             'pre_post' => fake()->numberBetween(0, 127),
-            'status' => fake()->word(),
+            'status' => fake()->numberBetween(1,2),
             'store_id' => \App\Models\Store::factory(),
             'unit_id' => \App\Models\Unit::factory(),
             'utility_provider_id' => \App\Models\UtilityProvider::factory(),

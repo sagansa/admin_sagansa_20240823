@@ -120,6 +120,7 @@ class DetailRequestResource extends Resource
                 TextColumn::make('requestPurchase.user.name')
                     ->label('Request By'),
                 SelectColumn::make('status')
+                    // ->native(false)
                     ->options([
                         '1' => 'Processed',
                         '2' => 'Approved',
@@ -152,9 +153,9 @@ class DetailRequestResource extends Resource
     {
         return [
             'index' => Pages\ListDetailRequests::route('/'),
-            // 'create' => Pages\CreateDetailRequest::route('/create'),
-            // 'view' => Pages\ViewDetailRequest::route('/{record}'),
-            // 'edit' => Pages\EditDetailRequest::route('/{record}/edit'),
+            'create' => Pages\CreateDetailRequest::route('/create'),
+            'view' => Pages\ViewDetailRequest::route('/{record}'),
+            'edit' => Pages\EditDetailRequest::route('/{record}/edit'),
         ];
     }
 }

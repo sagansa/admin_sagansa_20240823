@@ -24,12 +24,12 @@ class StoreFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'nickname' => fake()->text(255),
-            'no_telp' => fake()->text(255),
+            'nickname' => fake()->username(),
+            'no_telp' => fake()->randomNumber(),
             'email' => fake()
                 ->unique()
                 ->safeEmail(),
-            'status' => fake()->word(),
+            'status' => fake()->numberBetween(1,2),
             'user_id' => \App\Models\User::factory(),
         ];
     }

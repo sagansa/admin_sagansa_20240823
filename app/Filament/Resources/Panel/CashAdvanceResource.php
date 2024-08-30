@@ -3,11 +3,13 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Advances;
+use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StatusSelectInput;
+use App\Filament\Forms\StatusSelectLabel;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -73,18 +75,14 @@ class CashAdvanceResource extends Resource
 
                 TextColumn::make('date'),
 
-                TextColumn::make('transfer')
-                    ->numeric(thousandsSeparator: '.'),
+                CurrencyColumn::make('transfer'),
 
-                TextColumn::make('before')
-                    ->numeric(thousandsSeparator: '.'),
+                CurrencyColumn::make('before'),
 
 
-                TextColumn::make('purchase')
-                    ->numeric(thousandsSeparator: '.'),
+                CurrencyColumn::make('purchase'),
 
-                TextColumn::make('remains')
-                    ->numeric(thousandsSeparator: '.'),
+                CurrencyColumn::make('remains'),
 
                 TextColumn::make('user.name'),
 
@@ -111,8 +109,7 @@ class CashAdvanceResource extends Resource
 
                 Group::make()->schema([
                     Select::make('user_id')
-                        ->hiddenLabel()
-                        ->placeholder('User')
+                        ->label('User')
                         ->required()
                         ->relationship('user', 'name')
                         ->searchable()
@@ -122,20 +119,20 @@ class CashAdvanceResource extends Resource
                             'md' => 4,
                         ]),
 
-                    DateInput::make('date')
+                    DatePicker::make('date')
                         ->columnSpan([
                             'md' => 4,
                         ]),
 
-                    StatusSelectInput::make('status')
+                    StatusSelectLabel::make('status')
+                        ->label('Status')
                         ->columnSpan([
                             'md' => 4,
                         ]),
 
                     TextInput::make('transfer')
                         ->required()
-                        ->hiddenLabel()
-                        ->placeholder('Transfer')
+                        ->label('Transfer')
                         ->default(0)
                         ->minValue(0)
                         ->numeric()
@@ -151,8 +148,7 @@ class CashAdvanceResource extends Resource
 
                     TextInput::make('before')
                         ->required()
-                        ->hiddenLabel()
-                        ->placeholder('Before')
+                        ->label('Before')
                         ->default(0)
                         ->minValue(0)
                         ->numeric()
@@ -168,8 +164,7 @@ class CashAdvanceResource extends Resource
 
                      TextInput::make('purchase')
                         ->readOnly()
-                        ->hiddenLabel()
-                        ->placeholder('Purchase')
+                        ->label('Purchase')
                         ->numeric()
                         ->prefix('Rp')
                         ->columnSpan([
@@ -178,8 +173,7 @@ class CashAdvanceResource extends Resource
 
                     TextInput::make('remains')
                         ->readOnly()
-                        ->hiddenLabel()
-                        ->placeholder('Remains')
+                        ->label('Remains')
                         ->numeric()
                         ->prefix('Rp')
                         ->columnSpan([

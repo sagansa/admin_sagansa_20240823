@@ -23,6 +23,7 @@ class FuelServiceFactory extends Factory
     public function definition(): array
     {
         return [
+            'date' => fake()->date(),
             'fuel_service' => fake()->numberBetween(0, 127),
             'km' => fake()->randomNumber(),
             'liter' => fake()->randomNumber(1),

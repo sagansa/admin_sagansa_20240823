@@ -36,8 +36,11 @@ class DetailRequest extends Model
         return $this->hasMany(DetailInvoice::class);
     }
 
-    // public function getQuantityPlanNameAttribute()
-    // {
-    //     return $this->quantity_plan . ' ' . $this->unit->unit;
-    // }
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->status = 1;
+        });
+    }
+
 }

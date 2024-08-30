@@ -172,11 +172,18 @@ class PaymentReceiptResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                ImageColumn::make('image')->visibility('public'),
+                ImageColumn::make('image')
+                    ->label('Payment')
+                    ->visibility('public'),
 
-                ImageColumn::make('image_adjust')->visibility('public'),
+                ImageColumn::make('image_adjust')
+                    ->label('insufficient')
+                    ->visibility('public'),
 
                 TextColumn::make('supplier.name'),
+
+                TextColumn::make('created_at')
+                    ->date(),
 
                 TextColumn::make('payment_for')
                     ->formatStateUsing(

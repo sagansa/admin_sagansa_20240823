@@ -25,7 +25,7 @@ class UtilityBillFactory extends Factory
         return [
             'date' => fake()->date(),
             'amount' => fake()->randomNumber(),
-            'initial_indiator' => fake()->randomNumber(),
+            'initial_indicator' => fake()->randomNumber(),
             'last_indicator' => fake()->randomNumber(),
             'utility_id' => \App\Models\Utility::factory(),
         ];

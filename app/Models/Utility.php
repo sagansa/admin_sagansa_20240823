@@ -35,4 +35,9 @@ class Utility extends Model
     {
         return $this->hasMany(UtilityBill::class);
     }
+
+    public function getUtilityNameAttribute()
+    {
+        return $this->store->nickname . ' | ' . $this->number . ' | ' . $this->utilityProvider->name;
+    }
 }

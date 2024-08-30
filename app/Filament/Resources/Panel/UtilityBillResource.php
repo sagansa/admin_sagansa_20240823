@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Columns\CurrencyColumn;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -18,6 +19,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\Panel\UtilityBillResource\Pages;
 use App\Filament\Resources\Panel\UtilityBillResource\RelationManagers;
+use App\Models\Utility;
+use Filament\Forms\Get;
 
 class UtilityBillResource extends Resource
 {
@@ -52,30 +55,44 @@ class UtilityBillResource extends Resource
                     Select::make('utility_id')
                         ->required()
                         ->relationship('utility', 'name')
+                        ->relationship(
+                            name: 'utility',
+                            modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
+                        )
+                        ->getOptionLabelFromRecordUsing(fn (Utility $record) => "{$record->utility_name}")
                         ->searchable()
+                        ->reactive()
                         ->preload()
                         ->native(false),
 
                     DatePicker::make('date')
                         ->rules(['date'])
+                        ->default('today')
                         ->required()
                         ->native(false),
 
                     TextInput::make('amount')
                         ->required()
                         ->numeric()
-                        ->step(1)
                         ->prefix('Rp'),
 
-                    TextInput::make('initial_indiator')
+                    TextInput::make('initial_indicator')
                         ->required()
-                        ->numeric()
-                        ->step(1),
+                        ->suffix(function (Get $get) {
+                            $utility = Utility::find($get('utility_id'));
+                            return $utility ? $utility->unit->unit : '';
+                        })
+                        ->minValue(0)
+                        ->numeric(),
 
                     TextInput::make('last_indicator')
                         ->required()
-                        ->numeric()
-                        ->step(1),
+                        ->suffix(function (Get $get) {
+                            $utility = Utility::find($get('utility_id'));
+                            return $utility ? $utility->unit->unit : '';
+                        })
+                        ->minValue(0)
+                        ->numeric(),
                 ]),
             ]),
         ]);
@@ -88,18 +105,22 @@ class UtilityBillResource extends Resource
             ->columns([
                 TextColumn::make('utility.name'),
 
-                TextColumn::make('date')->since(),
+                TextColumn::make('utility.store.nickname'),
 
-                TextColumn::make('amount'),
+                TextColumn::make('utility.utilityProvider.name'),
 
-                TextColumn::make('initial_indiator'),
+                TextColumn::make('date'),
+
+                CurrencyColumn::make('amount'),
+
+                TextColumn::make('initial_indicator'),
 
                 TextColumn::make('last_indicator'),
             ])
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

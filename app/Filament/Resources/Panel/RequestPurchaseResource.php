@@ -18,8 +18,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\Panel\RequestPurchaseResource\Pages;
 use App\Filament\Resources\Panel\RequestPurchaseResource\RelationManagers;
+use App\Models\DetailRequest;
+use App\Models\Product;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Get;
 use Illuminate\Support\Facades\Auth;
 
 class RequestPurchaseResource extends Resource
@@ -67,19 +72,6 @@ class RequestPurchaseResource extends Resource
                         ->required()
                         ->native(false),
 
-                    Select::make('status')
-                        ->required()
-                        ->searchable()
-                        ->preload()
-                        ->native(false)
-                        ->options([
-                            '1' => 'Processes',
-                            '2' => 'Approved',
-                            '3' => 'Done',
-                            '4' => 'Rejected',
-                            '5' => 'Not Valid',
-                            '6' => 'Not Used',
-                        ]),
                 ]),
             ]),
 
@@ -98,6 +90,28 @@ class RequestPurchaseResource extends Resource
 
                 TextColumn::make('date'),
 
+                TextColumn::make('detailRequests')
+                    ->label('Orders')
+                    ->formatStateUsing(function (RequestPurchase $record) {
+                        return implode('<br>', $record->detailRequests->map(function ($item) {
+                            $statusLabels = [
+                                '1' => '<span class="badge bg-warning">process</span>',
+                                '2' => '<span class="badge bg-success">done</span>',
+                                '3' => '<span class="badge bg-danger">reject</span>',
+                                '4' => '<span class="badge bg-info">approved</span>',
+                                '5' => '<span class="badge bg-secondary">not valid</span>',
+                                '6' => '<span class="bg-gray-500 badge">not used</span>',
+                            ];
+
+                            // Pilih label status berdasarkan nilai status
+                            $status = $statusLabels[$item->status] ?? '<span class="badge bg-default">unknown</span>';
+
+                            return "{$item->product->name} = {$item->quantity_plan} {$item->product->unit->unit} ({$status})";
+                        })->toArray());
+                    })
+                    ->html() // Mengizinkan HTML dalam kolom
+                    ->extraAttributes(['class' => 'whitespace-pre-wrap']),
+
                 TextColumn::make('user.name'),
 
                 // TextColumn::make('status'),
@@ -105,13 +119,13 @@ class RequestPurchaseResource extends Resource
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                // Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
-            // ->bulkActions([
-            //     Tables\Actions\BulkActionGroup::make([
-            //         Tables\Actions\DeleteBulkAction::make(),
-            //     ]),
-            // ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ])
             ->defaultSort('date', 'desc');
     }
 
@@ -139,36 +153,41 @@ class RequestPurchaseResource extends Resource
                 Select::make('product_id')
                     ->relationship('product', 'name')
                     ->required()
+                    ->preload()
                     ->searchable()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->distinct()
+                    ->reactive()
                     ->columnSpan(4),
                 TextInput::make('quantity_plan')
                     ->required()
                     ->minValue(1)
                     ->numeric()
-                    ->columnSpan(3),
-                Select::make('status')
-                    ->options([
-                            '1' => 'Processed',
-                            '2' => 'Approved',
-                            '3' => 'Done',
-                            '4' => 'Rejected',
-                            '5' => 'Not Valid',
-                            '6' => 'Not Used',
-                        ])
-                    ->columnSpan(3),
-                    // ->visible(fn () => Auth::user()->hasRole('super_admin')),
-                // Select::make('status')
-                //     ->options([
-                //             '1' => 'Processed',
-                //         ])
-                //     ->columnSpan(3),
-                    // ->visible(fn () => Auth::user()->hasRole('staff')),
-
+                    ->suffix(function (Get $get) {
+                        $product = Product::find($get('product_id'));
+                        return $product ? $product->unit->unit : '';
+                    })
+                    ->columnSpan(2),
+                Placeholder::make('status')
+                    ->hidden(fn ($operation) => $operation === 'create')
+                    ->content(fn (DetailRequest $record): string => [
+                        '1' => __('process'),
+                        '2' => __('done'),
+                        '3' => __('reject'),
+                        '4' => __('approved'),
+                        '5' => __('not valid'),
+                        '6' => __('not used'),
+                    ][$record->status])
+                    ->columnSpan(2),
+                Hidden::make('status')
+                    ->default(1),
+                Hidden::make('store_id')
+                    ->default(1),
+                Hidden::make('payment_type_id')
+                    ->default(1),
             ])
             ->columns([
-                'md' => 10,
+                'md' => 8,
             ])
             ->defaultItems(1);
     }

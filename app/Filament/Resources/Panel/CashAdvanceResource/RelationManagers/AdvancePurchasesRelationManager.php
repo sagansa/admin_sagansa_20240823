@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel\CashAdvanceResource\RelationManagers;
 
+use App\Filament\Tables\AdvancePurchaseTable;
 use App\Models\AdvancePurchase;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -86,11 +87,6 @@ class AdvancePurchasesRelationManager extends RelationManager
                             AdvancePurchase::calculateTotalPrice();
                         }
                     }),
-
-                // RichEditor::make('notes')
-                //     ->nullable()
-                //     ->string()
-                //     ->fileAttachmentsVisibility('public'),
             ]),
         ]);
     }
@@ -98,27 +94,8 @@ class AdvancePurchasesRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->columns([
-                ImageColumn::make('image')->visibility('public'),
-
-                TextColumn::make('supplier.name'),
-
-                TextColumn::make('store.nickname'),
-
-                TextColumn::make('date'),
-
-                TextColumn::make('total_price'),
-
-                SelectColumn::make('status')
-                    ->options([
-                        '1' => 'belum diperiksa',
-                        '2' => 'valid',
-                        '3' => 'diperbaiki',
-                        '4' => 'periksa ulang',
-                    ])
-                    ->selectablePlaceholder(false),
-
-            ])
+            ->columns(AdvancePurchaseTable::schema())
+            //
             ->filters([])
             // ->headerActions([Tables\Actions\CreateAction::make()])
             ->actions([

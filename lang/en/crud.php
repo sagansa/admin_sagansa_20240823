@@ -1490,4 +1490,67 @@ return [
             ],
         ],
     ],
+    'utilityBills' => [
+        'itemTitle' => 'Utility Bill',
+        'collectionTitle' => 'Utility Bills',
+        'inputs' => [
+            'utility_id' => [
+                'label' => 'Utility',
+                'placeholder' => 'Utility id',
+            ],
+            'date' => [
+                'label' => 'Date',
+                'placeholder' => 'Date',
+            ],
+            'amount' => [
+                'label' => 'Amount',
+                'placeholder' => 'Amount',
+            ],
+            'initial_indiator' => [
+                'label' => 'Initial indiator',
+                'placeholder' => 'Initial indiator',
+            ],
+            'last_indicator' => [
+                'label' => 'Last indicator',
+                'placeholder' => 'Last indicator',
+            ],
+            'initial_indicator' => [
+                'label' => 'Initial indicator',
+                'placeholder' => 'Initial indicator',
+            ],
+        ],
+        'filament' => [
+            'utility_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'amount' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'initial_indiator' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'last_indicator' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'initial_indicator' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
 ];
