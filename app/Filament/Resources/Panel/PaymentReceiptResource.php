@@ -20,25 +20,13 @@ use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\PaymentReceiptResource\Pages;
 use App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
 use App\Models\DailySalary;
-use App\Models\DailySalaryPaymentReceipt;
 use App\Models\FuelService;
 use App\Models\InvoicePurchase;
-use Filament\Actions\Action;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
-use Illuminate\Support\Facades\Mail;
 
 class PaymentReceiptResource extends Resource
 {
@@ -242,7 +230,7 @@ class PaymentReceiptResource extends Resource
             ];
         });
 
-        return TableRepeater::make('invoicePurchases')
+        return Repeater::make('invoicePurchases')
             ->label('')
             ->default($invoicePurchases)
             ->relationship('invoicePurchases')
@@ -271,7 +259,7 @@ class PaymentReceiptResource extends Resource
                 return [$dailySalary->id => $dailySalary->daily_salary_name];
             })->all();
 
-        return TableRepeater::make('dailySalaryPaymentReceipts')
+        return Repeater::make('dailySalaryPaymentReceipts')
             ->hiddenLabel()
             ->default($dailySalaries)
             ->relationship()
@@ -297,7 +285,7 @@ class PaymentReceiptResource extends Resource
                 return [$fuelService->id => $fuelService->fuel_service_name];
             })->all();
 
-        return TableRepeater::make('fuelServicePaymentReceipts')
+        return Repeater::make('fuelServicePaymentReceipts')
             ->hiddenLabel()
             ->relationship()
             ->schema([

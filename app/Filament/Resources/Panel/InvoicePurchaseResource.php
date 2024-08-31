@@ -3,13 +3,10 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Invoices;
-use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
-use Filament\Forms;
 use Filament\Tables;
-use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\InvoicePurchase;
@@ -21,27 +18,21 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\InvoicePurchaseResource\Pages;
-use App\Filament\Resources\Panel\InvoicePurchaseResource\RelationManagers;
 use App\Models\DetailRequest;
 use App\Models\PaymentType;
 use App\Models\Store;
 use App\Models\Supplier;
-use App\Models\Unit;
-use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
-use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
-use Marvinosswald\FilamentInputSelectAffix\TextInputSelectAffix;
+use Filament\Forms\Set;
+use Filament\Support\Enums\ActionSize;
+use Illuminate\Support\Facades\Auth;
 
 class InvoicePurchaseResource extends Resource
 {
     protected static ?string $model = InvoicePurchase::class;
-
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 3;
 
@@ -100,10 +91,6 @@ class InvoicePurchaseResource extends Resource
 
                 TextColumn::make('date'),
 
-                // TextColumn::make('taxes'),
-
-                // TextColumn::make('discounts'),
-
                 TextColumn::make('total_price'),
 
                 TextColumn::make('payment_status'),
@@ -113,6 +100,26 @@ class InvoicePurchaseResource extends Resource
                 TextColumn::make('createdBy.name'),
             ])
             ->filters([])
+            ->headerActions([
+                Tables\Actions\Action::make('transfer')
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['created_by_id'] = Auth::id();
+                        $data['payment_status'] = '1';
+                        $data['order_status'] = '1';
+                        $data['payment_type_id'] = '1';
+
+                        return $data;
+                    })->size(ActionSize::Large),
+                Tables\Actions\Action::make('tunai')
+                    ->mutateFormDataUsing(function (array $data): array {
+                        $data['created_by_id'] = Auth::id();
+                        $data['payment_status'] = '2';
+                        $data['order_status'] = '1';
+                        $data['payment_type_id'] = '1';
+
+                        return $data;
+                    })->size(ActionSize::Large)
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
@@ -134,7 +141,7 @@ class InvoicePurchaseResource extends Resource
     {
         return [
             'index' => Pages\ListInvoicePurchases::route('/'),
-            'create' => Pages\CreateInvoicePurchase::route('/create'),
+            // 'create' => Pages\CreateInvoicePurchase::route('/create'),
             'view' => Pages\ViewInvoicePurchase::route('/{record}'),
             'edit' => Pages\EditInvoicePurchase::route('/{record}/edit'),
         ];
@@ -145,20 +152,20 @@ class InvoicePurchaseResource extends Resource
         return [
             ImageInput::make('image'),
 
-            Select::make('payment_type_id')
-                ->required()
-                ->relationship(
-                    name: 'paymentType',
-                    modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
-                )
-                ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
-                ->disableOptionWhen(fn (string $value): bool => $value === '1')
-                ->in(fn (Select $component): array => array_keys($component->getEnabledOptions()))
-                ->preload()
-                ->native(false),
+            // Select::make('payment_type_id')
+            //     ->required()
+            //     ->reactive()
+            //     ->relationship(
+            //         name: 'paymentType',
+            //         modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
+            //     )
+            //     ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
+            //     ->preload()
+            //     ->native(false),
 
             Select::make('store_id')
                 ->required()
+                ->reactive()
                 ->relationship(
                     name: 'store',
                     modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '8'),
@@ -181,19 +188,18 @@ class InvoicePurchaseResource extends Resource
 
             DateInput::make('date'),
 
-            Select::make('payment_status')
-                ->required()
-                ->preload()
-                ->options([
-                    '1' => '<span class="text-yellow-500">belum dibayar</span>',
-                    '2' => '<span class="text-green-500">sudah dibayar</span>',
-                    '3' => '<span class="text-red-500">tidak valid</span>',
-                ])
-                ->allowHtml()
-                ->native(false),
+            Placeholder::make('payment_status')
+                ->hidden(fn ($operation) => $operation === 'create')
+                ->content(fn (DetailRequest $record): string => [
+                    '1' => __('belum dibayar'),
+                    '2' => __('sudah dibayar'),
+                    '3' => __('tidak valid'),
+                ][$record->payment_status])
+                ->columnSpan(2),
 
             Select::make('order_status')
                 ->required()
+                ->hidden(fn ($operation) => $operation === 'create')
                 ->preload()
                 ->options([
                     '1' => 'belum diterima',
@@ -206,58 +212,129 @@ class InvoicePurchaseResource extends Resource
 
     public static function getItemsRepeater(): Repeater
     {
-        return TableRepeater::make('detailInvoices')
+        return Repeater::make('detailInvoices')
             ->hiddenLabel()
             ->minItems(1)
-            ->columns(['md' => 12])
+            ->columns(['md' => 8])
             ->relationship()
             ->schema([
                 Select::make('detail_request_id')
-                    ->relationship('detailRequest.product', 'name')
+                    ->relationship(
+                        name: 'detailRequest',
+                        modifyQueryUsing: fn (Builder $query) => $query,
+                        // modifyQueryUsing: fn (Builder $query) => $query->whereHas('product', fn ($query) => $query->where('payment_type_id', 1)),
+                    )
+                    ->getOptionLabelFromRecordUsing(fn (DetailRequest $record) => "{$record->product->name}")
+                    // ->relationship(
+                    //     name: 'detailRequest',
+                    //     modifyQueryUsing: fn (Builder $query) => $query->whereHas('product', fn ($query) => $query->where('payment_type_id', request()->input('payment_type_id')))
+                    // ->whereHas('store', fn ($query) => $query->where('id', request()->input('store_id'))),
+                    // )
+                    // ->getOptionLabelFromRecordUsing(fn (DetailRequest $record) => $record->product->name)
                     ->native(false)
                     ->reactive()
                     ->required()
+                    ->distinct()
+                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->columnSpan(['md' => 4]),
 
                 TextInput::make('quantity_product')
                     ->required()
+                    ->reactive()
+                    ->minValue(1)
+                    ->default(1)
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        self::updateUnitPrice($get, $set);
+                    })
                     ->suffix(function (Get $get) {
                         $detailRequest = DetailRequest::find($get('detail_request_id'));
                         return $detailRequest ? $detailRequest->product->unit->unit : '';
                     })
                     ->columnSpan(['md' => 2]),
 
-                TextInputSelectAffix::make('quantity_invoice')
+                TextInput::make('subtotal_invoice')
                     ->required()
-                    ->select(fn() => Select::make('unit_id')
-                        ->native(false)
-                        ->extraAttributes([
-                            // 'class' => 'w-[36px]' // if you want to constrain the selects size, depending on your usecase
-                        ])
-                        ->options(Unit::all()->pluck('unit', 'id'))
-                    )
-                    ->columnSpan(['md' => 3]),
+                    ->reactive()
+                    ->prefix('Rp')
+                    ->minValue(0)
+                    ->numeric()
+                    ->distinct()
+                    ->debounce(500)
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        self::updateTotalPrice($get, $set);
+                    })
 
-                // Select::make('unit_id')
-                //     ->native(false)
-                //     ->relationship('unit', 'unit')
-                //     ->columnSpan(['md' => 2]),
-
-                CurrencyInput::make('subtotal_price')
-                    ->columnSpan(['md' => 3]),
-            ]);
+                    ->columnSpan(['md' => 2]),
+            ])
+            ->afterStateUpdated(function (Get $get, Set $set) {
+                self::updateTotalPrice($get, $set);
+            });
     }
 
     public static function getDetailsFormBottomSchema(): array
     {
         return[
-            CurrencyInput::make('taxes'),
+            TextInput::make('taxes')
+                ->required()
+                ->minValue(0)
+                ->reactive()
+                ->numeric()
+                ->debounce(500)
+                ->default(0)
+                ->afterStateUpdated(function (Get $get, Set $set) {
+                    self::updateTotalPrice($get, $set);
+                }),
 
-            CurrencyInput::make('discounts'),
+            TextInput::make('discounts')
+                ->required()
+                ->minValue(0)
+                ->reactive()
+                ->numeric()
+                ->debounce(500)
+                ->default(0)
+                ->afterStateUpdated(function (Get $get, Set $set) {
+                    self::updateTotalPrice($get, $set);
+                }),
 
-            CurrencyInput::make('total_price'),
+            TextInput::make('total_price')
+                ->readOnly()
+                ->default(0)
+                ->minValue(0),
 
             Notes::make('notes'),
         ];
+    }
+
+    protected static function updateTotalPrice(Get $get, Set $set): void
+    {
+        // Get the repeater items or initialize to an empty array if null
+        $repeaterItems = $get('detailInvoices') ?? [];
+
+        $subtotalPrice = 0;
+        $totalPrice = 0;
+        $taxes = 0;
+        $discounts = 0;
+
+        $taxes = $get('taxes') !== null ? (int) $get('taxes') : 0;
+        $discounts = $get('discounts') !== null ? (int) $get('discounts') : 0;
+
+        // foreach ($repeaterItems as $item) {
+        //     $subtotalInvoice = $item['subtotal_invoice'] ?? 0;
+
+        //     $subtotalPrice += $subtotalInvoice;
+        // }
+
+        foreach ($repeaterItems as $item) {
+            if (isset($item['subtotal_invoice'])) {
+                $subtotalPrice += (int) $item['subtotal_invoice'];
+            }
+        }
+
+        $totalPrice = $subtotalPrice + $taxes - $discounts;
+
+        // $set('subtotal_price', number_format($subtotalPrice, 0, ',', ''));
+        // $set('total_price', number_format($totalPrice, 0, ',', ''));
+        $set('subtotal_price', $subtotalPrice);
+        $set('total_price', $totalPrice);
     }
 }

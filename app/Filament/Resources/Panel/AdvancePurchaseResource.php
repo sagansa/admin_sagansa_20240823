@@ -200,7 +200,7 @@ class AdvancePurchaseResource extends Resource
                         $product = Product::find($get('product_id'));
                         return $product ? $product->unit->unit : '';
                     })
-                    ->debounce(1000) // Menambahkan penundaan 500ms
+                    ->debounce(500)
                     ->columnSpan([
                         'md' => 2,
                     ])
@@ -211,12 +211,12 @@ class AdvancePurchaseResource extends Resource
 
                 TextInput::make('price')
                     ->required()
-                    ->minValue(1)
+                    ->minValue(0)
                     ->prefix('Rp')
                     ->columnSpan([
                         'md' => 2,
                     ])
-                    ->debounce(1000)
+                    ->debounce(500)
                     ->numeric()
                     ->reactive()
                     ->distinct()
@@ -292,22 +292,22 @@ class AdvancePurchaseResource extends Resource
 
     protected static function updateTotalPrice(Get $get, Set $set): void
     {
-    // Get the repeater items or initialize to an empty array if null
-    $repeaterItems = $get('detailAdvancePurchases') ?? [];
+        // Get the repeater items or initialize to an empty array if null
+        $repeaterItems = $get('detailAdvancePurchases') ?? [];
 
-    $subtotalPrice = 0;
+        $subtotalPrice = 0;
 
-    foreach ($repeaterItems as $item) {
-        if (isset($item['price'])) {
-            $subtotalPrice += (int) $item['price'];
+        foreach ($repeaterItems as $item) {
+            if (isset($item['price'])) {
+                $subtotalPrice += (int) $item['price'];
+            }
         }
-    }
 
-    $discountPrice = $get('discount_price') !== null ? (int) $get('discount_price') : 0;
-    $totalPrice = $subtotalPrice - $discountPrice;
+        $discountPrice = $get('discount_price') !== null ? (int) $get('discount_price') : 0;
+        $totalPrice = $subtotalPrice - $discountPrice;
 
-    $set('subtotal_price', $subtotalPrice);
-    $set('total_price', $totalPrice);
+        $set('subtotal_price', $subtotalPrice);
+        $set('total_price', $totalPrice);
     }
 }
 

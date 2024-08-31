@@ -18,17 +18,11 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\RemainingStockResource\Pages;
 use App\Filament\Resources\Panel\RemainingStockResource\RelationManagers;
 use App\Models\Product;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
-use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 
 class RemainingStockResource extends Resource
 {
@@ -147,7 +141,7 @@ class RemainingStockResource extends Resource
             ];
         })->toArray();
 
-        return TableRepeater::make('productRemainingStocks')
+        return Repeater::make('productRemainingStocks')
             // ->label(__('crud.remainingStocks.products'))
 
             ->hiddenLabel()

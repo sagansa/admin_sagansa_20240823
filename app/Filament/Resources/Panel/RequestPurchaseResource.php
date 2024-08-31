@@ -179,11 +179,11 @@ class RequestPurchaseResource extends Resource
                         '6' => __('not used'),
                     ][$record->status])
                     ->columnSpan(2),
-                Hidden::make('status')
+                Hidden::make('status') // belum selesai
                     ->default(1),
-                Hidden::make('store_id')
+                Hidden::make('store_id') // belum selesai
                     ->default(1),
-                Hidden::make('payment_type_id')
+                Hidden::make('payment_type_id') //belum selesai
                     ->default(1),
             ])
             ->columns([

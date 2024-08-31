@@ -87,8 +87,8 @@ class SalesProductForm
             ])
             ->afterStateUpdated(function (Get $get, Set $set) {
                 self::updateTotalPrice($get, $set);
-            })
-            ->deletable(fn ($record) => (auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin')));
+            });
+            // ->deletable(fn ($record) => (auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin')));
     }
 
     protected static function updateSubtotalPrice(Get $get, Set $set): void
@@ -111,7 +111,7 @@ class SalesProductForm
 
         $subTotalPrice = 0;
         $totalPrice = 0;
-        $shippingCost = $get('shipping_cost') !== null ? (int) $get('shipping_cost') : 1;
+        $shippingCost = $get('shipping_cost') !== null ? (int) $get('shipping_cost') : 0;
 
         foreach ($repeaterItems as $item) {
             $quantity = $item['quantity'] ?? 1;
