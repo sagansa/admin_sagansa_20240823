@@ -36,11 +36,15 @@ class DetailRequest extends Model
         return $this->hasMany(DetailInvoice::class);
     }
 
-    protected static function booted()
+    public function getDetailRequestNameAttribute()
     {
-        static::creating(function ($model) {
-            $model->status = 1;
-        });
+        return $this->product->name . ' | ' . $this->product->unit->unit . ' | ' . $this->requestPurchase->date;
     }
+
+    public function scopeByInvoicePurchase($query, $storeId, $paymentTypeId)
+    {
+        return $query->where('store_id', $storeId)->where('payment_type_id', $paymentTypeId);
+    }
+
 
 }

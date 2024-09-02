@@ -65,10 +65,15 @@ class DetailRequestResource extends Resource
             //             ->numeric()
             //             ->step(1),
 
-            //         TextInput::make('status')
-            //             ->required()
-            //             ->numeric()
-            //             ->step(1),
+                    Select::make('status')
+                        ->options([
+                            '1' => 'process',
+                            '2' => 'done',
+                            '3' => 'reject',
+                            '4' => 'approved',
+                            '5' => 'not valid',
+                            '6' => 'not used',
+                        ]),
 
             //         RichEditor::make('notes')
             //             ->nullable()
@@ -104,6 +109,11 @@ class DetailRequestResource extends Resource
     {
         return $table
             ->poll('60s')
+            ->groups([
+                'requestPurchase.date',
+                'store.nickname'
+            ])
+            ->defaultGroup('store.nickname')
             ->columns([
                 TextColumn::make('product.name')
                     ->label('Product'),
@@ -111,24 +121,41 @@ class DetailRequestResource extends Resource
                     ->label('Request Date'),
                 TextColumn::make('product.paymentType.name')
                     ->label('Payment Type'),
-                TextColumn::make('store.nickname')
-                    ->label('Store'),
+                // TextColumn::make('store.nickname')
+                //     ->label('Store'),
                 TextColumn::make('quantity_plan')
-                    ->label('Quantity Plan'),
+                    ->label('Qty Plan'),
                 TextColumn::make('quantityPurchase.quantity')
-                    ->label('Quantity Purchase'),
-                TextColumn::make('requestPurchase.user.name')
+                    ->label('Qty Purchase'),
+
+                TextColumn::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->color(
+                        fn(string $state): string => match ($state) {
+                            '1' => 'warning',
+                            '2' => 'success',
+                            '3' => 'danger',
+                            '4' => 'warning',
+                            '5' => 'danger',
+                            '6' => 'gray',
+                            default => $state,
+                        }
+                    )
+                    ->formatStateUsing(
+                        fn(string $state): string => match ($state) {
+                            '1' => 'process',
+                            '2' => 'done',
+                            '3' => 'reject',
+                            '4' => 'approved',
+                            '5' => 'not valid',
+                            '6' => 'not used',
+                            default => $state,
+                        }
+                    ),
+
+                    TextColumn::make('requestPurchase.user.name')
                     ->label('Request By'),
-                SelectColumn::make('status')
-                    // ->native(false)
-                    ->options([
-                        '1' => 'Processed',
-                        '2' => 'Approved',
-                        '3' => 'Done',
-                        '4' => 'Rejected',
-                        '5' => 'Not Valid',
-                        '6' => 'Not Used',
-                    ]),
             ])
             ->filters([])
             ->actions([

@@ -189,6 +189,13 @@ class RequestPurchaseResource extends Resource
             ->columns([
                 'md' => 8,
             ])
-            ->defaultItems(1);
+            ->defaultItems(1)
+            ->mutateRelationshipDataBeforeFillUsing(function (array $data): array {
+                $data['store_id'] = '1';
+                $data['payment_type_id'] = '1';
+                $data['status'] = '1';
+
+                return $data;
+            });
     }
 }

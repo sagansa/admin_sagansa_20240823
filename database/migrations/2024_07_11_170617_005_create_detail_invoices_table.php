@@ -29,7 +29,7 @@ return new class extends Migration {
                 ->unsigned()
                 ->nullable()
                 ->index();
-            $table->bigInteger('subtotal_price');
+            $table->bigInteger('subtotal_invoice');
             $table->tinyInteger('status');
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

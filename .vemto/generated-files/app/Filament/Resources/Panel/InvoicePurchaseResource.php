@@ -168,7 +168,7 @@ class InvoicePurchaseResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [RelationManagers\DetailInvoicesRelationManager::class];
     }
 
     public static function getPages(): array

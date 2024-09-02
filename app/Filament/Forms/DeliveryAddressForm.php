@@ -14,15 +14,6 @@ class DeliveryAddressForm
     {
         return [
 
-            // Select::make('for')
-            //     ->required()
-            //     ->native(false)
-            //     ->options([
-            //         '1' => 'direct',
-            //         '2' => 'employee',
-            //         '3' => 'online',
-            //     ]),
-
             OSMMap::make('location')
                 ->label('Location')
                 ->showMarker()

@@ -11,13 +11,13 @@ class CreateInvoicePurchase extends CreateRecord
 {
     protected static string $resource = InvoicePurchaseResource::class;
 
-    // protected function mutateFormDataBeforeCreate(array $data): array
-    // {
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
 
-    //     $data['created_by_id'] = Auth::id();
-    //     $data['payment_status'] = '1';
-    //     $data['order_status'] = '1';
+        $data['created_by_id'] = Auth::id();
+        $data['payment_status'] = '1';
+        $data['order_status'] = '1';
 
-    //     return $data;
-    // }
+        return $data;
+    }
 }

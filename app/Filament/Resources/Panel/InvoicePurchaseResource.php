@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Invoices;
+use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
@@ -23,12 +24,9 @@ use App\Models\DetailRequest;
 use App\Models\PaymentType;
 use App\Models\Store;
 use App\Models\Supplier;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use Filament\Support\Enums\ActionSize;
-use Illuminate\Support\Facades\Auth;
 
 class InvoicePurchaseResource extends Resource
 {
@@ -91,35 +89,49 @@ class InvoicePurchaseResource extends Resource
 
                 TextColumn::make('date'),
 
-                TextColumn::make('total_price'),
+                CurrencyColumn::make('total_price'),
 
-                TextColumn::make('payment_status'),
+                TextColumn::make('payment_status')
+                    ->badge()
+                    ->color(
+                        fn(string $state): string => match ($state) {
+                            '1' => 'warning',
+                            '2' => 'success',
+                            '3' => 'danger',
+                            default => $state,
+                        }
+                    )
+                    ->formatStateUsing(
+                        fn(string $state): string => match ($state) {
+                            '1' => 'belum dibayar',
+                            '2' => 'sudah dibayar',
+                            '3' => 'tidak valid',
+                            default => $state,
+                        }
+                    ),
 
-                TextColumn::make('order_status'),
+                TextColumn::make('order_status')
+                    ->badge()
+                    ->color(
+                        fn(string $state): string => match ($state) {
+                            '1' => 'warning',
+                            '2' => 'success',
+                            '3' => 'danger',
+                            default => $state,
+                        }
+                    )
+                    ->formatStateUsing(
+                        fn(string $state): string => match ($state) {
+                            '1' => 'belum diterima',
+                            '2' => 'sudah diterima',
+                            '3' => 'dikembalikan',
+                            default => $state,
+                        }
+                    ),
 
                 TextColumn::make('createdBy.name'),
             ])
             ->filters([])
-            ->headerActions([
-                Tables\Actions\Action::make('transfer')
-                    ->mutateFormDataUsing(function (array $data): array {
-                        $data['created_by_id'] = Auth::id();
-                        $data['payment_status'] = '1';
-                        $data['order_status'] = '1';
-                        $data['payment_type_id'] = '1';
-
-                        return $data;
-                    })->size(ActionSize::Large),
-                Tables\Actions\Action::make('tunai')
-                    ->mutateFormDataUsing(function (array $data): array {
-                        $data['created_by_id'] = Auth::id();
-                        $data['payment_status'] = '2';
-                        $data['order_status'] = '1';
-                        $data['payment_type_id'] = '1';
-
-                        return $data;
-                    })->size(ActionSize::Large)
-            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
@@ -134,14 +146,16 @@ class InvoicePurchaseResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            //
+        ];
     }
 
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListInvoicePurchases::route('/'),
-            // 'create' => Pages\CreateInvoicePurchase::route('/create'),
+            'create' => Pages\CreateInvoicePurchase::route('/create'),
             'view' => Pages\ViewInvoicePurchase::route('/{record}'),
             'edit' => Pages\EditInvoicePurchase::route('/{record}/edit'),
         ];
@@ -152,16 +166,24 @@ class InvoicePurchaseResource extends Resource
         return [
             ImageInput::make('image'),
 
-            // Select::make('payment_type_id')
-            //     ->required()
-            //     ->reactive()
-            //     ->relationship(
-            //         name: 'paymentType',
-            //         modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
-            //     )
-            //     ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
-            //     ->preload()
-            //     ->native(false),
+            Select::make('payment_type_id')
+                ->required()
+                ->reactive()
+                ->relationship(
+                    name: 'paymentType',
+                    modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
+                )
+
+                ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
+                ->default(2)
+                ->disableOptionWhen(fn (string $value): bool => $value === '2')
+                ->in(fn (Select $component): array => array_keys($component->getEnabledOptions()))
+                ->preload()
+                ->native(false)
+                ->afterStateUpdated(function ($state, callable $set) {
+                    // $set('detailInvoices', null);
+                    // $set('store_id', null);
+                }),
 
             Select::make('store_id')
                 ->required()
@@ -173,7 +195,11 @@ class InvoicePurchaseResource extends Resource
                 ->getOptionLabelFromRecordUsing(fn (Store $record) => "{$record->nickname}")
                 ->searchable()
                 ->preload()
-                ->native(false),
+                ->native(false)
+                ->afterStateUpdated(function ($state, callable $set) {
+                    // $set('detailInvoices', null);
+                    // $set('payment_type_id', null);
+                }),
 
             Select::make('supplier_id')
                 ->required()
@@ -188,14 +214,14 @@ class InvoicePurchaseResource extends Resource
 
             DateInput::make('date'),
 
-            Placeholder::make('payment_status')
-                ->hidden(fn ($operation) => $operation === 'create')
-                ->content(fn (DetailRequest $record): string => [
-                    '1' => __('belum dibayar'),
-                    '2' => __('sudah dibayar'),
-                    '3' => __('tidak valid'),
-                ][$record->payment_status])
-                ->columnSpan(2),
+            // Placeholder::make('payment_status'),
+                // ->hidden(fn ($operation) => $operation === 'create'),
+                // ->content(fn (DetailRequest $record): string => [
+                //     '1' => __('belum dibayar'),
+                //     '2' => __('sudah dibayar'),
+                //     '3' => __('tidak valid'),
+                // ][$record->payment_status])
+                // ->columnSpan(2),
 
             Select::make('order_status')
                 ->required()
@@ -219,22 +245,30 @@ class InvoicePurchaseResource extends Resource
             ->relationship()
             ->schema([
                 Select::make('detail_request_id')
+                    ->label('Detail Request')
                     ->relationship(
                         name: 'detailRequest',
-                        modifyQueryUsing: fn (Builder $query) => $query,
-                        // modifyQueryUsing: fn (Builder $query) => $query->whereHas('product', fn ($query) => $query->where('payment_type_id', 1)),
+                        modifyQueryUsing: function (Builder $query, callable $get) {
+                            $paymentTypeId = $get('../../payment_type_id');
+                            $storeId = $get('../../store_id');
+
+                            $statusFilter = '';
+                                if ($paymentTypeId == 1) { // transfer
+                                    $statusFilter = '1'; // process dan approved
+                                } elseif ($paymentTypeId == 2) { // tunai
+                                    $statusFilter = '4'; // approved
+                            }
+
+                            $queryFinal = $query
+                                ->where('store_id', $storeId)
+                                ->where('status', $statusFilter);
+
+                            return $queryFinal;
+                        }
                     )
-                    ->getOptionLabelFromRecordUsing(fn (DetailRequest $record) => "{$record->product->name}")
-                    // ->relationship(
-                    //     name: 'detailRequest',
-                    //     modifyQueryUsing: fn (Builder $query) => $query->whereHas('product', fn ($query) => $query->where('payment_type_id', request()->input('payment_type_id')))
-                    // ->whereHas('store', fn ($query) => $query->where('id', request()->input('store_id'))),
-                    // )
-                    // ->getOptionLabelFromRecordUsing(fn (DetailRequest $record) => $record->product->name)
+                    ->getOptionLabelFromRecordUsing(fn (DetailRequest $record) => "{$record->detail_request_name}")
                     ->native(false)
-                    ->reactive()
                     ->required()
-                    ->distinct()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->columnSpan(['md' => 4]),
 
@@ -243,9 +277,6 @@ class InvoicePurchaseResource extends Resource
                     ->reactive()
                     ->minValue(1)
                     ->default(1)
-                    ->afterStateUpdated(function (Get $get, Set $set) {
-                        self::updateUnitPrice($get, $set);
-                    })
                     ->suffix(function (Get $get) {
                         $detailRequest = DetailRequest::find($get('detail_request_id'));
                         return $detailRequest ? $detailRequest->product->unit->unit : '';
@@ -317,12 +348,6 @@ class InvoicePurchaseResource extends Resource
 
         $taxes = $get('taxes') !== null ? (int) $get('taxes') : 0;
         $discounts = $get('discounts') !== null ? (int) $get('discounts') : 0;
-
-        // foreach ($repeaterItems as $item) {
-        //     $subtotalInvoice = $item['subtotal_invoice'] ?? 0;
-
-        //     $subtotalPrice += $subtotalInvoice;
-        // }
 
         foreach ($repeaterItems as $item) {
             if (isset($item['subtotal_invoice'])) {

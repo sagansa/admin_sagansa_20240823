@@ -1553,4 +1553,70 @@ return [
             ],
         ],
     ],
+    'detailInvoices' => [
+        'itemTitle' => 'Detail Invoice',
+        'collectionTitle' => 'Detail Invoices',
+        'inputs' => [
+            'detail_request_id' => [
+                'label' => 'Detail request id',
+                'placeholder' => 'Detail request id',
+            ],
+            'quantity_product' => [
+                'label' => 'Quantity product',
+                'placeholder' => 'Quantity product',
+            ],
+            'quantity_invoice' => [
+                'label' => 'Quantity invoice',
+                'placeholder' => 'Quantity invoice',
+            ],
+            'unit_id' => [
+                'label' => 'Unit id',
+                'placeholder' => 'Unit id',
+            ],
+            'subtotal_price' => [
+                'label' => 'Subtotal price',
+                'placeholder' => 'Subtotal price',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+        ],
+        'filament' => [
+            'detail_request_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'quantity_product' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'quantity_invoice' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'unit_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'subtotal_price' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
 ];

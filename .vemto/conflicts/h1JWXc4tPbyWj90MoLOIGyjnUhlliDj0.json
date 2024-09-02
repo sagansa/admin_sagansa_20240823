@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "a906c8eb-90b3-4c65-883e-340fd31f1d40",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\PaymentReceiptResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\PaymentReceiptResource;\nuse App\\Models\\DailySalary;\nuse App\\Models\\PaymentReceipt;\n\nclass CreatePaymentReceipt extends CreateRecord\n{\n    protected static string $resource = PaymentReceiptResource::class;\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\PaymentReceiptResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\PaymentReceiptResource;\n\nclass CreatePaymentReceipt extends CreateRecord\n{\n    protected static string $resource = PaymentReceiptResource::class;\n}\n"
-        }
-    ]
-}

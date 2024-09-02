@@ -96,7 +96,7 @@ class PaymentReceiptResource extends Resource
                                 $items = InvoicePurchase::all()->map(function ($item) {
                                     return ['invoice_purchase_id' => $item->id];
                                 })->toArray();
-                                self::updateInstanceStatusAndCalculateTotalAmount($items, $set, InvoicePurchase::class, 'invoice_purchase_id');
+                                self::updateInstancePaymentStatusAndCalculateTotalAmount($items, $set, InvoicePurchase::class, 'invoice_purchase_id');
                             }
                         }),
 
@@ -108,9 +108,9 @@ class PaymentReceiptResource extends Resource
             ]),
 
             Section::make()->schema([
-                self::getInvoicePurchasesRepeater()
+                self::getFuelServicesRepeater()
                 ])
-                ->visible(fn ($get) => $get('payment_for') == '3')
+                ->visible(fn ($get) => $get('payment_for') == '1')
                 ->hidden(fn ($operation) => $operation === 'edit' || $operation === 'view'),
 
             Section::make()->schema([
@@ -120,9 +120,9 @@ class PaymentReceiptResource extends Resource
                 ->hidden(fn ($operation) => $operation === 'edit' || $operation === 'view'),
 
             Section::make()->schema([
-                self::getFuelServicesRepeater()
+                self::getInvoicePurchasesRepeater()
                 ])
-                ->visible(fn ($get) => $get('payment_for') == '1')
+                ->visible(fn ($get) => $get('payment_for') == '3')
                 ->hidden(fn ($operation) => $operation === 'edit' || $operation === 'view'),
 
             Section::make()->schema([
@@ -223,23 +223,39 @@ class PaymentReceiptResource extends Resource
 
     public static function getInvoicePurchasesRepeater(): Repeater
     {
-        $invoicePurchases = InvoicePurchase::all()->map(function ($item) {
-            return [
-                'invoice_purchase_id' => $item->id,
-                'amount' => $item->amount,
-            ];
-        });
+        // $invoicePurchases = InvoicePurchase::all()->map(function ($item) {
+        //     return [
+        //         'invoice_purchase_id' => $item->id,
+        //         'amount' => $item->amount,
+        //     ];
+        // });
+
+        // $invoicePurchases = InvoicePurchase::where('payment_status', '1')->where('payment_type_id', '1')
+        //     ->get()
+        //     ->map(function ($item) {
+        //         return [
+        //             'invoice_purchase_id' => $item->id,
+        //         ];
+        //     })->toArray();
+
+        $options = InvoicePurchase::where('payment_status', '1')
+            ->where('payment_type_id', '1')
+            ->get()
+            ->mapWithKeys(function ($invoicePurchase) {
+                return [$invoicePurchase->id => $invoicePurchase->invoice_purchase_name];
+            })->all();
 
         return Repeater::make('invoicePurchases')
-            ->label('')
-            ->default($invoicePurchases)
+            ->hiddenLabel()
+            // ->default($invoicePurchases)
             ->relationship('invoicePurchases')
-            ->schema([
+            ->simple(
                 Select::make('invoice_purchase_id')
+                    ->label('Invoice Purchase')
                     ->native(false)
-                    ->options(InvoicePurchase::pluck('date', 'id')),
-                TextInput::make('amount'),
-            ]);
+                    ->options($options)
+                    ->disableOptionsWhenSelectedInSiblingRepeaterItems(),
+            );
     }
 
     public static function getDailySalariesRepeater(): Repeater // OK
@@ -263,14 +279,14 @@ class PaymentReceiptResource extends Resource
             ->hiddenLabel()
             ->default($dailySalaries)
             ->relationship()
-            ->schema([
+            ->simple(
                 Select::make('daily_salary_id')
                     ->label('Daily Salary')
                     ->native(false)
                     ->required()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->options($options),
-            ])
+            )
             ->afterStateUpdated(function ($state, $set) {
                 self::updateInstanceStatusAndCalculateTotalAmount($state, $set, DailySalary::class, 'daily_salary_id');
             });
@@ -288,14 +304,14 @@ class PaymentReceiptResource extends Resource
         return Repeater::make('fuelServicePaymentReceipts')
             ->hiddenLabel()
             ->relationship()
-            ->schema([
+            ->simple(
                 Select::make('fuel_service_id')
                     ->label('Fuel Service')
                     ->native(false)
                     ->required()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->options($options),
-            ])
+            )
             ->afterStateUpdated(function ($state, $set) {
                 self::updateInstanceStatusAndCalculateTotalAmount($state, $set, FuelService::class, 'fuel_service_id');
             });
@@ -331,6 +347,21 @@ class PaymentReceiptResource extends Resource
                 $totalAmount += $instance->amount;
                 // Update the status of the instance to 2
                 $instance->status = 2;
+                $instance->save();
+            }
+        }
+        $set('total_amount', $totalAmount);
+    }
+
+    protected static function updateInstancePaymentStatusAndCalculateTotalAmount($items, $set, $model, $field)
+    {
+        $totalAmount = 0;
+        foreach ($items as $item) {
+            $instance = $model::find($item[$field]);
+            if ($instance) {
+                $totalAmount += $instance->amount;
+                // Update the status of the instance to 2
+                $instance->payment_status = 2;
                 $instance->save();
             }
         }
