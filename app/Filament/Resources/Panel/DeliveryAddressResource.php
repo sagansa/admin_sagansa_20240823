@@ -20,7 +20,7 @@ class DeliveryAddressResource extends Resource
 
     protected static ?int $navigationSort = 4;
 
-    protected static ?string $navigationGroup = 'Sales Transaction';
+    protected static ?string $navigationGroup = 'Sales';
 
     public static function getModelLabel(): string
     {

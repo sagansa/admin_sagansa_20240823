@@ -31,7 +31,7 @@ class SalesOrderDirectsResource extends Resource
 {
     protected static ?string $model = SalesOrderDirect::class;
 
-    protected static ?string $navigationGroup = 'Sales Transaction';
+    protected static ?string $navigationGroup = 'Sales';
 
     protected static ?string $pluralLabel = 'Order';
 

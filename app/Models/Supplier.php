@@ -9,7 +9,22 @@ class Supplier extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'no_telp',
+        'address',
+        'province_id',
+        'regency_id',
+        'district_id',
+        'village_id',
+        'bank_id',
+        'bank_account_name',
+        'bank_account_no',
+        'status',
+        'image',
+        'user_id',
+        'postal_code_id'
+    ];
 
     public function province()
     {
@@ -59,11 +74,6 @@ class Supplier extends Model
     public function postalCode()
     {
         return $this->belongsTo(PostalCode::class);
-    }
-
-    public function paymentReceipts()
-    {
-        return $this->hasMany(PaymentReceipt::class);
     }
 
     public function getSupplierNameAttribute()

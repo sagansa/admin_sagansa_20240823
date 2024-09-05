@@ -3,13 +3,9 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Columns\CurrencyColumn;
-use App\Filament\Forms\BaseSelectInput;
-use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
-use Filament\Forms;
 use Filament\Tables;
-use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\PaymentReceipt;
@@ -26,7 +22,7 @@ use App\Models\DailySalary;
 use App\Models\FuelService;
 use App\Models\InvoicePurchase;
 use Filament\Forms\Components\Radio;
-use Filament\Forms\Components\Repeater;
+use Illuminate\Database\Eloquent\Builder;
 
 class PaymentReceiptResource extends Resource
 {
@@ -53,20 +49,6 @@ class PaymentReceiptResource extends Resource
         return __('crud.paymentReceipts.collectionTitle');
     }
 
-    public function updateSections()
-    {
-        $paymentFor = request()->input('payment_for');
-
-        // Tampilkan section berdasarkan nilai payment_for
-        if ($paymentFor == '1') {
-            // Tampilkan section fuel services
-        } elseif ($paymentFor == '2') {
-            // Tampilkan section daily salaries
-        } elseif ($paymentFor == '3') {
-            // Tampilkan section invoice purchases
-        }
-    }
-
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -74,56 +56,95 @@ class PaymentReceiptResource extends Resource
                 Grid::make(['default' => 1])->schema([
 
                     Radio::make('payment_for')
+                        ->hiddenLabel()
                         ->options([
-                            '1' => 'fuel service',
+                            '1' => 'fuel/service',
                             '2' => 'daily salary',
                             '3' => 'invoice',
                         ])
                         ->inline()
+                        ->reactive(),
+
+                    Select::make('fuelServices')
+                        ->visible(fn ($get) => $get('payment_for') == '1')
+                        ->multiple()
+                        ->relationship(
+                            name: 'fuelServices',
+                            modifyQueryUsing: fn (Builder $query) => $query
+                                ->where('payment_type_id', '1')
+                                ->where('status', '1')
+                        )
+                        ->getOptionLabelFromRecordUsing(fn (FuelService $record) => "{$record->fuel_service_name}")
+                        ->preload()
                         ->reactive()
+                        ->native(false)
                         ->afterStateUpdated(function ($state, $set) {
-                            if ($state == '1') {
-                                $items = FuelService::where('status', '1')->where('payment_type_id', '1')->get()->map(function ($item) {
-                                    return ['fuel_service_id' => $item->id];
-                                })->toArray();
-                                self::updateInstanceStatusAndCalculateTotalAmount($items, $set, FuelService::class, 'fuel_service_id');
-                            } elseif ($state == '2') {
-                                $items = DailySalary::where('status', '3')->where('payment_type_id', '1')->get()->map(function ($item) {
-                                    return ['daily_salary_id' => $item->id];
-                                })->toArray();
-                                self::updateInstanceStatusAndCalculateTotalAmount($items, $set, DailySalary::class, 'daily_salary_id');
-                            } elseif ($state == '3') {
-                                $items = InvoicePurchase::all()->map(function ($item) {
-                                    return ['invoice_purchase_id' => $item->id];
-                                })->toArray();
-                                self::updateInstancePaymentStatusAndCalculateTotalAmount($items, $set, InvoicePurchase::class, 'invoice_purchase_id');
+                            $totalAmount = 0;
+                            foreach ($state as $fuelServiceId) {
+                                $fuelService = FuelService::find($fuelServiceId);
+                                if ($fuelService) {
+                                    $fuelService->status = 2;
+                                    $fuelService->save();
+                                    $totalAmount += $fuelService->amount;
+                                }
                             }
+                            $set('total_amount', $totalAmount);
                         }),
 
-                    Select::make('supplier_id')
-                        ->relationship('supplier', 'name')
-                        ->required()
+                    Select::make('dailySalaries')
+                        ->visible(fn ($get) => $get('payment_for') == '2')
+                        ->multiple()
+                        ->relationship(
+                            name: 'dailySalaries',
+                            modifyQueryUsing: fn (Builder $query) => $query
+                                ->where('payment_type_id', '1')
+                                ->where('status', '3')
+                        )
+                        ->getOptionLabelFromRecordUsing(fn (DailySalary $record) => "{$record->daily_salary_name}")
+                        ->preload()
+                        ->reactive()
+                        ->native(false)
+                        ->afterStateUpdated(function ($state, $set) {
+                            $totalAmount = 0;
+                            foreach ($state as $dailySalaryId) {
+                                $dailySalary = DailySalary::find($dailySalaryId);
+                                if ($dailySalary) {
+                                    $dailySalary->status = 2;
+                                    $dailySalary->save();
+                                    $totalAmount += $dailySalary->amount;
+                                }
+                            }
+                            $set('total_amount', $totalAmount);
+                        }),
+
+                    Select::make('invoicePurchases')
+                        ->visible(fn ($get) => $get('payment_for') == '3')
+                        ->multiple()
+                        ->relationship(
+                            name: 'invoicePurchases',
+                            modifyQueryUsing: fn (Builder $query) => $query
+                                ->where('payment_type_id', '1')
+                                ->where('payment_status', '1')
+                        )
+                        ->getOptionLabelFromRecordUsing(fn (InvoicePurchase $record) => "{$record->invoice_purchase_name}")
+                        ->preload()
+                        ->reactive()
+                        ->native(false)
+                        ->afterStateUpdated(function ($state, $set) {
+                            $totalAmount = 0;
+                            foreach ($state as $invoicePurchaseId) {
+                                $invoicePurchase = InvoicePurchase::find($invoicePurchaseId);
+                                if ($invoicePurchase) {
+                                    $invoicePurchase->payment_status = 2;
+                                    $invoicePurchase->save();
+                                    $totalAmount += $invoicePurchase->total_price;
+                                }
+                            }
+                            $set('total_amount', $totalAmount);
+                        }),
 
                 ]),
             ]),
-
-            Section::make()->schema([
-                self::getFuelServicesRepeater()
-                ])
-                ->visible(fn ($get) => $get('payment_for') == '1')
-                ->hidden(fn ($operation) => $operation === 'edit' || $operation === 'view'),
-
-            Section::make()->schema([
-                self::getDailySalariesRepeater()
-                ])
-                ->visible(fn ($get) => $get('payment_for') == '2')
-                ->hidden(fn ($operation) => $operation === 'edit' || $operation === 'view'),
-
-            Section::make()->schema([
-                self::getInvoicePurchasesRepeater()
-                ])
-                ->visible(fn ($get) => $get('payment_for') == '3')
-                ->hidden(fn ($operation) => $operation === 'edit' || $operation === 'view'),
 
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
@@ -143,6 +164,8 @@ class PaymentReceiptResource extends Resource
                         ->required()
                         ->numeric()
                         ->placeholder('Transfer Amount'),
+
+                    ImageInput::make('image'),
 
                     ImageInput::make('image_adjust')
                         ->hidden(fn ($operation) => $operation === 'create'),
@@ -221,150 +244,8 @@ class PaymentReceiptResource extends Resource
         ];
     }
 
-    public static function getInvoicePurchasesRepeater(): Repeater
-    {
-        // $invoicePurchases = InvoicePurchase::all()->map(function ($item) {
-        //     return [
-        //         'invoice_purchase_id' => $item->id,
-        //         'amount' => $item->amount,
-        //     ];
-        // });
-
-        // $invoicePurchases = InvoicePurchase::where('payment_status', '1')->where('payment_type_id', '1')
-        //     ->get()
-        //     ->map(function ($item) {
-        //         return [
-        //             'invoice_purchase_id' => $item->id,
-        //         ];
-        //     })->toArray();
-
-        $options = InvoicePurchase::where('payment_status', '1')
-            ->where('payment_type_id', '1')
-            ->get()
-            ->mapWithKeys(function ($invoicePurchase) {
-                return [$invoicePurchase->id => $invoicePurchase->invoice_purchase_name];
-            })->all();
-
-        return Repeater::make('invoicePurchases')
-            ->hiddenLabel()
-            // ->default($invoicePurchases)
-            ->relationship('invoicePurchases')
-            ->simple(
-                Select::make('invoice_purchase_id')
-                    ->label('Invoice Purchase')
-                    ->native(false)
-                    ->options($options)
-                    ->disableOptionsWhenSelectedInSiblingRepeaterItems(),
-            );
-    }
-
-    public static function getDailySalariesRepeater(): Repeater // OK
-    {
-        $dailySalaries = DailySalary::where('status', '3')->where('payment_type_id', '1')
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'daily_salary_id' => $item->id,
-                ];
-            })->toArray();
-
-        $options = DailySalary::where('status', '3')
-            ->where('payment_type_id', '1')
-            ->get()
-            ->mapWithKeys(function ($dailySalary) {
-                return [$dailySalary->id => $dailySalary->daily_salary_name];
-            })->all();
-
-        return Repeater::make('dailySalaryPaymentReceipts')
-            ->hiddenLabel()
-            ->default($dailySalaries)
-            ->relationship()
-            ->simple(
-                Select::make('daily_salary_id')
-                    ->label('Daily Salary')
-                    ->native(false)
-                    ->required()
-                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                    ->options($options),
-            )
-            ->afterStateUpdated(function ($state, $set) {
-                self::updateInstanceStatusAndCalculateTotalAmount($state, $set, DailySalary::class, 'daily_salary_id');
-            });
-    }
-
-    public static function getFuelServicesRepeater(): Repeater
-    {
-        $options = FuelService::where('status', '1')
-            ->where('payment_type_id', '1')
-            ->get()
-            ->mapWithKeys(function ($fuelService) {
-                return [$fuelService->id => $fuelService->fuel_service_name];
-            })->all();
-
-        return Repeater::make('fuelServicePaymentReceipts')
-            ->hiddenLabel()
-            ->relationship()
-            ->simple(
-                Select::make('fuel_service_id')
-                    ->label('Fuel Service')
-                    ->native(false)
-                    ->required()
-                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                    ->options($options),
-            )
-            ->afterStateUpdated(function ($state, $set) {
-                self::updateInstanceStatusAndCalculateTotalAmount($state, $set, FuelService::class, 'fuel_service_id');
-            });
-    }
-
     public static function calculateDifference($record)
     {
         return $record->total_amount - $record->transfer_amount;
-    }
-
-
-    protected static function calculateTotalAmount($state, $model, $field)
-    {
-        $totalAmount = 0;
-        foreach ($state as $item) {
-            $instance = $model::find($item[$field]);
-            if ($instance) {
-                $totalAmount += $instance->amount;
-                // Update the status of the instance to 2
-                $instance->status = 2;
-                $instance->save();
-            }
-        }
-        return $totalAmount;
-    }
-
-    protected static function updateInstanceStatusAndCalculateTotalAmount($items, $set, $model, $field)
-    {
-        $totalAmount = 0;
-        foreach ($items as $item) {
-            $instance = $model::find($item[$field]);
-            if ($instance) {
-                $totalAmount += $instance->amount;
-                // Update the status of the instance to 2
-                $instance->status = 2;
-                $instance->save();
-            }
-        }
-        $set('total_amount', $totalAmount);
-    }
-
-    protected static function updateInstancePaymentStatusAndCalculateTotalAmount($items, $set, $model, $field)
-    {
-        $totalAmount = 0;
-        foreach ($items as $item) {
-            $instance = $model::find($item[$field]);
-            if ($instance) {
-                $totalAmount += $instance->amount;
-                // Update the status of the instance to 2
-                $instance->payment_status = 2;
-                $instance->save();
-            }
-        }
-        $set('total_amount', $totalAmount);
     }
 }

@@ -21,6 +21,7 @@ use App\Filament\Resources\Panel\DailySalaryResource\Pages;
 use App\Filament\Tables\DailySalaryTable;
 use App\Models\PaymentType;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class DailySalaryResource extends Resource
 {
@@ -54,7 +55,7 @@ class DailySalaryResource extends Resource
                 Grid::make(['default' => 1])->schema([
                     BaseSelectInput::make('store_id')
                         ->placeholder('Store')
-                        ->relationship('store', 'name'),
+                        ->relationship('store', 'nickname'),
 
                     BaseSelectInput::make('shift_store_id')
                         ->placeholder('Shift Store')
@@ -100,10 +101,18 @@ class DailySalaryResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('setStatusToThree')
+                        ->label('Set Status to Siap Dibayar')
+                        ->icon('heroicon-o-check')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            DailySalary::whereIn('id', $records->pluck('id'))->update(['status' => 3]);
+                        })
+                        ->color('warning'),
                 ]),
             ])
-            ->defaultSort('id', 'desc');
+            ->defaultSort('date', 'desc');
     }
 
     public static function getRelations(): array

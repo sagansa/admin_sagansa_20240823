@@ -54,9 +54,14 @@ class InvoicePurchase extends Model
     public function getInvoicePurchaseNameAttribute()
     {
         if($this->supplier->bank_account_name != null) {
-            return $this->supplier->name . ' | ' . $this->supplier->bank->name . ' | ' . $this->date . ' | ' . $this->detailInvoices->sum('subtotal_invoice');
+            return $this->supplier->name .
+                ' | ' . $this->supplier->bank->name .
+                ' | ' . $this->date .
+                ' | Rp ' . number_format($this->detailInvoices->sum('subtotal_invoice'), 0, ',', '.');
         } else {
-            return $this->supplier->name . ' | ' . $this->date . ' | ' . $this->detailInvoices->sum('subtotal_invoice');
+            return $this->supplier->name .
+                ' | ' . $this->date .
+                ' | Rp ' . number_format($this->detailInvoices->sum('subtotal_invoice'), 0, ',', '.');
         }
     }
 }

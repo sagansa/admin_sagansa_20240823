@@ -23,7 +23,7 @@ class ClosingStorePolicy
      */
     public function view(User $user, ClosingStore $closingStore): bool
     {
-        return $user->can('view_panel::closing::store');
+        return $user->can('view_panel::closing::store') && $closingStore->status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class ClosingStorePolicy
      */
     public function update(User $user, ClosingStore $closingStore): bool
     {
-        return $user->can('update_panel::closing::store');
+        return $user->can('update_panel::closing::store') && $closingStore->status !== 2;
     }
 
     /**

@@ -14,7 +14,8 @@ class DailySalaryTable
             TextColumn::make('createdBy.name')
                 ->label('For'),
 
-            TextColumn::make('store.name'),
+            TextColumn::make('store.nickname')
+                ->toggleable(isToggledHiddenByDefault: true),
 
             TextColumn::make('shiftStore.name'),
 
@@ -24,7 +25,8 @@ class DailySalaryTable
 
             PaymentStatusColumn::make('status'),
 
-            TextColumn::make('paymentType.name'),
+            TextColumn::make('paymentType.name')
+                ->toggleable(isToggledHiddenByDefault: true),
         ];
     }
 }

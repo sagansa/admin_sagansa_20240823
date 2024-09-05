@@ -1619,4 +1619,295 @@ return [
             ],
         ],
     ],
+    'closingStores' => [
+        'itemTitle' => 'Closing Store',
+        'collectionTitle' => 'Closing Stores',
+        'inputs' => [
+            'store_id' => [
+                'label' => 'Store id',
+                'placeholder' => 'Store id',
+            ],
+            'shift_store_id' => [
+                'label' => 'Shift store',
+                'placeholder' => 'Shift store id',
+            ],
+            'date' => [
+                'label' => 'Date',
+                'placeholder' => 'Date',
+            ],
+            'cash_from_yesterday' => [
+                'label' => 'Cash from yesterday',
+                'placeholder' => 'Cash from yesterday',
+            ],
+            'cash_for_tomorrow' => [
+                'label' => 'Cash for tomorrow',
+                'placeholder' => 'Cash for tomorrow',
+            ],
+            'transfer_by_id' => [
+                'label' => 'Transfer by',
+                'placeholder' => 'Transfer by id',
+            ],
+            'total_cash_transfer' => [
+                'label' => 'Total cash transfer',
+                'placeholder' => 'Total cash transfer',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+            'created_by_id' => [
+                'label' => 'Created by',
+                'placeholder' => 'Created by id',
+            ],
+            'approved_by_id' => [
+                'label' => 'Approved by',
+                'placeholder' => 'Approved by id',
+            ],
+        ],
+        'filament' => [
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'shift_store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'cash_from_yesterday' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'cash_for_tomorrow' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'transfer_by_id' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'total_cash_transfer' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'created_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'approved_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'closingCouriers' => [
+        'itemTitle' => 'Closing Courier',
+        'collectionTitle' => 'Closing Couriers',
+        'inputs' => [
+            'bank_id' => [
+                'label' => 'Bank',
+                'placeholder' => 'Bank id',
+            ],
+            'total_cash_to_transfer' => [
+                'label' => 'Total cash to transfer',
+                'placeholder' => 'Total cash to transfer',
+            ],
+            'image' => [
+                'label' => 'Image',
+                'placeholder' => 'Image',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+            'created_by_id' => [
+                'label' => 'Created By',
+                'placeholder' => 'Created by id',
+            ],
+            'approved_by_id' => [
+                'label' => 'Approved By',
+                'placeholder' => 'Approved by id',
+            ],
+        ],
+        'filament' => [
+            'bank_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'total_cash_to_transfer' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'image' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'created_by_id' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'approved_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'closingStoreInvoicePurchase' => [
+        'itemTitle' => 'Closing Store Invoice Purchase',
+        'collectionTitle' => 'Closing Store Invoice Purchase',
+    ],
+    'closingStoreDailySalary' => [
+        'itemTitle' => 'Closing Store Daily Salary',
+        'collectionTitle' => 'Closing Store Daily Salary',
+    ],
+    'closingStoreFuelService' => [
+        'itemTitle' => 'Closing Store Fuel Service',
+        'collectionTitle' => 'Closing Store Fuel Service',
+    ],
+    'cashlesses' => [
+        'itemTitle' => 'Cashless',
+        'collectionTitle' => 'Cashlesses',
+        'inputs' => [
+            'account_cashless_id' => [
+                'label' => 'Account cashless id',
+                'placeholder' => 'Account cashless id',
+            ],
+            'image' => [
+                'label' => 'Image',
+                'placeholder' => 'Image',
+            ],
+            'bruto_apl' => [
+                'label' => 'Bruto apl',
+                'placeholder' => 'Bruto apl',
+            ],
+            'netto_apl' => [
+                'label' => 'Netto apl',
+                'placeholder' => 'Netto apl',
+            ],
+            'bruto_real' => [
+                'label' => 'Bruto real',
+                'placeholder' => 'Bruto real',
+            ],
+            'netto_real' => [
+                'label' => 'Netto real',
+                'placeholder' => 'Netto real',
+            ],
+            'image_canceled' => [
+                'label' => 'Image canceled',
+                'placeholder' => 'Image canceled',
+            ],
+            'canceled' => [
+                'label' => 'Canceled',
+                'placeholder' => 'Canceled',
+            ],
+        ],
+        'filament' => [
+            'account_cashless_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'image' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'bruto_apl' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'netto_apl' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'bruto_real' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'netto_real' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'image_canceled' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'canceled' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
 ];

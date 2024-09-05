@@ -3,9 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Columns\ActiveColumn;
-use Filament\Forms;
 use Filament\Tables;
-use Livewire\Component;
 use App\Models\Product;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -22,7 +20,8 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\DateTimePicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\Panel\ProductResource\Pages;
-use App\Filament\Resources\Panel\ProductResource\RelationManagers;
+use Filament\Forms\Set;
+use Illuminate\Support\Str;
 
 class ProductResource extends Resource
 {
@@ -65,7 +64,9 @@ class ProductResource extends Resource
                     TextInput::make('name')
                         ->required()
                         ->string()
-                        ->autofocus(),
+                        ->autofocus()
+                        ->live(onBlur: true)
+                        ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))),
 
                     Select::make('unit_id')
                         ->required()
@@ -75,7 +76,8 @@ class ProductResource extends Resource
 
                     TextInput::make('slug')
                         ->required()
-                        ->string(),
+                        ->string()
+                        ->unique(Product::class, 'slug'),
 
                     TextInput::make('sku')
                         ->label('SKU')

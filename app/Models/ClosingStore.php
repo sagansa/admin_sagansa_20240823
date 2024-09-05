@@ -11,11 +11,6 @@ class ClosingStore extends Model
 
     protected $guarded = [];
 
-    public function closingCouriers()
-    {
-        return $this->belongsToMany(ClosingCourier::class);
-    }
-
     public function shiftStore()
     {
         return $this->belongsTo(ShiftStore::class);
@@ -59,5 +54,18 @@ class ClosingStore extends Model
     public function invoicePurchases()
     {
         return $this->belongsToMany(InvoicePurchase::class);
+    }
+
+    public function closingCouriers()
+    {
+        return $this->belongsToMany(ClosingCourier::class);
+    }
+
+    public function getClosingStoreNameAttribute()
+    {
+        return $this->store->nickname .
+            ' | ' . $this->shiftStore->name .
+            ' | ' . $this->date .
+            ' | Rp ' . number_format($this->total_cash_transfer, 0, ',', '.');
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Invoices;
-use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
@@ -15,11 +14,10 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\InvoicePurchaseResource\Pages;
+use App\Filament\Tables\InvoicePurchaseTable;
 use App\Models\DetailRequest;
 use App\Models\PaymentType;
 use App\Models\Store;
@@ -78,59 +76,9 @@ class InvoicePurchaseResource extends Resource
     {
         return $table
             ->poll('60s')
-            ->columns([
-                ImageColumn::make('image')->visibility('public'),
-
-                TextColumn::make('paymentType.name'),
-
-                TextColumn::make('store.nickname'),
-
-                TextColumn::make('supplier.name'),
-
-                TextColumn::make('date'),
-
-                CurrencyColumn::make('total_price'),
-
-                TextColumn::make('payment_status')
-                    ->badge()
-                    ->color(
-                        fn(string $state): string => match ($state) {
-                            '1' => 'warning',
-                            '2' => 'success',
-                            '3' => 'danger',
-                            default => $state,
-                        }
-                    )
-                    ->formatStateUsing(
-                        fn(string $state): string => match ($state) {
-                            '1' => 'belum dibayar',
-                            '2' => 'sudah dibayar',
-                            '3' => 'tidak valid',
-                            default => $state,
-                        }
-                    ),
-
-                TextColumn::make('order_status')
-                    ->badge()
-                    ->color(
-                        fn(string $state): string => match ($state) {
-                            '1' => 'warning',
-                            '2' => 'success',
-                            '3' => 'danger',
-                            default => $state,
-                        }
-                    )
-                    ->formatStateUsing(
-                        fn(string $state): string => match ($state) {
-                            '1' => 'belum diterima',
-                            '2' => 'sudah diterima',
-                            '3' => 'dikembalikan',
-                            default => $state,
-                        }
-                    ),
-
-                TextColumn::make('createdBy.name'),
-            ])
+            ->columns(
+                InvoicePurchaseTable::schema()
+            )
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),

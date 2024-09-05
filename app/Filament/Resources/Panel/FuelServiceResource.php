@@ -26,6 +26,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\FuelServiceResource\Pages;
 use App\Filament\Resources\Panel\FuelServiceResource\RelationManagers;
+use App\Filament\Tables\FuelServiceTable;
 use App\Models\PaymentType;
 use App\Models\Supplier;
 use App\Models\Vehicle;
@@ -97,10 +98,11 @@ class FuelServiceResource extends Resource
                         ->hiddenLabel()
                         ->relationship(
                             name: 'supplier',
-                            modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', '3'),
+                            modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '3'),
                         )
-                        ->getOptionLabelFromRecordUsing(fn (Supplier $record) => "{$record->name}")
+                        ->getOptionLabelFromRecordUsing(fn (Supplier $record) => "{$record->supplier_name}")
                         ->searchable()
+                        ->preload()
                         ->native(false),
 
                     Select::make('payment_type_id')
@@ -156,35 +158,9 @@ class FuelServiceResource extends Resource
         return $table
             ->query($query)
             ->poll('60s')
-            ->columns([
-                ImageColumn::make('image')->visibility('public'),
-
-                TextColumn::make('fuel_service')
-                    ->formatStateUsing(
-                        fn(string $state): string => match ($state) {
-                            '1' => 'fuel',
-                            '2' => 'service',
-                        }),
-
-                TextColumn::make('supplier.name'),
-
-                TextColumn::make('date'),
-
-                TextColumn::make('vehicle.no_register'),
-
-                TextColumn::make('paymentType.name'),
-
-                TextColumn::make('km')->numeric(thousandsSeparator: '.')->label('km'),
-
-                TextColumn::make('liter'),
-
-                CurrencyColumn::make('amount'),
-
-                TextColumn::make('createdBy.name'),
-
-                PaymentStatusColumn::make('status'),
-
-            ])
+            ->columns(
+                FuelServiceTable::schema()
+            )
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),

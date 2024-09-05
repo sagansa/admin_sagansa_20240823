@@ -30,7 +30,7 @@ class DailySalariesRelationManager extends RelationManager
             Grid::make(['default' => 1])->schema([
                 Select::make('store_id')
                     ->required()
-                    ->relationship('store', 'name')
+                    ->relationship('store', 'nickname')
                     ->searchable()
                     ->preload()
                     ->native(false),
@@ -91,7 +91,7 @@ class DailySalariesRelationManager extends RelationManager
 
             ->filters([])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                // Tables\Actions\CreateAction::make(),
 
                 // Tables\Actions\AttachAction::make()->form(
                 //     fn(Tables\Actions\AttachAction $action): array => [
@@ -100,19 +100,34 @@ class DailySalariesRelationManager extends RelationManager
                 //     ]
                 // )->multiple(),
 
-                Tables\Actions\AttachAction::make()->preloadRecordSelect()->multiple(),
+                // Tables\Actions\AttachAction::make()->preloadRecordSelect()->multiple(),
                     // TextInput::make('amount')
+
+                // Tables\Actions\AttachAction::make()
+                //     ->recordSelect(
+                //         fn (Select $select) => $select->placeholder('Select a post'),
+                //     )
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\DetachAction::make(),
+                // Tables\Actions\EditAction::make(),
+                // Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DetachAction::make()
+                    ->action(function ($record) {
+                        $record->pivot->delete();
+                        $record->update(['status' => 3]);
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
 
-                    Tables\Actions\DetachBulkAction::make(),
+                    Tables\Actions\DetachBulkAction::make()
+                        ->action(function ($records) {
+                            foreach ($records as $record) {
+                                $record->paymentReceipts()->detach();
+                                $record->update(['status' => 3]);
+                            }
+                        }),
                 ]),
             ]);
     }

@@ -27,8 +27,8 @@ return new class extends Migration {
             $table->bigInteger('cash_for_tomorrow');
             $table
                 ->bigInteger('transfer_by_id')
-                ->nullable()
                 ->unsigned()
+                ->nullable()
                 ->index();
             $table->bigInteger('total_cash_transfer');
             $table->tinyInteger('status');
@@ -47,19 +47,7 @@ return new class extends Migration {
             $table->timestamp('updated_at')->nullable();
 
             $table
-                ->foreign('store_id')
-                ->references('id')
-                ->on('stores')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table
-                ->foreign('shift_store_id')
-                ->references('id')
-                ->on('shift_stores')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
-            $table
-                ->foreign('transfer_by_id')
+                ->foreign('approved_by_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade')
@@ -71,7 +59,19 @@ return new class extends Migration {
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table
-                ->foreign('approved_by_id')
+                ->foreign('shift_store_id')
+                ->references('id')
+                ->on('shift_stores')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table
+                ->foreign('store_id')
+                ->references('id')
+                ->on('stores')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table
+                ->foreign('transfer_by_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade')

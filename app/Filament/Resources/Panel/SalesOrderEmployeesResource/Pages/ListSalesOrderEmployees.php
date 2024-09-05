@@ -22,10 +22,10 @@ class ListSalesOrderEmployees extends ListRecords
     {
         return [
             null => Tab::make('All'),
-            'belum Diperiksa' => Tab::make()->query(fn ($query) => $query->where('payment_status', '1')),
+            'belum diperiksa' => Tab::make()->query(fn ($query) => $query->where('payment_status', '1')),
             'valid' => Tab::make()->query(fn ($query) => $query->where('payment_status', '2')),
             'perbaiki' => Tab::make()->query(fn ($query) => $query->where('payment_status', '3')),
-            'periksa Ulang' => Tab::make()->query(fn ($query) => $query->where('payment_status', '4')),
+            'periksa ulang' => Tab::make()->query(fn ($query) => $query->where('payment_status', '4')),
         ];
     }
 }

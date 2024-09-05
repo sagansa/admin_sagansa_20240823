@@ -23,7 +23,7 @@ class ClosingCourierPolicy
      */
     public function view(User $user, ClosingCourier $closingCourier): bool
     {
-        return $user->can('view_panel::closing::courier');
+        return $user->can('view_panel::closing::courier') && $closingCourier->status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class ClosingCourierPolicy
      */
     public function update(User $user, ClosingCourier $closingCourier): bool
     {
-        return $user->can('update_panel::closing::courier');
+        return $user->can('update_panel::closing::courier') && $closingCourier->status !== 2;
     }
 
     /**

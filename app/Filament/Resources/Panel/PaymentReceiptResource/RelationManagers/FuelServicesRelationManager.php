@@ -2,21 +2,11 @@
 
 namespace App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
 
-use App\Filament\Columns\CurrencyColumn;
-use Filament\Forms;
+use App\Filament\Actions\DetachFuelServiceAction;
 use Filament\Tables;
-use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Select;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\ImageColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\RichEditor;
 use Filament\Resources\RelationManagers\RelationManager;
-use App\Filament\Resources\Panel\PaymentReceiptResource;
+use App\Filament\Tables\FuelServiceTable;
 
 class FuelServicesRelationManager extends RelationManager
 {
@@ -118,48 +108,40 @@ class FuelServicesRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->columns([
-                TextColumn::make('supplier.name'),
-
-                TextColumn::make('vehicle.no_register'),
-
-                TextColumn::make('km'),
-
-                TextColumn::make('liter'),
-
-                CurrencyColumn::make('amount'),
-
-                TextColumn::make('createdBy.name'),
-
-                TextColumn::make('fuel_service')
-                    ->formatStateUsing(
-                        fn(string $state): string => match ($state) {
-                            '1' => 'fuel',
-                            '2' => 'service',
-                        }),
-
-                TextColumn::make('status'),
-            ])
+            ->columns(
+                FuelServiceTable::schema()
+            )
             ->filters([])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                // Tables\Actions\CreateAction::make(),
 
-                Tables\Actions\AttachAction::make()->form(
-                    fn(Tables\Actions\AttachAction $action): array => [
-                        $action->getRecordSelect(),
-                    ]
-                ),
+                // Tables\Actions\AttachAction::make()->form(
+                //     fn(Tables\Actions\AttachAction $action): array => [
+                //         $action->getRecordSelect(),
+                //     ]
+                // ),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\DetachAction::make(),
+                // Tables\Actions\EditAction::make(),
+                // Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DetachAction::make()
+                    // ->label('Detach')
+                    ->action(function ($record) {
+                        $record->pivot->delete(); // Hapus hubungan pada tabel pivot
+                        $record->update(['status' => 1]); // Ubah status menjadi 1
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
 
-                    Tables\Actions\DetachBulkAction::make(),
+                    Tables\Actions\DetachBulkAction::make()
+                        ->action(function ($records) {
+                            foreach ($records as $record) {
+                                $record->paymentReceipts()->detach(); // Menghapus hubungan di tabel pivot
+                                $record->update(['status' => 1]); // Mengubah status menjadi 1
+                            }
+                    }),
                 ]),
             ]);
     }

@@ -3,9 +3,8 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Invoices;
-use Filament\Forms;
+use App\Filament\Columns\StatusColumn;
 use Filament\Tables;
-use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\RequestPurchase;
@@ -14,14 +13,10 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\Panel\RequestPurchaseResource\Pages;
-use App\Filament\Resources\Panel\RequestPurchaseResource\RelationManagers;
-use App\Models\DetailRequest;
 use App\Models\Product;
 use Filament\Forms\Components\Hidden;
-use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Get;
@@ -114,7 +109,7 @@ class RequestPurchaseResource extends Resource
 
                 TextColumn::make('user.name'),
 
-                // TextColumn::make('status'),
+                StatusColumn::make('status'),
             ])
             ->filters([])
             ->actions([
@@ -156,6 +151,7 @@ class RequestPurchaseResource extends Resource
                     ->preload()
                     ->searchable()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                   ->disabled(fn (Get $get) => $get('status') != 1)
                     ->distinct()
                     ->reactive()
                     ->columnSpan(4),
@@ -168,17 +164,20 @@ class RequestPurchaseResource extends Resource
                         return $product ? $product->unit->unit : '';
                     })
                     ->columnSpan(2),
-                Placeholder::make('status')
-                    ->hidden(fn ($operation) => $operation === 'create')
-                    ->content(fn (DetailRequest $record): string => [
-                        '1' => __('process'),
-                        '2' => __('done'),
-                        '3' => __('reject'),
-                        '4' => __('approved'),
-                        '5' => __('not valid'),
-                        '6' => __('not used'),
-                    ][$record->status])
+                Select::make('status')
+                    ->options([
+                        '1' => 'process',
+                        '2' => 'done',
+                        '3' => 'reject',
+                        '4' => 'approved',
+                        '5' => 'not valid',
+                        '6' => 'not used',
+                    ])
+                    ->native(false)
+                    // ->default(1)
+                    ->disabled(fn () => !Auth::user()->hasRole('admin'))
                     ->columnSpan(2),
+
                 Hidden::make('status') // belum selesai
                     ->default(1),
                 Hidden::make('store_id') // belum selesai

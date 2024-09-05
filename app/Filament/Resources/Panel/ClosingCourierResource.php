@@ -2,6 +2,10 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Columns\CurrencyColumn;
+use App\Filament\Columns\StatusColumn;
+use App\Filament\Forms\ImageInput;
+use App\Filament\Forms\Notes;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -20,6 +24,9 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\ClosingCourierResource\Pages;
 use App\Filament\Resources\Panel\ClosingCourierResource\RelationManagers;
+use App\Models\ClosingStore;
+use Filament\Forms\Components\Repeater;
+use Illuminate\Support\Facades\Auth;
 
 class ClosingCourierResource extends Resource
 {
@@ -27,7 +34,7 @@ class ClosingCourierResource extends Resource
 
     // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $navigationGroup = 'Cash';
 
@@ -51,78 +58,97 @@ class ClosingCourierResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
+                    ImageInput::make('image'),
+
                     Select::make('bank_id')
                         ->required()
                         ->relationship('bank', 'name')
-                        ->searchable()
                         ->preload()
                         ->native(false),
 
                     TextInput::make('total_cash_to_transfer')
+                        ->label('Total Cash to Transfer')
                         ->required()
                         ->numeric()
-                        ->step(1)
                         ->prefix('Rp'),
-
-                    FileUpload::make('image')
-                        ->rules(['image'])
-                        ->nullable()
-                        ->maxSize(1024)
-                        ->image()
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
-
-                    Select::make('status')
-                        ->required()
-                        ->default('1')
-                        ->searchable()
-                        ->preload()
-                        ->native(false)
-                        ->options([
-                            '1' => 'belum diperiksa',
-                            '2' => 'valid',
-                            '3' => 'diperbaiki',
-                            '4' => 'periksa ulang',
-                        ]),
-
-                    RichEditor::make('notes')
-                        ->nullable()
-                        ->fileAttachmentsVisibility('public'),
-
-                    TextInput::make('created_by_id')
-                        ->nullable()
-                        ->numeric()
-                        ->step(1),
-
-                    Select::make('approved_by_id')
-                        ->required()
-                        ->relationship('createdBy', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
                 ]),
+            ]),
+
+            Section::make()->schema([
+                Grid::make(['default' => 1])->schema([
+                    Select::make('closingStores')
+                        ->multiple()
+                        ->relationship(
+                            name: 'closingStores',
+                            modifyQueryUsing: fn (Builder $query, $get) => $query
+                                ->where('transfer_by_id', Auth::id())
+                                // ->where('status', '1')
+                                // ->when($get('store_id'), fn ($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
+                        )
+                        ->getOptionLabelFromRecordUsing(fn (ClosingStore $record) => "{$record->closing_store_name}")
+                        ->preload()
+                        ->reactive()
+                        ->native(false),
+                        // ->afterStateUpdated(function ($state, $set) {
+                        //     $totalAmount = 0;
+                        //     foreach ($state as $fuelServiceId) {
+                        //         $fuelService = ClosingStore::find($fuelServiceId);
+                        //         if ($fuelService) {
+                        //             $fuelService->status = 2;
+                        //             $fuelService->save();
+                        //             $totalAmount += $fuelService->amount;
+                        //         }
+                        //     }
+                        //     $set('total_amount', $totalAmount);
+                        // }),
+                ])
+            ]),
+
+            Section::make()->schema([
+                Grid::make(['default' => 1])->schema([
+                    Select::make('status')
+                    ->required()
+                    ->required(fn () => Auth::user()->hasRole('admin'))
+                    ->hidden(fn ($operation) => $operation === 'create')
+                    ->disabled(fn () => Auth::user()->hasRole('staff'))
+                    ->preload()
+                    ->native(false)
+                    ->options([
+                        '1' => 'belum diperiksa',
+                        '2' => 'valid',
+                        '3' => 'diperbaiki',
+                        '4' => 'periksa ulang',
+                    ]),
+
+                    Notes::make('notes'),
+                ])
             ]),
         ]);
     }
 
     public static function table(Table $table): Table
     {
+        $query = ClosingCourier::query();
+
+        if (!Auth::user()->hasRole('admin')) {
+            $query->where('created_by_id', Auth::id());
+        }
+
         return $table
+            ->query($query)
             ->poll('60s')
             ->columns([
-                TextColumn::make('bank.name'),
-
-                TextColumn::make('total_cash_to_transfer'),
-
                 ImageColumn::make('image')->visibility('public'),
 
-                TextColumn::make('status'),
+                TextColumn::make('bank.name'),
 
-                TextColumn::make('notes')->limit(255),
-
-                TextColumn::make('created_by_id'),
+                CurrencyColumn::make('total_cash_to_transfer'),
 
                 TextColumn::make('createdBy.name'),
+
+                TextColumn::make('approvedBy.name'),
+
+                StatusColumn::make('status'),
             ])
             ->filters([])
             ->actions([
@@ -134,12 +160,14 @@ class ClosingCourierResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('id', 'desc');
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            //
+        ];
     }
 
     public static function getPages(): array

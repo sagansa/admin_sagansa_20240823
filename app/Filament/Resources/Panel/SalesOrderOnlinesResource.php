@@ -32,7 +32,7 @@ class SalesOrderOnlinesResource extends Resource
 {
     protected static ?string $model = SalesOrderOnline::class;
 
-    protected static ?string $navigationGroup = 'Sales Transaction';
+    protected static ?string $navigationGroup = 'Sales';
 
     protected static ?int $navigationSort = 3;
 

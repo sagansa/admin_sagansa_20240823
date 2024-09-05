@@ -19,6 +19,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\PermitEmployeeResource\Pages;
 use App\Filament\Resources\Panel\PermitEmployeeResource\RelationManagers;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class PermitEmployeeResource extends Resource
@@ -165,8 +166,22 @@ class PermitEmployeeResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ])
+                    Tables\Actions\BulkAction::make('approve')
+                        ->label('setujui')
+                        ->icon('heroicon-o-check')
+                        ->action(fn (Collection $records) => $records->each->update(['status' => '2']))
+                        ->deselectRecordsAfterCompletion()
+                        ->requiresConfirmation(),
+
+                    Tables\Actions\BulkAction::make('notApprove')
+                        ->label('Tidak dietujui')
+                        ->icon('heroicon-o-x-mark')
+                        ->action(fn (Collection $records) => $records->each->update(['status' => '3']))
+                        ->deselectRecordsAfterCompletion()
+                        ->requiresConfirmation(),
+                        ]),
+                    ])
+
             ->defaultSort('created_at', 'desc');
     }
 

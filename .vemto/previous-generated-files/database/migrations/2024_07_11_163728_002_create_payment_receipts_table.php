@@ -15,7 +15,6 @@ return new class extends Migration {
         Schema::create('payment_receipts', function (Blueprint $table) {
             $table->id();
             $table->string('image', 255)->nullable();
-            $table->bigInteger('supplier_id')->unsigned();
             $table->bigInteger('total_amount');
             $table->bigInteger('transfer_amount');
             $table->tinyInteger('payment_for');

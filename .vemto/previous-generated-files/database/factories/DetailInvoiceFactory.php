@@ -25,7 +25,7 @@ class DetailInvoiceFactory extends Factory
         return [
             'quantity_product' => fake()->randomNumber(1),
             'quantity_invoice' => fake()->randomNumber(1),
-            'subtotal_price' => fake()->randomNumber(),
+            'subtotal_invoice' => fake()->randomNumber(),
             'status' => fake()->word(),
             'invoice_purchase_id' => \App\Models\InvoicePurchase::factory(),
             'detail_request_id' => \App\Models\DetailRequest::factory(),

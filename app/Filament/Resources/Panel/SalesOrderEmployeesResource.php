@@ -28,11 +28,11 @@ class SalesOrderEmployeesResource extends Resource
 {
     protected static ?string $model = SalesOrderEmployee::class;
 
-    protected static ?string $navigationGroup = 'Sales Transaction';
+    protected static ?string $navigationGroup = 'Sales';
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $pluralLabel = 'Sales';
+    protected static ?string $pluralLabel = 'Employee';
 
     public static function form(Form $form): Form
     {

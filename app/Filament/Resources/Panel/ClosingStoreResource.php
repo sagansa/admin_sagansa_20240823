@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\Panel;
 
-use Filament\Forms;
+use App\Filament\Columns\CurrencyColumn;
+use App\Filament\Columns\StatusColumn;
+use App\Filament\Forms\Notes;
 use Filament\Tables;
-use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\ClosingStore;
@@ -16,9 +17,12 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\ClosingStoreResource\Pages;
 use App\Filament\Resources\Panel\ClosingStoreResource\RelationManagers;
+use App\Models\DailySalary;
+use App\Models\FuelService;
+use App\Models\InvoicePurchase;
+use Illuminate\Support\Facades\Auth;
 
 class ClosingStoreResource extends Resource
 {
@@ -52,51 +56,154 @@ class ClosingStoreResource extends Resource
                 Grid::make(['default' => 1])->schema([
                     Select::make('store_id')
                         ->required()
-                        ->relationship('store', 'name')
-                        ->searchable()
+                        ->relationship('store', 'nickname')
                         ->preload()
-                        ->native(false),
+                        ->native(false)
+                        ->reactive(),
 
                     Select::make('shift_store_id')
                         ->required()
                         ->relationship('shiftStore', 'name')
-                        ->searchable()
                         ->preload()
                         ->native(false),
 
                     DatePicker::make('date')
                         ->rules(['date'])
+                        ->default('today')
                         ->required()
                         ->native(false),
 
                     TextInput::make('cash_from_yesterday')
+                        ->prefix('Rp')
                         ->required()
-                        ->numeric()
-                        ->step(1)
-                        ->prefix('Rp'),
+                        ->numeric(),
 
                     TextInput::make('cash_for_tomorrow')
+                        ->prefix('Rp')
                         ->required()
-                        ->numeric()
-                        ->step(1)
-                        ->prefix('Rp'),
-
-                    TextInput::make('transfer_by_id')
-                        ->nullable()
-                        ->numeric()
-                        ->step(1)
-                        ->prefix('Rp'),
+                        ->numeric(),
 
                     TextInput::make('total_cash_transfer')
+                        ->prefix('Rp')
                         ->required()
-                        ->numeric()
-                        ->step(1)
-                        ->prefix('Rp'),
+                        ->minValue(0)
+                        ->numeric(),
+
+
+                ]),
+            ]),
+
+            Section::make()->schema([
+                Grid::make(['default' => 1])->schema([
+                    Select::make('fuelServices')
+                        ->multiple()
+                        ->relationship(
+                            name: 'fuelServices',
+                            modifyQueryUsing: fn (Builder $query, $get) => $query
+                                ->where('payment_type_id', '2')
+                                ->where('status', '1')
+                        )
+                        ->getOptionLabelFromRecordUsing(fn (FuelService $record) => "{$record->fuel_service_name}")
+                        ->preload()
+                        ->reactive()
+                        ->native(false),
+
+                    Select::make('dailySalaries')
+                        ->multiple()
+                        ->relationship(
+                            name: 'dailySalaries',
+                            modifyQueryUsing: fn (Builder $query, $get) => $query
+                                ->where('payment_type_id', '2')
+                                ->where('status', '1')
+                                ->when($get('store_id'), fn ($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
+                        )
+                        ->getOptionLabelFromRecordUsing(fn (DailySalary $record) => "{$record->daily_salary_name}")
+                        ->preload()
+                        ->reactive()
+                        ->native(false),
+
+                    Select::make('invoicePurchases')
+                        ->multiple()
+                        ->relationship(
+                            name: 'invoicePurchases',
+                            modifyQueryUsing: fn (Builder $query, $get) => $query
+                                ->where('payment_type_id', '2')
+                                ->where('payment_status', '1')
+                                ->when($get('store_id'), fn ($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
+                        )
+                        ->getOptionLabelFromRecordUsing(fn (InvoicePurchase $record) => "{$record->invoice_purchase_name}")
+                        ->preload()
+                        ->reactive()
+                        ->native(false),
+
+                    Select::make('invoicePurchases')
+                        ->multiple()
+                        ->relationship(
+                            name: 'invoicePurchases',
+                            modifyQueryUsing: fn (Builder $query, $get) => $query
+                                ->where('payment_type_id', '2')
+                                ->where('payment_status', '1')
+                                ->when($get('store_id'), fn ($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
+                        )
+                        ->getOptionLabelFromRecordUsing(fn (InvoicePurchase $record) => "{$record->invoice_purchase_name}")
+                        ->preload()
+                        ->reactive()
+                        ->native(false)
+                        ->afterStateUpdated(function ($state, $set, $get) {
+                            $fuelServices = $get('fuelServices');
+                            $dailySalaries = $get('dailySalaries');
+                            $invoicePurchases = $state;
+
+                            $totalFuelService = 0;
+                            foreach ($fuelServices as $fuelServiceId) {
+                                $fuelService = FuelService::find($fuelServiceId);
+                                if ($fuelService) {
+                                    $totalFuelService += $fuelService->amount;
+                                }
+                            }
+
+                            $totalDailySalary = 0;
+                            foreach ($dailySalaries as $dailySalaryId) {
+                                $dailySalary = DailySalary::find($dailySalaryId);
+                                if ($dailySalary) {
+                                    $totalDailySalary += $dailySalary->amount;
+                                }
+                            }
+
+                            $totalInvoicePurchase = 0;
+                            foreach ($invoicePurchases as $invoicePurchaseId) {
+                                $invoicePurchase = InvoicePurchase::find($invoicePurchaseId);
+                                if ($invoicePurchase) {
+                                    $totalInvoicePurchase += $invoicePurchase->total_price;
+                                }
+                            }
+
+                            $spendingCashTotal = $totalFuelService + $totalDailySalary + $totalInvoicePurchase;
+                            $set('spending_cash_total', $spendingCashTotal);
+                        }),
+
+                ])
+            ]),
+
+            Section::make()->schema([
+                Grid::make(['default' => 1])->schema([
+                    TextInput::make('spending_cash_total')
+                        ->readOnly(),
+
+                    Select::make('transfer_by_id')
+                        ->nullable()
+                        // ->required(function ($request) {
+                        //     return $request->total_cash_transfer != 0;
+                        // })
+                        ->relationship('transferBy', 'name')
+                        ->preload()
+                        ->native(false),
 
                     Select::make('status')
                         ->required()
-                        ->default('1')
-                        ->searchable()
+                        ->hidden(fn ($operation) => $operation === 'create')
+                        ->disabled(fn () => Auth::user()->hasRole('staff'))
+                        ->required(fn () => Auth::user()->hasRole('admin'))
                         ->preload()
                         ->native(false)
                         ->options([
@@ -106,55 +213,41 @@ class ClosingStoreResource extends Resource
                             '4' => 'periksa ulang',
                         ]),
 
-                    RichEditor::make('notes')
-                        ->nullable()
-                        ->string()
-                        ->fileAttachmentsVisibility('public'),
-
-                    Select::make('created_by_id')
-                        ->nullable()
-                        ->relationship('createdBy', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
-
-                    Select::make('approved_by_id')
-                        ->nullable()
-                        ->relationship('transferBy', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
-                ]),
-            ]),
+                    Notes::make('notes'),
+                ])
+            ])
         ]);
     }
 
     public static function table(Table $table): Table
     {
+        $query = ClosingStore::query();
+
+        if (!Auth::user()->hasRole('admin')) {
+            $query->where('created_by_id', Auth::id());
+        }
+
         return $table
+            ->query($query)
             ->poll('60s')
             ->columns([
-                TextColumn::make('store.name'),
+                TextColumn::make('store.nickname'),
 
                 TextColumn::make('shiftStore.name'),
 
-                TextColumn::make('date')->since(),
+                TextColumn::make('date'),
 
-                TextColumn::make('cash_from_yesterday'),
+                CurrencyColumn::make('cash_from_yesterday'),
 
-                TextColumn::make('cash_for_tomorrow'),
+                CurrencyColumn::make('cash_for_tomorrow'),
 
-                TextColumn::make('transfer_by_id'),
-
-                TextColumn::make('total_cash_transfer'),
-
-                TextColumn::make('status'),
-
-                TextColumn::make('notes')->limit(255),
+                CurrencyColumn::make('total_cash_transfer'),
 
                 TextColumn::make('createdBy.name'),
 
                 TextColumn::make('transferBy.name'),
+
+                StatusColumn::make('status'),
             ])
             ->filters([])
             ->actions([
@@ -166,12 +259,17 @@ class ClosingStoreResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('id', 'desc');
+            ->defaultSort(fn (Builder $query) => $query->orderBy('date', 'desc')->orderBy('created_at', 'desc'));
     }
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            RelationManagers\CashlessesRelationManager::class,
+            RelationManagers\InvoicePurchasesRelationManager::class,
+            RelationManagers\DailySalariesRelationManager::class,
+            RelationManagers\FuelServicesRelationManager::class,
+        ];
     }
 
     public static function getPages(): array
@@ -183,4 +281,11 @@ class ClosingStoreResource extends Resource
             'edit' => Pages\EditClosingStore::route('/{record}/edit'),
         ];
     }
+
+
 }
+
+// spending_cash_total = fuelService + dailySalary + invoicePurchase
+// penjumlahan cashless bruto_apl = cashless_total
+// cash_total = cash_for_tomorrow - cash_from_yesterday + spending_cash_total + total_cash_transfer
+// omzet = cash_total + cashless_total

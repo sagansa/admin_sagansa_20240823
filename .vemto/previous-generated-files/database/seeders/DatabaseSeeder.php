@@ -99,5 +99,6 @@ class DatabaseSeeder extends Seeder
         $this->call(DailySalaryPaymentReceiptSeeder::class);
         $this->call(FuelServicePaymentReceiptSeeder::class);
         $this->call(InvoicePurchasePaymentReceiptSeeder::class);
+        $this->call(UserCashlessSeeder::class);
     }
 }
