@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Filament\Facades\Filament;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('https://admin.sagansa.id/admin');
 });
 
 Route::middleware([
@@ -15,10 +15,6 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
-
-    // Route::get('/remaining-stock-products', function () {
-    //     return Filament::render('remaining-stock-products');
-    // })->name('remaining-stock-products');
 });
 
 
