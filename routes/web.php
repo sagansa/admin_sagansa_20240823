@@ -17,10 +17,4 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::domain('www.sagansa.id')->group(function () {
-    Route::get('/', function () {
-        return redirect('https://admin.sagansa.id/admin');
-    });
-});
-
 
