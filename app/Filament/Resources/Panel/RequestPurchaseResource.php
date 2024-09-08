@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Invoices;
+use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\StatusColumn;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -30,9 +31,11 @@ class RequestPurchaseResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Purchase';
+    protected static ?string $navigationGroup = 'Invoice';
 
-    protected static ?string $cluster = Invoices::class;
+    protected static ?string $cluster = Purchases::class;
+
+    protected static ?string $pluralLabel = 'Invoice';
 
     public static function getModelLabel(): string
     {
@@ -78,7 +81,14 @@ class RequestPurchaseResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $requestPurchases = RequestPurchase::query();
+
+        if (Auth::user()->hasRole('staff')) {
+            $requestPurchases->where('user_id', Auth::id());
+        }
+
         return $table
+            ->query($requestPurchases)
             ->poll('60s')
             ->columns([
                 TextColumn::make('store.nickname'),

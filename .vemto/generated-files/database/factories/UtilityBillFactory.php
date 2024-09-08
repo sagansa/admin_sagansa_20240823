@@ -28,6 +28,7 @@ class UtilityBillFactory extends Factory
             'initial_indicator' => fake()->randomNumber(),
             'last_indicator' => fake()->randomNumber(),
             'utility_id' => \App\Models\Utility::factory(),
+            'user_id' => \App\Models\User::factory(),
         ];
     }
 }

@@ -2,15 +2,12 @@
 
 namespace App\Filament\Resources\Panel;
 
-use App\Filament\Columns\CurrencyColumn;
-use App\Filament\Columns\PaymentStatusColumn;
+use App\Filament\Clusters\Purchases;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\PaymentStatusSelectInput;
-use Filament\Forms;
 use Filament\Tables;
-use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\FuelService;
@@ -18,19 +15,13 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\FuelServiceResource\Pages;
-use App\Filament\Resources\Panel\FuelServiceResource\RelationManagers;
 use App\Filament\Tables\FuelServiceTable;
 use App\Models\PaymentType;
 use App\Models\Supplier;
 use App\Models\Vehicle;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Radio;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,7 +33,9 @@ class FuelServiceResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $navigationGroup = 'Purchase';
+    protected static ?string $cluster = Purchases::class;
+
+    // protected static ?string $navigationGroup = 'Purchase';
 
     public static function getModelLabel(): string
     {

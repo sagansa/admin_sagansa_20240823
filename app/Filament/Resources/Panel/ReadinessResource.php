@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\HRD;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -29,7 +30,9 @@ class ReadinessResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'HRD';
+    protected static ?string $navigationGroup = 'Personal Data';
+
+    protected static ?string $cluster = HRD::class;
 
     public static function getModelLabel(): string
     {

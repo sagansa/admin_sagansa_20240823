@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\HRD;
+use App\Filament\Clusters\Salaries;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\PaymentStatusColumn;
 use App\Filament\Forms\BaseSelectInput;
@@ -20,8 +22,10 @@ use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\DailySalaryResource\Pages;
 use App\Filament\Tables\DailySalaryTable;
 use App\Models\PaymentType;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class DailySalaryResource extends Resource
 {
@@ -31,7 +35,11 @@ class DailySalaryResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'HRD';
+    protected static ?string $cluster = HRD::class;
+
+    protected static ?string $navigationGroup = 'Salaries';
+
+    protected static ?string $pluralLabel = 'Daily Salaries';
 
     public static function getModelLabel(): string
     {
@@ -89,12 +97,41 @@ class DailySalaryResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $dailySalaries = DailySalary::query();
+
+        if (Auth::user()->hasRole('staff')) {
+            $dailySalaries->where('created_by_id', Auth::id());
+        }
+
         return $table
+            ->query($dailySalaries)
             ->poll('60s')
             ->columns(
                 DailySalaryTable::schema()
             )
-            ->filters([])
+            ->filters([
+                SelectFilter::make('created_by_id')
+                    ->label('User')
+                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
+                    ->relationship('createdBy', 'name'),
+                SelectFilter::make('payment_type_id')
+                    ->label('Payment Type')
+                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
+                    ->options([
+                        '1' => 'transfer',
+                        '2' => 'tunai',
+                    ]),
+                SelectFilter::make('status')
+                    ->label('Status')
+                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
+                    ->options([
+                        '1' => 'belum diperiksa',
+                        '2' => 'sudah dibayar',
+                        '3' => 'siap dibayar',
+                        '4' => 'perbaiki',
+                    ])
+
+            ])
             ->actions([
                 Tables\Actions\EditAction::make()->visible(fn ($record) => auth()->user()->can('update', $record)),
                 Tables\Actions\ViewAction::make()->visible(fn ($record) => auth()->user()->can('view', $record)),

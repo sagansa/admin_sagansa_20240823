@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Products;
+use App\Filament\Clusters\Transaction\Settings;
 use App\Filament\Columns\ActiveColumn;
 use Filament\Tables;
 use App\Models\Product;
@@ -31,7 +33,9 @@ class ProductResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Setting';
+    protected static ?string $cluster = Settings::class;
+
+    protected static ?string $navigationGroup = 'Product';
 
     public static function getModelLabel(): string
     {

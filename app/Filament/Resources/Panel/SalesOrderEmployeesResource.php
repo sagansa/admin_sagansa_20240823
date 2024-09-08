@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Sales;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\BottomTotalPriceForm;
 use App\Filament\Forms\DeliveryAddressForm;
@@ -33,6 +34,8 @@ class SalesOrderEmployeesResource extends Resource
     protected static ?int $navigationSort = 2;
 
     protected static ?string $pluralLabel = 'Employee';
+
+    protected static ?string $cluster = Sales::class;
 
     public static function form(Form $form): Form
     {

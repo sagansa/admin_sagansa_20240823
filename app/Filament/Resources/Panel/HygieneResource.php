@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Store;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -26,7 +27,9 @@ class HygieneResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'HRD';
+    protected static ?string $navigationGroup = 'Hygiene';
+
+    protected static ?string $cluster = Store::class;
 
     public static function getModelLabel(): string
     {

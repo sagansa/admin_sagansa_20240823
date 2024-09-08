@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Stock;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -29,6 +30,8 @@ class TransferStockResource extends Resource
     // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
+
+    protected static ?string $cluster = Stock::class;
 
     protected static ?string $navigationGroup = 'Stock';
 

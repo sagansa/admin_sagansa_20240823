@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Invoices;
+use App\Filament\Clusters\Purchases;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
@@ -25,6 +26,7 @@ use App\Models\Supplier;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Illuminate\Support\Facades\Auth;
 
 class InvoicePurchaseResource extends Resource
 {
@@ -32,9 +34,11 @@ class InvoicePurchaseResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
-    protected static ?string $navigationGroup = 'Purchase';
+    protected static ?string $navigationGroup = 'Invoice';
 
-    protected static ?string $cluster = Invoices::class;
+    protected static ?string $pluralLabel = 'Invoices';
+
+    protected static ?string $cluster = Purchases::class;
 
     public static function getModelLabel(): string
     {
@@ -74,7 +78,14 @@ class InvoicePurchaseResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $invoicePurchases = InvoicePurchase::query();
+
+        if (Auth::user()->hasRole('staff')) {
+            $invoicePurchases->where('created_by_id', Auth::id());
+        }
+
         return $table
+            ->query($invoicePurchases)
             ->poll('60s')
             ->columns(
                 InvoicePurchaseTable::schema()
@@ -111,6 +122,8 @@ class InvoicePurchaseResource extends Resource
 
     public static function getDetailsFormHeadSchema(): array
     {
+
+
         return [
             ImageInput::make('image'),
 

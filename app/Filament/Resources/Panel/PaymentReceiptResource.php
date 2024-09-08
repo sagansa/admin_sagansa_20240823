@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
@@ -32,7 +33,9 @@ class PaymentReceiptResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Purchase';
+    protected static ?string $cluster = Purchases::class;
+
+    // protected static ?string $navigationGroup = 'Purchase';
 
     public static function getModelLabel(): string
     {
@@ -190,8 +193,6 @@ class PaymentReceiptResource extends Resource
                 ImageColumn::make('image_adjust')
                     ->label('insufficient')
                     ->visibility('public'),
-
-                TextColumn::make('supplier.name'),
 
                 TextColumn::make('created_at')
                     ->date(),

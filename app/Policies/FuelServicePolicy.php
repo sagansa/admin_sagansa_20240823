@@ -23,7 +23,7 @@ class FuelServicePolicy
      */
     public function view(User $user, FuelService $fuelService): bool
     {
-        return $user->can('view_panel::fuel::service') && $fuelService->status === 2;
+        return $user->can('view_panel::fuel::service');
     }
 
     /**
@@ -39,7 +39,7 @@ class FuelServicePolicy
      */
     public function update(User $user, FuelService $fuelService): bool
     {
-        return $user->can('update_panel::fuel::service')  && $fuelService->status !== 2;
+        return $user->can('update_panel::fuel::service');
     }
 
     /**

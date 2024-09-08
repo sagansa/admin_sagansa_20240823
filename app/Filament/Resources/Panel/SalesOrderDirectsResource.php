@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Sales;
 use App\Filament\Columns\DeliveryStatusColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\BottomTotalPriceForm;
@@ -37,13 +38,14 @@ class SalesOrderDirectsResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    protected static ?string $cluster = Sales::class;
+
     public static function form(Form $form): Form
     {
         return $form->schema([
 
             Section::make()
-                ->schema(static::getDetailsFormHeadSchema())
-                ->columns(2),
+                ->schema(static::getDetailsFormHeadSchema()),
 
             Section::make('Detail Order')->schema([
                 SalesProductForm::getItemsRepeater()
@@ -52,8 +54,8 @@ class SalesOrderDirectsResource extends Resource
 
             Section::make()
                  ->schema(BottomTotalPriceForm::schema())
-            ])
-        ->disabled(fn (?SalesOrderDirect $record) => $record !== null && $record->payment_status == 2 && $record->delivery_status == 2);
+        ]);
+        // ->disabled(fn (?SalesOrderDirect $record) => $record !== null && $record->payment_status == 2 && $record->delivery_status == 2);
     }
 
     public static function table(Table $table): Table
@@ -148,6 +150,7 @@ class SalesOrderDirectsResource extends Resource
         return [
             'index' => Pages\ListSalesOrderDirects::route('/'),
             'create' => Pages\CreateSalesOrderDirects::route('/create'),
+            'view' => Pages\ViewSalesOrderDirects::route('/{record}'),
             'edit' => Pages\EditSalesOrderDirects::route('/{record}/edit'),
         ];
     }
@@ -167,7 +170,7 @@ class SalesOrderDirectsResource extends Resource
         }
 
         return [
-            FileUpload::make('image_payment') // user
+            FileUpload::make('image_payment')
                 ->label('Payment')
                 ->disabled(fn (SalesOrderDirect $salesOrderDirect) =>
                     Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2
@@ -207,6 +210,7 @@ class SalesOrderDirectsResource extends Resource
                 ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2 || Auth::user()->hasRole('storage-staff'))
                 ->relationship('deliveryService', 'name')
                 ->searchable()
+                ->reactive()
                 ->preload()
                 ->native(false),
 
@@ -216,7 +220,8 @@ class SalesOrderDirectsResource extends Resource
 
             Select::make('delivery_address_id')
                 ->label('Delivery Address')
-                ->required()
+                ->required(fn (SalesOrderDirect $salesOrderDirect) => $salesOrderDirect->delivery_service_id != 33)
+                ->reactive()
                 ->relationship(
                     name: 'deliveryAddress',
                     modifyQueryUsing: function (Builder $query) {
@@ -231,7 +236,7 @@ class SalesOrderDirectsResource extends Resource
                 )
                 ->getOptionLabelFromRecordUsing(fn (DeliveryAddress $record) => "{$record->delivery_address_name}")
                 ->searchable()
-                ->hidden(fn () => !Auth::user()->hasRole('customer'))
+                ->hidden(fn (SalesOrderDirect $salesOrderDirect) => !Auth::user()->hasRole('customer') || $salesOrderDirect->delivery_service_id == 33)
                 ->disabled(fn (SalesOrderDirect $salesOrderDirect) =>
                     Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2)
                 ->preload()

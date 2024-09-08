@@ -58,7 +58,7 @@ class ViewSalesOrderOnlines extends ViewRecord
 
                 Section::make('Detail Order')
                     ->schema([
-                        TableRepeatableEntry::make('detailSalesOrders')
+                        RepeatableEntry::make('detailSalesOrders')
                             ->schema([
                                 TextEntry::make('product.product_name'),
                                 TextEntry::make('quantity'),

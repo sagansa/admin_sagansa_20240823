@@ -23,7 +23,7 @@ class CashAdvancePolicy
      */
     public function view(User $user, CashAdvance $cashAdvance): bool
     {
-        return $user->can('view_panel::cash::advance') && $cashAdvance->status === 2;
+        return $user->can('view_panel::cash::advance');
     }
 
     /**
@@ -39,7 +39,7 @@ class CashAdvancePolicy
      */
     public function update(User $user, CashAdvance $cashAdvance): bool
     {
-        return $user->can('update_panel::cash::advance') && $cashAdvance->status !== 2;
+        return $user->can('update_panel::cash::advance');
     }
 
     /**

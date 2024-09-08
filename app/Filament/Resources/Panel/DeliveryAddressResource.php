@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Sales;
 use App\Filament\Forms\DeliveryAddressForm;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -21,6 +22,10 @@ class DeliveryAddressResource extends Resource
     protected static ?int $navigationSort = 4;
 
     protected static ?string $navigationGroup = 'Sales';
+
+    protected static ?string $pluralLabel = 'Delivery Address';
+
+    protected static ?string $cluster = Sales::class;
 
     public static function getModelLabel(): string
     {

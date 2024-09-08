@@ -19,7 +19,7 @@ return new class extends Migration {
             $table
                 ->foreign('presence_id')
                 ->references('id')
-                ->on('presence')
+                ->on('presences')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
             $table

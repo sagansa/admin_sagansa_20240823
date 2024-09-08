@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Stock;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -29,7 +30,9 @@ class UtilityUsageResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Stock';
+    protected static ?string $cluster = Stock::class;
+
+    protected static ?string $navigationGroup = 'Consumption';
 
     public static function getModelLabel(): string
     {

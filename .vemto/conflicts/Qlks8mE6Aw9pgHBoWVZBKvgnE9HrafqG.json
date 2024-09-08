@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "708eadb1-5e93-4721-8d81-79ed2cc3e393",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DeliveryAddressResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\DeliveryAddressResource;\nuse Illuminate\\Support\\Facades\\Auth;\nuse Illuminate\\Database\\Eloquent\\Builder;\n\nclass ListDeliveryAddresses extends ListRecords\n{\n    protected static string $resource = DeliveryAddressResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n}\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DeliveryAddressResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\DeliveryAddressResource;\n\nclass ListDeliveryAddresses extends ListRecords\n{\n    protected static string $resource = DeliveryAddressResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n}\n"
+        }
+    ]
+}

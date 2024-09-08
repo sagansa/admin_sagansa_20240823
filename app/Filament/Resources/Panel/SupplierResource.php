@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\StatusSupplierColumn;
 use App\Filament\Forms\AddressForm;
 use App\Filament\Forms\ImageInput;
@@ -35,7 +36,9 @@ class SupplierResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Setting';
+    protected static ?string $cluster = Purchases::class;
+
+    // protected static ?string $navigationGroup = 'Purchase';
 
     public static function getModelLabel(): string
     {

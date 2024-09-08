@@ -23,7 +23,7 @@ class SalesOrderEmployeePolicy
      */
     public function view(User $user, SalesOrderEmployee $salesOrderEmployee): bool
     {
-        return $user->can('view_panel::sales::order::employees') && $salesOrderEmployee->payment_status === 2;
+        return $user->can('view_panel::sales::order::employees');
     }
 
     /**
@@ -39,7 +39,7 @@ class SalesOrderEmployeePolicy
      */
     public function update(User $user, SalesOrderEmployee $salesOrderEmployee): bool
     {
-        return $user->can('update_panel::sales::order::employees') && $salesOrderEmployee->payment_status !== 2;
+        return $user->can('update_panel::sales::order::employees');
     }
 
     /**

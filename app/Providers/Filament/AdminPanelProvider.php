@@ -26,11 +26,14 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->navigationGroups([
                 NavigationGroup::make()
-                    ->label('Sales Transaction')
-                    ->icon('heroicon-o-building-storefront'),
+                    ->label('Access')
+                    ->icon('heroicon-o-shield-check'),
                 NavigationGroup::make()
-                    ->label('Purchase')
+                    ->label('Transaction')
                     ->icon('heroicon-o-shopping-cart'),
+                NavigationGroup::make()
+                    ->label('Asset')
+                    ->icon('heroicon-o-globe-alt'),
                 NavigationGroup::make()
                     ->label('HRD')
                     ->icon('heroicon-o-user-group'),
@@ -40,11 +43,6 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make()
                     ->label('Stock')
                     ->icon('heroicon-o-document-chart-bar'),
-                NavigationGroup::make()
-                    ->label('Filament Shield'),
-                NavigationGroup::make()
-                    ->label('Setting')
-                    ->icon('heroicon-o-cog-6-tooth'),
             ])
             ->default()
             ->topNavigation()

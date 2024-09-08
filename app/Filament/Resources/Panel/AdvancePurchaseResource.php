@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Advances;
+use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\DateInput;
 use Filament\Tables;
@@ -14,11 +15,8 @@ use App\Models\AdvancePurchase;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\AdvancePurchaseResource\Pages;
 use App\Filament\Tables\AdvancePurchaseTable;
@@ -28,6 +26,7 @@ use App\Models\Product;
 use App\Models\Store;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Builder;
 
 class AdvancePurchaseResource extends Resource
 {
@@ -37,9 +36,9 @@ class AdvancePurchaseResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $cluster = Advances::class;
+    protected static ?string $cluster = Purchases::class;
 
-    // protected static ?string $navigationGroup = 'Purchases';
+    protected static ?string $navigationGroup = 'Advances';
 
     public static function getModelLabel(): string
     {
@@ -75,7 +74,13 @@ class AdvancePurchaseResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $advancePurchases = AdvancePurchase::query();
+
+        if (Auth::user()->hasRole('staff')) {
+            $advancePurchases->where('user_id', Auth::id());
+        }
         return $table
+            ->query($advancePurchases)
             ->poll('60s')
             ->columns(AdvancePurchaseTable::schema())
             ->filters([])
@@ -110,17 +115,6 @@ class AdvancePurchaseResource extends Resource
 
     public static function getDetailsFormHeadSchema(): array
     {
-        $userId = Auth::id();
-
-        $deliveryAddresses = Store::whereIn('user_id', [$userId, Auth::id()])->pluck('nickname', 'id');
-
-        // $deliveryAddresses = Store::
-        //     where('user_id', $userId)->
-        //     where('user_id', Auth::id())
-        //     ->pluck('nickname', 'id');
-
-        // dd($deliveryAddresses);
-
         return [
             FileUpload::make('image')
                 ->rules(['image'])
@@ -134,12 +128,17 @@ class AdvancePurchaseResource extends Resource
                 ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
 
             Select::make('cash_advance_id')
-                    ->required()
+                    ->required(fn () => Auth::user()->hasRole('staff'))
+                    ->disabled(fn () => Auth::user()->hasRole('admin'))
                     ->label('Cash Advance')
-                    ->options(CashAdvance::all()
-                        ->where('status', '=', 1)
-                        ->where('user_id', '=', Auth::id())
-                        ->pluck('cash_advance_name','id')),
+                    ->relationship(
+                        name: 'cashAdvance',
+                        modifyQueryUsing: fn (Builder $query) =>
+                            Auth::user()->hasRole('staff')
+                                ? $query->where('user_id', Auth::id())->where('status', 1)
+                                : $query,
+                    )
+                    ->getOptionLabelFromRecordUsing(fn (CashAdvance $record) => "{$record->cash_advance_name}"),
 
             Select::make('store_id')
                 ->required()
@@ -160,7 +159,9 @@ class AdvancePurchaseResource extends Resource
 
             Select::make('status')
                 ->required()
-                ->default('1')
+                ->required(fn () => Auth::user()->hasRole('admin'))
+                ->hidden(fn ($operation) => $operation === 'create')
+                ->disabled(fn () => Auth::user()->hasRole('staff'))
                 ->preload()
                 ->native(false)
                 ->options([

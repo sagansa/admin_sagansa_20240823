@@ -29,10 +29,7 @@ class BottomTotalPriceForm
                 ->readOnly()
                 ->reactive(),
 
-            RichEditor::make('notes')
-                ->nullable()
-                ->string()
-                ->fileAttachmentsVisibility('public'),
+            Notes::make('notes'),
 
         ];
     }

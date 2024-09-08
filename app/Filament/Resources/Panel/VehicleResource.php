@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Asset;
+use App\Filament\Clusters\Vehicles;
 use App\Filament\Columns\ActiveColumn;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
@@ -33,7 +35,9 @@ class VehicleResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Setting';
+    protected static ?string $cluster = Asset::class;
+
+    protected static ?string $navigationGroup = 'Vehicle';
 
     public static function getModelLabel(): string
     {

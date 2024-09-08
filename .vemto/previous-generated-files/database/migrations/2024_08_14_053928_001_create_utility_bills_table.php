@@ -18,10 +18,15 @@ return new class extends Migration {
                 ->bigInteger('utility_id')
                 ->unsigned()
                 ->index();
+            $table->string('image')->nullable();
             $table->date('date');
             $table->bigInteger('amount');
             $table->bigInteger('initial_indicator');
             $table->bigInteger('last_indicator');
+            $table
+                ->bigInteger('user_id')
+                ->unsigned()
+                ->index();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
 
@@ -29,6 +34,12 @@ return new class extends Migration {
                 ->foreign('utility_id')
                 ->references('id')
                 ->on('utilities')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
+            $table
+                ->foreign('user_id')
+                ->references('id')
+                ->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
         });

@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\HRD;
+use App\Filament\Clusters\Salaries;
 use App\Filament\Forms\Notes;
 use Filament\Forms;
 use Filament\Tables;
@@ -30,7 +32,11 @@ class PermitEmployeeResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'HRD';
+    protected static ?string $navigationGroup = 'Salaries';
+
+    protected static ?string $pluralLabel = 'Permits';
+
+    protected static ?string $cluster = HRD::class;
 
     public static function getModelLabel(): string
     {
@@ -122,7 +128,8 @@ class PermitEmployeeResource extends Resource
             ->query($query)
             ->poll('60s')
             ->columns([
-                TextColumn::make('createdBy.name'),
+                TextColumn::make('createdBy.name')
+                    ->hidden(fn () => !Auth::user()->hasRole('admin')),
 
                 TextColumn::make('reason')
                     ->formatStateUsing(

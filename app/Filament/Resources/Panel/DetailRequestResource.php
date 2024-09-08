@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Invoices;
+use App\Filament\Clusters\Purchases;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -20,6 +21,7 @@ use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\DetailRequestResource\Pages;
 use App\Filament\Resources\Panel\DetailRequestResource\RelationManagers;
 use Filament\Tables\Columns\SelectColumn;
+use Illuminate\Support\Facades\Auth;
 
 class DetailRequestResource extends Resource
 {
@@ -29,9 +31,11 @@ class DetailRequestResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $navigationGroup = 'Purchase';
+    protected static ?string $navigationGroup = 'Invoice';
 
-    protected static ?string $cluster = Invoices::class;
+    protected static ?string $cluster = Purchases::class;
+
+    protected static ?string $pluralLabel = 'Invoice';
 
     public static function getModelLabel(): string
     {
@@ -65,15 +69,15 @@ class DetailRequestResource extends Resource
             //             ->numeric()
             //             ->step(1),
 
-                    Select::make('status')
-                        ->options([
-                            '1' => 'process',
-                            '2' => 'done',
-                            '3' => 'reject',
-                            '4' => 'approved',
-                            '5' => 'not valid',
-                            '6' => 'not used',
-                        ]),
+                    // Select::make('status')
+                    //     ->options([
+                    //         '1' => 'process',
+                    //         '2' => 'done',
+                    //         '3' => 'reject',
+                    //         '4' => 'approved',
+                    //         '5' => 'not valid',
+                    //         '6' => 'not used',
+                    //     ]),
 
             //         RichEditor::make('notes')
             //             ->nullable()
@@ -155,7 +159,8 @@ class DetailRequestResource extends Resource
                     ),
 
                     TextColumn::make('requestPurchase.user.name')
-                    ->label('Request By'),
+                        ->label('Request By')
+                        ->hidden(fn () => !Auth::user()->hasRole('admin')),
             ])
             ->filters([])
             ->actions([

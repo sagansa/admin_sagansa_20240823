@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
 use Filament\Forms;
 use Filament\Tables;
@@ -30,7 +31,9 @@ class UtilityBillResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Purchase';
+    protected static ?string $cluster = Purchases::class;
+
+    // protected static ?string $navigationGroup = 'Purchase';
 
     public static function getModelLabel(): string
     {
@@ -127,7 +130,7 @@ class UtilityBillResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('id', 'desc');
+            ->defaultSort('date', 'desc');
     }
 
     public static function getRelations(): array

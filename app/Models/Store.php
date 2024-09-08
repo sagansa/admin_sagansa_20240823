@@ -81,11 +81,6 @@ class Store extends Model
         return $this->hasMany(SelfConsumption::class);
     }
 
-    public function storeConsumptions()
-    {
-        return $this->hasMany(StoreConsumption::class);
-    }
-
     public function salesOrders()
     {
         return $this->hasMany(SalesOrder::class);

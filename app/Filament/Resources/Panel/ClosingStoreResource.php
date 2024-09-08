@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Closings;
+use App\Filament\Clusters\Purchases;
+use App\Filament\Clusters\Sales;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\Notes;
@@ -22,6 +25,8 @@ use App\Filament\Resources\Panel\ClosingStoreResource\RelationManagers;
 use App\Models\DailySalary;
 use App\Models\FuelService;
 use App\Models\InvoicePurchase;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Illuminate\Support\Facades\Auth;
 
 class ClosingStoreResource extends Resource
@@ -32,7 +37,11 @@ class ClosingStoreResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Cash';
+    protected static ?string $navigationGroup = 'Closing';
+
+    protected static ?string $pluralLabel = 'Store';
+
+    protected static ?string $cluster = Closings::class;
 
     public static function getModelLabel(): string
     {
@@ -76,20 +85,32 @@ class ClosingStoreResource extends Resource
                     TextInput::make('cash_from_yesterday')
                         ->prefix('Rp')
                         ->required()
-                        ->numeric(),
+                        ->reactive()
+                        ->minValue(0)
+                        ->numeric()
+                        ->afterStateUpdated(function (Get $get, Set $set) {
+                            self::updateTotalCash($get, $set);
+                        }),
 
                     TextInput::make('cash_for_tomorrow')
                         ->prefix('Rp')
                         ->required()
-                        ->numeric(),
+                        ->reactive()
+                        ->minValue(0)
+                        ->numeric()
+                        ->afterStateUpdated(function (Get $get, Set $set) {
+                            self::updateTotalCash($get, $set);
+                        }),
 
                     TextInput::make('total_cash_transfer')
                         ->prefix('Rp')
                         ->required()
+                        ->reactive()
                         ->minValue(0)
-                        ->numeric(),
-
-
+                        ->numeric()
+                        ->afterStateUpdated(function (Get $get, Set $set) {
+                            self::updateTotalCash($get, $set);
+                        }),
                 ]),
             ]),
 
@@ -106,7 +127,10 @@ class ClosingStoreResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn (FuelService $record) => "{$record->fuel_service_name}")
                         ->preload()
                         ->reactive()
-                        ->native(false),
+                        ->native(false)
+                        ->afterStateUpdated(function (Get $get, Set $set) {
+                            self::updateTotalCash($get, $set);
+                        }),
 
                     Select::make('dailySalaries')
                         ->multiple()
@@ -120,21 +144,10 @@ class ClosingStoreResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn (DailySalary $record) => "{$record->daily_salary_name}")
                         ->preload()
                         ->reactive()
-                        ->native(false),
-
-                    Select::make('invoicePurchases')
-                        ->multiple()
-                        ->relationship(
-                            name: 'invoicePurchases',
-                            modifyQueryUsing: fn (Builder $query, $get) => $query
-                                ->where('payment_type_id', '2')
-                                ->where('payment_status', '1')
-                                ->when($get('store_id'), fn ($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
-                        )
-                        ->getOptionLabelFromRecordUsing(fn (InvoicePurchase $record) => "{$record->invoice_purchase_name}")
-                        ->preload()
-                        ->reactive()
-                        ->native(false),
+                        ->native(false)
+                        ->afterStateUpdated(function (Get $get, Set $set) {
+                            self::updateTotalCash($get, $set);
+                        }),
 
                     Select::make('invoicePurchases')
                         ->multiple()
@@ -149,37 +162,8 @@ class ClosingStoreResource extends Resource
                         ->preload()
                         ->reactive()
                         ->native(false)
-                        ->afterStateUpdated(function ($state, $set, $get) {
-                            $fuelServices = $get('fuelServices');
-                            $dailySalaries = $get('dailySalaries');
-                            $invoicePurchases = $state;
-
-                            $totalFuelService = 0;
-                            foreach ($fuelServices as $fuelServiceId) {
-                                $fuelService = FuelService::find($fuelServiceId);
-                                if ($fuelService) {
-                                    $totalFuelService += $fuelService->amount;
-                                }
-                            }
-
-                            $totalDailySalary = 0;
-                            foreach ($dailySalaries as $dailySalaryId) {
-                                $dailySalary = DailySalary::find($dailySalaryId);
-                                if ($dailySalary) {
-                                    $totalDailySalary += $dailySalary->amount;
-                                }
-                            }
-
-                            $totalInvoicePurchase = 0;
-                            foreach ($invoicePurchases as $invoicePurchaseId) {
-                                $invoicePurchase = InvoicePurchase::find($invoicePurchaseId);
-                                if ($invoicePurchase) {
-                                    $totalInvoicePurchase += $invoicePurchase->total_price;
-                                }
-                            }
-
-                            $spendingCashTotal = $totalFuelService + $totalDailySalary + $totalInvoicePurchase;
-                            $set('spending_cash_total', $spendingCashTotal);
+                        ->afterStateUpdated(function (Get $get, Set $set) {
+                            self::updateTotalCash($get, $set);
                         }),
 
                 ])
@@ -187,8 +171,27 @@ class ClosingStoreResource extends Resource
 
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    TextInput::make('spending_cash_total')
-                        ->readOnly(),
+                    TextInput::make('spending_total_cash')
+                        ->prefix('Rp')
+                        ->disabled()
+                        ->afterStateUpdated(function (Get $get, Set $set) {
+                            self::updateTotalCash($get, $set);
+                        }),
+
+                    TextInput::make('total_cash')
+                        ->prefix('Rp')
+                        ->disabled()
+                        ->afterStateUpdated(function (Get $get, Set $set) {
+                            self::updateTotalCash($get, $set);
+                        }),
+
+                    TextInput::make('total_cashless')
+                        ->prefix('Rp')
+                        ->disabled(),
+
+                    TextInput::make('total_omzet')
+                        ->prefix('Rp')
+                        ->disabled(),
 
                     Select::make('transfer_by_id')
                         ->nullable()
@@ -243,7 +246,8 @@ class ClosingStoreResource extends Resource
 
                 CurrencyColumn::make('total_cash_transfer'),
 
-                TextColumn::make('createdBy.name'),
+                TextColumn::make('createdBy.name')
+                    ->hidden(fn () => !Auth::user()->hasRole('admin')),
 
                 TextColumn::make('transferBy.name'),
 
@@ -282,6 +286,56 @@ class ClosingStoreResource extends Resource
         ];
     }
 
+    protected static function updateTotalCash(Get $get, Set $set): void
+    {
+        $fuelServices = $get('fuelServices');
+        $dailySalaries = $get('dailySalaries');
+        $invoicePurchases = $get('invoicePurchases');
+
+        $totalFuelService = 0;
+        foreach ($fuelServices as $fuelServiceId) {
+            $fuelService = FuelService::find($fuelServiceId);
+            if ($fuelService) {
+                $totalFuelService += $fuelService->amount;
+            }
+        }
+
+        $totalDailySalary = 0;
+        foreach ($dailySalaries as $dailySalaryId) {
+            $dailySalary = DailySalary::find($dailySalaryId);
+            if ($dailySalary) {
+                $totalDailySalary += $dailySalary->amount;
+            }
+        }
+
+        $totalInvoicePurchase = 0;
+        foreach ($invoicePurchases as $invoicePurchaseId) {
+            $invoicePurchase = InvoicePurchase::find($invoicePurchaseId);
+            if ($invoicePurchase) {
+                $totalInvoicePurchase += $invoicePurchase->total_price;
+            }
+        }
+
+        $spendingTotalCash = $totalFuelService + $totalDailySalary + $totalInvoicePurchase;
+        $set('spending_total_cash', $spendingTotalCash);
+
+        $cashForTomorrow = $get('cash_for_tomorrow');
+        $cashFromYesterday = $get('cash_from_yesterday');
+        $totalCashTransfer = $get('total_cash_transfer');
+
+        $totalCash = $cashForTomorrow - $cashFromYesterday + $spendingTotalCash + $totalCashTransfer;
+        $set('total_cash', $totalCash);
+    }
+
+    protected static function updateTotalCashless(Get $get, Set $set): void
+    {
+
+    }
+
+    protected static function updateTotalOmzet(Get $get, Set $set): void
+    {
+
+    }
 
 }
 

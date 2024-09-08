@@ -8,9 +8,10 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements FilamentUser
@@ -18,6 +19,7 @@ class User extends Authenticatable implements FilamentUser
     use HasRoles;
     use HasFactory;
     use Notifiable;
+    use SoftDeletes;
     use HasApiTokens;
     use HasPanelShield;
     use HasProfilePhoto;
@@ -60,6 +62,15 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function (User $user) {
+            $user->assignRole('customer');
+        });
     }
 
     /**
@@ -260,26 +271,6 @@ class User extends Authenticatable implements FilamentUser
     public function productionsApprovedBy()
     {
         return $this->hasMany(Production::class, 'approved_by_id');
-    }
-
-    /**
-     * Get all of the presencesCreatedBy.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function presencesCreatedBy()
-    {
-        return $this->hasMany(Presence::class, 'created_by_id');
-    }
-
-    /**
-     * Get all of the presencesApprovedBy.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function presencesApprovedBy()
-    {
-        return $this->hasMany(Presence::class, 'approved_by_id');
     }
 
     /**
@@ -509,6 +500,16 @@ class User extends Authenticatable implements FilamentUser
      */
     public function deliveryAddresses()
     {
-        return $this->hasMany(DeliveryAddress::class, 'user_id');
+        return $this->hasMany(DeliveryAddress::class);
+    }
+
+    /**
+     * Get all of the utilityBills.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function utilityBills()
+    {
+        return $this->hasMany(UtilityBill::class);
     }
 }

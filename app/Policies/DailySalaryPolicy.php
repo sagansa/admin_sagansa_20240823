@@ -23,7 +23,7 @@ class DailySalaryPolicy
      */
     public function view(User $user, DailySalary $dailySalary): bool
     {
-        return $user->can('view_panel::daily::salary') && $dailySalary->status === 2;
+        return $user->can('view_panel::daily::salary');
     }
 
     /**
@@ -39,7 +39,7 @@ class DailySalaryPolicy
      */
     public function update(User $user, DailySalary $dailySalary): bool
     {
-        return $user->can('update_panel::daily::salary') && $dailySalary->status !== 2;
+        return $user->can('update_panel::daily::salary');
     }
 
     /**

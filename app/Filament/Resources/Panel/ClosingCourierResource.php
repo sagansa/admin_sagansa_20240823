@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Closings;
+use App\Filament\Clusters\Purchases;
+use App\Filament\Clusters\Sales;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\ImageInput;
@@ -36,7 +39,11 @@ class ClosingCourierResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $navigationGroup = 'Cash';
+    protected static ?string $navigationGroup = 'Closing';
+
+    protected static ?string $pluralLabel = 'Courier';
+
+    protected static ?string $cluster = Closings::class;
 
     public static function getModelLabel(): string
     {

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Sales;
 use App\Filament\Columns\DeliveryStatusColumn;
 use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Pages;
 use App\Models\DeliveryAddress;
@@ -10,6 +11,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -25,6 +27,8 @@ use App\Filament\Forms\DeliveryAddressForm;
 use App\Filament\Forms\SalesProductForm;
 use App\Models\SalesOrderOnline;
 use App\Models\Store;
+use Filament\Forms\Components\Wizard;
+use Filament\Forms\Components\Wizard\Step;
 use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -38,20 +42,22 @@ class SalesOrderOnlinesResource extends Resource
 
     protected static ?string $pluralLabel = 'Online';
 
+    protected static ?string $cluster = Sales::class;
+
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Section::make()
-                ->schema(static::getDetailsFormHeadSchema())
-                ->columns(2),
+                Section::make('Order')
+                    ->schema(static::getDetailsFormHeadSchema())
+                    ->columns(2),
 
-            Section::make('Detail Order')->schema([
-                SalesProductForm::getItemsRepeater()
-                ])
-                ->disabled(fn () => Auth::user()->hasRole('storage-staff')),
+                Section::make('Detail Order')->schema([
+                    SalesProductForm::getItemsRepeater()
+                    ])
+                    ->disabled(fn () => Auth::user()->hasRole('storage-staff')),
 
-            Section::make()
-                ->schema(BottomTotalPriceForm::schema()),
+                Section::make('Total Price')
+                    ->schema(BottomTotalPriceForm::schema()),
             ])
             ->disabled(fn (?SalesOrderOnline $record) => $record !== null && $record->delivery_status == 2);
     }

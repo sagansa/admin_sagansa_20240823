@@ -59,11 +59,6 @@ class Product extends Model
         return $this->belongsToMany(SelfConsumption::class);
     }
 
-    public function productConsumptions()
-    {
-        return $this->hasMany(ProductConsumption::class);
-    }
-
     public function transferStocks()
     {
         return $this->belongsToMany(TransferStock::class);

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Advances;
+use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\DateInput;
@@ -39,9 +40,9 @@ class CashAdvanceResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $cluster = Advances::class;
+    protected static ?string $cluster = Purchases::class;
 
-    // protected static ?string $navigationGroup = 'Purchases';
+    protected static ?string $navigationGroup = 'Advances';
 
     public static function getModelLabel(): string
     {
@@ -120,6 +121,7 @@ class CashAdvanceResource extends Resource
                         ]),
 
                     DatePicker::make('date')
+                        ->default('today')
                         ->columnSpan([
                             'md' => 4,
                         ]),

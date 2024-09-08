@@ -23,7 +23,7 @@ class RequestPurchasePolicy
      */
     public function view(User $user, RequestPurchase $requestPurchase): bool
     {
-        return $user->can('view_panel::request::purchase') && $requestPurchase->status === 2;
+        return $user->can('view_panel::request::purchase');
     }
 
     /**
@@ -39,7 +39,7 @@ class RequestPurchasePolicy
      */
     public function update(User $user, RequestPurchase $requestPurchase): bool
     {
-        return $user->can('update_panel::request::purchase') && $requestPurchase->status !== 2;
+        return $user->can('update_panel::request::purchase');
     }
 
     /**

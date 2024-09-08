@@ -1834,7 +1834,7 @@ return [
         'collectionTitle' => 'Cashlesses',
         'inputs' => [
             'account_cashless_id' => [
-                'label' => 'Account cashless id',
+                'label' => 'Account cashless',
                 'placeholder' => 'Account cashless id',
             ],
             'image' => [
@@ -1864,6 +1864,10 @@ return [
             'canceled' => [
                 'label' => 'Canceled',
                 'placeholder' => 'Canceled',
+            ],
+            'closing_store_id' => [
+                'label' => 'Closing store id',
+                'placeholder' => 'Closing store id',
             ],
         ],
         'filament' => [
@@ -1904,6 +1908,2715 @@ return [
                 'description' => '',
             ],
             'canceled' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'closing_store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'accountCashlesses' => [
+        'itemTitle' => 'Account Cashless',
+        'collectionTitle' => 'Account Cashlesses',
+        'inputs' => [
+            'cashless_provider_id' => [
+                'label' => 'Cashless provider',
+                'placeholder' => 'Cashless provider id',
+            ],
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'store_cashless_id' => [
+                'label' => 'Store cashless',
+                'placeholder' => 'Store cashless id',
+            ],
+            'email' => [
+                'label' => 'Email',
+                'placeholder' => 'Email',
+            ],
+            'username' => [
+                'label' => 'Username',
+                'placeholder' => 'Username',
+            ],
+            'password' => [
+                'label' => 'Password',
+                'placeholder' => 'Password',
+            ],
+            'no_telp' => [
+                'label' => 'No telp',
+                'placeholder' => 'No telp',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+        ],
+        'filament' => [
+            'cashless_provider_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'store_cashless_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'email' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'username' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'password' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'no_telp' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'adminCashlesses' => [
+        'itemTitle' => 'Admin Cashless',
+        'collectionTitle' => 'Admin Cashlesses',
+        'inputs' => [
+            'cashless_provider_id' => [
+                'label' => 'Cashless provider',
+                'placeholder' => 'Cashless provider id',
+            ],
+            'username' => [
+                'label' => 'Username',
+                'placeholder' => 'Username',
+            ],
+            'email' => [
+                'label' => 'Email',
+                'placeholder' => 'Email',
+            ],
+            'no_telp' => [
+                'label' => 'No telp',
+                'placeholder' => 'No telp',
+            ],
+            'password' => [
+                'label' => 'Password',
+                'placeholder' => 'Password',
+            ],
+        ],
+        'filament' => [
+            'cashless_provider_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'username' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'email' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'no_telp' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'password' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'banks' => [
+        'itemTitle' => 'Bank',
+        'collectionTitle' => 'Banks',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+        ],
+    ],
+    'cashlessProviders' => [
+        'itemTitle' => 'Cashless Provider',
+        'collectionTitle' => 'Cashless Providers',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'contractEmployees' => [
+        'itemTitle' => 'Contract Employee',
+        'collectionTitle' => 'Contract Employees',
+        'inputs' => [
+            'file' => [
+                'label' => 'File',
+                'placeholder' => 'File',
+            ],
+            'from_date' => [
+                'label' => 'From date',
+                'placeholder' => 'From date',
+            ],
+            'until_date' => [
+                'label' => 'Until date',
+                'placeholder' => 'Until date',
+            ],
+            'nominal_guarantee' => [
+                'label' => 'Nominal guarantee',
+                'placeholder' => 'Nominal guarantee',
+            ],
+            'guarantee' => [
+                'label' => 'Guarantee',
+                'placeholder' => 'Guarantee',
+            ],
+            'employee_id' => [
+                'label' => 'Employee',
+                'placeholder' => 'Employee id',
+            ],
+            'user_id' => [
+                'label' => 'User',
+                'placeholder' => 'User id',
+            ],
+            'guaranteed_return' => [
+                'label' => 'Guaranteed return',
+                'placeholder' => 'Guaranteed return',
+            ],
+        ],
+        'filament' => [
+            'file' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'from_date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'until_date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'nominal_guarantee' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'guarantee' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'employee_id' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'user_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'guaranteed_return' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'contractLocations' => [
+        'itemTitle' => 'Contract Location',
+        'collectionTitle' => 'Contract Locations',
+        'inputs' => [
+            'location_id' => [
+                'label' => 'Location',
+                'placeholder' => 'Location id',
+            ],
+            'from_date' => [
+                'label' => 'From date',
+                'placeholder' => 'From date',
+            ],
+            'until_date' => [
+                'label' => 'Until date',
+                'placeholder' => 'Until date',
+            ],
+            'nominal_contract' => [
+                'label' => 'Nominal contract',
+                'placeholder' => 'Nominal contract',
+            ],
+        ],
+        'filament' => [
+            'location_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'from_date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'until_date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'nominal_contract' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'deliveryServices' => [
+        'itemTitle' => 'Delivery Service',
+        'collectionTitle' => 'Delivery Services',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+        ],
+    ],
+    'employees' => [
+        'itemTitle' => 'Employee',
+        'collectionTitle' => 'Employees',
+        'inputs' => [
+            'identity_no' => [
+                'label' => 'Identity no',
+                'placeholder' => 'Identity no',
+            ],
+            'nickname' => [
+                'label' => 'Nickname',
+                'placeholder' => 'Nickname',
+            ],
+            'no_telp' => [
+                'label' => 'No telp',
+                'placeholder' => 'No telp',
+            ],
+            'birth_place' => [
+                'label' => 'Birth place',
+                'placeholder' => 'Birth place',
+            ],
+            'birth_date' => [
+                'label' => 'Birth date',
+                'placeholder' => 'Birth date',
+            ],
+            'fathers_name' => [
+                'label' => 'Fathers name',
+                'placeholder' => 'Fathers name',
+            ],
+            'mothers_name' => [
+                'label' => 'Mothers name',
+                'placeholder' => 'Mothers name',
+            ],
+            'address' => [
+                'label' => 'Address',
+                'placeholder' => 'Address',
+            ],
+            'province_id' => [
+                'label' => 'Province',
+                'placeholder' => 'Province id',
+            ],
+            'city_id' => [
+                'label' => 'City',
+                'placeholder' => 'City id',
+            ],
+            'district_id' => [
+                'label' => 'District',
+                'placeholder' => 'District id',
+            ],
+            'subdistrict_id' => [
+                'label' => 'Subdistrict',
+                'placeholder' => 'Subdistrict id',
+            ],
+            'postal_code_id' => [
+                'label' => 'Postal code',
+                'placeholder' => 'Postal code id',
+            ],
+            'parents_no_telp' => [
+                'label' => 'Parents no telp',
+                'placeholder' => 'Parents no telp',
+            ],
+            'siblings_name' => [
+                'label' => 'Siblings name',
+                'placeholder' => 'Siblings name',
+            ],
+            'siblings_no_telp' => [
+                'label' => 'Siblings no telp',
+                'placeholder' => 'Siblings no telp',
+            ],
+            'bpjs' => [
+                'label' => 'BPJS',
+                'placeholder' => 'Bpjs',
+            ],
+            'bank_account_no' => [
+                'label' => 'Bank account no',
+                'placeholder' => 'Bank account no',
+            ],
+            'acceptance_date' => [
+                'label' => 'Acceptance date',
+                'placeholder' => 'Acceptance date',
+            ],
+            'signs' => [
+                'label' => 'Signs',
+                'placeholder' => 'Signs',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+            'image_identity_id' => [
+                'label' => 'Image identity id',
+                'placeholder' => 'Image identity id',
+            ],
+            'image_selfie' => [
+                'label' => 'Image selfie',
+                'placeholder' => 'Image selfie',
+            ],
+            'user_id' => [
+                'label' => 'User',
+                'placeholder' => 'User id',
+            ],
+            'bank_id' => [
+                'label' => 'Bank',
+                'placeholder' => 'Bank id',
+            ],
+            'employee_status_id' => [
+                'label' => 'Employee status',
+                'placeholder' => 'Employee status id',
+            ],
+            'gender' => [
+                'label' => 'Gender',
+                'placeholder' => 'Gender',
+            ],
+            'religion' => [
+                'label' => 'Religion',
+                'placeholder' => 'Religion',
+            ],
+            'driving_license' => [
+                'label' => 'Driving license',
+                'placeholder' => 'Driving license',
+            ],
+            'marital_status' => [
+                'label' => 'Marital status',
+                'placeholder' => 'Marital status',
+            ],
+            'level_of_education' => [
+                'label' => 'Level of education',
+                'placeholder' => 'Level of education',
+            ],
+            'major' => [
+                'label' => 'Major',
+                'placeholder' => 'Major',
+            ],
+            'latitude' => [
+                'label' => 'Latitude',
+                'placeholder' => 'Latitude',
+            ],
+            'longitude' => [
+                'label' => 'Longitude',
+                'placeholder' => 'Longitude',
+            ],
+        ],
+        'filament' => [
+            'identity_no' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'nickname' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'no_telp' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'birth_place' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'birth_date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'fathers_name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'mothers_name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'address' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'province_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'city_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'district_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'subdistrict_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'postal_code_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'parents_no_telp' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'siblings_name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'siblings_no_telp' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'bpjs' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'bank_account_no' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'acceptance_date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'signs' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'image_identity_id' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'image_selfie' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'user_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'bank_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'employee_status_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'gender' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'religion' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'driving_license' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'marital_status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'level_of_education' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'major' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'latitude' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'longitude' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'employeeStatuses' => [
+        'itemTitle' => 'Employee Status',
+        'collectionTitle' => 'Employee Statuses',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'hygienes' => [
+        'itemTitle' => 'Hygiene',
+        'collectionTitle' => 'Hygienes',
+        'inputs' => [
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+            'created_by_id' => [
+                'label' => 'Created by id',
+                'placeholder' => 'Created by id',
+            ],
+            'approved_by_id' => [
+                'label' => 'Approved by id',
+                'placeholder' => 'Approved by id',
+            ],
+        ],
+        'filament' => [
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'created_by_id' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'approved_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'hygieneOfRooms' => [
+        'itemTitle' => 'Hygiene Of Room',
+        'collectionTitle' => 'Hygiene Of Rooms',
+        'inputs' => [
+            'hygiene_id' => [
+                'label' => 'Hygiene',
+                'placeholder' => 'Hygiene id',
+            ],
+            'room_id' => [
+                'label' => 'Room',
+                'placeholder' => 'Room id',
+            ],
+            'image' => [
+                'label' => 'Image',
+                'placeholder' => 'Image',
+            ],
+        ],
+        'filament' => [
+            'hygiene_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'room_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'image' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'locations' => [
+        'itemTitle' => 'Location',
+        'collectionTitle' => 'Locations',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'contact_person_name' => [
+                'label' => 'Contact person name',
+                'placeholder' => 'Contact person name',
+            ],
+            'contact_person_number' => [
+                'label' => 'Contact person number',
+                'placeholder' => 'Contact person number',
+            ],
+            'address' => [
+                'label' => 'Address',
+                'placeholder' => 'Address',
+            ],
+            'province_id' => [
+                'label' => 'Province',
+                'placeholder' => 'Province id',
+            ],
+            'city_id' => [
+                'label' => 'City',
+                'placeholder' => 'City id',
+            ],
+            'district_id' => [
+                'label' => 'District',
+                'placeholder' => 'District id',
+            ],
+            'subdistrict_id' => [
+                'label' => 'Subdistrict',
+                'placeholder' => 'Subdistrict id',
+            ],
+            'postal_code_id' => [
+                'label' => 'Postal code',
+                'placeholder' => 'Postal code id',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'contact_person_name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'contact_person_number' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'address' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'province_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'city_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'district_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'subdistrict_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'postal_code_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'materialGroups' => [
+        'itemTitle' => 'Material Group',
+        'collectionTitle' => 'Material Groups',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'user_id' => [
+                'label' => 'User',
+                'placeholder' => 'User id',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'user_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'monthlySalaries' => [
+        'itemTitle' => 'Monthly Salary',
+        'collectionTitle' => 'Monthly Salaries',
+        'inputs' => [
+            'amount' => [
+                'label' => 'Amount',
+                'placeholder' => 'Amount',
+            ],
+        ],
+        'filament' => [
+            'amount' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'movementAssets' => [
+        'itemTitle' => 'Movement Asset',
+        'collectionTitle' => 'Movement Assets',
+        'inputs' => [
+            'image' => [
+                'label' => 'Image',
+                'placeholder' => 'Image',
+            ],
+            'qr_code' => [
+                'label' => 'Qr code',
+                'placeholder' => 'Qr code',
+            ],
+            'product_id' => [
+                'label' => 'Product',
+                'placeholder' => 'Product id',
+            ],
+            'good_cond_qty' => [
+                'label' => 'Good cond qty',
+                'placeholder' => 'Good cond qty',
+            ],
+            'bad_cond_qty' => [
+                'label' => 'Bad cond qty',
+                'placeholder' => 'Bad cond qty',
+            ],
+            'store_asset_id' => [
+                'label' => 'Store asset',
+                'placeholder' => 'Store asset id',
+            ],
+        ],
+        'filament' => [
+            'image' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'qr_code' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'product_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'good_cond_qty' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'bad_cond_qty' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'store_asset_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'movementAssetAudits' => [
+        'itemTitle' => 'Movement Asset Audit',
+        'collectionTitle' => 'Movement Asset Audits',
+        'inputs' => [
+            'image' => [
+                'label' => 'Image',
+                'placeholder' => 'Image',
+            ],
+            'movement_asset_id' => [
+                'label' => 'Movement asset',
+                'placeholder' => 'Movement asset id',
+            ],
+            'good_cond_qty' => [
+                'label' => 'Good cond qty',
+                'placeholder' => 'Good cond qty',
+            ],
+            'bad_cond_qty' => [
+                'label' => 'Bad cond qty',
+                'placeholder' => 'Bad cond qty',
+            ],
+            'movement_asset_result_id' => [
+                'label' => 'Movement asset result',
+                'placeholder' => 'Movement asset result id',
+            ],
+        ],
+        'filament' => [
+            'image' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'movement_asset_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'good_cond_qty' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'bad_cond_qty' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'movement_asset_result_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'movementAssetResults' => [
+        'itemTitle' => 'Movement Asset Result',
+        'collectionTitle' => 'Movement Asset Results',
+        'inputs' => [
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'date' => [
+                'label' => 'Date',
+                'placeholder' => 'Date',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+            'user_id' => [
+                'label' => 'User',
+                'placeholder' => 'User id',
+            ],
+        ],
+        'filament' => [
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'user_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'onlineCategories' => [
+        'itemTitle' => 'Online Category',
+        'collectionTitle' => 'Online Categories',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+        ],
+    ],
+    'onlineShopProviders' => [
+        'itemTitle' => 'Online Shop Provider',
+        'collectionTitle' => 'Online Shop Providers',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'paymentTypes' => [
+        'itemTitle' => 'Payment Type',
+        'collectionTitle' => 'Payment Types',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'presences' => [
+        'itemTitle' => 'Presence',
+        'collectionTitle' => 'Presences',
+        'inputs' => [
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'shift_store_id' => [
+                'label' => 'Shift store',
+                'placeholder' => 'Shift store id',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'image_in' => [
+                'label' => 'Image in',
+                'placeholder' => 'Image in',
+            ],
+            'datetime_in' => [
+                'label' => 'Datetime in',
+                'placeholder' => 'Datetime in',
+            ],
+            'latitude_in' => [
+                'label' => 'Latitude in',
+                'placeholder' => 'Latitude in',
+            ],
+            'longitude_in' => [
+                'label' => 'Longitude in',
+                'placeholder' => 'Longitude in',
+            ],
+            'image_out' => [
+                'label' => 'Image out',
+                'placeholder' => 'Image out',
+            ],
+            'datetime_out' => [
+                'label' => 'Datetime out',
+                'placeholder' => 'Datetime out',
+            ],
+            'latitude_out' => [
+                'label' => 'Latitude out',
+                'placeholder' => 'Latitude out',
+            ],
+            'longitude_out' => [
+                'label' => 'Longitude out',
+                'placeholder' => 'Longitude out',
+            ],
+            'created_by_id' => [
+                'label' => 'Created by',
+                'placeholder' => 'Created by id',
+            ],
+            'approved_by_id' => [
+                'label' => 'Approved by',
+                'placeholder' => 'Approved by id',
+            ],
+        ],
+        'filament' => [
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'shift_store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'image_in' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'datetime_in' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'latitude_in' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'longitude_in' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'image_out' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'datetime_out' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'latitude_out' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'longitude_out' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'created_by_id' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'approved_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'productConsumptions' => [
+        'itemTitle' => 'Product Consumption',
+        'collectionTitle' => 'Product Consumptions',
+        'inputs' => [
+            'product_id' => [
+                'label' => 'Product',
+                'placeholder' => 'Product id',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+        ],
+        'filament' => [
+            'product_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+        ],
+    ],
+    'productions' => [
+        'itemTitle' => 'Production',
+        'collectionTitle' => 'Productions',
+        'inputs' => [
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'date' => [
+                'label' => 'Date',
+                'placeholder' => 'Date',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+            'created_by_id' => [
+                'label' => 'Created by',
+                'placeholder' => 'Created by id',
+            ],
+            'approved_by_id' => [
+                'label' => 'Approved by',
+                'placeholder' => 'Approved by id',
+            ],
+        ],
+        'filament' => [
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'created_by_id' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'approved_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'productionMainFroms' => [
+        'itemTitle' => 'Production Main From',
+        'collectionTitle' => 'Production Main Froms',
+        'inputs' => [
+            'detail_invoice_id' => [
+                'label' => 'Detail invoice',
+                'placeholder' => 'Detail invoice id',
+            ],
+        ],
+        'filament' => [
+            'detail_invoice_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'productionSupportFroms' => [
+        'itemTitle' => 'Production Support From',
+        'collectionTitle' => 'Production Support Froms',
+        'inputs' => [
+            'product_id' => [
+                'label' => 'Product',
+                'placeholder' => 'Product id',
+            ],
+            'quantity' => [
+                'label' => 'Quantity',
+                'placeholder' => 'Quantity',
+            ],
+        ],
+        'filament' => [
+            'product_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'quantity' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'productionTos' => [
+        'itemTitle' => 'Production To',
+        'collectionTitle' => 'Production Tos',
+        'inputs' => [
+            'product_id' => [
+                'label' => 'Product',
+                'placeholder' => 'Product id',
+            ],
+            'quantity' => [
+                'label' => 'Quantity',
+                'placeholder' => 'Quantity',
+            ],
+        ],
+        'filament' => [
+            'product_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'quantity' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'readinesses' => [
+        'itemTitle' => 'Readiness',
+        'collectionTitle' => 'Readinesses',
+        'inputs' => [
+            'image_selfie' => [
+                'label' => 'Image selfie',
+                'placeholder' => 'Image selfie',
+            ],
+            'left_hand' => [
+                'label' => 'Left hand',
+                'placeholder' => 'Left hand',
+            ],
+            'right_hand' => [
+                'label' => 'Right hand',
+                'placeholder' => 'Right hand',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+            'created_by_id' => [
+                'label' => 'Created by',
+                'placeholder' => 'Created by id',
+            ],
+            'approved_by_id' => [
+                'label' => 'Approved by',
+                'placeholder' => 'Approved by id',
+            ],
+        ],
+        'filament' => [
+            'image_selfie' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'left_hand' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'right_hand' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'created_by_id' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'approved_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'rooms' => [
+        'itemTitle' => 'Room',
+        'collectionTitle' => 'Rooms',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'selfConsumptions' => [
+        'itemTitle' => 'Self Consumption',
+        'collectionTitle' => 'Self Consumptions',
+        'inputs' => [
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'date' => [
+                'label' => 'Date',
+                'placeholder' => 'Date',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+            'created_by_id' => [
+                'label' => 'Created by',
+                'placeholder' => 'Created by id',
+            ],
+            'approved_by_id' => [
+                'label' => 'Approved by',
+                'placeholder' => 'Approved by id',
+            ],
+        ],
+        'filament' => [
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'created_by_id' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'approved_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'shiftStores' => [
+        'itemTitle' => 'Shift Store',
+        'collectionTitle' => 'Shift Stores',
+        'inputs' => [
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+        ],
+        'filament' => [
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'stores' => [
+        'itemTitle' => 'Store',
+        'collectionTitle' => 'Stores',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'nickname' => [
+                'label' => 'Nickname',
+                'placeholder' => 'Nickname',
+            ],
+            'no_telp' => [
+                'label' => 'No telp',
+                'placeholder' => 'No telp',
+            ],
+            'email' => [
+                'label' => 'Email',
+                'placeholder' => 'Email',
+            ],
+            'user_id' => [
+                'label' => 'User',
+                'placeholder' => 'User id',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'nickname' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'no_telp' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'email' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'user_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+        ],
+    ],
+    'storeAssets' => [
+        'itemTitle' => 'Store Asset',
+        'collectionTitle' => 'Store Assets',
+        'inputs' => [
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+        ],
+        'filament' => [
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'storeCashlesses' => [
+        'itemTitle' => 'Store Cashless',
+        'collectionTitle' => 'Store Cashlesses',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+        ],
+    ],
+    'storeConsumptions' => [
+        'itemTitle' => 'Store Consumption',
+        'collectionTitle' => 'Store Consumptions',
+        'inputs' => [
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'date' => [
+                'label' => 'Date',
+                'placeholder' => 'Date',
+            ],
+        ],
+        'filament' => [
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'transferStocks' => [
+        'itemTitle' => 'Transfer Stock',
+        'collectionTitle' => 'Transfer Stocks',
+        'inputs' => [
+            'date' => [
+                'label' => 'Date',
+                'placeholder' => 'Date',
+            ],
+            'image' => [
+                'label' => 'Image',
+                'placeholder' => 'Image',
+            ],
+            'from_store_id' => [
+                'label' => 'From store',
+                'placeholder' => 'From store id',
+            ],
+            'to_store_id' => [
+                'label' => 'To store',
+                'placeholder' => 'To store id',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+            'approved_by_id' => [
+                'label' => 'Approved by',
+                'placeholder' => 'Approved by id',
+            ],
+            'received_by_id' => [
+                'label' => 'Received by',
+                'placeholder' => 'Received by id',
+            ],
+            'sent_by_id' => [
+                'label' => 'Sent by',
+                'placeholder' => 'Sent by id',
+            ],
+        ],
+        'filament' => [
+            'date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'image' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'from_store_id' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'to_store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'approved_by_id' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'received_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'sent_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'transferToAccounts' => [
+        'itemTitle' => 'Transfer To Account',
+        'collectionTitle' => 'Transfer To Accounts',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'number' => [
+                'label' => 'Number',
+                'placeholder' => 'Number',
+            ],
+            'bank_id' => [
+                'label' => 'Bank',
+                'placeholder' => 'Bank id',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'number' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'bank_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+        ],
+    ],
+    'units' => [
+        'itemTitle' => 'Unit',
+        'collectionTitle' => 'Units',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'unit' => [
+                'label' => 'Unit',
+                'placeholder' => 'Unit',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'unit' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'utilities' => [
+        'itemTitle' => 'Utility',
+        'collectionTitle' => 'Utilities',
+        'inputs' => [
+            'number' => [
+                'label' => 'Number',
+                'placeholder' => 'Number',
+            ],
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'category' => [
+                'label' => 'Category',
+                'placeholder' => 'Category',
+            ],
+            'unit_id' => [
+                'label' => 'Unit',
+                'placeholder' => 'Unit id',
+            ],
+            'utility_provider_id' => [
+                'label' => 'Utility provider',
+                'placeholder' => 'Utility provider id',
+            ],
+            'pre_post' => [
+                'label' => 'Pre post',
+                'placeholder' => 'Pre post',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+        ],
+        'filament' => [
+            'number' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'category' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'unit_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'utility_provider_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'pre_post' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'utilityProviders' => [
+        'itemTitle' => 'Utility Provider',
+        'collectionTitle' => 'Utility Providers',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'category' => [
+                'label' => 'Category',
+                'placeholder' => 'Category',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'category' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+        ],
+    ],
+    'utilityUsages' => [
+        'itemTitle' => 'Utility Usage',
+        'collectionTitle' => 'Utility Usages',
+        'inputs' => [
+            'image' => [
+                'label' => 'Image',
+                'placeholder' => 'Image',
+            ],
+            'utility_id' => [
+                'label' => 'Utility',
+                'placeholder' => 'Utility id',
+            ],
+            'result' => [
+                'label' => 'Result',
+                'placeholder' => 'Result',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+            'created_by_id' => [
+                'label' => 'Created by',
+                'placeholder' => 'Created by id',
+            ],
+            'approved_by_id' => [
+                'label' => 'Approved by',
+                'placeholder' => 'Approved by id',
+            ],
+        ],
+        'filament' => [
+            'image' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'utility_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'result' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'created_by_id' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'approved_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'vehicleCertificates' => [
+        'itemTitle' => 'Vehicle Certificate',
+        'collectionTitle' => 'Vehicle Certificates',
+        'inputs' => [
+            'vehicle_id' => [
+                'label' => 'Vehicle',
+                'placeholder' => 'Vehicle id',
+            ],
+            'bpkb' => [
+                'label' => 'BPKB',
+                'placeholder' => 'Bpkb',
+            ],
+            'stnk' => [
+                'label' => 'Stnk',
+                'placeholder' => 'Stnk',
+            ],
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'brand' => [
+                'label' => 'Brand',
+                'placeholder' => 'Brand',
+            ],
+            'type' => [
+                'label' => 'Type',
+                'placeholder' => 'Type',
+            ],
+            'category' => [
+                'label' => 'Category',
+                'placeholder' => 'Category',
+            ],
+            'model' => [
+                'label' => 'Model',
+                'placeholder' => 'Model',
+            ],
+            'manufacture_year' => [
+                'label' => 'Manufacture year',
+                'placeholder' => 'Manufacture year',
+            ],
+            'cylinder_capacity' => [
+                'label' => 'Cylinder capacity',
+                'placeholder' => 'Cylinder capacity',
+            ],
+            'vehicle_identity_no' => [
+                'label' => 'Vehicle identity no',
+                'placeholder' => 'Vehicle identity no',
+            ],
+            'engine_no' => [
+                'label' => 'Engine no',
+                'placeholder' => 'Engine no',
+            ],
+            'color' => [
+                'label' => 'Color',
+                'placeholder' => 'Color',
+            ],
+            'type_fuel' => [
+                'label' => 'Type fuel',
+                'placeholder' => 'Type fuel',
+            ],
+            'lisence_plate_color' => [
+                'label' => 'Lisence plate color',
+                'placeholder' => 'Lisence plate color',
+            ],
+            'registration_year' => [
+                'label' => 'Registration year',
+                'placeholder' => 'Registration year',
+            ],
+            'bpkb_no' => [
+                'label' => 'Bpkb no',
+                'placeholder' => 'Bpkb no',
+            ],
+            'location_code' => [
+                'label' => 'Location code',
+                'placeholder' => 'Location code',
+            ],
+            'registration_queue_no' => [
+                'label' => 'Registration queue no',
+                'placeholder' => 'Registration queue no',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+        ],
+        'filament' => [
+            'vehicle_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'bpkb' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'stnk' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'brand' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'type' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'category' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'model' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'manufacture_year' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'cylinder_capacity' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'vehicle_identity_no' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'engine_no' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'color' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'type_fuel' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'lisence_plate_color' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'registration_year' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'bpkb_no' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'location_code' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'registration_queue_no' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'vehicleTaxes' => [
+        'itemTitle' => 'Vehicle Tax',
+        'collectionTitle' => 'Vehicle Taxes',
+        'inputs' => [
+            'image' => [
+                'label' => 'Image',
+                'placeholder' => 'Image',
+            ],
+            'amount_tax' => [
+                'label' => 'Amount tax',
+                'placeholder' => 'Amount tax',
+            ],
+            'vehicle_id' => [
+                'label' => 'Vehicle',
+                'placeholder' => 'Vehicle id',
+            ],
+            'expired_date' => [
+                'label' => 'Expired date',
+                'placeholder' => 'Expired date',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+            'user_id' => [
+                'label' => 'User',
+                'placeholder' => 'User id',
+            ],
+        ],
+        'filament' => [
+            'image' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'amount_tax' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'vehicle_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'expired_date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'user_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'workingExperiences' => [
+        'inputs' => [
+            'employee_id' => [
+                'label' => 'Employee',
+                'placeholder' => 'Employee id',
+            ],
+            'place' => [
+                'label' => 'Place',
+                'placeholder' => 'Place',
+            ],
+            'position' => [
+                'label' => 'Position',
+                'placeholder' => 'Position',
+            ],
+            'salary_per_month' => [
+                'label' => 'Salary per month',
+                'placeholder' => 'Salary per month',
+            ],
+            'from_date' => [
+                'label' => 'From date',
+                'placeholder' => 'From date',
+            ],
+            'until_date' => [
+                'label' => 'Until date',
+                'placeholder' => 'Until date',
+            ],
+            'reason' => [
+                'label' => 'Reason',
+                'placeholder' => 'Reason',
+            ],
+        ],
+        'filament' => [
+            'employee_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'place' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'position' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'salary_per_month' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'from_date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'until_date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'reason' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'productRemainingStocks' => [
+        'inputs' => [
+            'product_id' => [
+                'label' => 'Product',
+                'placeholder' => 'Product id',
+            ],
+            'remaining_stock_id' => [
+                'label' => 'Remaining stock',
+                'placeholder' => 'Remaining stock id',
+            ],
+            'quantity' => [
+                'label' => 'Quantity',
+                'placeholder' => 'Quantity',
+            ],
+        ],
+        'filament' => [
+            'product_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'remaining_stock_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'quantity' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+        ],
+    ],
+    'userCashlesses' => [
+        'itemTitle' => 'User Cashless',
+        'collectionTitle' => 'User Cashlesses',
+        'inputs' => [
+            'cashless_provider_id' => [
+                'label' => 'Cashless provider',
+                'placeholder' => 'Cashless provider id',
+            ],
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'store_cashless_id' => [
+                'label' => 'Store cashless',
+                'placeholder' => 'Store cashless id',
+            ],
+            'email' => [
+                'label' => 'Email',
+                'placeholder' => 'Email',
+            ],
+            'username' => [
+                'label' => 'Username',
+                'placeholder' => 'Username',
+            ],
+            'password' => [
+                'label' => 'Password',
+                'placeholder' => 'Password',
+            ],
+            'no_telp' => [
+                'label' => 'No telp',
+                'placeholder' => 'No telp',
+            ],
+        ],
+        'filament' => [
+            'cashless_provider_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'store_cashless_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'email' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'username' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'password' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'no_telp' => [
                 'helper_text' => '',
                 'label' => '',
                 'description' => '',

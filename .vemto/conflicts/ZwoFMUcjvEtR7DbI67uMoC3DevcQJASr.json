@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "a35a71ff-de23-4acb-a670-d85b6307def2",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DeliveryAddressResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\DeliveryAddressResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateDeliveryAddress extends CreateRecord\n{\n    protected static string $resource = DeliveryAddressResource::class;\n\n    // protected function mutateFormDataBeforeCreate(array $data): array\n    // {\n    //     $user = Auth::user();\n    //     if ($user->hasRole('customer')) {\n    //         $data['for'] = \"1\"; //direct\n    //     } elseif ($user->hasRole('admin') || $user->hasRole('storage-staff')) {\n    //         $data['for'] = \"3\"; //online\n    //     } elseif ($user->hasRole('sales')) {\n    //         $data['for'] = \"2\"; //employee\n    //     }\n\n    //     $data['user_id'] = Auth::id();\n\n    //     return $data;\n    // }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DeliveryAddressResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\DeliveryAddressResource;\n\nclass CreateDeliveryAddress extends CreateRecord\n{\n    protected static string $resource = DeliveryAddressResource::class;\n}\n"
-        }
-    ]
-}

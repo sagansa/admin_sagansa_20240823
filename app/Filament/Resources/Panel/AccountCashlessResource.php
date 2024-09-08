@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Cashlesses;
+use App\Filament\Clusters\Transaction\Settings;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -27,7 +29,9 @@ class AccountCashlessResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Setting';
+    protected static ?string $cluster = Settings::class;
+
+    protected static ?string $navigationGroup = 'Cashless';
 
     public static function getModelLabel(): string
     {

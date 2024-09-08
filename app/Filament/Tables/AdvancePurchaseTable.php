@@ -22,15 +22,7 @@ class AdvancePurchaseTable
 
             CurrencyColumn::make('total_price'),
 
-            SelectColumn::make('status')
-                ->disabled(Auth::user()->hasRole('staff'))
-                ->options([
-                    '1' => 'belum diperiksa',
-                    '2' => 'valid',
-                    '3' => 'diperbaiki',
-                    '4' => 'periksa ulang',
-                ])
-                ->selectablePlaceholder(false),
+            StatusColumn::make('status'),
         ];
     }
 }

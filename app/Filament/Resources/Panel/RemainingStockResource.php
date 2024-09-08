@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Clusters\Stock;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\BaseSelectInput;
 use App\Filament\Forms\DateInput;
@@ -23,6 +24,7 @@ use App\Filament\Resources\Panel\RemainingStockResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
+use Illuminate\Support\Facades\Auth;
 
 class RemainingStockResource extends Resource
 {
@@ -31,6 +33,8 @@ class RemainingStockResource extends Resource
     // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
+
+    protected static ?string $cluster = Stock::class;
 
     protected static ?string $navigationGroup = 'Stock';
 
@@ -51,8 +55,6 @@ class RemainingStockResource extends Resource
 
     public static function form(Form $form): Form
     {
-
-
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
@@ -60,8 +62,9 @@ class RemainingStockResource extends Resource
                         ->placeholder(__('Date')),
 
                     BaseSelectInput::make('store_id')
+                        ->required()
                         ->placeholder('Store')
-                        ->relationship('store', 'name'),
+                        ->relationship('store', 'nickname'),
 
                     StatusSelectInput::make('status')
                         ->placeholder('Status'),
@@ -79,14 +82,22 @@ class RemainingStockResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $remainingStocks = RemainingStock::query();
+
+        if (Auth::user()->hasRole('staff')) {
+            $remainingStocks = $remainingStocks->where('created_by_id', Auth::id());
+        }
+
         return $table
             ->poll('60s')
+            ->query($remainingStocks)
             ->columns([
                 TextColumn::make('date'),
 
-                TextColumn::make('store.name'),
+                TextColumn::make('store.nickname'),
 
-                TextColumn::make('createdBy.name'),
+                TextColumn::make('createdBy.name')
+                    ->hidden(fn () => !Auth::user()->hasRole('admin')),
 
                 StatusColumn::make('status'),
 
@@ -120,6 +131,11 @@ class RemainingStockResource extends Resource
             //
             RelationManagers\ProductsRelationManager::class,
         ];
+    }
+
+    public static function getCreateButtonLabel(): string
+    {
+        return __('Create'); // Mengubah teks tombol menjadi "Create"
     }
 
     public static function getPages(): array

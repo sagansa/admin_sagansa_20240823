@@ -6,6 +6,7 @@ use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\PaymentStatusColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Facades\Auth;
 
 class FuelServiceTable
 {
@@ -35,7 +36,8 @@ class FuelServiceTable
 
                 CurrencyColumn::make('amount'),
 
-                TextColumn::make('createdBy.name'),
+                TextColumn::make('createdBy.name')
+                    ->hidden(fn () => !Auth::user()->hasRole('admin')),
 
                 PaymentStatusColumn::make('status'),
 
