@@ -78,9 +78,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            ->plugins([
-                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make('super_admin')
             ]);
+            // ->plugins([
+            //     \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make('super_admin')
+            // ]);
     }
 }
