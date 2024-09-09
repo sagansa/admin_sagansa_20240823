@@ -191,7 +191,7 @@ class InvoicePurchaseResource extends Resource
                 ->preload()
                 ->options([
                     '1' => 'belum dibayar',
-                    '2' => 'sudah sibayar',
+                    '2' => 'sudah dibayar',
                     '3' => 'tidak valid',
                 ])
                 ->native(false),

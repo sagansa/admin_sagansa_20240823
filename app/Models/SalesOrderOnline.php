@@ -52,4 +52,10 @@ class SalesOrderOnline extends Model
     {
         return $this->hasMany(DetailSalesOrder::class, 'sales_order_id');
     }
+
+    // Atribut atau accessor untuk URL gambar
+    public function getImagePaymentUrlAttribute()
+    {
+        return asset('storage/' . $this->image_payment); // Menyesuaikan dengan lokasi penyimpanan gambar Anda
+    }
 }

@@ -117,7 +117,7 @@ class DetailRequestResource extends Resource
                 'requestPurchase.date',
                 'store.nickname'
             ])
-            ->defaultGroup('store.nickname')
+            // ->defaultGroup('requestPurchase.date')
             ->columns([
                 TextColumn::make('product.name')
                     ->label('Product'),
@@ -173,7 +173,7 @@ class DetailRequestResource extends Resource
 
                 ]),
             ])
-            ->defaultSort('id', 'desc');
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

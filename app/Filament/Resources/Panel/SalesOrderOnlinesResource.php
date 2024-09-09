@@ -68,14 +68,17 @@ class SalesOrderOnlinesResource extends Resource
                 ImageColumn::make('image_payment')
                     ->disabled(fn () => Auth::user()->hasRole('staff') || Auth::user()->hasRole('storage-staff'))
                     ->label('Payment')
-                    ->url(fn (SalesOrderOnline $record) => url($record->image_payment))
-                    ->openUrlInNewTab()
+                    // ->url(fn (SalesOrderOnline $record) => url($record->image_payment))
+                    ->url(fn($record) => asset('storage/' . $record->image_payment))
+                    ->openUrlInNewTab() // Membuka URL di tab baru
+                    // ->size(50) // Ukuran gambar thumbnail
+                    ->tooltip('Klik untuk membuka gambar di tab baru') // Tooltip untuk pengguna
                     ->toggleable(isToggledHiddenByDefault: false),
 
                 ImageColumn::make('image_delivery')
                     ->label('Delivery')
-                    ->url(fn (SalesOrderOnline $record) => url($record->image_payment))
-                    ->openUrlInNewTab()
+                    // ->url(fn (SalesOrderOnline $record) => url($record->image_delivery))
+                    // ->openUrlInNewTab()
                     ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('store.nickname')
