@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Sales;
 use App\Filament\Columns\DeliveryStatusColumn;
+use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\BottomTotalPriceForm;
 use App\Filament\Forms\DeliveryAddressForm;
@@ -74,11 +75,13 @@ class SalesOrderDirectsResource extends Resource
             ->query($query)
             ->columns([
 
-                TextColumn::make('image_payment')
-                    ->label('Payment'),
+                ImageOpenUrlColumn::make('image_payment')
+                    ->label('Payment')
+                    ->url(fn($record) => asset('storage/' . $record->image_payment)),
 
-                TextColumn::make('image_delivery')
-                    ->label('delivery'),
+                ImageOpenUrlColumn::make('image_delivery')
+                    ->label('delivery')
+                    ->url(fn($record) => asset('storage/' . $record->image_delivery)),
 
                 TextColumn::make('delivery_date')
                     ->label('Date'),
@@ -185,7 +188,9 @@ class SalesOrderDirectsResource extends Resource
                 ->columnSpan([
                     'full'
                 ])
-                ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1'])
+                ->disk('public')
+                ->directory('images/Direct/Payment'),
 
             Select::make('store_id')
                 ->required(fn () => Auth::user()->hasRole('admin'))
@@ -309,6 +314,8 @@ class SalesOrderDirectsResource extends Resource
                 ->maxSize(1024)
                 ->image()
                 ->imageEditor()
+                ->disk('public')
+                ->directory('images/Online/Delivery')
                 ->columnSpan([
                     'full'
                 ])
