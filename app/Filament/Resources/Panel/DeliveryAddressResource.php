@@ -69,9 +69,9 @@ class DeliveryAddressResource extends Resource
             ->columns([
                 TextColumn::make('name'),
 
-                TextColumn::make('recipients_name'),
+                TextColumn::make('recipient_name'),
 
-                TextColumn::make('recipients_telp_no')
+                TextColumn::make('recipient_telp_no')
                     ->label('Telephone'),
 
                 TextColumn::make('city.name'),

@@ -14,8 +14,8 @@ class DeliveryAddress extends Model
     protected $fillable = [
         'for',
         'name',
-        'recipients_name',
-        'recipients_telp_no',
+        'recipient_name',
+        'recipient_telp_no',
         'address',
         'province_id',
         'city_id',

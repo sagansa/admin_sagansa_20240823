@@ -49,10 +49,10 @@ class DeliveryAddressForm
                 ->placeholder('Rumah, Kantor, atau Lain-lain')
                 ->required(),
 
-            TextInput::make('recipients_name')
+            TextInput::make('recipient_name')
                 ->required(),
 
-            TextInput::make('recipients_telp_no')
+            TextInput::make('recipient_telp_no')
                 ->label('Telephone')
                 ->numeric()
                 ->required(),
