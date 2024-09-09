@@ -66,7 +66,7 @@ class SalesOrderOnlinesResource extends Resource
             ->query(SalesOrderOnline::query()->where('for', 3))
             ->columns([
                 ImageColumn::make('image_payment')
-                    ->storage('public')
+                    // ->storage('public')
                     ->directory('images/Online/Payment')
                     ->disabled(fn () => Auth::user()->hasRole('staff') || Auth::user()->hasRole('storage-staff'))
                     ->label('Payment'),
