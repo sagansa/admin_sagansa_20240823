@@ -151,9 +151,17 @@ class RequestPurchaseResource extends Resource
 
     public static function getItemsRepeater(): Repeater
     {
+
         return Repeater::make('detailRequests')
             ->relationship()
             ->minItems(1)
+            ->mutateRelationshipDataBeforeCreateUsing(function (array $data, RequestPurchase $record): array {
+                $data['store_id'] = $record->store_id;
+                $data['payment_type_id'] = optional(Product::find($data['product_id']))->payment_type_id;
+                $data['status'] = '1';
+
+                return $data;
+            })
             ->schema([
                 Select::make('product_id')
                     ->relationship('product', 'name')
@@ -186,27 +194,14 @@ class RequestPurchaseResource extends Resource
                         '6' => 'not used',
                     ])
                     ->native(false)
-                    // ->default(1)
+                    ->default(1)
                     ->disabled(fn () => !Auth::user()->hasRole('admin'))
                     ->columnSpan(2),
 
-                Hidden::make('status') // belum selesai
-                    ->default(1),
-                Hidden::make('store_id') // belum selesai
-                    ->default(1),
-                Hidden::make('payment_type_id') //belum selesai
-                    ->default(1),
             ])
             ->columns([
                 'md' => 8,
             ])
-            ->defaultItems(1)
-            ->mutateRelationshipDataBeforeFillUsing(function (array $data): array {
-                $data['store_id'] = '1';
-                $data['payment_type_id'] = '1';
-                $data['status'] = '1';
-
-                return $data;
-            });
+            ->defaultItems(1);
     }
 }
