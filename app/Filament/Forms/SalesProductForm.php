@@ -46,7 +46,7 @@ class SalesProductForm
                     ->default(1)
                     ->minValue(1)
                     ->required()
-                    ->debounce(500)
+                    ->debounce(1000)
                     ->columnSpan([
                         'md' => 2,
                     ])
@@ -94,11 +94,20 @@ class SalesProductForm
     protected static function updateSubtotalPrice(Get $get, Set $set): void
     {
         // Mengambil nilai dan mengonversi ke float, dengan default 0 untuk price dan 1 untuk quantity
-        $unitPrice = $get('unit_price') !== null ? (int) $get('unit_price') : 1;
-        $quantity = $get('quantity') !== null ? (int) $get('quantity') : 1;
+        $unitPrice = $get('unit_price');
+        $quantity = $get('quantity');
+
+        // Cek jika quantity atau unit price null, maka tidak melakukan perhitungan
+        if ($quantity === null || $unitPrice === null) {
+            $set('subtotal_price', '');
+            return;
+        }
+        // // Mengambil nilai dan mengonversi ke float, dengan default 0 untuk price dan 1 untuk quantity
+        // $unitPrice = $get('unit_price') !== null ? (int) $get('unit_price') : 0;
+        // $quantity = $get('quantity') !== null ? (int) $get('quantity') : 1;
 
         // Cek jika quantity 0 untuk menghindari pembagian dengan 0
-        $subtotalPrice = $quantity > 0 ? $unitPrice * $quantity : 0;
+        $subtotalPrice = $quantity > 0 ? (int) $unitPrice * (int) $quantity : 0;
 
         // $unitPrice = $price / $quantity;
         $set('subtotal_price', number_format($subtotalPrice, 0, ',', ''));
@@ -114,13 +123,19 @@ class SalesProductForm
         $shippingCost = $get('shipping_cost') !== null ? (int) $get('shipping_cost') : 0;
 
         foreach ($repeaterItems as $item) {
-            $quantity = $item['quantity'] ?? 1;
-            $unitPrice = $item['unit_price'] ?? 0;
+            $quantity = $item['quantity'];
+            $unitPrice = $item['unit_price'];
 
-            $subTotalPrice += $quantity * $unitPrice;
+            // Cek jika quantity atau unit price null, maka tidak melakukan perhitungan
+            if ($quantity === null || $unitPrice === null) {
+                continue;
+            }
 
-            $totalPrice = $subTotalPrice + $shippingCost;
+            // Cek jika quantity null sebelum melakukan operasi perkalian
+            $subTotalPrice += (int) $quantity * (int) $unitPrice;
         }
+
+        $totalPrice = $subTotalPrice + $shippingCost;
 
         $set('total_price', number_format($totalPrice, 0, ',', ''));
     }
