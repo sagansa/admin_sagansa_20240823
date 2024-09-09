@@ -234,7 +234,8 @@ class InvoicePurchaseResource extends Resource
 
                             $queryFinal = $query
                                 ->where('store_id', $storeId)
-                                ->where('status', $statusFilter);
+                                ->where('status', $statusFilter)
+                                ->orderBy('id', 'desc'); // tambahkan metode orderBy;
 
                             return $queryFinal;
                         }
@@ -242,6 +243,7 @@ class InvoicePurchaseResource extends Resource
                     ->getOptionLabelFromRecordUsing(fn (DetailRequest $record) => "{$record->detail_request_name}")
                     ->native(false)
                     ->required()
+                    ->searchable()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->columnSpan(['md' => 4]),
 
