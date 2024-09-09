@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Sales;
 use App\Filament\Columns\DeliveryStatusColumn;
+use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Pages;
 use App\Models\DeliveryAddress;
 use Filament\Forms\Components\DatePicker;
@@ -65,21 +66,14 @@ class SalesOrderOnlinesResource extends Resource
         return $table
             ->query(SalesOrderOnline::query()->where('for', 3))
             ->columns([
-                ImageColumn::make('image_payment')
+                ImageOpenUrlColumn::make('image_payment')
                     ->disabled(fn () => Auth::user()->hasRole('staff') || Auth::user()->hasRole('storage-staff'))
                     ->label('Payment')
-                    // ->url(fn (SalesOrderOnline $record) => url($record->image_payment))
-                    ->url(fn($record) => asset('storage/' . $record->image_payment))
-                    ->openUrlInNewTab() // Membuka URL di tab baru
-                    // ->size(50) // Ukuran gambar thumbnail
-                    ->tooltip('Klik untuk membuka gambar di tab baru') // Tooltip untuk pengguna
-                    ->toggleable(isToggledHiddenByDefault: false),
+                    ->url(fn($record) => asset('storage/' . $record->image_payment)),
 
-                ImageColumn::make('image_delivery')
+                ImageOpenUrlColumn::make('image_delivery')
                     ->label('Delivery')
-                    // ->url(fn (SalesOrderOnline $record) => url($record->image_delivery))
-                    // ->openUrlInNewTab()
-                    ->toggleable(isToggledHiddenByDefault: false),
+                    ->url(fn($record) => asset('storage/' . $record->image_delivery)),
 
                 TextColumn::make('store.nickname')
                     ->disabled(fn () => Auth::user()->hasRole('staff') || Auth::user()->hasRole('storage-staff')),
