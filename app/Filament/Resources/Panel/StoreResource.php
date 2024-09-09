@@ -61,6 +61,7 @@ class StoreResource extends Resource
                         ->string(),
 
                     TextInput::make('no_telp')
+                        ->label('Telephone')
                         ->nullable()
                         ->string(),
 
@@ -70,17 +71,19 @@ class StoreResource extends Resource
                         ->unique('stores', 'email', ignoreRecord: true)
                         ->email(),
 
-                    Select::make('user_id')
-                        ->required()
-                        ->relationship('user', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
-
                     Select::make('status')
                         ->required()
-                        ->searchable()
                         ->preload()
+                        ->options([
+                            '1' => 'warung',
+                            '2' => 'gudang',
+                            '3' => 'produksi',
+                            '4' => 'warung + gudang',
+                            '5' => 'warung + produksi',
+                            '6' => 'gudang + produksi',
+                            '7' => 'warung + gudang + produksi',
+                            '8' => 'tidak aktif'
+                        ])
                         ->native(false),
                 ]),
             ]),
@@ -102,19 +105,32 @@ class StoreResource extends Resource
 
                 TextColumn::make('user.name'),
 
-                TextColumn::make('status'),
+                TextColumn::make('status')
+                    ->formatStateUsing(
+                        fn(string $state): string => match ($state) {
+                            '1' => 'warung',
+                            '2' => 'gudang',
+                            '3' => 'produksi',
+                            '4' => 'warung + gudang',
+                            '5' => 'warung + produksi',
+                            '6' => 'gudang + produksi',
+                            '7' => 'warung + gudang + produksi',
+                            '8' => 'tidak aktif',
+                            default => $state,
+                        }
+                    ),
             ])
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ])
-            ->defaultSort('id', 'desc');
+            ->defaultSort('nickname', 'asc');
     }
 
     public static function getRelations(): array
