@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
+use Filament\Tables\Columns\Layout\Panel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements FilamentUser
