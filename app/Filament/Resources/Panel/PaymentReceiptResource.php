@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
+use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use Filament\Tables;
@@ -186,13 +187,15 @@ class PaymentReceiptResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                ImageColumn::make('image')
+                ImageOpenUrlColumn::make('image')
                     ->label('Payment')
-                    ->visibility('public'),
+                    ->visibility('public')
+                    ->url(fn($record) => asset('storage/' . $record->image)),
 
-                ImageColumn::make('image_adjust')
-                    ->label('insufficient')
-                    ->visibility('public'),
+                ImageOpenUrlColumn::make('image_adjust')
+                    ->label('Adjust')
+                    ->visibility('public')
+                    ->url(fn($record) => asset('storage/' . $record->image_adjust)),
 
                 TextColumn::make('created_at')
                     ->date(),

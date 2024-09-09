@@ -90,7 +90,7 @@ class SalesOrderDirectsResource extends Resource
 
                 TextColumn::make('deliveryAddress.name'),
 
-                TextColumn::make('transferToAccount.name'),
+                TextColumn::make('transferToAccount.transfer_account_name'),
 
                 StatusColumn::make('payment_status'),
 
