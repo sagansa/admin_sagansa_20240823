@@ -67,9 +67,10 @@ class SalesOrderOnlinesResource extends Resource
             ->columns([
                 ImageColumn::make('image_payment')
                     ->disabled(fn () => Auth::user()->hasRole('staff') || Auth::user()->hasRole('storage-staff'))
-                    ->visibility('public')
-                    // ->disk('storage')
-                    ->label('Payment'),
+                    ->label('Payment')
+                    ->url(fn (SalesOrderOnline $record) => url($record->image_payment))
+                    ->openUrlInNewTab()
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('image_delivery')
                     ->label('Delivery')
