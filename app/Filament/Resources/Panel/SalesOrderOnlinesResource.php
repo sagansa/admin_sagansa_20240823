@@ -262,7 +262,7 @@ class SalesOrderOnlinesResource extends Resource
             Select::make('delivery_address_id')
                 ->label('Delivery Address')
                 ->hidden(fn ($operation) => $operation === 'create')
-                // ->required(fn () => Auth::user()->hasRole('storage-staff'))
+                ->required(fn () => Auth::user()->hasRole('storage-staff'))
                 ->nullable(fn () => Auth::user()->hasRole('admin'))
                 ->relationship(
                     name: 'deliveryAddress',
