@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Sales;
+use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\BottomTotalPriceForm;
 use App\Filament\Forms\DeliveryAddressForm;
@@ -67,10 +68,9 @@ class SalesOrderEmployeesResource extends Resource
         return $table
             ->query($query)
             ->columns([
-                TextColumn::make('image_payment')
-                    ->label('Transfer'),
-
-                TextColumn::make('store.nickname'),
+                ImageOpenUrlColumn::make('image_payment')
+                    ->label('Transfer')
+                    ->url(fn($record) => asset('storage/' . $record->image_payment)),
 
                 TextColumn::make('delivery_date')
                     ->label('Date'),
