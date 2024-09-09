@@ -214,6 +214,11 @@ class InvoicePurchaseResource extends Resource
         return Repeater::make('detailInvoices')
             ->hiddenLabel()
             ->minItems(1)
+            ->mutateRelationshipDataBeforeCreateUsing(function (array $data, InvoicePurchase $record): array {
+                $data['status'] = '3';
+
+                return $data;
+            })
             ->columns(['md' => 8])
             ->relationship()
             ->schema([
