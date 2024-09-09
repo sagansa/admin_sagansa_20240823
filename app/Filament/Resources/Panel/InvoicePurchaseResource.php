@@ -219,6 +219,7 @@ class InvoicePurchaseResource extends Resource
             ->schema([
                 Select::make('detail_request_id')
                     ->label('Detail Request')
+
                     ->relationship(
                         name: 'detailRequest',
                         modifyQueryUsing: function (Builder $query, callable $get) {
@@ -240,9 +241,37 @@ class InvoicePurchaseResource extends Resource
                             return $queryFinal;
                         }
                     )
+
+                    // ->relationship(
+                    //     name: 'detailRequest',
+                    //     modifyQueryUsing: function (Builder $query, callable $get) {
+                    //         $paymentTypeId = $get('../../payment_type_id'); // Access payment_type_id from the parent form
+                    //         $storeId = $get('../../store_id'); // Access store_id from the parent form
+
+                    //         // Determine the status filter based on the payment type
+                    //         $statusFilter = match ($paymentTypeId) {
+                    //             1 => '1', // Process and approved for transfer payment type
+                    //             2 => '4', // Approved for cash payment type
+                    //             default => '',
+                    //         };
+
+                    //         // Modify the query with the filters applied
+                    //         $query->when($storeId, function ($query) use ($storeId) {
+                    //             return $query->where('store_id', $storeId);
+                    //         })
+                    //         ->when($statusFilter, function ($query) use ($statusFilter) {
+                    //             return $query->where('status', $statusFilter);
+                    //         })
+                    //         ->orderBy('id', 'desc'); // Order the results by ID in descending order
+
+                    //         return $query;
+                    //     }
+                    // )
+
                     ->getOptionLabelFromRecordUsing(fn (DetailRequest $record) => "{$record->detail_request_name}")
                     ->native(false)
                     ->required()
+                    ->preload()
                     ->searchable()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->columnSpan(['md' => 4]),
