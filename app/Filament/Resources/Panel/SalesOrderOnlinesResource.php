@@ -67,6 +67,7 @@ class SalesOrderOnlinesResource extends Resource
             ->columns([
                 ImageColumn::make('image_payment')
                     ->disabled(fn () => Auth::user()->hasRole('staff') || Auth::user()->hasRole('storage-staff'))
+                    ->visibility('public')
                     // ->disk('storage')
                     ->label('Payment'),
 
