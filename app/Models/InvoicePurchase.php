@@ -56,6 +56,8 @@ class InvoicePurchase extends Model
         if($this->supplier->bank_account_name != null) {
             return $this->supplier->name .
                 ' | ' . $this->supplier->bank->name .
+                ' | ' . $this->supplier->bank_account_name .
+                ' | ' . $this->supplier->bank_account_no .
                 ' | ' . $this->date .
                 ' | Rp ' . number_format($this->detailInvoices->sum('subtotal_invoice'), 0, ',', '.');
         } else {
