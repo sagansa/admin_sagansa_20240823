@@ -55,7 +55,7 @@ class DeliveryAddressForm
             TextInput::make('recipient_telp_no')
                 ->label('Telephone')
                 ->numeric()
-                ->required(),
+                ->nullable(),
 
             TextInput::make('address')
                 ->required(),

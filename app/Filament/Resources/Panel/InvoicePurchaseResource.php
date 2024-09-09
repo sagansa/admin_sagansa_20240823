@@ -184,6 +184,18 @@ class InvoicePurchaseResource extends Resource
                 // ][$record->payment_status])
                 // ->columnSpan(2),
 
+            Select::make('payment_status')
+                ->required(fn () => Auth::user()->hasRole('admin'))
+                ->disabled(fn () => !Auth::user()->hasRole('admin'))
+                ->hidden(fn ($operation) => $operation === 'create')
+                ->preload()
+                ->options([
+                    '1' => 'belum dibayar',
+                    '2' => 'sudah sibayar',
+                    '3' => 'tidak valid',
+                ])
+                ->native(false),
+
             Select::make('order_status')
                 ->required()
                 ->hidden(fn ($operation) => $operation === 'create')
