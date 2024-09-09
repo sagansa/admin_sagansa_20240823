@@ -161,10 +161,11 @@ class RequestPurchaseResource extends Resource
                     ->preload()
                     ->searchable()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                   ->disabled(fn (Get $get) => $get('status') != 1)
-                    ->distinct()
+                    // ->disabled(fn (Get $get) => $get('status') != 1)
+                    // ->distinct()
                     ->reactive()
                     ->columnSpan(4),
+
                 TextInput::make('quantity_plan')
                     ->required()
                     ->minValue(1)
@@ -174,6 +175,7 @@ class RequestPurchaseResource extends Resource
                         return $product ? $product->unit->unit : '';
                     })
                     ->columnSpan(2),
+
                 Select::make('status')
                     ->options([
                         '1' => 'process',

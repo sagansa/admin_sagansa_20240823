@@ -310,6 +310,8 @@ class SalesOrderOnlinesResource extends Resource
                 ->maxSize(1024)
                 ->image()
                 ->imageEditor()
+                ->disk('public')
+                ->directory('images/Online/Delivery')
                 ->columnSpan([
                     'full'
                 ])
