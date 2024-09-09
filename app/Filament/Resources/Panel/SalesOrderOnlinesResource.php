@@ -72,8 +72,10 @@ class SalesOrderOnlinesResource extends Resource
                     ->openUrlInNewTab()
                     ->toggleable(isToggledHiddenByDefault: false),
 
-                TextColumn::make('image_delivery')
+                ImageColumn::make('image_delivery')
                     ->label('Delivery')
+                    ->url(fn (SalesOrderOnline $record) => url($record->image_payment))
+                    ->openUrlInNewTab()
                     ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('store.nickname')
