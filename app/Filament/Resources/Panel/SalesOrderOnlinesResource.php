@@ -284,8 +284,9 @@ class SalesOrderOnlinesResource extends Resource
 
 
             TextInput::make('receipt_no')
+                ->label('Receipt No'),
                 // ->hidden(fn ($operation) => $operation === 'create')
-                ->required(fn (SalesOrderOnline $record) => $record->delivery_status == 3),
+                // ->required(fn (SalesOrderOnline $record) => $record->delivery_status == 3),
 
             Select::make('delivery_status')
                 ->required()
