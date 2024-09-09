@@ -84,13 +84,22 @@ class DeliveryAddress extends Model
 
     public function getDeliveryAddressNameAttribute()
     {
+        $postalCode = $this->postalCode ? $this->postalCode->postal_code : '';
+        $recipientsName = $this->recipient_name ?: '';
+        $recipientTelpNo = $this->recipient_telp_no ?: '';
+        $address = $this->address ?: '';
+        $subdistrictName = $this->subdistrict ? $this->subdistrict->name : '';
+        $districtName = $this->district ? $this->district->name : '';
+        $provinceName = $this->province ? $this->province->name : '';
+        $cityName = $this->city ? $this->city->name : '';
+
         return implode(PHP_EOL, [
             $this->name,
-            $this->recipients_name . ' - ' . $this->recipients_telp_no,
-            $this->address,
-            $this->subdistrict->name  . ', ' . $this->district->name,
-            $this->province->name . ', ' . $this->city->name,
-            $this->postalCode->postal_code,
+            $recipientsName . ' - ' . $recipientTelpNo,
+            $address,
+            $subdistrictName . ', ' . $districtName,
+            $provinceName . ', ' . $cityName,
+            $postalCode,
         ]);
     }
 
