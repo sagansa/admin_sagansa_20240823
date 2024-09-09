@@ -284,10 +284,8 @@ class SalesOrderOnlinesResource extends Resource
 
 
             TextInput::make('receipt_no')
-                ->hidden(fn ($operation) => $operation === 'create')
-                ->required(fn (SalesOrderOnline $record) => Auth::user()->hasRole('storage-staff') && $record->delivery_status == 3)
-                ->disabled(fn () => Auth::user()->hasRole('admin') )
-                ->string(),
+                // ->hidden(fn ($operation) => $operation === 'create')
+                ->required(fn (SalesOrderOnline $record) => $record->delivery_status == 3),
 
             Select::make('delivery_status')
                 ->required()
