@@ -59,7 +59,7 @@ class InvoicePurchaseResource extends Resource
     {
         return $form->schema([
             Section::make()->schema([
-                Grid::make(['default' => 2])->schema(
+                Grid::make(['default' => 1])->schema(
                     static::getDetailsFormHeadSchema()),
             ]),
 
