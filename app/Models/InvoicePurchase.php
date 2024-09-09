@@ -9,7 +9,22 @@ class InvoicePurchase extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    // protected $guarded = [];
+
+    protected $fillable = [
+        'image',
+        'payment_type_id',
+        'store_id',
+        'supplier_id',
+        'date',
+        'taxes',
+        'discounts',
+        'total_price',
+        'notes',
+        'created_by_id',
+        'payment_status',
+        'order_status',
+    ];
 
     public function paymentType()
     {

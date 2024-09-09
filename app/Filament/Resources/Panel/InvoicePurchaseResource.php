@@ -298,7 +298,7 @@ class InvoicePurchaseResource extends Resource
                     ->prefix('Rp')
                     ->minValue(0)
                     ->numeric()
-                    ->distinct()
+                    // ->distinct()
                     ->debounce(500)
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         self::updateTotalPrice($get, $set);
@@ -338,7 +338,6 @@ class InvoicePurchaseResource extends Resource
 
             TextInput::make('total_price')
                 ->readOnly()
-                ->default(0)
                 ->minValue(0),
 
             Notes::make('notes'),
