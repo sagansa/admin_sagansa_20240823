@@ -23,7 +23,7 @@ class PermitEmployeePolicy
      */
     public function view(User $user, PermitEmployee $permitEmployee): bool
     {
-        return $user->can('view_panel::permit::employee');
+        return $user->can('view_panel::permit::employee') && $permitEmployee->status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class PermitEmployeePolicy
      */
     public function update(User $user, PermitEmployee $permitEmployee): bool
     {
-        return $user->can('update_panel::permit::employee');
+        return $user->can('update_panel::permit::employee') && $permitEmployee->status !== 2;
     }
 
     /**

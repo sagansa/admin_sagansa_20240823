@@ -23,7 +23,16 @@ class DeliveryAddressPolicy
      */
     public function view(User $user, DeliveryAddress $deliveryAddress): bool
     {
-        return $user->can('view_panel::delivery::address');
+        // return $user->can('view_panel::delivery::address');
+
+        // Cek apakah ada transaksi yang terkait dengan DeliveryAddress
+        if ($deliveryAddress->salesOrders()->exists()) {
+            // Jika ada transaksi, tidak bisa update
+            return $user->can('update_panel::delivery::address');
+        }
+
+        // Jika tidak ada transaksi, bisa update
+        return false;
     }
 
     /**
@@ -39,6 +48,15 @@ class DeliveryAddressPolicy
      */
     public function update(User $user, DeliveryAddress $deliveryAddress): bool
     {
+        // return $user->can('update_panel::delivery::address');
+
+        // Cek apakah ada transaksi yang terkait dengan DeliveryAddress
+        if ($deliveryAddress->salesOrders()->exists()) {
+            // Jika ada transaksi, tidak bisa update
+            return false;
+        }
+
+        // Jika tidak ada transaksi, bisa update
         return $user->can('update_panel::delivery::address');
     }
 

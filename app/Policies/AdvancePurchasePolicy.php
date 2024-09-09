@@ -23,7 +23,7 @@ class AdvancePurchasePolicy
      */
     public function view(User $user, AdvancePurchase $advancePurchase): bool
     {
-        return $user->can('view_panel::advance::purchase');
+        return $user->can('view_panel::advance::purchase') && $advancePurchase->status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class AdvancePurchasePolicy
      */
     public function update(User $user, AdvancePurchase $advancePurchase): bool
     {
-        return $user->can('update_panel::advance::purchase');
+        return $user->can('update_panel::advance::purchase') && $advancePurchase->status !== 2;
     }
 
     /**

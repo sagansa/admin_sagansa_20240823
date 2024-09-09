@@ -23,7 +23,7 @@ class RemainingStockPolicy
      */
     public function view(User $user, RemainingStock $remainingStock): bool
     {
-        return $user->can('view_panel::remaining::stock');
+        return $user->can('view_panel::remaining::stock') && $remainingStock->status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class RemainingStockPolicy
      */
     public function update(User $user, RemainingStock $remainingStock): bool
     {
-        return $user->can('update_panel::remaining::stock');
+        return $user->can('update_panel::remaining::stock') && $remainingStock->status === 2;
     }
 
     /**

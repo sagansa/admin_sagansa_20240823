@@ -23,7 +23,7 @@ class SupplierPolicy
      */
     public function view(User $user, Supplier $supplier): bool
     {
-        return $user->can('view_panel::supplier');
+        return $user->can('view_panel::supplier') && $supplier->status !== 1;
     }
 
     /**
@@ -39,7 +39,7 @@ class SupplierPolicy
      */
     public function update(User $user, Supplier $supplier): bool
     {
-        return $user->can('update_panel::supplier');
+        return $user->can('update_panel::supplier') && $supplier->status === 1;
     }
 
     /**

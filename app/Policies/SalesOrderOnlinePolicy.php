@@ -23,7 +23,7 @@ class SalesOrderOnlinePolicy
      */
     public function view(User $user, SalesOrderOnline $salesOrderOnline): bool
     {
-        return $user->can('view_panel::sales::order::onlines');
+        return $user->can('view_panel::sales::order::onlines') && $salesOrderOnline->delivery_status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class SalesOrderOnlinePolicy
      */
     public function update(User $user, SalesOrderOnline $salesOrderOnline): bool
     {
-        return $user->can('update_panel::sales::order::onlines');
+        return $user->can('update_panel::sales::order::onlines') && $salesOrderOnline->delivery_status !== 2;
     }
 
     /**
