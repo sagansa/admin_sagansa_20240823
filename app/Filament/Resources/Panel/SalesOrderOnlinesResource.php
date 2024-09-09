@@ -11,7 +11,6 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Group;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -27,10 +26,9 @@ use App\Filament\Forms\DeliveryAddressForm;
 use App\Filament\Forms\SalesProductForm;
 use App\Models\SalesOrderOnline;
 use App\Models\Store;
-use Filament\Forms\Components\Wizard;
-use Filament\Forms\Components\Wizard\Step;
 use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
+use Filament\Tables\Columns\ImageColumn;
 
 class SalesOrderOnlinesResource extends Resource
 {
@@ -67,7 +65,7 @@ class SalesOrderOnlinesResource extends Resource
         return $table
             ->query(SalesOrderOnline::query()->where('for', 3))
             ->columns([
-                TextColumn::make('image_payment')
+                ImageColumn::make('image_payment')
                     ->disabled(fn () => Auth::user()->hasRole('staff') || Auth::user()->hasRole('storage-staff'))
                     ->label('Payment'),
 
@@ -220,6 +218,8 @@ class SalesOrderOnlinesResource extends Resource
                     'full'
                 ])
                 ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1'])
+                ->disk('public')
+                ->directory('images/Online/Payment')
                 ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
 
             Select::make('store_id')
