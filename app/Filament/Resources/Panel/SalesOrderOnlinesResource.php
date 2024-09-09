@@ -66,7 +66,6 @@ class SalesOrderOnlinesResource extends Resource
             ->query(SalesOrderOnline::query()->where('for', 3))
             ->columns([
                 ImageColumn::make('image_payment')
-                    ->getStateUsing(fn (SalesOrderOnline $record) => asset('storage/images/Online/Payment/' . $record->image_payment))
                     ->disabled(fn () => Auth::user()->hasRole('staff') || Auth::user()->hasRole('storage-staff'))
                     ->label('Payment'),
 
