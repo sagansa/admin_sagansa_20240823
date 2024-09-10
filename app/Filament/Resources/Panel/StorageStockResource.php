@@ -151,7 +151,7 @@ class StorageStockResource extends Resource
             ];
         })->toArray();
 
-        return Repeater::make('productRequestStocks')
+        return Repeater::make('productStorageStocks')
             // ->label(__('crud.remainingStocks.products'))
 
             ->hiddenLabel()
