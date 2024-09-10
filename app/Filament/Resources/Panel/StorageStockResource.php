@@ -159,19 +159,28 @@ class StorageStockResource extends Resource
             ->relationship()
             ->addable(false)
             ->deletable(false)
+            ->columns([
+                'md' => 10,
+            ])
             ->schema([
                 Select::make('product_id')
                     ->label('Product')
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->required()
                     ->native(false)
-                    ->options(Product::where('request', '1')->get()->pluck('name','id')),
+                    ->options(Product::where('request', '1')->get()->pluck('name','id'))
+                    ->columnSpan([
+                        'md' => 5,
+                    ]),
                 TextInput::make('quantity')
                     ->required()
                     ->suffix(function ($get) {
                         $product = Product::find($get('product_id'));
                         return $product ? $product->unit->unit : '';
-                    }),
+                    })
+                    ->columnSpan([
+                        'md' => 5,
+                    ]),
             ]);
     }
 }
