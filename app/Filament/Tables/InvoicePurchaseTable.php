@@ -3,6 +3,7 @@
 namespace App\Filament\Tables;
 
 use App\Filament\Columns\CurrencyColumn;
+use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\PaymentStatusColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -12,7 +13,9 @@ class InvoicePurchaseTable
     public static function schema(): array
     {
         return [
-            ImageColumn::make('image')->visibility('public'),
+            ImageOpenUrlColumn::make('image')
+                ->visibility('public')
+                ->url(fn($record) => asset('storage/' . $record->image)),
 
             TextColumn::make('paymentType.name'),
 
