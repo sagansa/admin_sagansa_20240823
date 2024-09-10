@@ -26,6 +26,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\UtilityUsageResource\Pages;
 use App\Filament\Resources\Panel\UtilityUsageResource\RelationManagers;
+use App\Models\Utility;
 
 class UtilityUsageResource extends Resource
 {
@@ -63,7 +64,11 @@ class UtilityUsageResource extends Resource
 
                     Select::make('utility_id')
                         ->required()
-                        ->relationship('utility', 'name')
+                        ->relationship(
+                            name: 'utility',
+                            modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
+                        )
+                        ->getOptionLabelFromRecordUsing(fn (Utility $record) => "{$record->utility_name}")
                         ->preload()
                         ->native(false),
 
@@ -73,7 +78,6 @@ class UtilityUsageResource extends Resource
 
                     StatusSelectInput::make('status')
                         ->required()
-
                         ->hidden(fn ($operation) => $operation === 'create'),
 
                     Notes::make('notes'),
@@ -88,7 +92,9 @@ class UtilityUsageResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                ImageOpenUrlColumn::make('image')->visibility('public'),
+                ImageOpenUrlColumn::make('image')
+                    ->visibility('public')
+                    ->url(fn($record) => asset('storage/' . $record->image)),
 
                 TextColumn::make('utility.name'),
 
