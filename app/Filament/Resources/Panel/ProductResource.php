@@ -23,6 +23,8 @@ use Filament\Forms\Components\DateTimePicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\Panel\ProductResource\Pages;
 use Filament\Forms\Set;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
 class ProductResource extends Resource
@@ -81,7 +83,7 @@ class ProductResource extends Resource
                     TextInput::make('slug')
                         ->required()
                         ->string()
-                        ->unique(Product::class, 'slug'),
+                        ->unique(Product::class, 'slug', ignoreRecord: true),
 
                     TextInput::make('sku')
                         ->label('SKU')
@@ -91,8 +93,6 @@ class ProductResource extends Resource
                     TextInput::make('barcode')
                         ->nullable()
                         ->string(),
-
-
 
                     Select::make('request')
                         ->required()
@@ -153,7 +153,9 @@ class ProductResource extends Resource
             ->columns([
                 ImageColumn::make('image')->visibility('public'),
 
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                    ->searchable()
+                    ->toggleable(),
 
                 TextColumn::make('unit.unit'),
 
@@ -169,7 +171,14 @@ class ProductResource extends Resource
 
                 TextColumn::make('user.name'),
             ])
-            ->filters([Tables\Filters\TrashedFilter::make()])
+            ->filters([
+
+                SelectFilter::make('remaining')
+                    ->options([
+                        '1' => 'active',
+                        '2' => 'inactive',
+                    ]),
+                Tables\Filters\TrashedFilter::make()])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 // Tables\Actions\ViewAction::make(),
@@ -205,5 +214,10 @@ class ProductResource extends Resource
         return parent::getEloquentQuery()->withoutGlobalScopes([
             SoftDeletingScope::class,
         ]);
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name'];
     }
 }

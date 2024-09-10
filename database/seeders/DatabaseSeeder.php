@@ -40,7 +40,6 @@ class DatabaseSeeder extends Seeder
         $this->call(DetailInvoiceSeeder::class);
         $this->call(DetailRequestSeeder::class);
         $this->call(DetailSalesOrderSeeder::class);
-        $this->call(DetailStoreConsumptionSeeder::class);
         $this->call(DistrictSeeder::class);
         $this->call(EmployeeSeeder::class);
         $this->call(EmployeeStatusSeeder::class);
@@ -60,9 +59,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PaymentTypeSeeder::class);
         $this->call(PermitEmployeeSeeder::class);
         $this->call(PostalCodeSeeder::class);
-        $this->call(PresenceSeeder::class);
         $this->call(ProductSeeder::class);
-        $this->call(ProductConsumptionSeeder::class);
         $this->call(ProductionSeeder::class);
         $this->call(ProductionMainFromSeeder::class);
         $this->call(ProductionSupportFromSeeder::class);
@@ -81,7 +78,6 @@ class DatabaseSeeder extends Seeder
         $this->call(StoreSeeder::class);
         $this->call(StoreAssetSeeder::class);
         $this->call(StoreCashlessSeeder::class);
-        $this->call(StoreConsumptionSeeder::class);
         $this->call(SubdistrictSeeder::class);
         $this->call(SupplierSeeder::class);
         $this->call(TransferStockSeeder::class);
@@ -100,5 +96,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FuelServicePaymentReceiptSeeder::class);
         $this->call(InvoicePurchasePaymentReceiptSeeder::class);
         $this->call(UserCashlessSeeder::class);
+        $this->call(StorageStockSeeder::class);
     }
 }

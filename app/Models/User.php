@@ -6,13 +6,13 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Notifications\Notifiable;
+use Filament\Tables\Columns\Layout\Panel;
 use Filament\Models\Contracts\FilamentUser;
-use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
-use Filament\Tables\Columns\Layout\Panel;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements FilamentUser
@@ -63,15 +63,6 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::created(function (User $user) {
-            $user->assignRole('customer');
-        });
     }
 
     /**
@@ -513,4 +504,34 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasMany(UtilityBill::class);
     }
+
+    /**
+     * Get all of the storageStocksCreatedBy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function storageStocksCreatedBy()
+    {
+        return $this->hasMany(StorageStock::class, 'created_by_id');
+    }
+
+    /**
+     * Get all of the storageStocksApprovedBy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function storageStocksApprovedBy()
+    {
+        return $this->hasMany(StorageStock::class, 'approved_by_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function (User $user) {
+            $user->assignRole('customer');
+        });
+    }
+
 }

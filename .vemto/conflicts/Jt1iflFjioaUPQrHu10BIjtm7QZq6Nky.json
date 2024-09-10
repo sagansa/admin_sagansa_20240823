@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "5861c399-6cd5-49c0-9981-e72f90c38e05",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\PermitEmployeeResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\PermitEmployeeResource;\nuse Filament\\Resources\\Components\\Tab;\n\nclass ListPermitEmployees extends ListRecords\n{\n    protected static string $resource = PermitEmployeeResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n\n    public function getTabs(): array\n    {\n        return [\n            null => Tab::make('All'),\n            'belum disetujui' => Tab::make()->query(fn ($query) => $query->where('status', '1')),\n            'disetujui' => Tab::make()->query(fn ($query) => $query->where('status', '2')),\n            'tidak disetujui' => Tab::make()->query(fn ($query) => $query->where('status', '3')),\n            'pengajuan Ulang' => Tab::make()->query(fn ($query) => $query->where('status', '4')),\n        ];\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\PermitEmployeeResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\PermitEmployeeResource;\n\nclass ListPermitEmployees extends ListRecords\n{\n    protected static string $resource = PermitEmployeeResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n}\n"
-        }
-    ]
-}

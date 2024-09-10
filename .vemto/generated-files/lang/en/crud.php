@@ -4623,4 +4623,65 @@ return [
             ],
         ],
     ],
+    'storageStocks' => [
+        'itemTitle' => 'Storage Stock',
+        'collectionTitle' => 'Storage Stocks',
+        'inputs' => [
+            'date' => [
+                'label' => 'Date',
+                'placeholder' => 'Date',
+            ],
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'created_by_id' => [
+                'label' => 'Created By',
+                'placeholder' => 'Created by id',
+            ],
+            'approved_by_id' => [
+                'label' => 'Approved By',
+                'placeholder' => 'Approved by id',
+            ],
+        ],
+        'filament' => [
+            'date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'created_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'approved_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
 ];

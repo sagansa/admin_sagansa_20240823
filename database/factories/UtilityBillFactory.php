@@ -23,6 +23,7 @@ class UtilityBillFactory extends Factory
     public function definition(): array
     {
         return [
+            'image' => fake()->word(),
             'date' => fake()->date(),
             'amount' => fake()->randomNumber(),
             'initial_indicator' => fake()->randomNumber(),

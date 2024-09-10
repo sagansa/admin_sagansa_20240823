@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "d2410113-9182-494f-a46b-88e0ce35a692",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\CashAdvanceResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\CashAdvanceResource;\n\nclass CreateCashAdvance extends CreateRecord\n{\n    protected static string $resource = CashAdvanceResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n\n        // $data['created_by_id'] = Auth::id();\n        // $data['approved_by_id'] = Auth::id();\n        $data['status'] = '1';\n\n        return $data;\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\CashAdvanceResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\CashAdvanceResource;\n\nclass CreateCashAdvance extends CreateRecord\n{\n    protected static string $resource = CashAdvanceResource::class;\n}\n"
-        }
-    ]
-}

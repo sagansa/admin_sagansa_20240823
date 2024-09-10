@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "cb1b1215-ed1b-4ae6-b273-ed1ff10b14e1",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\ClosingStoreResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\ClosingStoreResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateClosingStore extends CreateRecord\n{\n    protected static string $resource = ClosingStoreResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n\n        $data['status'] = 1;\n        $data['created_by_id'] = Auth::id();\n\n        return $data;\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\ClosingStoreResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\ClosingStoreResource;\n\nclass CreateClosingStore extends CreateRecord\n{\n    protected static string $resource = ClosingStoreResource::class;\n}\n"
-        }
-    ]
-}

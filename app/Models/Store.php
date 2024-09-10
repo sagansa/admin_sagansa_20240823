@@ -66,11 +66,6 @@ class Store extends Model
         return $this->hasMany(Production::class);
     }
 
-    public function presences()
-    {
-        return $this->hasMany(Presence::class);
-    }
-
     public function remainingStocks()
     {
         return $this->hasMany(RemainingStock::class);
@@ -124,5 +119,15 @@ class Store extends Model
     public function userCashlesses()
     {
         return $this->hasMany(UserCashless::class);
+    }
+
+    public function storageStocks()
+    {
+        return $this->hasMany(StorageStock::class);
+    }
+
+    public function presences()
+    {
+        return $this->hasMany(Presence::class);
     }
 }

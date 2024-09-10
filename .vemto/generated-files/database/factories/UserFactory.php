@@ -32,6 +32,7 @@ class UserFactory extends Factory
             'two_factor_secret' => fake()->text(),
             'two_factor_recovery_codes' => fake()->text(),
             'remember_token' => \Str::random(10),
+            'deleted_at' => fake()->dateTime(),
         ];
     }
 

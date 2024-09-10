@@ -122,7 +122,7 @@ class RemainingStockResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('id', 'desc');
+            ->defaultSort('date', 'desc');
     }
 
     public static function getRelations(): array
@@ -179,7 +179,5 @@ class RemainingStockResource extends Resource
                         return $product ? $product->unit->unit : '';
                     }),
             ]);
-
-
     }
 }
