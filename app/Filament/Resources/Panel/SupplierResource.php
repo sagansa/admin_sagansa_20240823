@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Purchases;
+use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusSupplierColumn;
 use App\Filament\Forms\AddressForm;
 use App\Filament\Forms\ImageInput;
@@ -69,7 +70,8 @@ class SupplierResource extends Resource
                             ->hiddenLabel()
                             ->placeholder('Name')
                             ->string()
-                            ->autofocus(),
+                            ->autofocus()
+                            ->afterStateUpdated(fn (callable $set, $state) => $set('name', ucwords(strtolower($state)))), // Mengubah teks menjadi capital case saat diinput
 
                         Select::make('bank_id')
                             ->nullable()
@@ -113,7 +115,8 @@ class SupplierResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                ImageColumn::make('image')->visibility('public'),
+                ImageOpenUrlColumn::make('image')
+                    ->url(fn($record) => asset('storage/' . $record->image)),
 
                 TextColumn::make('name'),
 

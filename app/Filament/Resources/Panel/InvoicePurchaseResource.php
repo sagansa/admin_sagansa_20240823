@@ -26,6 +26,7 @@ use App\Models\Supplier;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Facades\Auth;
 
 class InvoicePurchaseResource extends Resource
@@ -90,7 +91,14 @@ class InvoicePurchaseResource extends Resource
             ->columns(
                 InvoicePurchaseTable::schema()
             )
-            ->filters([])
+            ->filters([
+                SelectFilter::make('payment_type_id')
+                    ->label('Payment Type')
+                    ->options([
+                        '1' => 'transfer',
+                        '2' => 'tunai'
+                    ])
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),

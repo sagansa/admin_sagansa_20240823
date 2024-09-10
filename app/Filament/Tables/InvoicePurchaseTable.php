@@ -23,7 +23,8 @@ class InvoicePurchaseTable
 
             TextColumn::make('supplier.name'),
 
-            TextColumn::make('date'),
+            TextColumn::make('date')
+                ->sortable(),
 
             CurrencyColumn::make('total_price'),
 
