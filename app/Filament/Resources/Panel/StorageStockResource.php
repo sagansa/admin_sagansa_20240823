@@ -168,7 +168,7 @@ class StorageStockResource extends Resource
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->required()
                     ->native(false)
-                    ->options(Product::where('request', '1')->get()->pluck('name','id'))
+                    ->options(Product::where('request', '1')->orderBy('name', 'asc')->get()->pluck('name','id'))
                     ->columnSpan([
                         'md' => 5,
                     ]),
