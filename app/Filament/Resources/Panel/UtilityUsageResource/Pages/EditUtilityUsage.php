@@ -20,6 +20,8 @@ class EditUtilityUsage extends EditRecord
     {
         if (Auth::user()->hasRole('admin')) {
             $data['approved_by_id'] = Auth::id();
+        } elseif (Auth::user->hasRole('supervisor')) {
+            $data['approved_by_id'] = Auth::id();
         }
 
         return $data;

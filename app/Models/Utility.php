@@ -40,4 +40,9 @@ class Utility extends Model
     {
         return $this->store->nickname . ' | ' . $this->number . ' | ' . $this->utilityProvider->name;
     }
+
+    public function getUtilityColumnNameAttribute()
+    {
+        return $this->store->nickname . ' | ' . $this->utilityProvider->name;
+    }
 }

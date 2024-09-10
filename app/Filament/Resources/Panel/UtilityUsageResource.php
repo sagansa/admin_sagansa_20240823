@@ -96,7 +96,7 @@ class UtilityUsageResource extends Resource
                     ->visibility('public')
                     ->url(fn($record) => asset('storage/' . $record->image)),
 
-                TextColumn::make('utility.name'),
+                TextColumn::make('utility.utility_column_name'),
 
                 TextColumn::make('result'),
 
