@@ -151,7 +151,7 @@ class InvoicePurchaseResource extends Resource
                 ->reactive()
                 ->relationship(
                     name: 'store',
-                    modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '8'),
+                    modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '8')->orderBy('name', 'asc'),
                 )
                 ->getOptionLabelFromRecordUsing(fn (Store $record) => "{$record->nickname}")
                 ->searchable()
@@ -166,7 +166,7 @@ class InvoicePurchaseResource extends Resource
                 ->required()
                 ->relationship(
                     name: 'supplier',
-                    modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '3'),
+                    modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '3')->orderBy('name', 'asc'),
                 )
                 ->getOptionLabelFromRecordUsing(fn (Supplier $record) => "{$record->supplier_name}")
                 ->searchable()
@@ -240,8 +240,7 @@ class InvoicePurchaseResource extends Resource
 
                             $queryFinal = $query
                                 ->where('store_id', $storeId)
-                                ->where('status', $statusFilter)
-                                ->orderBy('id', 'desc'); // tambahkan metode orderBy;
+                                ->where('status', $statusFilter); // tambahkan metode orderBy;
 
                             return $queryFinal;
                         }
