@@ -3,6 +3,11 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Stock;
+use App\Filament\Columns\ImageOpenUrlColumn;
+use App\Filament\Columns\StatusColumn;
+use App\Filament\Forms\ImageInput;
+use App\Filament\Forms\Notes;
+use App\Filament\Forms\StatusSelectInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -54,46 +59,25 @@ class UtilityUsageResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    FileUpload::make('image')
-                        ->rules(['image'])
-                        ->nullable()
-                        ->maxSize(1024)
-                        ->image()
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                    ImageInput::make('image'),
 
                     Select::make('utility_id')
                         ->required()
                         ->relationship('utility', 'name')
-                        ->searchable()
                         ->preload()
                         ->native(false),
 
                     TextInput::make('result')
                         ->required()
-                        ->numeric()
-                        ->step(1),
+                        ->numeric(),
 
-                    TextInput::make('status')
+                    StatusSelectInput::make('status')
                         ->required()
-                        ->string(),
 
-                    RichEditor::make('notes')
-                        ->nullable()
-                        ->string()
-                        ->fileAttachmentsVisibility('public'),
+                        ->hidden(fn ($operation) => $operation === 'create'),
 
-                    TextInput::make('created_by_id')
-                        ->required()
-                        ->numeric()
-                        ->step(1),
+                    Notes::make('notes'),
 
-                    Select::make('approved_by_id')
-                        ->required()
-                        ->relationship('createdBy', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
                 ]),
             ]),
         ]);
@@ -104,19 +88,17 @@ class UtilityUsageResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                ImageColumn::make('image')->visibility('public'),
+                ImageOpenUrlColumn::make('image')->visibility('public'),
 
                 TextColumn::make('utility.name'),
 
                 TextColumn::make('result'),
 
-                TextColumn::make('status'),
-
-                TextColumn::make('notes')->limit(255),
-
-                TextColumn::make('created_by_id'),
+                StatusColumn::make('status'),
 
                 TextColumn::make('createdBy.name'),
+
+                TextColumn::make('approvedBy.name'),
             ])
             ->filters([])
             ->actions([

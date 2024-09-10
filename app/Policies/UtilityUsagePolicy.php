@@ -23,7 +23,7 @@ class UtilityUsagePolicy
      */
     public function view(User $user, UtilityUsage $utilityUsage): bool
     {
-        return $user->can('view_panel::utility::usage');
+        return $user->can('view_panel::utility::usage') && $utilityUsage->delivery_status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class UtilityUsagePolicy
      */
     public function update(User $user, UtilityUsage $utilityUsage): bool
     {
-        return $user->can('update_panel::utility::usage');
+        return $user->can('update_panel::utility::usage') && $utilityUsage->delivery_status !== 2;
     }
 
     /**
