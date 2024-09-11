@@ -27,6 +27,7 @@ use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\UtilityUsageResource\Pages;
 use App\Filament\Resources\Panel\UtilityUsageResource\RelationManagers;
 use App\Models\Utility;
+use Illuminate\Support\Facades\Auth;
 
 class UtilityUsageResource extends Resource
 {
@@ -89,8 +90,15 @@ class UtilityUsageResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $utilityUsage = UtilityUsage::query();
+
+        if (!Auth::user()->hasRole('admin')) {
+            $utilityUsage->where('created_by_id', Auth::id());
+        }
+
         return $table
             ->poll('60s')
+            ->query($utilityUsage)
             ->columns([
                 ImageOpenUrlColumn::make('image')
                     ->visibility('public')
