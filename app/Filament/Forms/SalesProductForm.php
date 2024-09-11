@@ -33,7 +33,6 @@ class SalesProductForm
                     }))
                     ->required()
                     ->reactive()
-                    ->distinct()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->columnSpan([
                         'md' => 4,

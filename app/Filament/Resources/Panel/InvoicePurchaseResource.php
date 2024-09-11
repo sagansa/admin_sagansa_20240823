@@ -306,7 +306,6 @@ class InvoicePurchaseResource extends Resource
                     ->prefix('Rp')
                     ->minValue(0)
                     ->numeric()
-                    // ->distinct()
                     ->debounce(500)
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         self::updateTotalPrice($get, $set);

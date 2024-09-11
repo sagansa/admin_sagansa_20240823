@@ -185,7 +185,6 @@ class AdvancePurchaseResource extends Resource
                     ->options(Product::query()->pluck('name', 'id'))
                     ->required()
                     ->reactive()
-                    ->distinct()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->columnSpan([
                         'md' => 4,
@@ -221,7 +220,6 @@ class AdvancePurchaseResource extends Resource
                     ->debounce(500)
                     ->numeric()
                     ->reactive()
-                    ->distinct()
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         self::updateUnitPrice($get, $set);
                         self::updateTotalPrice($get, $set);
