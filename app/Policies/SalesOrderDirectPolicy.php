@@ -23,7 +23,7 @@ class SalesOrderDirectPolicy
      */
     public function view(User $user, SalesOrderDirect $salesOrderDirect): bool
     {
-        return $user->can('view_panel::sales::order::directs') && $salesOrderDirect->delivery_status === 2;
+        return $user->can('view_panel::sales::order::directs') && $salesOrderDirect->delivery_status === 3;
     }
 
     /**
@@ -39,7 +39,7 @@ class SalesOrderDirectPolicy
      */
     public function update(User $user, SalesOrderDirect $salesOrderDirect): bool
     {
-        return $user->can('update_panel::sales::order::directs') && $salesOrderDirect->delivery_status !== 2;
+        return $user->can('update_panel::sales::order::directs') && $salesOrderDirect->delivery_status !== 3;
     }
 
     /**
