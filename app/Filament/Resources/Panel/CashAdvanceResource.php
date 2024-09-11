@@ -31,6 +31,7 @@ use App\Models\AdvancePurchase;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Illuminate\Support\Facades\Auth;
 
 class CashAdvanceResource extends Resource
 {
@@ -69,6 +70,12 @@ class CashAdvanceResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $cashAdvance = CashAdvance::query();
+
+        if (!Auth::user()->hasRole('admin')) {
+            $cashAdvance->where('user_id', Auth::id());
+        }
+
         return $table
             ->poll('60s')
             ->columns([

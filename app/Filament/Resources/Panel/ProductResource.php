@@ -178,7 +178,13 @@ class ProductResource extends Resource
                         '1' => 'active',
                         '2' => 'inactive',
                     ]),
-                Tables\Filters\TrashedFilter::make()])
+
+                SelectFilter::make('request')
+                    ->options([
+                        '1' => 'active',
+                        '2' => 'inactive',
+                    ]),
+                ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 // Tables\Actions\ViewAction::make(),

@@ -120,7 +120,7 @@ class PermitEmployeeResource extends Resource
     {
         $query = PermitEmployee::query();
 
-        if (Auth::user()->hasRole('staff')) {
+        if (!Auth::user()->hasRole('admin')) {
             $query->where('created_by_id', Auth::id());
         }
 

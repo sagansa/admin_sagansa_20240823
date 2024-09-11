@@ -76,9 +76,10 @@ class AdvancePurchaseResource extends Resource
     {
         $advancePurchases = AdvancePurchase::query();
 
-        if (Auth::user()->hasRole('staff')) {
+        if (!Auth::user()->hasRole('admin')) {
             $advancePurchases->where('user_id', Auth::id());
         }
+
         return $table
             ->query($advancePurchases)
             ->poll('60s')

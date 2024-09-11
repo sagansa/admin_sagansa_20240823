@@ -22,6 +22,7 @@ use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\DailySalaryResource\Pages;
 use App\Filament\Tables\DailySalaryTable;
 use App\Models\PaymentType;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -99,7 +100,7 @@ class DailySalaryResource extends Resource
     {
         $dailySalaries = DailySalary::query();
 
-        if (Auth::user()->hasRole('staff')) {
+        if (!Auth::user()->hasRole('admin')) {
             $dailySalaries->where('created_by_id', Auth::id());
         }
 
@@ -112,6 +113,8 @@ class DailySalaryResource extends Resource
             ->filters([
                 SelectFilter::make('created_by_id')
                     ->label('User')
+                    ->searchable()
+                    ->preload()
                     ->hidden(fn () => !Auth::user()->hasRole('admin'))
                     ->relationship('createdBy', 'name', fn (Builder $query) => $query->whereHas('roles', fn (Builder $query) => $query->where('name', 'staff'))),
 
@@ -125,7 +128,7 @@ class DailySalaryResource extends Resource
                         '4' => 'perbaiki',
                     ])
 
-            ])
+                ], layout: FiltersLayout::AboveContent)
             ->actions([
                 Tables\Actions\EditAction::make()->visible(fn ($record) => auth()->user()->can('update', $record)),
                 Tables\Actions\ViewAction::make()->visible(fn ($record) => auth()->user()->can('view', $record)),

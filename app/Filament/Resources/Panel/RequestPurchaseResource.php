@@ -83,7 +83,7 @@ class RequestPurchaseResource extends Resource
     {
         $requestPurchases = RequestPurchase::query();
 
-        if (Auth::user()->hasRole('staff')) {
+        if (!Auth::user()->hasRole('admin')) {
             $requestPurchases->where('user_id', Auth::id());
         }
 

@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\UserResource\Pages;
 use App\Filament\Resources\Panel\UserResource\RelationManagers;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Filters\SelectFilter;
 
 class UserResource extends Resource
 {
@@ -84,11 +85,16 @@ class UserResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                TextColumn::make('name'),
-                TextColumn::make('email'),
+                TextColumn::make('name')
+                    ->searchable(),
+                TextColumn::make('email')
+                    ->searchable(),
                 TextColumn::make('roles.name')
                 ])
-            ->filters([])
+            ->filters([
+                SelectFilter::make('roles')
+                    ->relationship('roles', 'name'),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 // Tables\Actions\ViewAction::make(),
@@ -111,7 +117,7 @@ class UserResource extends Resource
         return [
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
-            'view' => Pages\ViewUser::route('/{record}'),
+            // 'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }

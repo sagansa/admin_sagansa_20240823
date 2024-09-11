@@ -81,7 +81,7 @@ class InvoicePurchaseResource extends Resource
     {
         $invoicePurchases = InvoicePurchase::query();
 
-        if (Auth::user()->hasRole('staff')) {
+        if (!Auth::user()->hasRole('admin')) {
             $invoicePurchases->where('created_by_id', Auth::id());
         }
 

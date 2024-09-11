@@ -84,7 +84,7 @@ class StorageStockResource extends Resource
     {
         $storageStocks = StorageStock::query();
 
-        if (Auth::user()->hasRole('staff')) {
+        if (!Auth::user()->hasRole('admin')) {
             $storageStocks = $storageStocks->where('created_by_id', Auth::id());
         }
 
