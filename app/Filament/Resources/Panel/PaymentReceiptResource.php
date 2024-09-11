@@ -191,7 +191,7 @@ class PaymentReceiptResource extends Resource
         $paymentReceipt = PaymentReceipt::query();
 
         if (Auth::user()->hasRole('staff') || Auth::user()->hasRole('supervisor')) {
-            $paymentReceipt()->whereHas('payment_for', ['1', '3']);
+            $paymentReceipt()->whereIn('payment_for', ['1', '3']);
         }
 
         return $table

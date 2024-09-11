@@ -31,6 +31,7 @@ use App\Models\AdvancePurchase;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class CashAdvanceResource extends Resource
@@ -119,7 +120,10 @@ class CashAdvanceResource extends Resource
                     Select::make('user_id')
                         ->label('User')
                         ->required()
-                        ->relationship('user', 'name')
+                        ->relationship('user', 'name', fn (Builder $query) => $query
+                            ->whereHas('roles', fn (Builder $query) => $query
+                                ->where('name', 'staff') || $query
+                                ->where('name', 'supervisor')))
                         ->searchable()
                         ->preload()
                         ->native(false)
