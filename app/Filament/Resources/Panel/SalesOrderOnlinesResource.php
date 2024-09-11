@@ -228,7 +228,7 @@ class SalesOrderOnlinesResource extends Resource
                 ->required()
                 ->relationship('store', 'nickname')
                 ->options(function () {
-                    return Store::where('status', 1)->pluck('nickname', 'id');
+                    return Store::where('status','<>', 8)->pluck('nickname', 'id');
                 })
                 ->preload()
                 ->native(false)

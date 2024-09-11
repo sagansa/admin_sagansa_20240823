@@ -7,6 +7,7 @@ use App\Filament\Clusters\Purchases;
 use App\Filament\Clusters\Sales;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
+use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -25,9 +26,11 @@ use App\Filament\Resources\Panel\ClosingStoreResource\RelationManagers;
 use App\Models\DailySalary;
 use App\Models\FuelService;
 use App\Models\InvoicePurchase;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AccountCashless;
 
 class ClosingStoreResource extends Resource
 {
@@ -168,6 +171,39 @@ class ClosingStoreResource extends Resource
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalCash($get, $set);
                         }),
+
+                ])
+            ]),
+
+            Section::make()->schema([
+                Grid::make(['default' => 1])->schema([
+                    Repeater::make('cashlesses')
+                        ->relationship()
+                        ->schema([
+                            Select::make('account_cashless_id')
+                                ->required()
+                                ->native(false)
+                                ->preload()
+                                ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                                ->relationship(
+                                    name: 'accountCashless',
+                                    modifyQueryUsing: function (Builder $query, callable $get) {
+                                        $storeId = $get('../../store_id');
+                                        $query->where('store_id', $storeId);
+
+                                        return $query;
+                                    }
+                                )
+                                ->getOptionLabelFromRecordUsing(fn (AccountCashless $record) => $record->account_cashless_name),
+
+                            TextInput::make('bruto_apl')
+                                ->label('Bruto Total Omzet')
+                                ->prefix('Rp')
+                                ->required()
+                                ->numeric(),
+
+                            ImageInput::make('image'),
+                        ])
 
                 ])
             ]),

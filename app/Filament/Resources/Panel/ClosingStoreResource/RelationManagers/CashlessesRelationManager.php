@@ -15,6 +15,7 @@ use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\FileUpload;
 use App\Filament\Resources\Panel\ClosingStoreResource;
+use App\Models\AccountCashless;
 use Filament\Resources\RelationManagers\RelationManager;
 
 class CashlessesRelationManager extends RelationManager
@@ -29,7 +30,19 @@ class CashlessesRelationManager extends RelationManager
             Grid::make(['default' => 1])->schema([
                 Select::make('account_cashless_id')
                     ->required()
-                    ->relationship('accountCashless', 'account_cashless_name')
+                    ->relationship(
+                        name: 'accountCashless',
+                        modifyQueryUsing: function (Builder $query, callable $get) {
+                            // Ambil store_id dari model yang sedang diakses
+                            $storeId = $get('../../store_id');
+
+                            // Filter accountCashless berdasarkan store_id yang sesuai
+                            $query->where('store_id', $storeId);
+
+                            return $query;
+                        }
+                    )
+                    ->getOptionLabelFromRecordUsing(fn (AccountCashless $record) => $record->account_cashless_name)
                     ->preload()
                     ->native(false),
 

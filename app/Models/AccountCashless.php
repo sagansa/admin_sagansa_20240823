@@ -38,6 +38,10 @@ class AccountCashless extends Model
 
     public function getAccountCashlessNameAttribute()
     {
-        return $this->store->nickname . ' | ' . $this->cashlessProvider->name . ' | ' . $this->storeCashless->name;
+        $name = $this->cashlessProvider->name . ' | ' ;
+        $email = $this->email ? $this->email . ' | ' : ''; // or some default value
+        $username = $this->username ? $this->username . ' | ' : '';
+
+        return "$name $email $username";
     }
 }
