@@ -25,6 +25,7 @@ use App\Models\FuelService;
 use App\Models\InvoicePurchase;
 use Filament\Forms\Components\Radio;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentReceiptResource extends Resource
 {
@@ -184,7 +185,12 @@ class PaymentReceiptResource extends Resource
 
     public static function table(Table $table): Table
     {
+        if (!Auth::user()->hasRole('admin')) {
+            $paymentReceipt = PaymentReceipt::query()->whereNotIn('payment_for', ['2']);
+        }
+
         return $table
+            ->query($paymentReceipt)
             ->poll('60s')
             ->columns([
                 ImageOpenUrlColumn::make('image')

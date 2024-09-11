@@ -45,6 +45,7 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-document-chart-bar'),
             ])
             ->default()
+            // ->databaseNotifications()
             ->topNavigation()
             ->id('admin')
             ->path('admin')
@@ -66,6 +67,7 @@ class AdminPanelProvider extends PanelProvider
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
             ])
+            // ->databaseNotifications()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
