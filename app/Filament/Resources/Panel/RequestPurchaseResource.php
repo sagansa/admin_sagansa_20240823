@@ -170,7 +170,6 @@ class RequestPurchaseResource extends Resource
                     ->searchable()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     // ->disabled(fn (Get $get) => $get('status') != 1)
-                    // ->distinct()
                     ->reactive()
                     ->columnSpan(4),
 
