@@ -118,15 +118,20 @@ class SupplierResource extends Resource
                 ImageOpenUrlColumn::make('image')
                     ->url(fn($record) => asset('storage/' . $record->image)),
 
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
 
                 TextColumn::make('city.name'),
 
                 TextColumn::make('bank.name'),
 
-                TextColumn::make('bank_account_name'),
+                TextColumn::make('bank_account_name')
+                    ->searchable()
+                    ->sortable(),
 
-                TextColumn::make('bank_account_no'),
+                TextColumn::make('bank_account_no')
+                    ->searchable(),
 
                 StatusSupplierColumn::make('status'),
 

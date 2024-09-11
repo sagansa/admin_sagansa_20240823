@@ -78,16 +78,16 @@ class Supplier extends Model
 
     public function getSupplierNameAttribute()
     {
-        if ($this->bank_account_no != null) {
-            return $this->name .
-                ' | ' .
-                $this->bank->name .
-                ' | ' .
-                $this->bank_account_name .
-                ' | ' .
-                $this->bank_account_no;
-        } else {
+        // if ($this->bank->name != null) {
+        //     return $this->name .
+        //         ' | ' .
+        //         $this->bank->name .
+        //         ' | ' .
+        //         $this->bank_account_name .
+        //         ' | ' .
+        //         $this->bank_account_no;
+        // } else {
             return $this->name;
-        }
+        // }
     }
 }

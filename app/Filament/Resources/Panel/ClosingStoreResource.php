@@ -123,6 +123,7 @@ class ClosingStoreResource extends Resource
                             modifyQueryUsing: fn (Builder $query, $get) => $query
                                 ->where('payment_type_id', '2')
                                 ->where('status', '1')
+                                ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn (FuelService $record) => "{$record->fuel_service_name}")
                         ->preload()
@@ -140,6 +141,7 @@ class ClosingStoreResource extends Resource
                                 ->where('payment_type_id', '2')
                                 ->where('status', '1')
                                 ->when($get('store_id'), fn ($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
+                                ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn (DailySalary $record) => "{$record->daily_salary_name}")
                         ->preload()
@@ -157,6 +159,7 @@ class ClosingStoreResource extends Resource
                                 ->where('payment_type_id', '2')
                                 ->where('payment_status', '1')
                                 ->when($get('store_id'), fn ($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
+                                ->orderBy('date','desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn (InvoicePurchase $record) => "{$record->invoice_purchase_name}")
                         ->preload()

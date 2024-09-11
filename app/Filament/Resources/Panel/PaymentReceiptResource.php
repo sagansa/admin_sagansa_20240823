@@ -78,6 +78,7 @@ class PaymentReceiptResource extends Resource
                             modifyQueryUsing: fn (Builder $query) => $query
                                 ->where('payment_type_id', '1')
                                 ->where('status', '1')
+                                ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn (FuelService $record) => "{$record->fuel_service_name}")
                         ->preload()
@@ -104,6 +105,7 @@ class PaymentReceiptResource extends Resource
                             modifyQueryUsing: fn (Builder $query) => $query
                                 ->where('payment_type_id', '1')
                                 ->where('status', '3')
+                                ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn (DailySalary $record) => "{$record->daily_salary_name}")
                         ->preload()
@@ -130,6 +132,7 @@ class PaymentReceiptResource extends Resource
                             modifyQueryUsing: fn (Builder $query) => $query
                                 ->where('payment_type_id', '1')
                                 ->where('payment_status', '1')
+                                ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn (InvoicePurchase $record) => "{$record->invoice_purchase_name}")
                         ->preload()
@@ -185,8 +188,10 @@ class PaymentReceiptResource extends Resource
 
     public static function table(Table $table): Table
     {
-        if (!Auth::user()->hasRole('admin')) {
-            $paymentReceipt = PaymentReceipt::query()->whereNotIn('payment_for', ['2']);
+        $paymentReceipt = PaymentReceipt::query();
+
+        if (Auth::user()->hasRole('staff') || Auth::user()->hasRole('supervisor')) {
+            $paymentReceipt()->whereHas('payment_for', ['1', '3']);
         }
 
         return $table

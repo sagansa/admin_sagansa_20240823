@@ -22,9 +22,9 @@ class StatusSupplierColumn extends TextColumn
         $this->badge()
              ->color(
                 fn(string $state): string => match ($state) {
-                    '1' => 'gray',
+                    '1' => 'warning',
                     '2' => 'success',
-                    '3' => 'danger',
+                    '3' => 'gray',
                     default => 'gray',
                 }
              );

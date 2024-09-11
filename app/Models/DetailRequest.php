@@ -38,7 +38,7 @@ class DetailRequest extends Model
 
     public function getDetailRequestNameAttribute()
     {
-        return $this->product->name . ' | ' . $this->product->unit->unit . ' | ' . $this->requestPurchase->date;
+        return $this->product->name . ' | ' . $this->requestPurchase->date;
     }
 
     public function scopeByInvoicePurchase($query, $storeId, $paymentTypeId)

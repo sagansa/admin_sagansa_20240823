@@ -150,7 +150,7 @@ class InvoicePurchaseResource extends Resource
                 ->preload()
                 ->native(false)
                 ->afterStateUpdated(function ($state, callable $set) {
-                    // $set('detailInvoices', null);
+                    $set('detailInvoices', null);
                     // $set('store_id', null);
                 }),
 
