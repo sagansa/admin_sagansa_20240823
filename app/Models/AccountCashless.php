@@ -35,4 +35,9 @@ class AccountCashless extends Model
     {
         return $this->hasMany(Cashless::class);
     }
+
+    public function getAccountCashlessNameAttribute()
+    {
+        return $this->store->nickname . ' | ' . $this->cashlessProvider->name . ' | ' . $this->storeCashless->name;
+    }
 }

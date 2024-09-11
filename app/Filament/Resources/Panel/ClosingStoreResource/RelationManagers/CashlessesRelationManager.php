@@ -29,8 +29,7 @@ class CashlessesRelationManager extends RelationManager
             Grid::make(['default' => 1])->schema([
                 Select::make('account_cashless_id')
                     ->required()
-                    ->relationship('accountCashless', 'email')
-                    ->searchable()
+                    ->relationship('accountCashless', 'account_cashless_name')
                     ->preload()
                     ->native(false),
 
