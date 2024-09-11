@@ -116,7 +116,16 @@ class DailySalaryResource extends Resource
                     ->searchable()
                     ->preload()
                     ->hidden(fn () => !Auth::user()->hasRole('admin'))
-                    ->relationship('createdBy', 'name', fn (Builder $query) => $query->whereHas('roles', fn (Builder $query) => $query->where('name', 'staff'))),
+                    ->relationship('createdBy', 'name', fn (Builder $query) => $query
+                        ->whereHas('roles', fn (Builder $query) => $query
+                            ->where('name', 'staff') || $query
+                            ->where('name', 'supervisor'))),
+
+                SelectFilter::make('payment_type_id')
+                    ->label('Payment Type')
+                    ->preload()
+                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
+                    ->relationship('paymentType', 'name', fn (Builder $query) => $query->where('status','1')),
 
                 SelectFilter::make('status')
                     ->label('Status')
@@ -129,6 +138,7 @@ class DailySalaryResource extends Resource
                     ])
 
                 ], layout: FiltersLayout::AboveContent)
+
             ->actions([
                 Tables\Actions\EditAction::make()->visible(fn ($record) => auth()->user()->can('update', $record)),
                 Tables\Actions\ViewAction::make()->visible(fn ($record) => auth()->user()->can('view', $record)),
