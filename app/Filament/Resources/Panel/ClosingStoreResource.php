@@ -89,6 +89,7 @@ class ClosingStoreResource extends Resource
                         ->prefix('Rp')
                         ->required()
                         ->reactive()
+                        ->debounce(2000)
                         ->minValue(0)
                         ->numeric()
                         ->afterStateUpdated(function (Get $get, Set $set) {
@@ -99,6 +100,7 @@ class ClosingStoreResource extends Resource
                         ->prefix('Rp')
                         ->required()
                         ->reactive()
+                        ->debounce(2000)
                         ->minValue(0)
                         ->numeric()
                         ->afterStateUpdated(function (Get $get, Set $set) {
@@ -109,6 +111,7 @@ class ClosingStoreResource extends Resource
                         ->prefix('Rp')
                         ->required()
                         ->reactive()
+                        ->debounce(2000)
                         ->minValue(0)
                         ->numeric()
                         ->afterStateUpdated(function (Get $get, Set $set) {
