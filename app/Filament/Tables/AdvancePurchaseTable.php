@@ -3,6 +3,7 @@
 namespace App\Filament\Tables;
 
 use App\Filament\Columns\CurrencyColumn;
+use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Models\AdvancePurchase;
 use Filament\Tables\Columns\ImageColumn;
@@ -15,7 +16,8 @@ class AdvancePurchaseTable
     public static function schema(): array
     {
         return [
-            ImageColumn::make('image')->visibility('public'),
+            ImageOpenUrlColumn::make('image')->visibility('public')
+                ->url(fn($record) => asset('storage/' . $record->image)),
 
             TextColumn::make('store.nickname'),
 
@@ -30,7 +32,6 @@ class AdvancePurchaseTable
                     })->toArray());
                 })
                 ->extraAttributes(['class' => 'whitespace-pre-wrap']),
-
 
             CurrencyColumn::make('total_price'),
 
