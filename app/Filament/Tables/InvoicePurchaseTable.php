@@ -5,6 +5,7 @@ namespace App\Filament\Tables;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\PaymentStatusColumn;
+use App\Models\InvoicePurchase;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 
@@ -25,7 +26,7 @@ class InvoicePurchaseTable
                 ->copyable()
                 ->formatStateUsing(
                     fn($record): string => '<ul>' . implode('', [
-                        '<li>Nama: ' . $record->supplier->name . '</li>',
+                        '<li>Nama Supplier: ' . $record->supplier->name . '</li>',
                         '<li>Bank: ' . ($record->supplier->bank ? $record->supplier->bank->name : 'tidak tersedia') . '</li>',
                         '<li>Nama Rekening: ' . ($record->supplier->bank_account_name ? $record->supplier->bank_account_name : 'tidak tersedia') . '</li>',
                         '<li>No. Rekening: ' . ($record->supplier->bank_account_no ? $record->supplier->bank_account_no : 'tidak tersedia') . '</li>',
@@ -34,6 +35,16 @@ class InvoicePurchaseTable
 
             TextColumn::make('date')
                 ->sortable(),
+
+            TextColumn::make('detailInvoicePurchases')
+                ->label('Detail Purchases')
+                ->html()
+                ->formatStateusing(function (InvoicePurchase $record) {
+                    return implode('<br>', $record->detailInvoicePurchases->map(function ($item) {
+                        $unitPrice = number_format($item->unit_price, 0, ',', '.'); // add thousands separator
+                        return "{$item->product->name} ({$item->quantity} {$item->product->unit->unit}) - Rp {$unitPrice}"; // add "Rp" prefix
+                    })->toArray());
+                }),
 
             CurrencyColumn::make('total_price'),
 
