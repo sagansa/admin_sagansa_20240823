@@ -41,7 +41,8 @@ class AccountCashless extends Model
         $name = $this->cashlessProvider->name . ' | ' ;
         $email = $this->email ? $this->email . ' | ' : ''; // or some default value
         $username = $this->username ? $this->username . ' | ' : '';
+        $store = $this->storeCashless;
 
-        return "$name $email $username";
+        return "$name $email $username $store";
     }
 }

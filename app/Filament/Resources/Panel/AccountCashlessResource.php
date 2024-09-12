@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Cashlesses;
 use App\Filament\Clusters\Transaction\Settings;
+use App\Filament\Forms\Notes;
+use App\Filament\Forms\StatusSelectInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -20,6 +22,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\AccountCashlessResource\Pages;
 use App\Filament\Resources\Panel\AccountCashlessResource\RelationManagers;
+use Filament\Tables\Filters\SelectFilter;
 
 class AccountCashlessResource extends Resource
 {
@@ -86,22 +89,15 @@ class AccountCashlessResource extends Resource
                     TextInput::make('password')
                         ->nullable()
                         ->string()
-                        ->minLength(6)
                         ->password(),
 
                     TextInput::make('no_telp')
                         ->nullable()
                         ->string(),
 
-                    TextInput::make('status')
-                        ->required()
-                        ->numeric()
-                        ->step(1),
+                    StatusSelectInput::make('status'),
 
-                    RichEditor::make('notes')
-                        ->nullable()
-                        ->string()
-                        ->fileAttachmentsVisibility('public'),
+                    Notes::make('notes'),
                 ]),
             ]),
         ]);
@@ -125,10 +121,11 @@ class AccountCashlessResource extends Resource
                 TextColumn::make('password'),
 
                 TextColumn::make('no_telp'),
-
-                TextColumn::make('status'),
             ])
-            ->filters([])
+            ->filters([
+                SelectFilter::make('store_id')
+                    ->relationship('store', 'nickname')
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
