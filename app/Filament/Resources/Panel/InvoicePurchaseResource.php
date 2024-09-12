@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Panel;
 
-use App\Filament\Clusters\Invoices;
 use App\Filament\Clusters\Purchases;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
@@ -22,8 +21,8 @@ use App\Filament\Resources\Panel\InvoicePurchaseResource\Pages;
 use App\Filament\Tables\InvoicePurchaseTable;
 use App\Models\DetailRequest;
 use App\Models\PaymentType;
-use App\Models\Store;
 use App\Models\Supplier;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -168,7 +167,11 @@ class InvoicePurchaseResource extends Resource
                 ->preload()
                 ->native(false),
 
-            DateInput::make('date'),
+            DatePicker::make('date')
+                ->rules(['date'])
+                ->required()
+                ->default('today')
+                ->native(false),
 
             // Placeholder::make('payment_status'),
                 // ->hidden(fn ($operation) => $operation === 'create'),
