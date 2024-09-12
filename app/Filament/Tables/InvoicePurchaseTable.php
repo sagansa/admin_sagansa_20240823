@@ -21,19 +21,8 @@ class InvoicePurchaseTable
 
             TextColumn::make('store.nickname'),
 
-            // TextColumn::make('supplier.supplier_name'),
-
-            // TextColumn::make('supplier')
-            //     ->formatStateUsing(
-            //         fn($record): string => '<ul><li>' . implode('</li><li>', [
-            //             $record->supplier->name,
-            //             $record->supplier->bank->name,
-            //             $record->supplier->bank_account_name,
-            //             $record->supplier->bank_account_no,
-            //         ]) . '</li></ul>'
-            //     )->html(),
-
             TextColumn::make('supplier')
+                ->copyable()
                 ->formatStateUsing(
                     fn($record): string => '<ul>' . implode('', [
                         '<li>Nama: ' . $record->supplier->name . '</li>',
