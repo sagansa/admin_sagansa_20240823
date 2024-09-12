@@ -365,7 +365,7 @@ class ClosingStoreResource extends Resource
         $cashFromYesterday = $get('cash_from_yesterday') ?? 0;
         $totalCashTransfer = $get('total_cash_transfer') ?? 0;
 
-        $totalCash = $cashForTomorrow - $cashFromYesterday + $spendingTotalCash + $totalCashTransfer;
+        $totalCash = floatval($cashForTomorrow) - floatval($cashFromYesterday) + floatval($spendingTotalCash) + floatval($totalCashTransfer);
         $set('total_cash', $totalCash);
     }
 
