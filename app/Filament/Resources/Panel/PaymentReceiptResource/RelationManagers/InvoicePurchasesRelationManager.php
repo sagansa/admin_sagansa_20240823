@@ -17,6 +17,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Resources\RelationManagers\RelationManager;
 use App\Filament\Resources\Panel\PaymentReceiptResource;
+use App\Filament\Tables\InvoicePurchaseTable;
 
 class InvoicePurchasesRelationManager extends RelationManager
 {
@@ -100,33 +101,9 @@ class InvoicePurchasesRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->columns([
-                ImageColumn::make('image')->visibility('public'),
-
-                TextColumn::make('paymentType.name'),
-
-                TextColumn::make('store.name'),
-
-                TextColumn::make('supplier.name'),
-
-                TextColumn::make('date')->since(),
-
-                TextColumn::make('taxes'),
-
-                TextColumn::make('discounts'),
-
-                TextColumn::make('total_price'),
-
-                TextColumn::make('notes')->limit(255),
-
-                TextColumn::make('created_by_id'),
-
-                TextColumn::make('createdBy.name'),
-
-                TextColumn::make('payment_status'),
-
-                TextColumn::make('order_status'),
-            ])
+            ->columns(
+                InvoicePurchaseTable::schema()
+                )
             ->filters([])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),

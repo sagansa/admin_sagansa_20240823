@@ -21,7 +21,27 @@ class InvoicePurchaseTable
 
             TextColumn::make('store.nickname'),
 
-            TextColumn::make('supplier.name'),
+            // TextColumn::make('supplier.supplier_name'),
+
+            // TextColumn::make('supplier')
+            //     ->formatStateUsing(
+            //         fn($record): string => '<ul><li>' . implode('</li><li>', [
+            //             $record->supplier->name,
+            //             $record->supplier->bank->name,
+            //             $record->supplier->bank_account_name,
+            //             $record->supplier->bank_account_no,
+            //         ]) . '</li></ul>'
+            //     )->html(),
+
+            TextColumn::make('supplier')
+                ->formatStateUsing(
+                    fn($record): string => '<ul>' . implode('', [
+                        '<li>Nama: ' . $record->supplier->name . '</li>',
+                        '<li>Bank: ' . ($record->supplier->bank ? $record->supplier->bank->name : 'tidak tersedia') . '</li>',
+                        '<li>Nama Rekening: ' . ($record->supplier->bank_account_name ? $record->supplier->bank_account_name : 'tidak tersedia') . '</li>',
+                        '<li>No. Rekening: ' . ($record->supplier->bank_account_no ? $record->supplier->bank_account_no : 'tidak tersedia') . '</li>',
+                    ]) . '</ul>'
+                )->html(),
 
             TextColumn::make('date')
                 ->sortable(),

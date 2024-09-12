@@ -62,7 +62,7 @@ class AccountCashlessResource extends Resource
 
                     Select::make('store_id')
                         ->required()
-                        ->relationship('store', 'name')
+                        ->relationship('store', 'nickname')
                         ->searchable()
                         ->preload()
                         ->native(false),
@@ -114,7 +114,7 @@ class AccountCashlessResource extends Resource
             ->columns([
                 TextColumn::make('cashlessProvider.name'),
 
-                TextColumn::make('store.name'),
+                TextColumn::make('store.nickname'),
 
                 TextColumn::make('storeCashless.name'),
 
