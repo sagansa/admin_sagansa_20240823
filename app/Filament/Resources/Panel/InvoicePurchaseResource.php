@@ -7,6 +7,7 @@ use App\Filament\Clusters\Purchases;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
+use App\Filament\Forms\StoreSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -154,21 +155,7 @@ class InvoicePurchaseResource extends Resource
                     // $set('store_id', null);
                 }),
 
-            Select::make('store_id')
-                ->required()
-                ->reactive()
-                ->relationship(
-                    name: 'store',
-                    modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '8')->orderBy('name', 'asc'),
-                )
-                ->getOptionLabelFromRecordUsing(fn (Store $record) => "{$record->nickname}")
-                ->searchable()
-                ->preload()
-                ->native(false)
-                ->afterStateUpdated(function ($state, callable $set) {
-                    // $set('detailInvoices', null);
-                    // $set('payment_type_id', null);
-                }),
+            StoreSelect::make('store_id'),
 
             Select::make('supplier_id')
                 ->required()

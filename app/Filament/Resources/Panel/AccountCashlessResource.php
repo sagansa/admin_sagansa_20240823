@@ -6,6 +6,7 @@ use App\Filament\Clusters\Cashlesses;
 use App\Filament\Clusters\Transaction\Settings;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StatusSelectInput;
+use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -63,12 +64,7 @@ class AccountCashlessResource extends Resource
                         ->preload()
                         ->native(false),
 
-                    Select::make('store_id')
-                        ->required()
-                        ->relationship('store', 'nickname')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
+                    StoreSelect::make('store_id'),
 
                     Select::make('store_cashless_id')
                         ->required()

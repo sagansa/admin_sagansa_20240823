@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Stock;
+use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -53,12 +54,7 @@ class SelfConsumptionResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    Select::make('store_id')
-                        ->required()
-                        ->relationship('store', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
+                    StoreSelect::make('store_id'),
 
                     DatePicker::make('date')
                         ->rules(['date'])

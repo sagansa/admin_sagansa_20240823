@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
 
 use App\Filament\Tables\DailySalaryTable;
 use App\Filament\Forms\StatusInput;
+use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -28,12 +29,8 @@ class DailySalariesRelationManager extends RelationManager
     {
         return $form->schema([
             Grid::make(['default' => 1])->schema([
-                Select::make('store_id')
-                    ->required()
-                    ->relationship('store', 'nickname')
-                    ->searchable()
-                    ->preload()
-                    ->native(false),
+                StoreSelect::make('store_id')
+                    ->required(),
 
                 Select::make('shift_store_id')
                     ->required()

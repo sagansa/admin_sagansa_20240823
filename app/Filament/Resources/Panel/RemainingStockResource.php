@@ -8,6 +8,7 @@ use App\Filament\Forms\BaseSelectInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\StatusSelect;
 use App\Filament\Forms\StatusSelectInput;
+use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -61,10 +62,7 @@ class RemainingStockResource extends Resource
                     DateInput::make('date')
                         ->placeholder(__('Date')),
 
-                    BaseSelectInput::make('store_id')
-                        ->required()
-                        ->placeholder('Store')
-                        ->relationship('store', 'nickname'),
+                    StoreSelect::make('store_id'),
 
                     StatusSelectInput::make('status')
                         ->placeholder('Status'),

@@ -9,6 +9,7 @@ use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
+use App\Filament\Forms\StoreSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -66,15 +67,7 @@ class ClosingStoreResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    Select::make('store_id')
-                        ->required()
-                        ->relationship(
-                            name: 'store',
-                            titleAttribute: 'nickname',
-                            modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', 8),)
-                        ->preload()
-                        ->native(false)
-                        ->reactive(),
+                    StoreSelect::make('store_id'),
 
                     Select::make('shift_store_id')
                         ->required()
@@ -132,6 +125,7 @@ class ClosingStoreResource extends Resource
                             modifyQueryUsing: fn (Builder $query, $get) => $query
                                 ->where('payment_type_id', '2')
                                 ->where('status', '1')
+                                ->whereDate('date', '>=', now()->subDays(10)) // add this line
                                 ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn (FuelService $record) => "{$record->fuel_service_name}")
@@ -150,13 +144,15 @@ class ClosingStoreResource extends Resource
                                 ->where('payment_type_id', '2')
                                 ->where('status', '1')
                                 ->when($get('store_id'), fn ($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
+                                ->whereDate('date', '>=', now()->subDays(10)) // add this line
                                 ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn (DailySalary $record) => "{$record->daily_salary_name}")
                         ->preload()
                         ->reactive()
                         ->native(false)
-                        ->afterStateUpdated(function (Get $get, Set $set) {
+                        ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                            self::updateDailySalaryStatus($state, $set);
                             self::updateTotalCash($get, $set);
                         }),
 
@@ -168,6 +164,7 @@ class ClosingStoreResource extends Resource
                                 ->where('payment_type_id', '2')
                                 ->where('payment_status', '1')
                                 ->when($get('store_id'), fn ($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
+                                ->whereDate('date', '>=', now()->subDays(10)) // add this line
                                 ->orderBy('date','desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn (InvoicePurchase $record) => "{$record->invoice_purchase_name}")
@@ -331,6 +328,17 @@ class ClosingStoreResource extends Resource
         ];
     }
 
+    protected static function updateDailySalaryStatus($state, $set): void
+    {
+        foreach ($state as $dailySalaryId) {
+            $dailySalary = DailySalary::find($dailySalaryId);
+            if  ($dailySalary) {
+                $dailySalary->status = 2;
+                $dailySalary->save();
+            }
+        }
+    }
+
     protected static function updateTotalCash(Get $get, Set $set): void
     {
         $fuelServices = $get('fuelServices');
@@ -381,6 +389,8 @@ class ClosingStoreResource extends Resource
     {
 
     }
+
+
 
 }
 

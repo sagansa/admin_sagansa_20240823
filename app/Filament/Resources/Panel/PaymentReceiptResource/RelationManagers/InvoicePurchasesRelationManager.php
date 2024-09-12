@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
 
+use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -44,12 +45,8 @@ class InvoicePurchasesRelationManager extends RelationManager
                     ->preload()
                     ->native(false),
 
-                Select::make('store_id')
-                    ->required()
-                    ->relationship('store', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->native(false),
+                StoreSelect::make('store_id')
+                    ->required(),
 
                 Select::make('supplier_id')
                     ->required()

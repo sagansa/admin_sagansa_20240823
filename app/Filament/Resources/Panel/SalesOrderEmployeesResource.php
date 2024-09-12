@@ -9,6 +9,7 @@ use App\Filament\Forms\BottomTotalPriceForm;
 use App\Filament\Forms\DeliveryAddressForm;
 use App\Filament\Forms\SalesProductForm;
 use App\Filament\Forms\ImageInput;
+use App\Filament\Forms\StoreSelect;
 use App\Filament\Resources\Panel\SalesOrderEmployeesResource\Pages;
 use App\Models\DeliveryAddress;
 use App\Models\Store;
@@ -145,14 +146,7 @@ class SalesOrderEmployeesResource extends Resource
             ImageInput::make('image_payment')
                 ->label('Transfer'),
 
-            Select::make('store_id')
-                ->label('Store')
-                ->required()
-                ->options(function () {
-                    return Store::where('status', 1)->pluck('nickname', 'id');
-                })
-                ->preload()
-                ->native(false),
+            StoreSelect::make('store_id'),
 
             DatePicker::make('delivery_date')
                 ->required()

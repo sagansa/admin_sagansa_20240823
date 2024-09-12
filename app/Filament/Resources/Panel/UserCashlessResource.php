@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Cashlesses;
 use App\Filament\Clusters\Transaction\Settings;
+use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -59,12 +60,8 @@ class UserCashlessResource extends Resource
                         ->preload()
                         ->native(false),
 
-                    Select::make('store_id')
-                        ->required()
-                        ->relationship('store', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
+                    StoreSelect::make('store_id')
+                        ->required(),
 
                     Select::make('store_cashless_id')
                         ->required()

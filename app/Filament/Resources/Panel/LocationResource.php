@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Store;
+use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -56,12 +57,7 @@ class LocationResource extends Resource
                         ->string()
                         ->autofocus(),
 
-                    Select::make('store_id')
-                        ->required()
-                        ->relationship('store', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
+                    StoreSelect::make('store_id'),
 
                     TextInput::make('contact_person_name')
                         ->required()

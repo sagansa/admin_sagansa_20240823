@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\Invoices;
 use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\StatusColumn;
+use App\Filament\Forms\StoreSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -57,12 +58,7 @@ class RequestPurchaseResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    Select::make('store_id')
-                        ->required()
-                        ->relationship('store', 'nickname')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
+                    StoreSelect::make('store_id'),
 
                     DatePicker::make('date')
                         ->default('today')

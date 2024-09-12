@@ -22,6 +22,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use App\Filament\Forms\SalesProductForm;
+use App\Filament\Forms\StoreSelect;
 use App\Models\DeliveryAddress;
 use App\Models\TransferToAccount;
 use Filament\Tables\Columns\Summarizers\Sum;
@@ -192,13 +193,10 @@ class SalesOrderDirectsResource extends Resource
                 ->disk('public')
                 ->directory('images/Direct/Payment'),
 
-            Select::make('store_id')
+            StoreSelect::make('store_id')
                 ->required(fn () => Auth::user()->hasRole('admin'))
                 ->hidden(fn () => Auth::user()->hasRole('customer'))
-                ->disabled(fn () => Auth::user()->hasRole('storage-staff'))
-                ->relationship('store', 'nickname')
-                ->preload()
-                ->native(false),
+                ->disabled(fn () => Auth::user()->hasRole('storage-staff')),
 
             DatePicker::make('delivery_date')
                 ->required()

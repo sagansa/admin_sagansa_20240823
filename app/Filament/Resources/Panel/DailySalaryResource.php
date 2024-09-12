@@ -9,6 +9,7 @@ use App\Filament\Columns\PaymentStatusColumn;
 use App\Filament\Forms\BaseSelectInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\PaymentStatusSelectInput;
+use App\Filament\Forms\StoreSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -62,9 +63,7 @@ class DailySalaryResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    BaseSelectInput::make('store_id')
-                        ->placeholder('Store')
-                        ->relationship('store', 'nickname'),
+                    StoreSelect::make('store_id'),
 
                     BaseSelectInput::make('shift_store_id')
                         ->placeholder('Shift Store')

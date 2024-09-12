@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Asset;
 use App\Filament\Clusters\Movements;
+use App\Filament\Forms\Notes;
+use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -52,17 +54,9 @@ class StoreAssetResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    Select::make('store_id')
-                        ->required()
-                        ->relationship('store', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
+                    StoreSelect::make('store_id'),
 
-                    RichEditor::make('notes')
-                        ->required()
-                        ->string()
-                        ->fileAttachmentsVisibility('public'),
+                    Notes::make('notes'),
 
                     Select::make('status')
                         ->required()

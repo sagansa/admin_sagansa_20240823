@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Stock;
+use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -68,17 +69,9 @@ class TransferStockResource extends Resource
                         ->imageEditor()
                         ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
 
-                    TextInput::make('from_store_id')
-                        ->required()
-                        ->numeric()
-                        ->step(1),
+                    StoreSelect::make('from_store_id'),
 
-                    Select::make('to_store_id')
-                        ->required()
-                        ->relationship('storeFrom', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
+                    StoreSelect::make('to_store_id'),
 
                     TextInput::make('status')
                         ->required()

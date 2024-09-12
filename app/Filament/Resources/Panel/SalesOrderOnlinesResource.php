@@ -25,6 +25,7 @@ use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Forms\BottomTotalPriceForm;
 use App\Filament\Forms\DeliveryAddressForm;
 use App\Filament\Forms\SalesProductForm;
+use App\Filament\Forms\StoreSelect;
 use App\Models\SalesOrderOnline;
 use App\Models\Store;
 use Filament\Tables\Actions\BulkAction;
@@ -224,14 +225,7 @@ class SalesOrderOnlinesResource extends Resource
                 ->directory('images/Online/Payment')
                 ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
 
-            Select::make('store_id')
-                ->required()
-                ->relationship('store', 'nickname')
-                ->options(function () {
-                    return Store::where('status','<>', 8)->pluck('nickname', 'id');
-                })
-                ->preload()
-                ->native(false)
+            StoreSelect::make('store_id')
                 ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
 
             DatePicker::make('delivery_date')

@@ -7,6 +7,7 @@ use App\Filament\Clusters\Vehicles;
 use App\Filament\Columns\ActiveColumn;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
+use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -81,15 +82,10 @@ class VehicleResource extends Resource
                         ->required()
                         ->string(),
 
-                    Select::make('store_id')
+                    StoreSelect::make('store_id')
                         ->hiddenLabel()
                         ->placeholder('Store')
-                        ->required()
-                        ->required()
-                        ->relationship('store', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->required(),
 
                     Select::make('status')
                         ->hiddenLabel()

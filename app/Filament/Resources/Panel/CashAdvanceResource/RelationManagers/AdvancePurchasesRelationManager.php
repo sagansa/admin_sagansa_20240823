@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel\CashAdvanceResource\RelationManagers;
 
+use App\Filament\Forms\StoreSelect;
 use App\Filament\Tables\AdvancePurchaseTable;
 use App\Models\AdvancePurchase;
 use Filament\Tables;
@@ -44,12 +45,8 @@ class AdvancePurchasesRelationManager extends RelationManager
                     ->preload()
                     ->native(false),
 
-                Select::make('store_id')
-                    ->required()
-                    ->relationship('store', 'name')
-                    ->searchable()
-                    ->preload()
-                    ->native(false),
+                StoreSelect::make('store_id')
+                    ->required(),
 
                 DatePicker::make('date')
                     ->rules(['date'])

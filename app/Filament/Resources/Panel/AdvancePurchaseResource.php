@@ -6,6 +6,7 @@ use App\Filament\Clusters\Advances;
 use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\DateInput;
+use App\Filament\Forms\StoreSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -141,12 +142,7 @@ class AdvancePurchaseResource extends Resource
                     )
                     ->getOptionLabelFromRecordUsing(fn (CashAdvance $record) => "{$record->cash_advance_name}"),
 
-            Select::make('store_id')
-                ->required()
-                ->relationship('store', 'nickname')
-                ->searchable()
-                ->preload()
-                ->native(false),
+            StoreSelect::make('store_id'),
 
             Select::make('supplier_id')
                 ->label('Supplier')
