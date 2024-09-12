@@ -147,13 +147,13 @@ class ClosingCourierResource extends Resource
             ->columns([
                 ImageColumn::make('image')->visibility('public'),
 
+                TextColumn::make('created_at'),
+
                 TextColumn::make('bank.name'),
 
                 CurrencyColumn::make('total_cash_to_transfer'),
 
                 TextColumn::make('createdBy.name'),
-
-                TextColumn::make('approvedBy.name'),
 
                 StatusColumn::make('status'),
             ])

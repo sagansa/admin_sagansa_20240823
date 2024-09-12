@@ -76,18 +76,30 @@ class Supplier extends Model
         return $this->belongsTo(PostalCode::class);
     }
 
+    // public function getSupplierNameAttribute()
+    // {
+    //     $supplierName = $this->name ? : '';
+    //     $bankName = $this->bank->name ? : '';
+    //     $accountName = $this->bank_account_name ? : '';
+    //     $accountNo = $this->bank_account_no ? : '';
+
+    //     return implode(PHP_EOL, [
+    //         $supplierName,
+    //         $bankName,
+    //         $accountName,
+    //         $accountNo,
+    //     ]);
+    // }
+
     public function getSupplierNameAttribute()
     {
-        $supplierName = $this->name ? : '';
-        $bankName = $this->bank->name ? : '';
-        $accountName = $this->bank_account_name ? : '';
-        $accountNo = $this->bank_account_no ? : '';
+        $supplierDetails = [
+            "Nama Supplier: " . ($this->name ? : 'tidak tersedia'),
+            "Bank: " . ($this->bank ? $this->bank->name : 'tidak tersedia'),
+            "Nama Rekening: " . ($this->bank_account_name ? : 'tidak tersedia'),
+            "No. Rekening: " . ($this->bank_account_no ? : 'tidak tersedia'),
+        ];
 
-        return implode(' ', [
-            $supplierName,
-            $bankName,
-            $accountName,
-            $accountNo,
-        ]);
+        return implode("\n", $supplierDetails);
     }
 }
