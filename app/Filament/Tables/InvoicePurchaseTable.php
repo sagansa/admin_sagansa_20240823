@@ -41,8 +41,8 @@ class InvoicePurchaseTable
                 ->html()
                 ->formatStateusing(function (InvoicePurchase $record) {
                     return implode('<br>', $record->detailInvoices->map(function ($item) {
-                        $unitPrice = number_format($item->unit_price, 0, ',', '.'); // add thousands separator
-                        return "{$item->detailRequest->product->name} ({$item->quantity} {$item->detailRequest->product->unit->unit}) - Rp {$unitPrice}"; // add "Rp" prefix
+                        $subtotalInvoice = number_format($item->subtotal_invoice, 0, ',', '.'); // add thousands separator
+                        return "{$item->detailRequest->product->name} ({$item->quantity_product} {$item->detailRequest->product->unit->unit}) - Rp {$subtotalInvoice}"; // add "Rp" prefix
                     })->toArray());
                 }),
 
