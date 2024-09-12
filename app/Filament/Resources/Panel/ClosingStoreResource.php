@@ -68,7 +68,10 @@ class ClosingStoreResource extends Resource
                 Grid::make(['default' => 1])->schema([
                     Select::make('store_id')
                         ->required()
-                        ->relationship('store', 'nickname')
+                        ->relationship(
+                            name: 'store',
+                            titleAttribute: 'nickname',
+                            modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', 8),)
                         ->preload()
                         ->native(false)
                         ->reactive(),
