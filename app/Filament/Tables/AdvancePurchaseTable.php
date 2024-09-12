@@ -23,7 +23,7 @@ class AdvancePurchaseTable
 
             TextColumn::make('date'),
 
-            TextColumn::make('detailAdvancePurchaes')
+            TextColumn::make('detailAdvancePurchases')
                 ->label('Detail Purchases')
                 ->html()
                 ->formatStateUsing(function (AdvancePurchase $record) {
