@@ -36,13 +36,13 @@ class InvoicePurchaseTable
             TextColumn::make('date')
                 ->sortable(),
 
-            TextColumn::make('detailInvoicePurchases')
+            TextColumn::make('detailInvoices')
                 ->label('Detail Purchases')
                 ->html()
                 ->formatStateusing(function (InvoicePurchase $record) {
-                    return implode('<br>', $record->detailInvoicePurchases->map(function ($item) {
+                    return implode('<br>', $record->detailInvoices->map(function ($item) {
                         $unitPrice = number_format($item->unit_price, 0, ',', '.'); // add thousands separator
-                        return "{$item->product->name} ({$item->quantity} {$item->product->unit->unit}) - Rp {$unitPrice}"; // add "Rp" prefix
+                        return "{$item->detailRequest->product->name} ({$item->quantity} {$item->detailRequest->product->unit->unit}) - Rp {$unitPrice}"; // add "Rp" prefix
                     })->toArray());
                 }),
 
