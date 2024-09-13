@@ -135,23 +135,23 @@ class InvoicePurchaseResource extends Resource
         return [
             ImageInput::make('image'),
 
-            StoreSelect::make('store_id')
-                ->afterStateUpdated(function ($state, callable $set) {
-                    $set('detailInvoices', null);
-                }),
+            StoreSelect::make('store_id'),
 
             Select::make('payment_type_id')
                 ->required()
-                // ->reactive()
+                ->reactive()
                 ->relationship(
                     name: 'paymentType',
-                    titleAttribute: 'name',
                     modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
                 )
+
+                ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
+                ->default(2)
                 ->preload()
                 ->native(false)
                 ->afterStateUpdated(function ($state, callable $set) {
                     $set('detailInvoices', null);
+                    // $set('store_id', null);
                 }),
 
             Select::make('supplier_id')
@@ -165,7 +165,11 @@ class InvoicePurchaseResource extends Resource
                 ->preload()
                 ->native(false),
 
-            DateInput::make('date'),
+            DatePicker::make('date')
+                ->rules(['date'])
+                ->required()
+                ->default('today')
+                ->native(false),
 
             // Placeholder::make('payment_status'),
                 // ->hidden(fn ($operation) => $operation === 'create'),
@@ -216,6 +220,7 @@ class InvoicePurchaseResource extends Resource
             ->schema([
                 Select::make('detail_request_id')
                     ->label('Detail Request')
+
                     ->relationship(
                         name: 'detailRequest',
                         modifyQueryUsing: function (Builder $query, callable $get) {
