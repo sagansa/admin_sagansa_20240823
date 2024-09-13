@@ -229,7 +229,7 @@ class InvoicePurchaseResource extends Resource
 
                             $statusFilter = '';
                                 if ($paymentTypeId == 1) { // transfer
-                                    $statusFilter = '1'; // process dan approved
+                                    $statusFilter = '1' || $statusFilter = '4'; // process dan approved -> 1 & 4
                                 } elseif ($paymentTypeId == 2) { // tunai
                                     $statusFilter = '4'; // approved
                             }
