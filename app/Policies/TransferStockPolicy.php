@@ -12,7 +12,7 @@ class TransferStockPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_panel::transfer::stocks');
+        return $user->can('view_any_panel::transfer::stock');
     }
 
     /**
@@ -20,7 +20,7 @@ class TransferStockPolicy
      */
     public function view(User $user, TransferStock $model): bool
     {
-        return $user->can('view_panel::transfer::stocks');
+        return $user->can('view_panel::transfer::stock');
     }
 
     /**
@@ -28,7 +28,7 @@ class TransferStockPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_panel::transfer::stocks');
+        return $user->can('create_panel::transfer::stock');
     }
 
     /**
@@ -36,7 +36,7 @@ class TransferStockPolicy
      */
     public function update(User $user, TransferStock $model): bool
     {
-        return $user->can('update_panel::transfer::stocks');
+        return $user->can('update_panel::transfer::stock');
     }
 
     /**
@@ -44,7 +44,7 @@ class TransferStockPolicy
      */
     public function delete(User $user, TransferStock $model): bool
     {
-        return $user->can('delete_panel::transfer::stocks');
+        return $user->can('delete_panel::transfer::stock');
     }
 
     /**
@@ -52,7 +52,7 @@ class TransferStockPolicy
      */
     public function restore(User $user, TransferStock $model): bool
     {
-        return $user->can('restore_panel::transfer::stocks');
+        return $user->can('restore_panel::transfer::stock');
     }
 
     /**
@@ -60,6 +60,6 @@ class TransferStockPolicy
      */
     public function forceDelete(User $user, TransferStock $model): bool
     {
-        return $user->can('force_delete_panel::transfer::stocks');
+        return $user->can('force_delete_panel::transfer::stock');
     }
 }
