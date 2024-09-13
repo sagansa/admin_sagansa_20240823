@@ -224,51 +224,25 @@ class InvoicePurchaseResource extends Resource
                 Select::make('detail_request_id')
                     ->label('Detail Request')
 
-                    // ->relationship(
-                    //     name: 'detailRequest',
-                    //     modifyQueryUsing: function (Builder $query, callable $get) {
-                    //         $paymentTypeId = $get('../../payment_type_id');
-                    //         $storeId = $get('../../store_id');
-
-                    //         $statusFilter = '';
-                    //             if ($paymentTypeId == 1) { // transfer
-                    //                 $statusFilter = '1'; // process
-                    //             } elseif ($paymentTypeId == 2) { // tunai
-                    //                 $statusFilter = '4'; // approved
-                    //         }
-
-                    //         $queryFinal = $query
-                    //             ->where('store_id', $storeId)
-                    //             ->where('status', $statusFilter)
-                    //             ->orderBy('id', 'desc');
-
-                    //         return $queryFinal;
-                    //     }
-                    // )
-
                     ->relationship(
                         name: 'detailRequest',
                         modifyQueryUsing: function (Builder $query, callable $get) {
-                            $paymentTypeId = $get('../../payment_type_id'); // Access payment_type_id from the parent form
-                            $storeId = $get('../../store_id'); // Access store_id from the parent form
+                            $paymentTypeId = $get('../../payment_type_id');
+                            $storeId = $get('../../store_id');
 
-                            // Determine the status filter based on the payment type
-                            $statusFilter = match ($paymentTypeId) {
-                                1 => '1', // Process and approved for transfer payment type
-                                2 => '4', // Approved for cash payment type
-                                default => '',
-                            };
+                            $statusFilter = '';
+                                if ($paymentTypeId == 1) { // transfer
+                                    $statusFilter = '1'; // process
+                                } elseif ($paymentTypeId == 2) { // tunai
+                                    $statusFilter = '4'; // approved
+                            }
 
-                            // Modify the query with the filters applied
-                            $query->when($storeId, function ($query) use ($storeId) {
-                                return $query->where('store_id', $storeId);
-                            })
-                            ->when($statusFilter, function ($query) use ($statusFilter) {
-                                return $query->where('status', $statusFilter);
-                            })
-                            ->orderBy('id', 'desc'); // Order the results by ID in descending order
+                            $queryFinal = $query
+                                ->where('store_id', $storeId)
+                                ->where('status', $statusFilter)
+                                ->orderBy('id', 'desc');
 
-                            return $query;
+                            return $queryFinal;
                         }
                     )
 
