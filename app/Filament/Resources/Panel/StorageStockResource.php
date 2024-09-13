@@ -142,7 +142,7 @@ class StorageStockResource extends Resource
 
     public static function getProductsRepeater(): Repeater
     {
-        $products = Product::where('request', '1')->get()->map(function ($item) {
+        $products = Product::where('request', '1')->orderBy('name','asc')->get()->map(function ($item) {
             return [
                 'product_id' => $item->id,
                 'quantity' => $item->quantity,

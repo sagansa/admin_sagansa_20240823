@@ -18,7 +18,11 @@ class InvoicePurchaseTable
                 ->visibility('public')
                 ->url(fn($record) => asset('storage/' . $record->image)),
 
-            TextColumn::make('paymentType.name'),
+            TextColumn::make('date')
+                ->sortable(),
+
+            TextColumn::make('paymentType.name')
+                ->toggleable(isToggledHiddenByDefault: true),
 
             TextColumn::make('store.nickname'),
 
@@ -32,9 +36,6 @@ class InvoicePurchaseTable
                         '<li>No. Rekening: ' . ($record->supplier->bank_account_no ? $record->supplier->bank_account_no : 'tidak tersedia') . '</li>',
                     ]) . '</ul>'
                 )->html(),
-
-            TextColumn::make('date')
-                ->sortable(),
 
             TextColumn::make('detailInvoices')
                 ->label('Detail Purchases')

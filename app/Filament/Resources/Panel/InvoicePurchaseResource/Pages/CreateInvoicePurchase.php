@@ -13,7 +13,6 @@ class CreateInvoicePurchase extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-
         $data['created_by_id'] = Auth::id();
         $data['payment_status'] = '1';
         $data['order_status'] = '1';

@@ -145,8 +145,6 @@ class InvoicePurchaseResource extends Resource
 
                 ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
                 ->default(2)
-                ->disableOptionWhen(fn (string $value): bool => $value === '2')
-                ->in(fn (Select $component): array => array_keys($component->getEnabledOptions()))
                 ->preload()
                 ->native(false)
                 ->afterStateUpdated(function ($state, callable $set) {
