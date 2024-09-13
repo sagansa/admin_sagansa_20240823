@@ -4,9 +4,12 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\StorageStock;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class StorageStockPolicy
 {
+    use HandlesAuthorization;
+
     /**
      * Determine whether the user can view any models.
      */
@@ -18,7 +21,7 @@ class StorageStockPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, StorageStock $model): bool
+    public function view(User $user, StorageStock $storageStock): bool
     {
         return $user->can('view_panel::storage::stock');
     }
@@ -34,7 +37,7 @@ class StorageStockPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, StorageStock $model): bool
+    public function update(User $user, StorageStock $storageStock): bool
     {
         return $user->can('update_panel::storage::stock');
     }
@@ -42,24 +45,64 @@ class StorageStockPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, StorageStock $model): bool
+    public function delete(User $user, StorageStock $storageStock): bool
     {
         return $user->can('delete_panel::storage::stock');
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Determine whether the user can bulk delete.
      */
-    public function restore(User $user, StorageStock $model): bool
+    public function deleteAny(User $user): bool
+    {
+        return $user->can('delete_any_panel::storage::stock');
+    }
+
+    /**
+     * Determine whether the user can permanently delete.
+     */
+    public function forceDelete(User $user, StorageStock $storageStock): bool
+    {
+        return $user->can('force_delete_panel::storage::stock');
+    }
+
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
+    {
+        return $user->can('force_delete_any_panel::storage::stock');
+    }
+
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, StorageStock $storageStock): bool
     {
         return $user->can('restore_panel::storage::stock');
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Determine whether the user can bulk restore.
      */
-    public function forceDelete(User $user, StorageStock $model): bool
+    public function restoreAny(User $user): bool
     {
-        return $user->can('force_delete_panel::storage::stock');
+        return $user->can('restore_any_panel::storage::stock');
+    }
+
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, StorageStock $storageStock): bool
+    {
+        return $user->can('replicate_panel::storage::stock');
+    }
+
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
+    {
+        return $user->can('reorder_panel::storage::stock');
     }
 }
