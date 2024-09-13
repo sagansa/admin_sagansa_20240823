@@ -148,10 +148,10 @@ class InvoicePurchaseResource extends Resource
                     modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),)
                 ->preload()
                 ->reactive()
-                ->native(false)
-                ->afterStateUpdated(function (callable $set) {
-                    $set('detailInvoices', null);
-                }),
+                ->native(false),
+                // ->afterStateUpdated(function (callable $set) {
+                //     $set('detailInvoices', null);
+                // }),
 
             Select::make('payment_type_id')
                 ->required()
@@ -164,10 +164,10 @@ class InvoicePurchaseResource extends Resource
                 ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
                 // ->default(2)
                 ->preload()
-                ->native(false)
-                ->afterStateUpdated(function (callable $set) {
-                    $set('detailInvoices', null);
-                }),
+                ->native(false),
+                // ->afterStateUpdated(function (callable $set) {
+                //     $set('detailInvoices', null);
+                // }),
 
             Select::make('supplier_id')
                 ->required()
