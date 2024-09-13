@@ -301,9 +301,8 @@ class InvoicePurchaseResource extends Resource
 
                     ->columnSpan(['md' => 2]),
             ])
-            ->afterStateUpdated(function (Get $get, Set $set, InvoicePurchase $record) {
+            ->afterStateUpdated(function (Get $get, Set $set) {
                 self::updateTotalPrice($get, $set);
-                // self::afterSave($record);
             });
     }
 
@@ -365,18 +364,5 @@ class InvoicePurchaseResource extends Resource
         // $set('total_price', number_format($totalPrice, 0, ',', ''));
         $set('subtotal_price', $subtotalPrice);
         $set('total_price', $totalPrice);
-    }
-
-    public static function afterSave(InvoicePurchase $record): void
-    {
-        // Get the detail invoices from the repeater
-        $detailInvoices = $record->detailInvoices;
-
-        // Loop through each detail invoice and update the status of the related detail request
-        foreach ($detailInvoices as $detailInvoice) {
-            $detailRequest = $detailInvoice->detailRequest;
-            $detailRequest->status = 2;
-            $detailRequest->save();
-        }
     }
 }
