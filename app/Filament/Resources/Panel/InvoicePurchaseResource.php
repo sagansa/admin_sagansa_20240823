@@ -135,7 +135,10 @@ class InvoicePurchaseResource extends Resource
         return [
             ImageInput::make('image'),
 
-            StoreSelect::make('store_id'),
+            StoreSelect::make('store_id')
+                ->afterStateUpdated(function ($state, callable $set) {
+                    $set('detailInvoices', null);
+                }),
 
             Select::make('payment_type_id')
                 ->required()
@@ -151,7 +154,6 @@ class InvoicePurchaseResource extends Resource
                 ->native(false)
                 ->afterStateUpdated(function ($state, callable $set) {
                     $set('detailInvoices', null);
-                    // $set('store_id', null);
                 }),
 
             Select::make('supplier_id')
