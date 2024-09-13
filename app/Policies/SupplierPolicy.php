@@ -12,7 +12,7 @@ class SupplierPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->can('view_any_panel::supplier');
     }
 
     /**
@@ -20,7 +20,7 @@ class SupplierPolicy
      */
     public function view(User $user, Supplier $model): bool
     {
-        return true;
+        return $user->can('view_panel::supplier');
     }
 
     /**
@@ -28,7 +28,7 @@ class SupplierPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return $user->can('create_panel::supplier');
     }
 
     /**
@@ -36,7 +36,7 @@ class SupplierPolicy
      */
     public function update(User $user, Supplier $model): bool
     {
-        return true;
+        return $user->can('update_panel::supplier');
     }
 
     /**
@@ -44,7 +44,7 @@ class SupplierPolicy
      */
     public function delete(User $user, Supplier $model): bool
     {
-        return true;
+        return $user->can('delete_panel::supplier');
     }
 
     /**
@@ -52,7 +52,7 @@ class SupplierPolicy
      */
     public function restore(User $user, Supplier $model): bool
     {
-        return true;
+        return $user->can('restore_panel::supplier');
     }
 
     /**
@@ -60,6 +60,6 @@ class SupplierPolicy
      */
     public function forceDelete(User $user, Supplier $model): bool
     {
-        return true;
+        return $user->can('force_delete_panel::supplier');
     }
 }
