@@ -135,6 +135,8 @@ class InvoicePurchaseResource extends Resource
         return [
             ImageInput::make('image'),
 
+            StoreSelect::make('store_id'),
+
             Select::make('payment_type_id')
                 ->required()
                 ->reactive()
@@ -151,8 +153,6 @@ class InvoicePurchaseResource extends Resource
                     $set('detailInvoices', null);
                     // $set('store_id', null);
                 }),
-
-            StoreSelect::make('store_id'),
 
             Select::make('supplier_id')
                 ->required()
