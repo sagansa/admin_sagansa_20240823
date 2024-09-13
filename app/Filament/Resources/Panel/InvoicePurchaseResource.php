@@ -229,13 +229,13 @@ class InvoicePurchaseResource extends Resource
 
                             $statusFilter = '';
                                 if ($paymentTypeId == 1) { // transfer
-                                    $statusFilter = '1,4'; // process dan approved -> 1 & 4
+                                    $statusFilter = '1'; // process dan approved -> 1 & 4
                                 } elseif ($paymentTypeId == 2) { // tunai
                                     $statusFilter = '4'; // approved
                             }
 
                             $queryFinal = $query
-                                ->where('store_id', $storeId)
+                                // ->where('store_id', $storeId)
                                 ->where('status', $statusFilter)
                                 ->orderBy('id', 'desc');
 
