@@ -145,10 +145,9 @@ class InvoicePurchaseResource extends Resource
                 ->reactive()
                 ->relationship(
                     name: 'paymentType',
+                    titleAttribute: 'name',
                     modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
                 )
-
-                ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
                 ->preload()
                 ->native(false)
                 ->afterStateUpdated(function ($state, callable $set) {
@@ -166,11 +165,7 @@ class InvoicePurchaseResource extends Resource
                 ->preload()
                 ->native(false),
 
-            DatePicker::make('date')
-                ->rules(['date'])
-                ->required()
-                ->default('today')
-                ->native(false),
+            DateInput::make('date'),
 
             // Placeholder::make('payment_status'),
                 // ->hidden(fn ($operation) => $operation === 'create'),
