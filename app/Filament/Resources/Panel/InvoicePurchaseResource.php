@@ -143,12 +143,16 @@ class InvoicePurchaseResource extends Resource
             Select::make('payment_type_id')
                 ->required()
                 ->reactive()
-                ->relationship(
-                    name: 'paymentType',
-                    modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
-                )
+                ->options([
+                    '1' => 'transfer',
+                    '2' => 'tunai',
+                ])
+                // ->relationship(
+                //     name: 'paymentType',
+                //     modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
+                // )
 
-                ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
+                // ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
                 // ->default(2)
                 ->preload()
                 ->native(false)
