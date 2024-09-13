@@ -12,7 +12,7 @@ class StorageStockPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_panel::storage::stock');
+        return $user->can('view_any_panel::storage::stocks');
     }
 
     /**
@@ -20,7 +20,7 @@ class StorageStockPolicy
      */
     public function view(User $user, StorageStock $model): bool
     {
-        return $user->can('view_panel::storage::stock');
+        return $user->can('view_panel::storage::stocks');
     }
 
     /**
@@ -28,7 +28,7 @@ class StorageStockPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_panel::storage::stock');
+        return $user->can('create_panel::storage::stocks');
     }
 
     /**
@@ -36,7 +36,7 @@ class StorageStockPolicy
      */
     public function update(User $user, StorageStock $model): bool
     {
-        return $user->can('update_panel::storage::stock');
+        return $user->can('update_panel::storage::stocks');
     }
 
     /**
@@ -44,7 +44,7 @@ class StorageStockPolicy
      */
     public function delete(User $user, StorageStock $model): bool
     {
-        return $user->can('delete_panel::storage::stock');
+        return $user->can('delete_panel::storage::stocks');
     }
 
     /**
@@ -52,7 +52,7 @@ class StorageStockPolicy
      */
     public function restore(User $user, StorageStock $model): bool
     {
-        return $user->can('restore_panel::storage::stock');
+        return $user->can('restore_panel::storage::stocks');
     }
 
     /**
@@ -60,6 +60,6 @@ class StorageStockPolicy
      */
     public function forceDelete(User $user, StorageStock $model): bool
     {
-        return $user->can('force_delete_panel::storage::stock');
+        return $user->can('force_delete_panel::storage::stocks');
     }
 }
