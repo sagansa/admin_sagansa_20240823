@@ -303,7 +303,7 @@ class InvoicePurchaseResource extends Resource
             ])
             ->afterStateUpdated(function (Get $get, Set $set, InvoicePurchase $record) {
                 self::updateTotalPrice($get, $set);
-                self::afterSave($record);
+                // self::afterSave($record);
             });
     }
 
