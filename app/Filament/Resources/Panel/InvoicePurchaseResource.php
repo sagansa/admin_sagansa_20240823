@@ -235,7 +235,7 @@ class InvoicePurchaseResource extends Resource
                             }
 
                             $queryFinal = $query
-                                // ->where('store_id', $storeId)
+                                ->where('store_id', $storeId)
                                 ->where('status', $statusFilter)
                                 ->orderBy('id', 'desc');
 
