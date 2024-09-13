@@ -135,8 +135,21 @@ class InvoicePurchaseResource extends Resource
         return [
             ImageInput::make('image'),
 
-            StoreSelect::make('store_id')
-                ->afterStateUpdated(function ($state, callable $set) {
+            // StoreSelect::make('store_id')
+            //     ->afterStateUpdated(function ($state, callable $set) {
+            //         $set('detailInvoices', null);
+            //     }),
+
+            Select::make('store_od')
+                ->required()
+                ->relationship(
+                    name: 'store',
+                    titleAttribute: 'nickname',
+                    modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),)
+                ->preload()
+                ->reactive()
+                ->native(false)
+                ->afterStateUpdated(function (callable $set) {
                     $set('detailInvoices', null);
                 }),
 
@@ -152,7 +165,7 @@ class InvoicePurchaseResource extends Resource
                 // ->default(2)
                 ->preload()
                 ->native(false)
-                ->afterStateUpdated(function ($state, callable $set) {
+                ->afterStateUpdated(function (callable $set) {
                     $set('detailInvoices', null);
                 }),
 
