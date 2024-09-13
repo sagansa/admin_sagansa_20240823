@@ -146,7 +146,7 @@ class InvoicePurchaseResource extends Resource
                 )
 
                 ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
-                ->default(2)
+                // ->default(2)
                 ->preload()
                 ->native(false)
                 ->afterStateUpdated(function ($state, callable $set) {
