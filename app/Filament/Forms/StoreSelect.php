@@ -17,7 +17,7 @@ class StoreSelect extends Select
                 titleAttribute: 'nickname',
                 modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),)
             ->preload()
-            // ->reactive()
+            ->reactive()
             ->native(false);
     }
 }
