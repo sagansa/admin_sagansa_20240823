@@ -142,7 +142,7 @@ class InvoicePurchaseResource extends Resource
 
             Select::make('payment_type_id')
                 ->required()
-                ->reactive()
+                // ->reactive()
                 ->relationship(
                     name: 'paymentType',
                     titleAttribute: 'name',
