@@ -98,7 +98,16 @@ class InvoicePurchaseResource extends Resource
                     ->options([
                         '1' => 'transfer',
                         '2' => 'tunai'
-                    ])
+                    ]),
+
+                SelectFilter::make('store_id')
+                    ->label('Store')
+                    ->relationship('store', 'nickname'),
+
+                SelectFilter::make('supplier_id')
+                    ->label('Supplier')
+                    ->relationship('supplier', 'name'),
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

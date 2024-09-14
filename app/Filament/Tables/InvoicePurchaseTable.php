@@ -29,7 +29,6 @@ class InvoicePurchaseTable
 
             TextColumn::make('supplier')
                 ->copyable()
-                ->searchable()
                 ->formatStateUsing(
                     fn($record): string => '<ul>' . implode('', [
                         '<li>Nama Supplier: ' . $record->supplier->name . '</li>',
