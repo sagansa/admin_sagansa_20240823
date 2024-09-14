@@ -128,7 +128,7 @@ class DetailRequestResource extends Resource
                     ->label('Store'),
                 TextColumn::make('quantity_plan')
                     ->label('Qty Plan'),
-                TextColumn::make('quantityPurchase.quantity')
+                TextColumn::make('detailInvoice.quantity_invoice')
                     ->label('Qty Purchase'),
 
                 TextColumn::make('status')
