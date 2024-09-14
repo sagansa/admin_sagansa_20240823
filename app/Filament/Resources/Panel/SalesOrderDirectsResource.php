@@ -92,12 +92,12 @@ class SalesOrderDirectsResource extends Resource
                 TextColumn::make('deliveryAddress')
                     ->formatStateusing(
                         fn($record): string => '<ul>' . implode('', [
-                            '<li>' . $record->deliveryAddress->name . '</li>',
-                            '<li>' . $record->deliveryAddress->recipient_name . ' - ' . $record->deliveryAddress->recipient_telp_no . '</li>',
-                            '<li>' . $record->deliveryAddress->address . '</li>',
-                            '<li>' . $record->deliveryAddress->subdistrict . ', ' . $record->deliveryAddress->district . '</li>',
-                            '<li>' . $record->deliveryAddress->city . ', ' . $record->deliveryAddress->province . '</li>',
-                            '<li>' . $record->deliveryAddress->postalCode->postal_code . '</li>',
+                            '<li>' . ($record->deliveryAddress->name ?? '') . '</li>',
+                            '<li>' . ($record->deliveryAddress->recipient_name ?? '') . ' - ' . ($record->deliveryAddress->recipient_telp_no ?? '') . '</li>',
+                            '<li>' . ($record->deliveryAddress->address ?? '') . '</li>',
+                            '<li>' . ($record->deliveryAddress->subdistrict ?? '') . ', ' . ($record->deliveryAddress->district ?? '') . '</li>',
+                            '<li>' . ($record->deliveryAddress->city  ?? ''). ', ' . ($record->deliveryAddress->province ?? '') . '</li>',
+                            '<li>' . ($record->deliveryAddress->postalCode->postal_code ?? '') . '</li>',
                         ]) . '</ul>'
                     )
                     ->html(),
