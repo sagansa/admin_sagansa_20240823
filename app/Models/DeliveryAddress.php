@@ -98,7 +98,7 @@ class DeliveryAddress extends Model
             $recipientsName . ' - ' . $recipientTelpNo,
             $address,
             $subdistrictName . ', ' . $districtName,
-            $provinceName . ', ' . $cityName,
+            $cityName . ', ' . $provinceName,
             $postalCode,
         ]);
     }
