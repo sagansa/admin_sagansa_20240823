@@ -140,7 +140,7 @@ class InvoicePurchaseResource extends Resource
             //         $set('detailInvoices', null);
             //     }),
 
-            Select::make('store_od')
+            Select::make('store_id')
                 ->required()
                 ->relationship(
                     name: 'store',
@@ -239,27 +239,25 @@ class InvoicePurchaseResource extends Resource
                     ->relationship(
                         name: 'detailRequest',
                         modifyQueryUsing: function (Builder $query, callable $get) {
-                            // $paymentTypeId = $get('../../payment_type_id');
+                            $paymentTypeId = $get('../../payment_type_id');
                             $storeId = $get('../../store_id');
 
-                            // $statusFilter = '';
-                            //     if ($paymentTypeId == '1') { // transfer
-                            //         $statusFilter = '1'; // process
-                            //     } elseif ($paymentTypeId == '2') { // tunai
-                            //         $statusFilter = '4'; // approved
-                            // }
-
-
+                            $statusFilter = '';
+                                if ($paymentTypeId == '1') { // transfer
+                                    $statusFilter = '1'; // process
+                                } elseif ($paymentTypeId == '2') { // tunai
+                                    $statusFilter = '4'; // approved
+                            }
 
                             $queryFinal = $query
                                 ->where('store_id', $storeId)
-                                ->when($query->payment_type_id == 1, function ($query) {
-                                    $query->where('status', 1); // process
-                                })
-                                ->when($query->payment_type_id == 2, function ($query) {
-                                    $query->where('status', 4); // approved
-                                })
-                                // ->where('status', $statusFilter)
+                                // ->when($query->payment_type_id == 1, function ($query) {
+                                //     $query->where('status', 1); // process
+                                // })
+                                // ->when($query->payment_type_id == 2, function ($query) {
+                                //     $query->where('status', 4); // approved
+                                // })
+                                ->where('status', $statusFilter)
                                 ->orderBy('id', 'desc');
                             return $queryFinal;
                         }
