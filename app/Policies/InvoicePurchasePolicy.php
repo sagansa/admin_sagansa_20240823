@@ -23,7 +23,7 @@ class InvoicePurchasePolicy
      */
     public function view(User $user, InvoicePurchase $invoicePurchase): bool
     {
-        return $user->can('view_panel::invoice::purchase') && $invoicePurchase->status === 2;
+        return $user->can('view_panel::invoice::purchase') && $invoicePurchase->order_status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class InvoicePurchasePolicy
      */
     public function update(User $user, InvoicePurchase $invoicePurchase): bool
     {
-        return $user->can('update_panel::invoice::purchase') && $invoicePurchase->status !== 2;
+        return $user->can('update_panel::invoice::purchase') && $invoicePurchase->order_status !== 2;
     }
 
     /**

@@ -234,8 +234,7 @@ class InvoicePurchaseResource extends Resource
             ->relationship()
             ->schema([
                 Select::make('detail_request_id')
-                    ->label('Detail Request')
-
+                    ->label('Detail Order')
                     ->relationship(
                         name: 'detailRequest',
                         modifyQueryUsing: function (Builder $query, callable $get) {
@@ -251,18 +250,11 @@ class InvoicePurchaseResource extends Resource
 
                             $queryFinal = $query
                                 ->where('store_id', $storeId)
-                                // ->when($query->payment_type_id == 1, function ($query) {
-                                //     $query->where('status', 1); // process
-                                // })
-                                // ->when($query->payment_type_id == 2, function ($query) {
-                                //     $query->where('status', 4); // approved
-                                // })
                                 ->where('status', $statusFilter)
                                 ->orderBy('id', 'desc');
                             return $queryFinal;
                         }
                     )
-
                     ->getOptionLabelFromRecordUsing(fn (DetailRequest $record) => "{$record->detail_request_name}")
                     ->native(false)
                     ->required()
