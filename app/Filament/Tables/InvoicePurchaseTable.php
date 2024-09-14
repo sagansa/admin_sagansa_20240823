@@ -24,10 +24,12 @@ class InvoicePurchaseTable
             TextColumn::make('paymentType.name')
                 ->toggleable(isToggledHiddenByDefault: true),
 
-            TextColumn::make('store.nickname'),
+            TextColumn::make('store.nickname')
+                ->searchable(),
 
             TextColumn::make('supplier')
                 ->copyable()
+                ->searchable()
                 ->formatStateUsing(
                     fn($record): string => '<ul>' . implode('', [
                         '<li>Nama Supplier: ' . $record->supplier->name . '</li>',
@@ -90,5 +92,4 @@ class InvoicePurchaseTable
             TextColumn::make('createdBy.name'),
         ];
     }
-
 }
