@@ -28,6 +28,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class InvoicePurchaseResource extends Resource
@@ -118,9 +119,25 @@ class InvoicePurchaseResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('setPaymentStatusToOne')
+                        ->label('Set Payment Status to Belum Dibayar')
+                        ->icon('heroicon-o-check')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            InvoicePurchase::whereIn('id', $records->pluck('id'))->update(['payment_status' => 1]);
+                        })
+                        ->color('warning'),
+                    Tables\Actions\BulkAction::make('setOrderStatusToOne')
+                        ->label('Set Order Status to Belum Diterima')
+                        ->icon('heroicon-o-check')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            InvoicePurchase::whereIn('id', $records->pluck('id'))->update(['order_status' => 1]);
+                        })
+                        ->color('warning'),
                 ]),
             ])
-            ->defaultSort('id', 'desc');
+            ->defaultSort('date', 'desc');
     }
 
     public static function getRelations(): array
