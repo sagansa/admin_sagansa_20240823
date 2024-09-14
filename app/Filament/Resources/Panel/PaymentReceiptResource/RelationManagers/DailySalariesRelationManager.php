@@ -35,7 +35,6 @@ class DailySalariesRelationManager extends RelationManager
                 Select::make('shift_store_id')
                     ->required()
                     ->relationship('shiftStore', 'name')
-                    ->searchable()
                     ->preload()
                     ->native(false),
 
@@ -52,7 +51,6 @@ class DailySalariesRelationManager extends RelationManager
                 Select::make('payment_type_id')
                     ->required()
                     ->relationship('paymentType', 'name')
-                    ->searchable()
                     ->preload()
                     ->native(false),
 
@@ -64,7 +62,6 @@ class DailySalariesRelationManager extends RelationManager
                         '4' => 'tidak valid'
                     ])
                     ->required()
-                    ->searchable()
                     ->preload()
                     ->native(false),
 
