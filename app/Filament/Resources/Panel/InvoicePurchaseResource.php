@@ -235,7 +235,7 @@ class InvoicePurchaseResource extends Resource
 
                             $paymentTypeFilter = '';
                                 if ($paymentTypeId == '1') { // transfer
-                                    $paymentTypeFilter = ['1', '2']; // transfer dan tunai
+                                    $paymentTypeFilter = ''; // transfer dan tunai
                                 } elseif ($paymentTypeId == '2') { // tunai
                                     $paymentTypeFilter = '2'; // transfer
                             }
