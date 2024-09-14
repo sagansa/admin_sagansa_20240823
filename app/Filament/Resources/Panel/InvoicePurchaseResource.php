@@ -136,10 +136,7 @@ class InvoicePurchaseResource extends Resource
         return [
             ImageInput::make('image'),
 
-            StoreSelect::make('store_id')
-                ->afterStateUpdated(function ($state, callable $set) {
-                    DetailInvoice::where('store_id', $state['store_id'])->update(['detail_request_id' => null]);
-                }),
+            StoreSelect::make('store_id'),
 
             Select::make('payment_type_id')
                 ->required()
