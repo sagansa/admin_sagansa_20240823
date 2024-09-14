@@ -57,12 +57,12 @@ class DetailRequestResource extends Resource
         return $form->schema([
             // Section::make()->schema([
             //     Grid::make(['default' => 1])->schema([
-            //         Select::make('product_id')
-            //             ->required()
-            //             ->relationship('product', 'name')
-            //             ->searchable()
-            //             ->preload()
-            //             ->native(false),
+                    Select::make('product_id')
+                        ->required()
+                        ->relationship('product', 'name')
+                        ->disabled()
+                        ->preload()
+                        ->native(false),
 
             //         TextInput::make('quantity_plan')
             //             ->required()
@@ -98,12 +98,11 @@ class DetailRequestResource extends Resource
             //             ->preload()
             //             ->native(false),
 
-            //         Select::make('payment_type_id')
-            //             ->required()
-            //             ->relationship('paymentType', 'name')
-            //             ->searchable()
-            //             ->preload()
-            //             ->native(false),
+                    Select::make('payment_type_id')
+                        ->required()
+                        ->relationship('paymentType', 'name')
+                        ->preload()
+                        ->native(false),
             //     ]),
             // ]),
         ]);
@@ -125,8 +124,8 @@ class DetailRequestResource extends Resource
                     ->label('Request Date'),
                 TextColumn::make('product.paymentType.name')
                     ->label('Payment Type'),
-                // TextColumn::make('store.nickname')
-                //     ->label('Store'),
+                TextColumn::make('store.nickname')
+                    ->label('Store'),
                 TextColumn::make('quantity_plan')
                     ->label('Qty Plan'),
                 TextColumn::make('quantityPurchase.quantity')

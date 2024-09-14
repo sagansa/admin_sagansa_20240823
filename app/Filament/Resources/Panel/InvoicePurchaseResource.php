@@ -19,6 +19,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\InvoicePurchaseResource\Pages;
 use App\Filament\Tables\InvoicePurchaseTable;
+use App\Models\DetailInvoice;
 use App\Models\DetailRequest;
 use App\Models\PaymentType;
 use App\Models\Supplier;
@@ -135,23 +136,10 @@ class InvoicePurchaseResource extends Resource
         return [
             ImageInput::make('image'),
 
-            // StoreSelect::make('store_id')
-            //     ->afterStateUpdated(function ($state, callable $set) {
-            //         $set('detailInvoices', null);
-            //     }),
-
-            Select::make('store_id')
-                ->required()
-                ->relationship(
-                    name: 'store',
-                    titleAttribute: 'nickname',
-                    modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),)
-                ->preload()
-                ->reactive()
-                ->native(false),
-                // ->afterStateUpdated(function (callable $set) {
-                //     $set('detailInvoices', null);
-                // }),
+            StoreSelect::make('store_id')
+                ->afterStateUpdated(function ($state, callable $set) {
+                    DetailInvoice::where('store_id', $state['store_id'])->update(['detail_request_id' => null]);
+                }),
 
             Select::make('payment_type_id')
                 ->required()
@@ -241,16 +229,23 @@ class InvoicePurchaseResource extends Resource
                             $paymentTypeId = $get('../../payment_type_id');
                             $storeId = $get('../../store_id');
 
-                            $statusFilter = '';
+                            // $statusFilter = '';
+                            //     if ($paymentTypeId == '1') { // transfer
+                            //         $statusFilter = '1'; // process
+                            //     } elseif ($paymentTypeId == '2') { // tunai
+                            //         $statusFilter = '4'; // approved
+                            // }
+
+                            $paymentTypeFilter = '';
                                 if ($paymentTypeId == '1') { // transfer
-                                    $statusFilter = '1'; // process
+                                    $paymentTypeFilter = ['1', '2']; // transfer dan tunai
                                 } elseif ($paymentTypeId == '2') { // tunai
-                                    $statusFilter = '4'; // approved
+                                    $paymentTypeFilter = '2'; // transfer
                             }
 
                             $queryFinal = $query
                                 ->where('store_id', $storeId)
-                                ->where('status', $statusFilter)
+                                ->where('payment_type_id', $paymentTypeFilter)
                                 ->orderBy('id', 'desc');
                             return $queryFinal;
                         }
