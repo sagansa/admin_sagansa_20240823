@@ -138,7 +138,7 @@ class InvoicePurchaseResource extends Resource
 
             StoreSelect::make('store_id')
                 ->afterStateUpdated(function (callable $set) {
-                        $set('detailInvoices.detail_request_id', null);
+                        $set('detailInvoices', null);
                     }),
 
             Select::make('payment_type_id')
