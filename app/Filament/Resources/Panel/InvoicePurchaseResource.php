@@ -102,10 +102,12 @@ class InvoicePurchaseResource extends Resource
 
                 SelectFilter::make('store_id')
                     ->label('Store')
+                    ->searchable()
                     ->relationship('store', 'nickname'),
 
                 SelectFilter::make('supplier_id')
                     ->label('Supplier')
+                    ->searchable()
                     ->relationship('supplier', 'name'),
 
             ])
