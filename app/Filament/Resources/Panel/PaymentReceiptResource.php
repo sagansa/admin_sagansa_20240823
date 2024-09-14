@@ -16,7 +16,6 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\PaymentReceiptResource\Pages;
 use App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
@@ -137,6 +136,7 @@ class PaymentReceiptResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn (InvoicePurchase $record) => "{$record->invoice_purchase_name}")
                         ->preload()
                         ->reactive()
+                        ->searchable()
                         ->native(false)
                         ->afterStateUpdated(function ($state, $set) {
                             $totalAmount = 0;

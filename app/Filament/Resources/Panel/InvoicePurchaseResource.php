@@ -226,29 +226,9 @@ class InvoicePurchaseResource extends Resource
                             $paymentTypeId = $get('../../payment_type_id');
                             $storeId = $get('../../store_id');
 
-                            // $statusFilter = '';
-                            //     if ($paymentTypeId == '1') { // transfer
-                            //         $statusFilter = '1'; // process
-                            //     } elseif ($paymentTypeId == '2') { // tunai
-                            //         $statusFilter = '4'; // approved
-                            // }
-
-                            // $paymentTypeFilter = '';
-                            //     if ($paymentTypeId == '1') { // transfer
-                            //         $paymentTypeFilter = '1'; // transfer dan tunai
-                            //     } elseif ($paymentTypeId == '2') { // tunai
-                            //         $paymentTypeFilter = '2'; // transfer
-                            // }
-
-                            // $queryFinal = $query
-                            //     ->where('store_id', $storeId)
-                            //     ->where('payment_type_id', $paymentTypeFilter)
-                            //     ->orderBy('id', 'desc');
-                            // return $queryFinal;
-
                             $paymentTypeFilter = null;
-                                if ($paymentTypeId == '2') { // tunai
-                                    $paymentTypeFilter = '2'; // transfer
+                                if ($paymentTypeId == '2') {
+                                    $paymentTypeFilter = '2';
                                 }
 
                                 $queryFinal = $query
