@@ -95,8 +95,8 @@ class SalesOrderDirectsResource extends Resource
                             '<li>' . ($record->deliveryAddress->name ?? '') . '</li>',
                             '<li>' . ($record->deliveryAddress->recipient_name ?? '') . ' - ' . ($record->deliveryAddress->recipient_telp_no ?? '') . '</li>',
                             '<li>' . ($record->deliveryAddress->address ?? '') . '</li>',
-                            '<li>' . ($record->deliveryAddress->subdistrict ?? '') . ', ' . ($record->deliveryAddress->district ?? '') . '</li>',
-                            '<li>' . ($record->deliveryAddress->city  ?? ''). ', ' . ($record->deliveryAddress->province ?? '') . '</li>',
+                            '<li>' . ($record->deliveryAddress->subdistrict->name ?? '') . ', ' . ($record->deliveryAddress->district->name ?? '') . '</li>',
+                            '<li>' . ($record->deliveryAddress->city->name  ?? ''). ', ' . ($record->deliveryAddress->province->name ?? '') . '</li>',
                             '<li>' . ($record->deliveryAddress->postalCode->postal_code ?? '') . '</li>',
                         ]) . '</ul>'
                     )
