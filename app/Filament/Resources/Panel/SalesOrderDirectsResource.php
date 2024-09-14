@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Sales;
+use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\DeliveryStatusColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusColumn;
@@ -89,18 +90,19 @@ class SalesOrderDirectsResource extends Resource
 
                 TextColumn::make('deliveryService.name'),
 
-                TextColumn::make('deliveryAddress')
-                    ->formatStateusing(
-                        fn($record): string => '<ul>' . implode('', [
-                            '<li>' . ($record->deliveryAddress->name ?? '') . '</li>',
-                            '<li>' . ($record->deliveryAddress->recipient_name ?? '') . ' - ' . ($record->deliveryAddress->recipient_telp_no ?? '') . '</li>',
-                            '<li>' . ($record->deliveryAddress->address ?? '') . '</li>',
-                            '<li>' . ($record->deliveryAddress->subdistrict->name ?? '') . ', ' . ($record->deliveryAddress->district->name ?? '') . '</li>',
-                            '<li>' . ($record->deliveryAddress->city->name  ?? ''). ', ' . ($record->deliveryAddress->province->name ?? '') . '</li>',
-                            '<li>' . ($record->deliveryAddress->postalCode->postal_code ?? '') . '</li>',
-                        ]) . '</ul>'
-                    )
-                    ->html(),
+                DeliveryAddressColumn::make('deliveryAddress'),
+                    // ->formatStateusing(
+                    //     fn($record): string => '<ul>' . implode('', [
+                    //         '<li>' . ($record->deliveryAddress->name ?? '') . '</li>',
+                    //         '<li>' . ($record->deliveryAddress->recipient_name ?? '') . ' - ' . ($record->deliveryAddress->recipient_telp_no ?? '') . '</li>',
+                    //         '<li>' . ($record->deliveryAddress->address ?? '') . '</li>',
+                    //         '<li>' . ($record->deliveryAddress->subdistrict->name ?? '') . ', ' . ($record->deliveryAddress->district->name ?? '') . '</li>',
+                    //         '<li>' . ($record->deliveryAddress->city->name  ?? ''). ', ' . ($record->deliveryAddress->province->name ?? '') . '</li>',
+                    //         '<li>' . ($record->deliveryAddress->postalCode->postal_code ?? '') . '</li>',
+                    //     ]) . '</ul>'
+                    // )
+                    // ->html()
+                    // ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('transferToAccount.transfer_account_name'),
 

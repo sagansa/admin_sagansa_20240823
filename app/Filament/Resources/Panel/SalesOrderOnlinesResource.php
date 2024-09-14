@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Sales;
+use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\DeliveryStatusColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Pages;
@@ -91,9 +92,7 @@ class SalesOrderOnlinesResource extends Resource
                 TextColumn::make('deliveryService.name')
                     ->label('Service'),
 
-                TextColumn::make('deliveryAddress.name')
-                    ->searchable()
-                    ->label('Address'),
+                DeliveryAddressColumn::make('deliveryAddress'),
 
                 TextColumn::make('receipt_no')
                     ->searchable()

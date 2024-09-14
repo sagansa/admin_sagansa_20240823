@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Sales;
+use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\BottomTotalPriceForm;
@@ -76,7 +77,7 @@ class SalesOrderEmployeesResource extends Resource
                 TextColumn::make('delivery_date')
                     ->label('Date'),
 
-                TextColumn::make('deliveryAddress.name')
+                DeliveryAddressColumn::make('deliveryAddress')
                     ->label('Customer'),
 
                 TextColumn::make('transferToAccount.name')
