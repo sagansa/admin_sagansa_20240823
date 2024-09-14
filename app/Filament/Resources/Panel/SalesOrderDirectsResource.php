@@ -89,7 +89,7 @@ class SalesOrderDirectsResource extends Resource
 
                 TextColumn::make('deliveryService.name'),
 
-                TextColumn::make('deliveryAddress.name')
+                TextColumn::make('deliveryAddress')
                     ->formatStateusing(
                         fn($record): string => '<ul>' . implode('', [
                             '<li>' . $record->deliveryAddress->getDeliveryAddressNameAttribute() . '</li>',
