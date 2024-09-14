@@ -170,6 +170,7 @@ class PaymentReceiptResource extends Resource
                         ->hiddenLabel()
                         ->prefix('Rp')
                         ->required()
+                        ->default(0)
                         ->numeric()
                         ->placeholder('Transfer Amount'),
 
