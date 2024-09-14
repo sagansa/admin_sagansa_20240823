@@ -233,17 +233,30 @@ class InvoicePurchaseResource extends Resource
                             //         $statusFilter = '4'; // approved
                             // }
 
-                            $paymentTypeFilter = '';
-                                if ($paymentTypeId == '1') { // transfer
-                                    $paymentTypeFilter = '1' || $paymentTypeFilter = '2'; // transfer dan tunai
-                                } elseif ($paymentTypeId == '2') { // tunai
-                                    $paymentTypeFilter = '2'; // transfer
-                            }
+                            // $paymentTypeFilter = '';
+                            //     if ($paymentTypeId == '1') { // transfer
+                            //         $paymentTypeFilter = '1'; // transfer dan tunai
+                            //     } elseif ($paymentTypeId == '2') { // tunai
+                            //         $paymentTypeFilter = '2'; // transfer
+                            // }
 
-                            $queryFinal = $query
-                                ->where('store_id', $storeId)
-                                ->where('payment_type_id', $paymentTypeFilter)
-                                ->orderBy('id', 'desc');
+                            // $queryFinal = $query
+                            //     ->where('store_id', $storeId)
+                            //     ->where('payment_type_id', $paymentTypeFilter)
+                            //     ->orderBy('id', 'desc');
+                            // return $queryFinal;
+
+                            $paymentTypeFilter = null;
+                                if ($paymentTypeId == '2') { // tunai
+                                    $paymentTypeFilter = '2'; // transfer
+                                }
+
+                                $queryFinal = $query
+                                    ->where('store_id', $storeId)
+                                    ->when($paymentTypeFilter, function ($query) use ($paymentTypeFilter) {
+                                        $query->where('payment_type_id', $paymentTypeFilter);
+                                    })
+                                    ->orderBy('id', 'desc');
                             return $queryFinal;
                         }
                     )
