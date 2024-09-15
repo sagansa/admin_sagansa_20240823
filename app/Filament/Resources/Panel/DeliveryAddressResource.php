@@ -235,13 +235,13 @@ class DeliveryAddressResource extends Resource
                     ->visible(fn ($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin'))
             ])
             ->filters([
-                SelectFilter::make('for')
-                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
-                    ->options([
-                        '1' => 'Direct',
-                        '2' => 'Employee',
-                        '3' => 'Online',
-                    ]),
+                // SelectFilter::make('for')
+                //     ->hidden(fn () => !Auth::user()->hasRole('admin'))
+                //     ->options([
+                //         '1' => 'Direct',
+                //         '2' => 'Employee',
+                //         '3' => 'Online',
+                //     ]),
                 // SelectFilter::make('user_role')
                 //     ->hidden(fn () => !Auth::user()->hasRole('admin'))
                 //     ->options([
