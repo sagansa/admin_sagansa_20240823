@@ -58,7 +58,7 @@ class DeliveryAddressPolicy
         }
 
         // Jika tidak ada transaksi, bisa update
-        return $user->can('update_panel::delivery::address') && !Auth::user()->hasRole('admin');
+        return Auth::user()->hasRole('admin');
     }
 
     /**
