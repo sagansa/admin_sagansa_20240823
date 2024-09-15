@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\DeliveryAddress;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Auth;
 
 class DeliveryAddressPolicy
 {
@@ -57,7 +58,7 @@ class DeliveryAddressPolicy
         }
 
         // Jika tidak ada transaksi, bisa update
-        return $user->can('update_panel::delivery::address');
+        return $user->can('update_panel::delivery::address') && !Auth::user()->hasRole('admin');
     }
 
     /**
