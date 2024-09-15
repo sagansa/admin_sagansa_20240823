@@ -230,7 +230,7 @@ class DeliveryAddressResource extends Resource
 
                 TextColumn::make('city.name'),
 
-                TextColumn::make('user.name')
+                TextColumn::make('user_id')
                     ->visible(fn ($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin'))
             ])
             ->filters([
