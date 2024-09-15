@@ -59,7 +59,7 @@ class DeliveryAddress extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'delivery_address_id');
+        return $this->belongsTo(User::class);
     }
 
     protected static function boot()

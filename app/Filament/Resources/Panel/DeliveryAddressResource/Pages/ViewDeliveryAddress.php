@@ -35,8 +35,7 @@ class ViewDeliveryAddress extends ViewRecord
                                     TextEntry::make('recipients_name'),
                                     TextEntry::make('recipients_telp_no'),
                                     TextEntry::make('latitude'),
-                                        // ->formatStateUsing(fn (DeliveryAddress $record) => $record->latitude),
-                                        // dd($latitude)
+
                                         // ->formatStateUsing(fn ($record) => '(' . $record->latitude . ', ' . $record->longitude . ')'),
                                     TextEntry::make('longitude'),
                                 ]),
