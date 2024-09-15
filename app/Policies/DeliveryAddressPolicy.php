@@ -54,7 +54,7 @@ class DeliveryAddressPolicy
         // Cek apakah ada transaksi yang terkait dengan DeliveryAddress
         if ($deliveryAddress->salesOrders()->exists()) {
             // Jika ada transaksi, tidak bisa update
-            return Auth::user()->hasRole('admin');
+            return false;
         }
 
         // Jika tidak ada transaksi, bisa update
