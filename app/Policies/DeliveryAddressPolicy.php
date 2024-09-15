@@ -33,7 +33,7 @@ class DeliveryAddressPolicy
         }
 
         // Jika tidak ada transaksi, bisa update
-        return !Auth::user()->hasRole('admin');
+        return false;
     }
 
     /**
