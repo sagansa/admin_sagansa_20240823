@@ -210,11 +210,11 @@ class DeliveryAddressResource extends Resource
             ->columns([
                 TextColumn::make('for')
                     ->hidden(fn () => !Auth::user()->hasRole('admin'))
-                    ->options([
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
                         '1' => 'Direct',
                         '2' => 'Employee',
                         '3' => 'Online',
-                    ]),
+                    }),
 
                 TextColumn::make('name')
                     ->searchable(),
