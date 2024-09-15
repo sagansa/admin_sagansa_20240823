@@ -242,16 +242,16 @@ class DeliveryAddressResource extends Resource
                         '2' => 'Employee',
                         '3' => 'Online',
                     ]),
-                SelectFilter::make('user_role')
-                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
-                    ->options([
-                        'customer' => 'Customer',
-                        'storage-staff' => 'Storage Staff',
-                    ])
-                    ->query(function (Builder $query) {
-                        $query->join('users', 'delivery_addresses.user_id', '=', 'users.id')
-                            ->where('users.role', request()->input('user_role'));
-                    }),
+                // SelectFilter::make('user_role')
+                //     ->hidden(fn () => !Auth::user()->hasRole('admin'))
+                //     ->options([
+                //         'customer' => 'Customer',
+                //         'storage-staff' => 'Storage Staff',
+                //     ])
+                //     ->query(function (Builder $query) {
+                //         $query->join('users', 'delivery_addresses.user_id', '=', 'users.id')
+                //             ->where('users.role', request()->input('user_role'));
+                //     }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
