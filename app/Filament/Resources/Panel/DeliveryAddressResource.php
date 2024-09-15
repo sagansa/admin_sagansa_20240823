@@ -241,6 +241,12 @@ class DeliveryAddressResource extends Resource
                         '2' => 'Employee',
                         '3' => 'Online',
                     ]),
+                SelectFilter::make('role')
+                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
+                    ->options([
+                        'customer' => 'Customer',
+                        'storage-staff' => 'Storage Staff',
+                    ])
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
