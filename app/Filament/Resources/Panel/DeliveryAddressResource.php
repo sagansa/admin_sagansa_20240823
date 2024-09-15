@@ -16,6 +16,8 @@ use App\Filament\Resources\Panel\DeliveryAddressResource\Pages;
 use App\Filament\Resources\Panel\DeliveryAddressResource\RelationManagers;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Tables\Filters\SelectFilter;
 use Humaidem\FilamentMapPicker\Fields\OSMMap;
 use Illuminate\Support\Facades\Auth;
@@ -62,7 +64,7 @@ class DeliveryAddressResource extends Resource
                                 'zoomSnap'            => 0.25,
                                 'wheelPxPerZoomLevel' => 60
                             ])
-                            ->afterStateHydrated(function (Forms\Get $get, Forms\Set $set, $record) {
+                            ->afterStateHydrated(function (Get $get, Set $set, $record) {
                                 if ($record) {
                                     $latitude = $record->latitude;
                                     $longitude = $record->longitude;
@@ -72,7 +74,7 @@ class DeliveryAddressResource extends Resource
                                     }
                                 }
                             })
-                            ->afterStateUpdated(function ($state, Forms\Get $get, Forms\Set $set) {
+                            ->afterStateUpdated(function ($state, Get $get, Set $set) {
                                 $set('latitude', $state['lat']);
                                 $set('longitude', $state['lng']);
                             })
