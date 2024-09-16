@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Asset;
 use App\Filament\Clusters\Movements;
+use App\Filament\Forms\ImageInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -17,8 +18,6 @@ use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
 use App\Filament\Resources\Panel\MovementAssetAuditResource\Pages;
 use App\Filament\Resources\Panel\MovementAssetAuditResource\RelationManagers;
 
@@ -54,13 +53,9 @@ class MovementAssetAuditResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    FileUpload::make('image')
-                        ->rules(['image'])
-                        ->nullable()
-                        ->maxSize(1024)
-                        ->image()
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                    ImageInput::make('image')
+                        ->disk('public')
+                        ->directory('images/MovementAssetAudit'),
 
                     Select::make('movement_asset_id')
                         ->required()

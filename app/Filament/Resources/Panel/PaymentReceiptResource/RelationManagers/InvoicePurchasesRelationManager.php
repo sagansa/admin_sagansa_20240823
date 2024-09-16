@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
 
+use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
@@ -11,9 +12,6 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\ImageColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -30,13 +28,9 @@ class InvoicePurchasesRelationManager extends RelationManager
     {
         return $form->schema([
             Grid::make(['default' => 1])->schema([
-                FileUpload::make('image')
-                    ->rules(['image'])
-                    ->nullable()
-                    ->maxSize(1024)
-                    ->image()
-                    ->imageEditor()
-                    ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                ImageInput::make('image')
+                    ->disk('public')
+                    ->directory('images/InvoicePurchase'),
 
                 Select::make('payment_type_id')
                     ->required()

@@ -21,9 +21,6 @@ use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\VehicleResource\Pages;
 use App\Filament\Resources\Panel\VehicleResource\RelationManagers;
 use Illuminate\Support\Facades\Auth;
@@ -60,7 +57,9 @@ class VehicleResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    ImageInput::make('image'),
+                    ImageInput::make('image')
+                        ->disk('public')
+                        ->directory('images/Vehicle'),
 
                     Select::make('type')
                         ->hiddenLabel()

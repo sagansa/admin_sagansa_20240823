@@ -22,8 +22,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\UtilityUsageResource\Pages;
 use App\Filament\Resources\Panel\UtilityUsageResource\RelationManagers;
 use App\Models\Utility;
@@ -61,7 +59,9 @@ class UtilityUsageResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    ImageInput::make('image'),
+                    ImageInput::make('image')
+                        ->disk('public')
+                        ->directory('images/UtilityUsage'),
 
                     Select::make('utility_id')
                         ->required()

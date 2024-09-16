@@ -21,9 +21,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\ImageColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
 use App\Filament\Resources\Panel\SupplierResource\Pages;
 use App\Filament\Resources\Panel\SupplierResource\RelationManagers;
 use App\Models\DeliveryAddress;
@@ -63,7 +60,9 @@ class SupplierResource extends Resource
                 Section::make()->schema([
                     Grid::make(['default' => 1])->schema([
 
-                        ImageInput::make('image'),
+                        ImageInput::make('image')
+                            ->disk('public')
+                            ->directory('images/Supplier'),
 
                         TextInput::make('name')
                             ->required()

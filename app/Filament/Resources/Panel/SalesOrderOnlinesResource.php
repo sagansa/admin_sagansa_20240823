@@ -9,7 +9,6 @@ use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Pages;
 use App\Models\DeliveryAddress;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -25,6 +24,7 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Forms\BottomTotalPriceForm;
 use App\Filament\Forms\DeliveryAddressForm;
+use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\SalesProductForm;
 use App\Filament\Forms\StoreSelect;
 use App\Models\SalesOrderOnline;
@@ -209,17 +209,8 @@ class SalesOrderOnlinesResource extends Resource
     {
 
         return [
-            FileUpload::make('image_payment')
+            ImageInput::make('image_payment')
                 ->label('From Online Shop')
-                ->rules(['image'])
-                ->nullable()
-                ->maxSize(1024)
-                ->image()
-                ->imageEditor()
-                ->columnSpan([
-                    'full'
-                ])
-                ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1'])
                 ->disk('public')
                 ->directory('images/Online/Payment')
                 ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
@@ -293,20 +284,10 @@ class SalesOrderOnlinesResource extends Resource
                     '6' => 'dikembalikan'
                 ]),
 
-            FileUpload::make('image_delivery')
+            ImageInput::make('image_delivery')
                 ->label('Delivered')
-                ->rules(['image'])
-                ->nullable()
-                ->hidden(fn ($operation) => $operation === 'create')
-                ->maxSize(1024)
-                ->image()
-                ->imageEditor()
                 ->disk('public')
-                ->directory('images/Online/Delivery')
-                ->columnSpan([
-                    'full'
-                ])
-                ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                ->directory('images/Online/Delivery'),
         ];
     }
 }

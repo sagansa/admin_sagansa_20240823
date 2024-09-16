@@ -6,6 +6,7 @@ use App\Filament\Clusters\Products;
 use App\Filament\Clusters\Transaction\Settings;
 use App\Filament\Columns\ActiveColumn;
 use App\Filament\Forms\ActiveStatusSelect;
+use App\Filament\Forms\ImageInput;
 use Filament\Tables;
 use App\Models\Product;
 use Filament\Forms\Form;
@@ -19,7 +20,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\DateTimePicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\Panel\ProductResource\Pages;
@@ -60,13 +60,9 @@ class ProductResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    FileUpload::make('image')
-                        ->rules(['image'])
-                        ->nullable()
-                        ->maxSize(1024)
-                        ->image()
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                    ImageInput::make('image')
+                        ->disk('public')
+                        ->directory('images/Product'),
 
                     TextInput::make('name')
                         ->required()

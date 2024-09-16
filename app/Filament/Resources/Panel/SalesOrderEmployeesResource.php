@@ -145,7 +145,9 @@ class SalesOrderEmployeesResource extends Resource
     {
         return [
             ImageInput::make('image_payment')
-                ->label('Transfer'),
+                ->label('Transfer')
+                ->disk('public')
+                ->directory('images/Employee'),
 
             StoreSelect::make('store_id'),
 

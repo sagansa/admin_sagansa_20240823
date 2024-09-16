@@ -207,7 +207,9 @@ class ClosingStoreResource extends Resource
                                 ->required()
                                 ->numeric(),
 
-                            ImageInput::make('image'),
+                            ImageInput::make('image')
+                                ->disk('public')
+                                ->directory('images/ClosingStore'),
                         ])
 
                 ])

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\HRD;
+use App\Filament\Forms\ImageInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -54,29 +55,17 @@ class ReadinessResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    FileUpload::make('image_selfie')
-                        ->rules(['image'])
-                        ->nullable()
-                        ->maxSize(1024)
-                        ->image()
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                    ImageInput::make('image_selfie')
+                        ->disk('public')
+                        ->directory('images/Readiness'),
 
-                    FileUpload::make('left_hand')
-                        ->rules(['image'])
-                        ->nullable()
-                        ->maxSize(1024)
-                        ->image()
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                    ImageInput::make('left_hand')
+                        ->disk('public')
+                        ->directory('images/Readiness'),
 
-                    FileUpload::make('right_hand')
-                        ->rules(['image'])
-                        ->nullable()
-                        ->maxSize(1024)
-                        ->image()
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                    ImageInput::make('right_hand')
+                        ->disk('public')
+                        ->directory('images/Readiness'),
 
                     Select::make('status')
                         ->required()

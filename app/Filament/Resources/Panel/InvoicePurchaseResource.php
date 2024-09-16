@@ -162,7 +162,9 @@ class InvoicePurchaseResource extends Resource
 
 
         return [
-            ImageInput::make('image'),
+            ImageInput::make('image')
+                ->disk('public')
+                ->directory('images/InvoicePurchase'),
 
             StoreSelect::make('store_id')
                 ->afterStateUpdated(function (Set $set) {

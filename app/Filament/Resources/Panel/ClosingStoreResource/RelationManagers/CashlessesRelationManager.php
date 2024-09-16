@@ -46,7 +46,9 @@ class CashlessesRelationManager extends RelationManager
                     ->preload()
                     ->native(false),
 
-                ImageInput::make('image'),
+                ImageInput::make('image')
+                    ->disk('public')
+                        ->directory('images/Cashless'),
 
                 TextInput::make('bruto_apl')
                     ->label('Bruto Application')
@@ -76,6 +78,8 @@ class CashlessesRelationManager extends RelationManager
 
                 TextInput::make('canceled')
                     ->prefix('Rp')
+                    ->disk('public')
+                    ->directory('images/Cashless')
                     ->required()
                     ->numeric(),
             ]),

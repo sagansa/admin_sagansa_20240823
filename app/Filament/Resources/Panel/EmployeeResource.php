@@ -3,9 +3,8 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\HRD;
-use Filament\Forms;
+use App\Filament\Forms\ImageInput;
 use Filament\Tables;
-use Livewire\Component;
 use Filament\Forms\Form;
 use App\Models\Employee;
 use Filament\Tables\Table;
@@ -17,13 +16,10 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Columns\CheckboxColumn;
 use App\Filament\Resources\Panel\EmployeeResource\Pages;
-use App\Filament\Resources\Panel\EmployeeResource\RelationManagers;
 
 class EmployeeResource extends Resource
 {
@@ -204,21 +200,13 @@ class EmployeeResource extends Resource
                         ->numeric()
                         ->step(1),
 
-                    FileUpload::make('image_identity_id')
-                        ->rules(['image'])
-                        ->nullable()
-                        ->maxSize(1024)
-                        ->image()
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                    ImageInput::make('image_identity_id')
+                        ->disk('public')
+                        ->directory('images/Employee'),
 
-                    FileUpload::make('image_selfie')
-                        ->rules(['image'])
-                        ->nullable()
-                        ->maxSize(1024)
-                        ->image()
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                    ImageInput::make('image_selfie')
+                        ->disk('public')
+                        ->directory('images/Employee'),
 
                     Select::make('religion')
                         ->required()

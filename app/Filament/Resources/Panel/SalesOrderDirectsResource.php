@@ -9,6 +9,7 @@ use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\BottomTotalPriceForm;
 use App\Filament\Forms\DeliveryAddressForm;
+use App\Filament\Forms\ImageInput;
 use App\Filament\Resources\Panel\SalesOrderDirectsResource\Pages;
 use App\Models\SalesOrderDirect;
 use Filament\Forms\Components\DatePicker;
@@ -187,22 +188,13 @@ class SalesOrderDirectsResource extends Resource
         }
 
         return [
-            FileUpload::make('image_payment')
+            ImageInput::make('image_payment')
                 ->label('Payment')
                 ->disabled(fn (SalesOrderDirect $salesOrderDirect) =>
                     Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2
                     || Auth::user()->hasRole('admin')
                     || Auth::user()->hasRole('storage-staff')
                 )
-                ->rules(['image'])
-                ->nullable()
-                ->maxSize(1024)
-                ->image()
-                ->imageEditor()
-                ->columnSpan([
-                    'full'
-                ])
-                ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1'])
                 ->disk('public')
                 ->directory('images/Direct/Payment'),
 
@@ -316,21 +308,12 @@ class SalesOrderDirectsResource extends Resource
                     ]
                 ),
 
-            FileUpload::make('image_delivery')
+            ImageInput::make('image_delivery')
                 ->hidden(fn () => Auth::user()->hasRole('customer'))
                 ->disabled(fn () => Auth::user()->hasRole('admin'))
                 ->label('Delivered')
-                ->rules(['image'])
-                ->nullable()
-                ->maxSize(1024)
-                ->image()
-                ->imageEditor()
                 ->disk('public')
-                ->directory('images/Online/Delivery')
-                ->columnSpan([
-                    'full'
-                ])
-                ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                ->directory('images/Direct/Delivery'),
         ];
     }
 }

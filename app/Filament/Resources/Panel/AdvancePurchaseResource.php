@@ -6,6 +6,7 @@ use App\Filament\Clusters\Advances;
 use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\DateInput;
+use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\StoreSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -17,7 +18,6 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\AdvancePurchaseResource\Pages;
 use App\Filament\Tables\AdvancePurchaseTable;
@@ -118,16 +118,9 @@ class AdvancePurchaseResource extends Resource
     public static function getDetailsFormHeadSchema(): array
     {
         return [
-            FileUpload::make('image')
-                ->rules(['image'])
-                ->nullable()
-                ->maxSize(1024)
-                ->image()
-                ->imageEditor()
-                ->columnSpan([
-                    'full'
-                ])
-                ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+            ImageInput::make('image')
+                ->disk('public')
+                ->directory('images/AdvancePurchase'),
 
             Select::make('cash_advance_id')
                     ->required(fn () => Auth::user()->hasRole('staff'))

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Asset;
 use App\Filament\Clusters\Movements;
+use App\Filament\Forms\ImageInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -54,13 +55,9 @@ class MovementAssetResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    FileUpload::make('image')
-                        ->rules(['image'])
-                        ->nullable()
-                        ->maxSize(1024)
-                        ->image()
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                    ImageInput::make('image')
+                        ->disk('public')
+                        ->directory('images/MovementAsset'),
 
                     TextInput::make('qr_code')
                         ->nullable()

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Stock;
+use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
@@ -19,7 +20,6 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\TransferStockResource\Pages;
 use App\Filament\Resources\Panel\TransferStockResource\RelationManagers;
@@ -61,13 +61,9 @@ class TransferStockResource extends Resource
                         ->required()
                         ->native(false),
 
-                    FileUpload::make('image')
-                        ->rules(['image'])
-                        ->nullable()
-                        ->maxSize(1024)
-                        ->image()
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                    ImageInput::make('image')
+                        ->disk('public')
+                        ->directory('images/TransferStock'),
 
                     StoreSelect::make('from_store_id'),
 

@@ -3,15 +3,11 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Closings;
-use App\Filament\Clusters\Purchases;
-use App\Filament\Clusters\Sales;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
-use Filament\Forms;
 use Filament\Tables;
-use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\ClosingCourier;
@@ -23,12 +19,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\ClosingCourierResource\Pages;
-use App\Filament\Resources\Panel\ClosingCourierResource\RelationManagers;
 use App\Models\ClosingStore;
-use Filament\Forms\Components\Repeater;
 use Illuminate\Support\Facades\Auth;
 
 class ClosingCourierResource extends Resource
@@ -65,7 +57,9 @@ class ClosingCourierResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    ImageInput::make('image'),
+                    ImageInput::make('image')
+                        ->disk('public')
+                        ->directory('images/ClosingCourier'),
 
                     Select::make('bank_id')
                         ->required()

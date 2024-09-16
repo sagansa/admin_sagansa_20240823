@@ -174,9 +174,13 @@ class PaymentReceiptResource extends Resource
                         ->numeric()
                         ->placeholder('Transfer Amount'),
 
-                    ImageInput::make('image'),
+                    ImageInput::make('image')
+                        ->disk('public')
+                        ->directory('images/PaymentReceipt'),
 
                     ImageInput::make('image_adjust')
+                        ->disk('public')
+                        ->directory('images/PaymentReceipt')
                         ->hidden(fn ($operation) => $operation === 'create'),
 
                     Notes::make('notes')

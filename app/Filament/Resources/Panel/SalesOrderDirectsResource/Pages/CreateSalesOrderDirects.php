@@ -3,11 +3,6 @@
 namespace App\Filament\Resources\Panel\SalesOrderDirectsResource\Pages;
 
 use App\Filament\Resources\Panel\SalesOrderDirectsResource;
-use Filament\Actions;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
 

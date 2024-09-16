@@ -59,7 +59,9 @@ class FuelServiceResource extends Resource
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
 
-                    ImageInput::make('image'),
+                    ImageInput::make('image')
+                        ->disk('public')
+                        ->directory('images/FuelService'),
 
                     DateInput::make('date')
                         ->required(),

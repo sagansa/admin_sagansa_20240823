@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel\CashAdvanceResource\RelationManagers;
 
+use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\StoreSelect;
 use App\Filament\Tables\AdvancePurchaseTable;
 use App\Models\AdvancePurchase;
@@ -12,8 +13,6 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\SelectColumn;
@@ -30,13 +29,9 @@ class AdvancePurchasesRelationManager extends RelationManager
     {
         return $form->schema([
             Grid::make(['default' => 1])->schema([
-                FileUpload::make('image')
-                    ->rules(['image'])
-                    ->nullable()
-                    ->maxSize(1024)
-                    ->image()
-                    ->imageEditor()
-                    ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                ImageInput::make('image')
+                    ->disk('public')
+                    ->directory('images/AdvancePurchase'),
 
                 Select::make('supplier_id')
                     ->required()
