@@ -126,6 +126,8 @@ class UtilityResource extends Resource
 
                 TextColumn::make('store.nickname'),
 
+                ActiveColumn::make('status'),
+
                 TextColumn::make('unit.unit'),
 
                 TextColumn::make('utilityProvider.name'),
@@ -146,8 +148,6 @@ class UtilityResource extends Resource
                             '3' => 'internet',
                         }
                     ),
-
-                ActiveColumn::make('status'),
             ])
             ->filters([])
             ->actions([
