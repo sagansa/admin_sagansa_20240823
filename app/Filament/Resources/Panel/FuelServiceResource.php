@@ -164,8 +164,6 @@ class FuelServiceResource extends Resource
                     ]),
 
                 SelectFilter::make('vehicle_id')
-                    ->required()
-                    ->placeholder('Vehicle')
                     ->label('Vehicle')
                     ->relationship(
                         name: 'vehicle',
