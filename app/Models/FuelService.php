@@ -48,9 +48,18 @@ class FuelService extends Model
 
     public function getFuelServiceNameAttribute()
     {
-        return $this->vehicle->no_register .
-            ' | Rp ' . number_format($this->amount, 0, ',', '.') .
-            ' | ' . $this->created_at .
-            ' | ' . $this->createdBy->name;;
+        // return $this->vehicle->no_register .
+        //     ' | Rp ' . number_format($this->amount, 0, ',', '.') .
+        //     ' | ' . $this->created_at .
+        //     ' | ' . $this->createdBy->name;
+
+        $fuelServiceDetails = [
+            ($this->vehicle->no_register ? : ''),
+            ($this->date ? : ''),
+            ($this->createdBy->name ? : ''),
+            ('Rp ' . number_format($this->amount) ? : ''),
+        ];
+
+        return implode("\n", $fuelServiceDetails);
     }
 }
