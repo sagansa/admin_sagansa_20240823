@@ -6,7 +6,7 @@ use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\PaymentStatusColumn;
 use App\Models\InvoicePurchase;
-use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
 
 class InvoicePurchaseTable
@@ -48,7 +48,13 @@ class InvoicePurchaseTable
                     })->toArray());
                 }),
 
-            CurrencyColumn::make('total_price'),
+            CurrencyColumn::make('total_price')
+                ->summarize(Sum::make()
+                    ->numeric(
+                        thousandsSeparator: '.'
+                    )
+                    ->label('')
+                    ->prefix('Rp ')),
 
             TextColumn::make('payment_status')
                 ->badge()
