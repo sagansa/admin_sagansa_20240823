@@ -75,6 +75,7 @@ class PaymentReceiptResource extends Resource
                         ->visible(fn ($get) => $get('payment_for') != '2')
                         ->options(Supplier::all()->where('status', '<>', 3)->pluck('supplier_name', 'id'))
                         ->searchable()
+                        ->preload()
                         ->native(false),
 
                     Select::make('user_id')
@@ -85,6 +86,7 @@ class PaymentReceiptResource extends Resource
                                 ->where('name', 'staff') || $query
                                 ->where('name', 'supervisor')))
                         ->searchable()
+                        ->preload()
                         ->native(false),
 
                     Select::make('fuelServices')
