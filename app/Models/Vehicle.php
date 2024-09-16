@@ -35,4 +35,9 @@ class Vehicle extends Model
     {
         return $this->hasMany(VehicleCertificate::class);
     }
+
+    public function getVehicleStatusAttribute()
+    {
+        return $this->no_register . ' - ' . $this->status;
+    }
 }

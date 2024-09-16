@@ -157,13 +157,15 @@ class FuelServiceResource extends Resource
             )
             ->filters([
                 SelectFilter::make('payment_type_id')
+                    ->label('Payment Type')
                     ->options([
                         '1' => 'transfer',
                         '2' => 'tunai',
                     ]),
 
                 SelectFilter::make('vehicle_id')
-                    ->relationship('vehicle', 'no_register'),
+                    ->label('Vehicle')
+                    ->relationship('vehicle', 'vehicle_name'),
 
                 SelectFilter::make('fuel_service')
                     ->options([
