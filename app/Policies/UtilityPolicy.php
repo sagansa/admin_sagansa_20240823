@@ -23,7 +23,7 @@ class UtilityPolicy
      */
     public function view(User $user, Utility $utility): bool
     {
-        return $user->can('view_panel::utility');
+        return $user->can('view_panel::utility') && $utility->status === 1;
     }
 
     /**
@@ -39,7 +39,7 @@ class UtilityPolicy
      */
     public function update(User $user, Utility $utility): bool
     {
-        return $user->can('update_panel::utility');
+        return $user->can('update_panel::utility') && $utility->status !== 1;
     }
 
     /**

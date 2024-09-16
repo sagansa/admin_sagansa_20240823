@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Transaction\Settings;
+use App\Filament\Columns\ActiveColumn;
+use App\Filament\Forms\ActiveStatusSelect;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
@@ -85,20 +87,24 @@ class UtilityResource extends Resource
 
                     Select::make('pre_post')
                         ->required()
-                        ->searchable()
+                        ->options([
+                            '1' => 'pre',
+                            '2' => 'post'
+                        ])
                         ->preload()
                         ->native(false),
 
                     Select::make('category')
+                        ->options([
+                            '1' => 'listrik',
+                            '2' => 'air',
+                            '3' => 'internet'
+                        ])
                         ->required()
-                        ->searchable()
                         ->preload()
                         ->native(false),
 
-                    TextInput::make('status')
-                        ->required()
-                        ->numeric()
-                        ->step(1),
+                    ActiveStatusSelect::make('status'),
                 ]),
             ]),
         ]);
@@ -109,21 +115,35 @@ class UtilityResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                TextColumn::make('number'),
+                TextColumn::make('number')
+                    ->copyable(),
 
                 TextColumn::make('name'),
 
-                TextColumn::make('store.name'),
+                TextColumn::make('store.nickname'),
 
-                TextColumn::make('unit.name'),
+                TextColumn::make('unit.unit'),
 
                 TextColumn::make('utilityProvider.name'),
 
-                TextColumn::make('pre_post'),
+                TextColumn::make('pre_post')
+                    ->formatStateUsing(
+                        fn(string $state): string => match ($state) {
+                            '1' => 'pre',
+                            '2' => 'post',
+                        }
+                    ),
 
-                TextColumn::make('category'),
+                TextColumn::make('category')
+                    ->formatStateUsing(
+                        fn(string $state): string => match ($state) {
+                            '1' => 'listrik',
+                            '2' => 'air',
+                            '3' => 'internet',
+                        }
+                    ),
 
-                TextColumn::make('status'),
+                ActiveColumn::make('status'),
             ])
             ->filters([])
             ->actions([

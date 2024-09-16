@@ -25,8 +25,6 @@ class ListDeliveryAddresses extends ListRecords
             'direct' => Tab::make()->query(fn ($query) => $query->where('for', '1')),
             'employee' => Tab::make()->query(fn ($query) => $query->where('for', '2')),
             'online' => Tab::make()->query(fn ($query) => $query->where('for', '3')),
-
-
         ];
     }
 }
