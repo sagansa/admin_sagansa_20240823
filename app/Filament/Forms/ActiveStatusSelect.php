@@ -3,7 +3,6 @@
 namespace App\Filament\Forms;
 
 use Filament\Forms\Components\Select;
-use Illuminate\Support\Facades\Auth;
 
 class ActiveStatusSelect extends Select
 {
@@ -12,7 +11,6 @@ class ActiveStatusSelect extends Select
         parent::setUp();
 
         $this
-            ->hiddenLabel()
             ->required()
             ->native(false)
             ->preload()

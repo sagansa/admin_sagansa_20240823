@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\Products;
 use App\Filament\Clusters\Transaction\Settings;
 use App\Filament\Columns\ActiveColumn;
+use App\Filament\Forms\ActiveStatusSelect;
 use Filament\Tables;
 use App\Models\Product;
 use Filament\Forms\Form;
@@ -94,25 +95,11 @@ class ProductResource extends Resource
                         ->nullable()
                         ->string(),
 
-                    Select::make('request')
-                        ->required()
-                        ->default('2')
-                        ->preload()
-                        ->native(false)
-                        ->options([
-                            '1' => 'active',
-                            '2' => 'inactive',
-                        ]),
+                    ActiveStatusSelect::make('request')
+                        ->default('2'),
 
-                    Select::make('remaining')
-                        ->required()
-                        ->default('2')
-                        ->preload()
-                        ->native(false)
-                        ->options([
-                            '1' => 'active',
-                            '2' => 'inactive',
-                        ]),
+                    ActiveStatusSelect::make('remaining')
+                        ->default('2'),
 
                     Select::make('payment_type_id')
                         ->required()
