@@ -147,7 +147,7 @@ class CashAdvanceResource extends Resource
                         ->default(0)
                         ->minValue(0)
                         ->numeric()
-                        ->debounce(500)
+                        ->debounce(2000)
                         ->prefix('Rp')
                         ->reactive()
                         ->afterStateUpdated(function (Set $set, Get $get) {
@@ -163,7 +163,7 @@ class CashAdvanceResource extends Resource
                         ->default(0)
                         ->minValue(0)
                         ->numeric()
-                        ->debounce(500)
+                        ->debounce(2000)
                         ->prefix('Rp')
                         ->reactive()
                         ->afterStateUpdated(function (Set $set, Get $get) {

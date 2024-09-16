@@ -45,7 +45,7 @@ class SalesProductForm
                     ->default(1)
                     ->minValue(1)
                     ->required()
-                    ->debounce(1000)
+                    ->debounce(2000)
                     ->columnSpan([
                         'md' => 2,
                     ])
@@ -58,7 +58,7 @@ class SalesProductForm
                 TextInput::make('unit_price')
                     ->required()
                     ->label('Unit Price')
-                    ->debounce(500)
+                    ->debounce(2000)
                     ->minValue(0)
                     ->numeric()
                     ->reactive()

@@ -190,7 +190,7 @@ class AdvancePurchaseResource extends Resource
                         $product = Product::find($get('product_id'));
                         return $product ? $product->unit->unit : '';
                     })
-                    ->debounce(500)
+                    ->debounce(2000)
                     ->columnSpan([
                         'md' => 2,
                     ])
@@ -206,7 +206,7 @@ class AdvancePurchaseResource extends Resource
                     ->columnSpan([
                         'md' => 2,
                     ])
-                    ->debounce(500)
+                    ->debounce(2000)
                     ->numeric()
                     ->reactive()
                     ->afterStateUpdated(function (Get $get, Set $set) {
@@ -244,7 +244,7 @@ class AdvancePurchaseResource extends Resource
                 TextInput::make('discount_price')
                     ->required()
                     ->numeric()
-                    ->debounce(1000)
+                    ->debounce(2000)
                     ->default(0)
                     ->reactive()
                     ->prefix('Rp')

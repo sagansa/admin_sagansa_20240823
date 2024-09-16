@@ -298,7 +298,7 @@ class InvoicePurchaseResource extends Resource
                     ->prefix('Rp')
                     ->minValue(0)
                     ->numeric()
-                    ->debounce(500)
+                    ->debounce(2000)
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         self::updateTotalPrice($get, $set);
                     })
@@ -317,8 +317,9 @@ class InvoicePurchaseResource extends Resource
                 ->required()
                 ->minValue(0)
                 ->reactive()
+                ->prefix('Rp')
                 ->numeric()
-                ->debounce(500)
+                ->debounce(2000)
                 ->default(0)
                 ->afterStateUpdated(function (Get $get, Set $set) {
                     self::updateTotalPrice($get, $set);
@@ -328,8 +329,9 @@ class InvoicePurchaseResource extends Resource
                 ->required()
                 ->minValue(0)
                 ->reactive()
+                ->prefix('Rp')
                 ->numeric()
-                ->debounce(500)
+                ->debounce(2000)
                 ->default(0)
                 ->afterStateUpdated(function (Get $get, Set $set) {
                     self::updateTotalPrice($get, $set);
@@ -337,6 +339,7 @@ class InvoicePurchaseResource extends Resource
 
             TextInput::make('total_price')
                 ->readOnly()
+                ->prefix('Rp')
                 ->minValue(0),
 
             Notes::make('notes'),

@@ -83,8 +83,6 @@ class InvoicePurchase extends Model
 
         $invoicePurchaseDetails = [
             ($this->supplier->name ? : ''),
-            ($this->supplier->bank_account_name ? : ''),
-            ($this->supplier->bank->name . ' - ' . $this->supplier->bank_account_no ? : ''),
             ($this->date ? : ''),
             ('Rp ' . number_format($this->total_price) ? : ''),
         ];
