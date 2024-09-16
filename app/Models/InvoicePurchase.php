@@ -68,17 +68,27 @@ class InvoicePurchase extends Model
 
     public function getInvoicePurchaseNameAttribute()
     {
-        if($this->supplier->bank_account_name != null) {
-            return $this->supplier->name .
-                ' | ' . $this->supplier->bank->name .
-                ' | ' . $this->supplier->bank_account_name .
-                ' | ' . $this->supplier->bank_account_no .
-                ' | ' . $this->date .
-                ' | Rp ' . number_format($this->detailInvoices->sum('subtotal_invoice'), 0, ',', '.');
-        } else {
-            return $this->supplier->name .
-                ' | ' . $this->date .
-                ' | Rp ' . number_format($this->detailInvoices->sum('subtotal_invoice'), 0, ',', '.');
-        }
+        // if($this->supplier->bank_account_name != null) {
+        //     return $this->supplier->name .
+        //         ' | ' . $this->supplier->bank->name .
+        //         ' | ' . $this->supplier->bank_account_name .
+        //         ' | ' . $this->supplier->bank_account_no .
+        //         ' | ' . $this->date .
+        //         ' | Rp ' . number_format($this->detailInvoices->sum('subtotal_invoice'), 0, ',', '.');
+        // } else {
+        //     return $this->supplier->name .
+        //         ' | ' . $this->date .
+        //         ' | Rp ' . number_format($this->detailInvoices->sum('subtotal_invoice'), 0, ',', '.');
+        // }
+
+        $invoicePurchaseDetails = [
+            ($this->supplier->name ? : ''),
+            ($this->supplier->bank_account_name ? : ''),
+            ($this->supplier->bank->name . ' - ' . $this->supplier->bank_account_no ? : ''),
+            ($this->date ? : ''),
+            ('Rp ' . number_format($this->total_price) ? : ''),
+        ];
+
+        return implode("\n", $invoicePurchaseDetails);
     }
 }
