@@ -72,6 +72,8 @@ class UtilityResource extends Resource
                     StoreSelect::make('store_id')
                         ->required(),
 
+                    ActiveStatusSelect::make('status'),
+
                     Select::make('unit_id')
                         ->required()
                         ->relationship('unit', 'name')
@@ -105,7 +107,7 @@ class UtilityResource extends Resource
                         ->preload()
                         ->native(false),
 
-                    ActiveStatusSelect::make('status'),
+
                 ]),
             ]),
         ]);
