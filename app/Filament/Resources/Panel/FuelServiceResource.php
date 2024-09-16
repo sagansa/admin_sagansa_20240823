@@ -165,10 +165,11 @@ class FuelServiceResource extends Resource
 
                 SelectFilter::make('vehicle_id')
                     ->label('Vehicle')
-                    ->relationship(
-                        name: 'vehicle',
-                        titleAttribute: 'vehicle_name',
-                        modifyQueryUsing: fn (Builder $query) => $query)
+                    // ->relationship(
+                    //     name: 'vehicle',
+                    //     titleAttribute: 'vehicle_status',
+                    //     modifyQueryUsing: fn (Builder $query) => $query)
+                    ->relationship('vehicle', 'vehicle_status')
                     ->preload()
                     ->native(false),
 
