@@ -73,9 +73,8 @@ class PaymentReceiptResource extends Resource
                     Select::make('supplier_id')
                         ->label('Supplier')
                         ->visible(fn ($get) => $get('payment_for') != '2')
-                        ->options(Supplier::all()->where('status', '<>', 3)->pluck('supplier_name', 'id'))
+                        ->options(Supplier::all()->where('status', '<>', 3)->orderBy('name','asc')->pluck('supplier_name', 'id'))
                         ->searchable()
-                        ->preload()
                         ->native(false),
 
                     Select::make('user_id')
@@ -84,7 +83,7 @@ class PaymentReceiptResource extends Resource
                         ->relationship('user', 'name', fn (Builder $query) => $query
                             ->whereHas('roles', fn (Builder $query) => $query
                                 ->where('name', 'staff') || $query
-                                ->where('name', 'supervisor')))
+                                ->where('name', 'supervisor'))->orderBy('name', 'asc'))
                         ->searchable()
                         ->preload()
                         ->native(false),
