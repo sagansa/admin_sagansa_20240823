@@ -13,7 +13,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
 use App\Filament\Resources\Panel\ClosingStoreResource;
 use App\Models\AccountCashless;
 use Filament\Resources\RelationManagers\RelationManager;

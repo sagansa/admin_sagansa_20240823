@@ -16,8 +16,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
 use App\Filament\Resources\Panel\HygieneOfRoomResource\Pages;
 use App\Filament\Resources\Panel\HygieneOfRoomResource\RelationManagers;
 

@@ -13,7 +13,6 @@ use App\Filament\Forms\ImageInput;
 use App\Filament\Resources\Panel\SalesOrderDirectsResource\Pages;
 use App\Models\SalesOrderDirect;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;

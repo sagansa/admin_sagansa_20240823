@@ -18,8 +18,6 @@ use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
 use App\Filament\Resources\Panel\MovementAssetResource\Pages;
 use App\Filament\Resources\Panel\MovementAssetResource\RelationManagers;
 

@@ -19,7 +19,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\FileUpload;
 use App\Filament\Resources\Panel\ReadinessResource\Pages;
 use App\Filament\Resources\Panel\ReadinessResource\RelationManagers;
 
