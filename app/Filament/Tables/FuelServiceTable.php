@@ -34,6 +34,14 @@ class FuelServiceTable
 
                 TextColumn::make('paymentType.name'),
 
+                TextColumn::make('Rp/liter')
+                    ->getStateUsing(function ($record) {
+                        return $record->liter > 0 ? $record->amount / $record->liter : 0;
+                    })
+                    ->numeric(thousandsSeparator: '.')
+                    ->prefix('Rp ')
+                    ->suffix(' /l'),
+
                 TextColumn::make('km')->numeric(thousandsSeparator: '.')->label('km'),
 
                 TextColumn::make('liter'),
