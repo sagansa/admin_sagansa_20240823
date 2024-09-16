@@ -28,6 +28,8 @@ class FuelServiceTable
 
                 TextColumn::make('date'),
 
+                TextColumn::make('created_at'),
+
                 TextColumn::make('vehicle.no_register'),
 
                 TextColumn::make('paymentType.name'),
