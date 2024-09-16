@@ -70,7 +70,8 @@ class UtilityResource extends Resource
                         ->string(),
 
                     StoreSelect::make('store_id')
-                        ->required(),
+                        ->required()
+                        ->sortable(),
 
                     ActiveStatusSelect::make('status'),
 

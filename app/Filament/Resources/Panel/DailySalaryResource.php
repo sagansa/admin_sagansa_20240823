@@ -3,9 +3,6 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\HRD;
-use App\Filament\Clusters\Salaries;
-use App\Filament\Columns\CurrencyColumn;
-use App\Filament\Columns\PaymentStatusColumn;
 use App\Filament\Forms\BaseSelectInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\PaymentStatusSelectInput;
@@ -18,7 +15,6 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\DailySalaryResource\Pages;
 use App\Filament\Tables\DailySalaryTable;
