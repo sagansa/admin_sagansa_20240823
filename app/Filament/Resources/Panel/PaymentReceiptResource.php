@@ -75,8 +75,7 @@ class PaymentReceiptResource extends Resource
                         ->visible(fn ($get) => $get('payment_for') != '2')
                         ->options(Supplier::all()->where('status', '<>', 3)->pluck('supplier_name', 'id'))
                         ->searchable()
-                        ->native(false)
-                        ->html(),
+                        ->native(false),
 
                     Select::make('user_id')
                         ->label('Employee')
