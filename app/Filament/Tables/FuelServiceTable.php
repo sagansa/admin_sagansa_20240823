@@ -24,13 +24,15 @@ class FuelServiceTable
                             '2' => 'service',
                         }),
 
-                TextColumn::make('supplier.name'),
+                TextColumn::make('supplier.name')
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('date'),
 
-                TextColumn::make('created_at'),
-
                 TextColumn::make('vehicle.no_register'),
+
+                TextColumn::make('vehicle.store.nickname')
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('paymentType.name'),
 
@@ -44,12 +46,15 @@ class FuelServiceTable
 
                 TextColumn::make('km')->numeric(thousandsSeparator: '.')->label('km'),
 
-                TextColumn::make('liter'),
+                TextColumn::make('liter')
+                    ->toggleable(isToggledHiddenByDefault: true),
 
-                CurrencyColumn::make('amount'),
+                CurrencyColumn::make('amount')
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('createdBy.name')
-                    ->hidden(fn () => !Auth::user()->hasRole('admin')),
+                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 PaymentStatusColumn::make('status'),
 

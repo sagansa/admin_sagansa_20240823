@@ -23,6 +23,7 @@ use App\Models\PaymentType;
 use App\Models\Supplier;
 use App\Models\Vehicle;
 use Filament\Forms\Components\Radio;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Facades\Auth;
 
 class FuelServiceResource extends Resource
@@ -154,7 +155,22 @@ class FuelServiceResource extends Resource
             ->columns(
                 FuelServiceTable::schema()
             )
-            ->filters([])
+            ->filters([
+                SelectFilter::make('payment_type_id')
+                    ->options([
+                        '1' => 'transfer',
+                        '2' => 'tunai',
+                    ]),
+
+                SelectFilter::make('vehicle_id')
+                    ->relationship('vehicle', 'no_register'),
+
+                SelectFilter::make('fuel_service')
+                    ->options([
+                        '1' => 'fuel',
+                        '2' => 'service',
+                    ]),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
@@ -164,7 +180,7 @@ class FuelServiceResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('created_at', 'desc');
+            ->defaultSort('date', 'desc');
     }
 
     public static function getRelations(): array
