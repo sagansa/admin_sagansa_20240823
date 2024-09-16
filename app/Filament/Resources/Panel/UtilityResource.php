@@ -21,6 +21,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\UtilityResource\Pages;
 use App\Filament\Resources\Panel\UtilityResource\RelationManagers;
+use Illuminate\Database\Eloquent\Collection;
 
 class UtilityResource extends Resource
 {
@@ -153,6 +154,14 @@ class UtilityResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('setStatusToInactive')
+                    ->label('Set Status to Inactive')
+                    ->icon('heroicon-o-check')
+                    ->requiresConfirmation()
+                    ->action(function (Collection $records) {
+                        Utility::whereIn('id', $records->pluck('id'))->update(['status' => 2]);
+                    })
+                    ->color('warning'),
                 ]),
             ])
             ->defaultSort('id', 'desc');
