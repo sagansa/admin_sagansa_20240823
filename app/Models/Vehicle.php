@@ -38,6 +38,11 @@ class Vehicle extends Model
 
     public function getVehicleStatusAttribute()
     {
-        return $this->no_register . ' - ' . $this->status;
+        $statuses = [
+            1 => 'active',
+            2 => 'inactive',
+        ];
+
+        return $this->no_register . ' - ' . $statuses[$this->status];
     }
 }
