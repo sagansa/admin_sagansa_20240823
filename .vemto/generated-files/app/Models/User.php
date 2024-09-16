@@ -525,6 +525,16 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(StorageStock::class, 'approved_by_id');
     }
 
+    /**
+     * Get all of the paymentReceipts.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function paymentReceipts()
+    {
+        return $this->hasMany(PaymentReceipt::class);
+    }
+
     protected static function boot()
     {
         parent::boot();

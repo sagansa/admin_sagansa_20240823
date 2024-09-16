@@ -9,7 +9,22 @@ class Supplier extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'no_telp',
+        'address',
+        'province_id',
+        'regency_id',
+        'district_id',
+        'village_id',
+        'bank_id',
+        'bank_account_name',
+        'bank_account_no',
+        'status',
+        'image',
+        'user_id',
+        'postal_code_id'
+    ];
 
     public function province()
     {
@@ -61,23 +76,30 @@ class Supplier extends Model
         return $this->belongsTo(PostalCode::class);
     }
 
-    public function paymentReceipts()
-    {
-        return $this->hasMany(PaymentReceipt::class);
-    }
+    // public function getSupplierNameAttribute()
+    // {
+    //     $supplierName = $this->name ? : '';
+    //     $bankName = $this->bank->name ? : '';
+    //     $accountName = $this->bank_account_name ? : '';
+    //     $accountNo = $this->bank_account_no ? : '';
+
+    //     return implode(PHP_EOL, [
+    //         $supplierName,
+    //         $bankName,
+    //         $accountName,
+    //         $accountNo,
+    //     ]);
+    // }
 
     public function getSupplierNameAttribute()
     {
-        if ($this->bank_account_no != null) {
-            return $this->name .
-                ' | ' .
-                $this->bank->name .
-                ' | ' .
-                $this->bank_account_name .
-                ' | ' .
-                $this->bank_account_no;
-        } else {
-            return $this->name;
-        }
+        $supplierDetails = [
+            "Nama Supplier: " . ($this->name ? : 'tidak tersedia'),
+            "Bank: " . ($this->bank ? $this->bank->name : 'tidak tersedia'),
+            "Nama Rekening: " . ($this->bank_account_name ? : 'tidak tersedia'),
+            "No. Rekening: " . ($this->bank_account_no ? : 'tidak tersedia'),
+        ];
+
+        return implode("\n", $supplierDetails);
     }
 }

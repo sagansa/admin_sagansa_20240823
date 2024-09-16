@@ -118,6 +118,14 @@ return [
                 'label' => 'Notes',
                 'placeholder' => 'Notes',
             ],
+            'supplier_id' => [
+                'label' => 'Supplier',
+                'placeholder' => 'Supplier id',
+            ],
+            'user_id' => [
+                'label' => 'User',
+                'placeholder' => 'User id',
+            ],
         ],
         'filament' => [
             'image' => [
@@ -149,6 +157,20 @@ return [
             ],
             'notes' => [
                 'helper_text' => '',
+                'label' => '',
+            ],
+            'supplier_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'user_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
                 'label' => '',
             ],
         ],

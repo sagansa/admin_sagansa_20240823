@@ -22,6 +22,7 @@ use App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
 use App\Models\DailySalary;
 use App\Models\FuelService;
 use App\Models\InvoicePurchase;
+use App\Models\Supplier;
 use Filament\Forms\Components\Radio;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -68,6 +69,19 @@ class PaymentReceiptResource extends Resource
                         ])
                         ->inline()
                         ->reactive(),
+
+                    Select::make('supplier_id')
+                        ->label('Supplier')
+                        ->visible(fn ($get) => $get('payment_for') != '2')
+                        ->options(Supplier::all()->where('status', '<>', 3)->pluck('supplier_name', 'id')),
+
+                    Select::make('user_id')
+                        ->label('Employee')
+                        ->visible(fn ($get) => $get('payment_for') == '2')
+                        ->relationship('user', 'name', fn (Builder $query) => $query
+                            ->whereHas('roles', fn (Builder $query) => $query
+                                ->where('name', 'staff') || $query
+                                ->where('name', 'supervisor'))),
 
                     Select::make('fuelServices')
                         ->visible(fn ($get) => $get('payment_for') == '1')

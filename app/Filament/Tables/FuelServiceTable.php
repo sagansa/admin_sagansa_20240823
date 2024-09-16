@@ -39,7 +39,11 @@ class FuelServiceTable
 
                 TextColumn::make('Rp/liter')
                     ->getStateUsing(function ($record) {
-                        return $record->liter > 0 ? $record->amount / $record->liter : 0;
+                        if ($record->fuel_service === 1) {
+                            return $record->liter > 0 ? $record->amount / $record->liter : 0;
+                        } elseif ($record->fuel_service === 2) {
+                            return '';
+                        }
                     })
                     ->numeric(thousandsSeparator: '.')
                     ->prefix('Rp ')

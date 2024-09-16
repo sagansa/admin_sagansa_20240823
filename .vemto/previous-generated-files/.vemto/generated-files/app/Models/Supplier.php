@@ -20,6 +20,7 @@ class Supplier extends Model
         'status',
         'image',
         'user_id',
+        'postal_code_id',
     ];
 
     public function province()
@@ -79,16 +80,13 @@ class Supplier extends Model
 
     public function getSupplierNameAttribute()
     {
-        if ($this->bank_account_no != null) {
-            return $this->name .
-                ' | ' .
-                $this->bank->name .
-                ' | ' .
-                $this->bank_account_name .
-                ' | ' .
-                $this->bank_account_no;
-        } else {
-            return $this->name;
-        }
+        $supplierDetails = [
+            'Nama Supplier: ' . ($this->name ?: 'tidak tersedia'),
+            'Bank: ' . ($this->bank ? $this->bank->name : 'tidak tersedia'),
+            'Nama Rekening: ' . ($this->bank_account_name ?: 'tidak tersedia'),
+            'No. Rekening: ' . ($this->bank_account_no ?: 'tidak tersedia'),
+        ];
+
+        return implode("\n", $supplierDetails);
     }
 }
