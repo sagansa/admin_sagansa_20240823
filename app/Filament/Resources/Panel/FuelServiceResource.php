@@ -167,9 +167,10 @@ class FuelServiceResource extends Resource
                     ->label('Vehicle')
                     ->relationship(
                         name: 'vehicle',
+                        titleAttribute: 'vehicle_status',
                         modifyQueryUsing: fn (Builder $query) => $query,
                     )
-                    ->getOptionLabelFromRecordUsing(fn (Vehicle $record) => "{$record->vehicle_status}")
+                    // ->getOptionLabelFromRecordUsing(fn (Vehicle $record) => "{$record->vehicle_status}")
                     ->searchable()
                     ->preload()
                     ->native(false),
