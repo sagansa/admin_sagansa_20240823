@@ -22,7 +22,8 @@ class FuelServiceTable
                         fn(string $state): string => match ($state) {
                             '1' => 'fuel',
                             '2' => 'service',
-                        }),
+                        })
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('supplier.name')
                     ->toggleable(isToggledHiddenByDefault: false),
