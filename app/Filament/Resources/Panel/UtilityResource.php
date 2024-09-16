@@ -70,8 +70,7 @@ class UtilityResource extends Resource
                         ->string(),
 
                     StoreSelect::make('store_id')
-                        ->required()
-                        ->sortable(),
+                        ->required(),
 
                     ActiveStatusSelect::make('status'),
 
@@ -120,11 +119,15 @@ class UtilityResource extends Resource
             ->poll('60s')
             ->columns([
                 TextColumn::make('number')
-                    ->copyable(),
+                    ->copyable()
+                    ->searchable(),
 
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                    ->searchable(),
 
-                TextColumn::make('store.nickname'),
+                TextColumn::make('store.nickname')
+                    ->sortable()
+                    ->searchable(),
 
                 ActiveColumn::make('status'),
 
