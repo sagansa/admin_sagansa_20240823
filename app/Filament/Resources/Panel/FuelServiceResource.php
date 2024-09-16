@@ -157,7 +157,7 @@ class FuelServiceResource extends Resource
             )
             ->filters([
                 SelectFilter::make('payment_type_id')
-                    ->hiddenLabel()
+                    ->label('Payment Type')
                     ->options([
                         '1' => 'transfer',
                         '2' => 'tunai',
@@ -166,7 +166,7 @@ class FuelServiceResource extends Resource
                 SelectFilter::make('vehicle_id')
                     ->required()
                     ->placeholder('Vehicle')
-                    ->hiddenLabel()
+                    ->label('Vehicle')
                     ->relationship(
                         name: 'vehicle',
                         modifyQueryUsing: fn (Builder $query) => $query,
@@ -177,7 +177,7 @@ class FuelServiceResource extends Resource
                     ->native(false),
 
                 SelectFilter::make('fuel_service')
-                    ->hiddenLabel()
+                    ->label('Fuel Service')
                     ->options([
                         '1' => 'fuel',
                         '2' => 'service',
