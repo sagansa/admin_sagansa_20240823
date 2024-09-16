@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\Utility;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Auth;
 
 class UtilityPolicy
 {
@@ -23,7 +24,7 @@ class UtilityPolicy
      */
     public function view(User $user, Utility $utility): bool
     {
-        return $user->can('view_panel::utility') && $utility->status === 1;
+        return $user->can('view_panel::utility') && $utility->status === 1 && !Auth::user()->hasRole('admin');
     }
 
     /**
@@ -39,7 +40,11 @@ class UtilityPolicy
      */
     public function update(User $user, Utility $utility): bool
     {
-        return $user->can('update_panel::utility') && $utility->status !== 1;
+        if (Auth::user()->hasRole('admin')) {
+            return $user->can('update_panel::utility');
+        } else {
+            return $user->can('update_panel::utility') && $utility->status !== 1;
+        }
     }
 
     /**
