@@ -36,4 +36,14 @@ class PaymentReceipt extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getPaymentReceiptNameAttribute()
+    {
+        $paymentReceiptDetails = [
+            ($this->supplier->name ? : ''),
+            ($this->user->name ? : ''),
+        ];
+
+        return $paymentReceiptDetails;
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Filament\Tables;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\PaymentStatusColumn;
+use App\Filament\Columns\SupplierColumn;
 use App\Models\InvoicePurchase;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
@@ -27,16 +28,7 @@ class InvoicePurchaseTable
             TextColumn::make('store.nickname')
                 ->searchable(),
 
-            TextColumn::make('supplier')
-                ->copyable()
-                ->formatStateUsing(
-                    fn($record): string => '<ul>' . implode('', [
-                        '<li>Nama Supplier: ' . $record->supplier->name . '</li>',
-                        '<li>Bank: ' . ($record->supplier->bank ? $record->supplier->bank->name : 'tidak tersedia') . '</li>',
-                        '<li>Nama Rekening: ' . ($record->supplier->bank_account_name ? $record->supplier->bank_account_name : 'tidak tersedia') . '</li>',
-                        '<li>No. Rekening: ' . ($record->supplier->bank_account_no ? $record->supplier->bank_account_no : 'tidak tersedia') . '</li>',
-                    ]) . '</ul>'
-                )->html(),
+            SupplierColumn::make('Supplier'),
 
             TextColumn::make('detailInvoices')
                 ->label('Detail Purchases')

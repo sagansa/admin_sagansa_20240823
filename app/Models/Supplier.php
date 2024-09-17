@@ -76,20 +76,20 @@ class Supplier extends Model
         return $this->belongsTo(PostalCode::class);
     }
 
-    // public function getSupplierNameAttribute()
-    // {
-    //     $supplierName = $this->name ? : '';
-    //     $bankName = $this->bank->name ? : '';
-    //     $accountName = $this->bank_account_name ? : '';
-    //     $accountNo = $this->bank_account_no ? : '';
+    public function getSupplierColumnNameAttribute()
+    {
+        $supplierName = $this->name ? : '';
+        $bankName = $this->bank->name ? : '';
+        $accountName = $this->bank_account_name ? : '';
+        $accountNo = $this->bank_account_no ? : '';
 
-    //     return implode(PHP_EOL, [
-    //         $supplierName,
-    //         $bankName,
-    //         $accountName,
-    //         $accountNo,
-    //     ]);
-    // }
+        return implode(PHP_EOL, [
+            $supplierName,
+            $bankName,
+            $accountName,
+            $accountNo,
+        ]);
+    }
 
     public function getSupplierNameAttribute()
     {

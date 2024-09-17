@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
+use App\Filament\Columns\SupplierColumn;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use Filament\Tables;
@@ -232,6 +233,8 @@ class PaymentReceiptResource extends Resource
                     ->visibility('public')
                     ->url(fn($record) => asset('storage/' . $record->image_adjust)),
 
+                SupplierColumn::make('Supplier'),
+
                 TextColumn::make('created_at')
                     ->date(),
 
@@ -282,9 +285,4 @@ class PaymentReceiptResource extends Resource
             'edit' => Pages\EditPaymentReceipt::route('/{record}/edit'),
         ];
     }
-
-    // public static function calculateDifference($record)
-    // {
-    //     return $record->total_amount - $record->transfer_amount;
-    // }
 }
