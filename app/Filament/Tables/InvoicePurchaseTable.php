@@ -30,6 +30,9 @@ class InvoicePurchaseTable
 
             SupplierColumn::make('Supplier'),
 
+            TextColumn::make('user.name')
+                ->toggleable(isToggledHiddenByDefault: true),
+
             TextColumn::make('detailInvoices')
                 ->label('Detail Purchases')
                 ->html()

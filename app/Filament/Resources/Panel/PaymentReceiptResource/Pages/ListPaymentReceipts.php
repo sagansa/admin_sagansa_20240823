@@ -19,10 +19,14 @@ class ListPaymentReceipts extends ListRecords
     public function getTabs(): array
     {
         return [
-            null => Tab::make('All'),
+            'invoice' => Tab::make()->query(fn ($query) => $query->where('payment_for', '3')),
             'fuel service' => Tab::make()->query(fn ($query) => $query->where('payment_for', '1')),
             'daily salary' => Tab::make()->query(fn ($query) => $query->where('payment_for', '2')),
-            'invoice' => Tab::make()->query(fn ($query) => $query->where('payment_for', '3')),
         ];
+    }
+
+    protected function getDefaultTab(): ?string
+    {
+        return 'invoice';
     }
 }
