@@ -199,9 +199,9 @@ class InvoicePurchaseResource extends Resource
                 ->native(false),
 
             DatePicker::make('date')
-                ->rules(['date'])
+                // ->rules(['date'])
                 // ->required()
-                // ->default('today')
+                ->default('today')
                 ->native(false),
 
             // Placeholder::make('payment_status'),
