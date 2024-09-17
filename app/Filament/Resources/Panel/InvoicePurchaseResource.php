@@ -188,7 +188,7 @@ class InvoicePurchaseResource extends Resource
                 }),
 
             Select::make('supplier_id')
-                ->required()
+                // ->required()
                 ->relationship(
                     name: 'supplier',
                     modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '3')->orderBy('name', 'asc'),
@@ -200,8 +200,8 @@ class InvoicePurchaseResource extends Resource
 
             DatePicker::make('date')
                 ->rules(['date'])
-                ->required()
-                ->default('today')
+                // ->required()
+                // ->default('today')
                 ->native(false),
 
             // Placeholder::make('payment_status'),
