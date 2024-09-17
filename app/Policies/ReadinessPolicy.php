@@ -23,7 +23,7 @@ class ReadinessPolicy
      */
     public function view(User $user, Readiness $readiness): bool
     {
-        return $user->can('view_panel::readiness');
+        return $user->can('view_panel::readiness') && $readiness->status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class ReadinessPolicy
      */
     public function update(User $user, Readiness $readiness): bool
     {
-        return $user->can('update_panel::readiness');
+        return $user->can('update_panel::readiness') && $readiness->status !== 2;
     }
 
     /**

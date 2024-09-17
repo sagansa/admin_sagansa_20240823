@@ -115,16 +115,9 @@ class VehicleResource extends Resource
             ->columns([
                 ImageColumn::make('image')->visibility('public'),
 
-                TextColumn::make('type')
-                    ->formatStateUsing(
-                        fn(string $state): string => match ($state) {
-                            '1' => 'active',
-                            '2' => 'inactive',
-                        },),
-
                 TextColumn::make('no_register'),
 
-                TextColumn::make('store.name'),
+                TextColumn::make('store.nickname'),
 
                 ActiveColumn::make('status'),
             ])

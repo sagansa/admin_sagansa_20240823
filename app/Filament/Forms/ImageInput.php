@@ -11,7 +11,7 @@ class ImageInput extends FileUpload
         parent::setUp();
 
         $this->rules(['image'])
-            ->hiddenLabel()
+            // ->hiddenLabel()
             ->nullable()
             ->maxSize(1024)
             ->image()

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\HRD;
+use App\Filament\Filters\SelectEmployeeFilter;
 use App\Filament\Forms\BaseSelectInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\PaymentStatusSelectInput;
@@ -106,15 +107,7 @@ class DailySalaryResource extends Resource
                 DailySalaryTable::schema()
             )
             ->filters([
-                SelectFilter::make('created_by_id')
-                    ->label('User')
-                    ->searchable()
-                    ->preload()
-                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
-                    ->relationship('createdBy', 'name', fn (Builder $query) => $query
-                        ->whereHas('roles', fn (Builder $query) => $query
-                            ->where('name', 'staff') || $query
-                            ->where('name', 'supervisor'))),
+                SelectEmployeeFilter::make('created_by_id'),
 
                 SelectFilter::make('payment_type_id')
                     ->label('Payment Type')

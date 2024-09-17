@@ -3,7 +3,10 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\HRD;
+use App\Filament\Columns\StatusColumn;
+use App\Filament\Filters\SelectEmployeeFilter;
 use App\Filament\Forms\ImageInput;
+use App\Filament\Forms\Notes;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -21,6 +24,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\ReadinessResource\Pages;
 use App\Filament\Resources\Panel\ReadinessResource\RelationManagers;
+use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Support\Facades\Auth;
 
 class ReadinessResource extends Resource
 {
@@ -55,21 +60,24 @@ class ReadinessResource extends Resource
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
                     ImageInput::make('image_selfie')
+                        ->label('Selfie')
                         ->disk('public')
                         ->directory('images/Readiness'),
 
                     ImageInput::make('left_hand')
+                        ->label('Left Hand')
                         ->disk('public')
                         ->directory('images/Readiness'),
 
                     ImageInput::make('right_hand')
+                        ->label('Right Hand')
                         ->disk('public')
                         ->directory('images/Readiness'),
 
                     Select::make('status')
-                        ->required()
-                        ->default('1')
-                        ->searchable()
+                        ->required(fn () => Auth::user()->hasRole('admin'))
+                        ->hidden(fn ($operation) => $operation === 'create')
+                        ->disabled(fn () => Auth::user()->hasRole('staff'))
                         ->preload()
                         ->native(false)
                         ->options([
@@ -79,22 +87,8 @@ class ReadinessResource extends Resource
                             '4' => 'periksa ulang',
                         ]),
 
-                    RichEditor::make('notes')
-                        ->nullable()
-                        ->string()
-                        ->fileAttachmentsVisibility('public'),
+                    Notes::make('notes'),
 
-                    TextInput::make('created_by_id')
-                        ->nullable()
-                        ->numeric()
-                        ->step(1),
-
-                    Select::make('approved_by_id')
-                        ->nullable()
-                        ->relationship('createdBy', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
                 ]),
             ]),
         ]);
@@ -102,6 +96,7 @@ class ReadinessResource extends Resource
 
     public static function table(Table $table): Table
     {
+
         return $table
             ->poll('60s')
             ->columns([
@@ -111,13 +106,13 @@ class ReadinessResource extends Resource
 
                 ImageColumn::make('right_hand')->visibility('public'),
 
-                TextColumn::make('status'),
-
-                TextColumn::make('created_by_id'),
+                StatusColumn::make('status'),
 
                 TextColumn::make('createdBy.name'),
             ])
-            ->filters([])
+            ->filters([
+                SelectEmployeeFilter::make('created_by_id'),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
