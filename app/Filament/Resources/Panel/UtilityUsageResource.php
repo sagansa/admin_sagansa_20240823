@@ -8,9 +8,7 @@ use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StatusSelectInput;
-use Filament\Forms;
 use Filament\Tables;
-use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\UtilityUsage;
@@ -19,12 +17,11 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\UtilityUsageResource\Pages;
-use App\Filament\Resources\Panel\UtilityUsageResource\RelationManagers;
 use App\Models\Utility;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Facades\Auth;
 
 class UtilityUsageResource extends Resource
@@ -104,6 +101,10 @@ class UtilityUsageResource extends Resource
                     ->visibility('public')
                     ->url(fn($record) => asset('storage/' . $record->image)),
 
+                TextColumn::make('created_at')
+                    ->sortable()
+                    ->date(),
+
                 TextColumn::make('utility.utility_column_name'),
 
                 TextColumn::make('result'),
@@ -114,7 +115,12 @@ class UtilityUsageResource extends Resource
 
                 TextColumn::make('approvedBy.name'),
             ])
-            ->filters([])
+            ->filters([
+
+                SelectFilter::make('utility_id')
+                    ->relationship('utility', 'utility_column_name'),
+
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),

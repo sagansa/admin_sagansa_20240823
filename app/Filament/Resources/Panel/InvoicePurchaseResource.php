@@ -166,10 +166,10 @@ class InvoicePurchaseResource extends Resource
                 ->disk('public')
                 ->directory('images/InvoicePurchase'),
 
-            StoreSelect::make('store_id')
-                ->afterStateUpdated(function (Set $set) {
+            StoreSelect::make('store_id'),
+                // ->afterStateUpdated(function (Set $set) {
                     // $set('detailInvoices', null);
-                }),
+                // }),
 
             Select::make('payment_type_id')
                 ->required()
@@ -181,13 +181,13 @@ class InvoicePurchaseResource extends Resource
                 )
                 ->default(2)
                 ->preload()
-                ->native(false)
-                ->afterStateUpdated(function (Set $set) {
+                ->native(false),
+                // ->afterStateUpdated(function (Set $set) {
                     // $set('detailInvoices', null);
-                }),
+                // }),
 
             Select::make('supplier_id')
-                // ->required()
+                ->required()
                 ->relationship(
                     name: 'supplier',
                     modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '3')->orderBy('name', 'asc'),
@@ -264,7 +264,7 @@ class InvoicePurchaseResource extends Resource
                     )
                     ->getOptionLabelFromRecordUsing(fn (DetailRequest $record) => "{$record->detail_request_name}")
                     ->native(false)
-                    // ->required()
+                    ->required()
                     ->preload()
                     ->searchable()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
@@ -287,7 +287,7 @@ class InvoicePurchaseResource extends Resource
                     ->prefix('Rp')
                     ->minValue(0)
                     ->numeric()
-                    ->debounce(500)
+                    ->debounce(2000)
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         self::updateTotalPrice($get, $set);
                     })
@@ -308,7 +308,7 @@ class InvoicePurchaseResource extends Resource
                 ->reactive()
                 ->prefix('Rp')
                 ->numeric()
-                ->debounce(500)
+                ->debounce(2000)
                 ->default(0)
                 ->afterStateUpdated(function (Get $get, Set $set) {
                     self::updateTotalPrice($get, $set);
@@ -320,7 +320,7 @@ class InvoicePurchaseResource extends Resource
                 ->reactive()
                 ->prefix('Rp')
                 ->numeric()
-                ->debounce(500)
+                ->debounce(2000)
                 ->default(0)
                 ->afterStateUpdated(function (Get $get, Set $set) {
                     self::updateTotalPrice($get, $set);

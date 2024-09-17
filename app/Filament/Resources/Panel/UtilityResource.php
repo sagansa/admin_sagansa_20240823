@@ -21,6 +21,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\UtilityResource\Pages;
 use App\Filament\Resources\Panel\UtilityResource\RelationManagers;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Collection;
 
 class UtilityResource extends Resource
@@ -152,7 +153,26 @@ class UtilityResource extends Resource
                         }
                     ),
             ])
-            ->filters([])
+            ->filters([
+
+                SelectFilter::make('store')
+                    ->relationship('store', 'nickname')
+                    ->searchable(),
+
+                SelectFilter::make('category')
+                    ->options([
+                        '1' => 'listrik',
+                        '2' => 'air',
+                        '3' => 'internet',
+                    ]),
+
+                SelectFilter::make('pre_post')
+                    ->options([
+                        '1' => 'pre',
+                        '2' => 'post',
+                    ]),
+
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
