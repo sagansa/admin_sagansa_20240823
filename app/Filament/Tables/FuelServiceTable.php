@@ -25,8 +25,18 @@ class FuelServiceTable
                         })
                     ->toggleable(isToggledHiddenByDefault: false),
 
-                TextColumn::make('supplier.name')
-                    ->toggleable(isToggledHiddenByDefault: false),
+                TextColumn::make('supplier')
+                    ->copyable()
+                    ->formatStateUsing(
+                        fn($record): string => '<ul>' . implode('', [
+                            '<li>Nama Supplier: ' . $record->supplier->name . '</li>',
+                            '<li>Bank: ' . ($record->supplier->bank ? $record->supplier->bank->name : 'tidak tersedia') . '</li>',
+                            '<li>Nama Rekening: ' . ($record->supplier->bank_account_name ? $record->supplier->bank_account_name : 'tidak tersedia') . '</li>',
+                            '<li>No. Rekening: ' . ($record->supplier->bank_account_no ? $record->supplier->bank_account_no : 'tidak tersedia') . '</li>',
+                        ]) . '</ul>'
+                    )
+                    ->html()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('date'),
 

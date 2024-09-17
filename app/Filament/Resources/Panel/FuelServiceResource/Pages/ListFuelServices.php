@@ -20,10 +20,9 @@ class ListFuelServices extends ListRecords
     {
         return [
             null => Tab::make('All'),
-            'belum Diperiksa' => Tab::make()->query(fn ($query) => $query->where('status', '1')),
-            'valid' => Tab::make()->query(fn ($query) => $query->where('status', '2')),
-            'perbaiki' => Tab::make()->query(fn ($query) => $query->where('status', '3')),
-            'periksa Ulang' => Tab::make()->query(fn ($query) => $query->where('status', '4')),
+            'belum dibayar' => Tab::make()->query(fn ($query) => $query->where('status', '1')),
+            'sudah dibayar' => Tab::make()->query(fn ($query) => $query->where('status', '2')),
+            'tidak valid' => Tab::make()->query(fn ($query) => $query->where('status', '3')),
         ];
     }
 }
