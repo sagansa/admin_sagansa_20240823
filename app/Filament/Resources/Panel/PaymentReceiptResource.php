@@ -251,10 +251,10 @@ class PaymentReceiptResource extends Resource
 
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->visible(fn ($record) => self::calculateDifference($record) !== 0),
-                Tables\Actions\ViewAction::make()
-                    ->visible(fn ($record) => self::calculateDifference($record) === 0),
+                Tables\Actions\EditAction::make(),
+                    // ->visible(fn ($record) => self::calculateDifference($record) !== 0),
+                Tables\Actions\ViewAction::make(),
+                    // ->visible(fn ($record) => self::calculateDifference($record) === 0),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -283,8 +283,8 @@ class PaymentReceiptResource extends Resource
         ];
     }
 
-    public static function calculateDifference($record)
-    {
-        return $record->total_amount - $record->transfer_amount;
-    }
+    // public static function calculateDifference($record)
+    // {
+    //     return $record->total_amount - $record->transfer_amount;
+    // }
 }
