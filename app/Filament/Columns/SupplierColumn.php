@@ -19,6 +19,7 @@ class SupplierColumn extends TextColumn
                     '<li>No. Rekening: ' . ($record->supplier->bank_account_no ? $record->supplier->bank_account_no : 'tidak tersedia') . '</li>',
                 ]) . '</ul>'
             )
-            ->html();
+            ->html()
+            ->toggleable(isToggledHiddenByDefault: false);
     }
 }

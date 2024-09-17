@@ -194,6 +194,7 @@ class SalesOrderDirectsResource extends Resource
                     || Auth::user()->hasRole('admin')
                     || Auth::user()->hasRole('storage-staff')
                 )
+                ->required()
                 ->disk('public')
                 ->directory('images/Direct/Payment'),
 
