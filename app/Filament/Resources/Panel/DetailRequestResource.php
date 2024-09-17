@@ -15,6 +15,7 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\Panel\DetailRequestResource\Pages;
 use App\Filament\Resources\Panel\DetailRequestResource\RelationManagers;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class DetailRequestResource extends Resource
@@ -166,7 +167,22 @@ class DetailRequestResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-
+                    Tables\Actions\BulkAction::make('setPaymentTypeToTransfer')
+                        ->label('Set Payment Type to Transfer')
+                        ->icon('heroicon-o-check')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            DetailRequest::whereIn('id', $records->pluck('id'))->update(['payment_type_id' => 1]);
+                        })
+                        ->color('success'),
+                    Tables\Actions\BulkAction::make('setPaymentTypeToCash')
+                        ->label('Set Payment Type to Cash')
+                        ->icon('heroicon-o-check')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            DetailRequest::whereIn('id', $records->pluck('id'))->update(['payment_type_id' => 2]);
+                        })
+                        ->color('warning'),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
