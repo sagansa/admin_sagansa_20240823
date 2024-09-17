@@ -31,6 +31,7 @@ use Filament\Forms\Set;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AccountCashless;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Collection;
 
 class ClosingStoreResource extends Resource
 {
@@ -309,9 +310,11 @@ class ClosingStoreResource extends Resource
             ->columns([
                 TextColumn::make('store.nickname'),
 
-                TextColumn::make('shiftStore.name'),
+                TextColumn::make('shiftStore.name')
+                    ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('date'),
+                TextColumn::make('date')
+                    ->sortable(),
 
                 CurrencyColumn::make('cash_from_yesterday'),
 
@@ -322,12 +325,14 @@ class ClosingStoreResource extends Resource
                 TextColumn::make('createdBy.name')
                     ->hidden(fn () => !Auth::user()->hasRole('admin')),
 
-                TextColumn::make('transferBy.name'),
+                TextColumn::make('transferBy.name')
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 StatusColumn::make('status'),
             ])
             ->filters([
                 SelectFilter::make('store_id')
+                    ->label('Store')
                     ->relationship('store', 'nickname')
             ])
             ->actions([
@@ -337,6 +342,14 @@ class ClosingStoreResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('setStatusToDiperbaiki')
+                        ->label('Set Status to Diperbaiki')
+                        ->icon('heroicon-o-check')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            ClosingStore::whereIn('id', $records->pluck('id'))->update(['status' => 3]);
+                        })
+                        ->color('warning'),
                 ]),
             ])
             ->defaultSort(fn (Builder $query) => $query->orderBy('date', 'desc')->orderBy('created_at', 'desc'));
