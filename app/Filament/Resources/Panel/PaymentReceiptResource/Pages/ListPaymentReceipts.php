@@ -20,9 +20,9 @@ class ListPaymentReceipts extends ListRecords
     {
         return [
             null => Tab::make('All'),
-            'fuel service' => Tab::make()->query(fn ($query) => $query->where('status', '1')),
-            'daily salary' => Tab::make()->query(fn ($query) => $query->where('status', '2')),
-            'invoice' => Tab::make()->query(fn ($query) => $query->where('status', '3')),
+            'fuel service' => Tab::make()->query(fn ($query) => $query->where('payment_for', '1')),
+            'daily salary' => Tab::make()->query(fn ($query) => $query->where('payment_for', '2')),
+            'invoice' => Tab::make()->query(fn ($query) => $query->where('payment_for', '3')),
         ];
     }
 }
