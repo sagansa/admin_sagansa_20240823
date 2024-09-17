@@ -24,6 +24,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\Panel\ProductResource\Pages;
 use Filament\Forms\Set;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
@@ -167,10 +168,20 @@ class ProductResource extends Resource
                         '1' => 'active',
                         '2' => 'inactive',
                     ]),
+
+                SelectFilter::make('payment_type_id')
+                    ->label('Payment Type')
+                    ->options([
+                        '1' => 'transfer',
+                        '2' => 'tunai',
+                        '3' => 'non',
+                    ]),
                 ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                // Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    // Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

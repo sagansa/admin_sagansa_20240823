@@ -5,6 +5,8 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\Invoices;
 use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\StatusColumn;
+use App\Filament\Filters\SelectStoreFilter;
+use App\Filament\Forms\DateInput;
 use App\Filament\Forms\StoreSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -22,6 +24,7 @@ use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Get;
+use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Support\Facades\Auth;
 
 class RequestPurchaseResource extends Resource
@@ -60,11 +63,7 @@ class RequestPurchaseResource extends Resource
                 Grid::make(['default' => 1])->schema([
                     StoreSelect::make('store_id'),
 
-                    DatePicker::make('date')
-                        ->default('today')
-                        ->rules(['date'])
-                        ->required()
-                        ->native(false),
+                    DateInput::make('date'),
 
                 ]),
             ]),
@@ -113,14 +112,18 @@ class RequestPurchaseResource extends Resource
                     ->html() // Mengizinkan HTML dalam kolom
                     ->extraAttributes(['class' => 'whitespace-pre-wrap']),
 
-                TextColumn::make('user.name'),
+                TextColumn::make('user.name')->hidden(fn () => !Auth::user()->hasRole('admin')),
 
-                StatusColumn::make('status'),
+                // StatusColumn::make('status'),
             ])
-            ->filters([])
+            ->filters([
+                SelectStoreFilter::make('store_id')
+            ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

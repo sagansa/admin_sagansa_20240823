@@ -15,6 +15,7 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\Panel\DetailRequestResource\Pages;
 use App\Filament\Resources\Panel\DetailRequestResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -121,10 +122,20 @@ class DetailRequestResource extends Resource
                     ->label('Payment Type'),
                 TextColumn::make('store.nickname')
                     ->label('Store'),
-                TextColumn::make('quantity_plan')
-                    ->label('Qty Plan'),
-                TextColumn::make('detailInvoices.quantity_invoice')
+
+                TextColumn::make('detailInvoices.quantity_product')
+                    // ->formatStateUsing(fn (DetailRequest $record) =>
+                    //     $record->detailInvoices ?
+                    //         number_format($record->detailInvoices->quantity_product, 0, ',', '.') . ' ' .
+                    //         $record->detailInvoices->product->unit->unit : '-')
+                    ->formatStateUsing(fn (DetailRequest $record) => implode(', ', $record->detailInvoices->pluck('quantity_product')->all()))
                     ->label('Qty Purchase'),
+
+                TextColumn::make('quantity_plan')
+                    ->label('Qty Plan')
+                    ->formatStateUsing(fn (DetailRequest $record) =>
+                        number_format($record->quantity_plan, 0, ',', '.') . ' ' .
+                            $record->product->unit->unit),
 
                 TextColumn::make('status')
                     ->label('Status')
@@ -161,28 +172,46 @@ class DetailRequestResource extends Resource
                 SelectPaymentTypeFilter::make('payment_type_id'),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                // Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    // Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make('setPaymentTypeToTransfer')
-                        ->label('Set Payment Type to Transfer')
+                    Tables\Actions\BulkAction::make('setStatusToDone')
+                        ->label('Set Status to Done')
                         ->icon('heroicon-o-check')
                         ->requiresConfirmation()
                         ->action(function (Collection $records) {
-                            DetailRequest::whereIn('id', $records->pluck('id'))->update(['payment_type_id' => 1]);
+                            DetailRequest::whereIn('id', $records->pluck('id'))->update(['status' => 2]);
                         })
                         ->color('success'),
-                    Tables\Actions\BulkAction::make('setPaymentTypeToCash')
-                        ->label('Set Payment Type to Cash')
+                    Tables\Actions\BulkAction::make('setStatusToReject')
+                        ->label('Set Status to Reject')
                         ->icon('heroicon-o-check')
                         ->requiresConfirmation()
                         ->action(function (Collection $records) {
-                            DetailRequest::whereIn('id', $records->pluck('id'))->update(['payment_type_id' => 2]);
+                            DetailRequest::whereIn('id', $records->pluck('id'))->update(['status' => 3]);
+                        })
+                        ->color('danger'),
+                    Tables\Actions\BulkAction::make('setStatusToNot Valid')
+                        ->label('Set Status to Not Valid')
+                        ->icon('heroicon-o-check')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            DetailRequest::whereIn('id', $records->pluck('id'))->update(['status' => 5]);
                         })
                         ->color('warning'),
+                    Tables\Actions\BulkAction::make('setStatusToNotUsed')
+                        ->label('Set Status to Not Used')
+                        ->icon('heroicon-o-check')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            DetailRequest::whereIn('id', $records->pluck('id'))->update(['status' => 6]);
+                        })
+                        ->color('gray'),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
