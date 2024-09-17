@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\Closings;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
+use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
@@ -331,9 +332,7 @@ class ClosingStoreResource extends Resource
                 StatusColumn::make('status'),
             ])
             ->filters([
-                SelectFilter::make('store_id')
-                    ->label('Store')
-                    ->relationship('store', 'nickname')
+                SelectStoreFilter::make('store_id'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

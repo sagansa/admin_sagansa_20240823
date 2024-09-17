@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
+use App\Filament\Filters\SelectStoreFilter;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -22,6 +23,7 @@ use App\Filament\Resources\Panel\UtilityBillResource\Pages;
 use App\Filament\Resources\Panel\UtilityBillResource\RelationManagers;
 use App\Models\Utility;
 use Filament\Forms\Get;
+use Filament\Tables\Filters\SelectFilter;
 
 class UtilityBillResource extends Resource
 {
@@ -106,13 +108,13 @@ class UtilityBillResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                TextColumn::make('utility.name'),
+                TextColumn::make('utility.number')->copyable(),
 
                 TextColumn::make('utility.store.nickname'),
 
                 TextColumn::make('utility.utilityProvider.name'),
 
-                TextColumn::make('date'),
+                TextColumn::make('date')->sortable(),
 
                 CurrencyColumn::make('amount'),
 
@@ -120,7 +122,18 @@ class UtilityBillResource extends Resource
 
                 TextColumn::make('last_indicator'),
             ])
-            ->filters([])
+            ->filters([
+                SelectFilter::make('utility_id')
+                    ->label('Utility')
+                    ->searchable()
+                    ->preload()
+                    ->relationship(
+                        name: 'utility',
+                        titleAttribute: 'utility_name',
+                        modifyQueryUsing: fn (Builder $query) => $query->where('status', '1')->orderBy('number', 'asc'),
+                    )
+                    ->getOptionLabelFromRecordUsing(fn (Utility $record) => "{$record->utility_name}"),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 // Tables\Actions\ViewAction::make(),
