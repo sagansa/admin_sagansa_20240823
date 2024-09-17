@@ -168,7 +168,7 @@ class InvoicePurchaseResource extends Resource
 
             StoreSelect::make('store_id')
                 ->afterStateUpdated(function (Set $set) {
-                    $set('detailInvoices', null);
+                    // $set('detailInvoices', null);
                 }),
 
             Select::make('payment_type_id')
@@ -179,12 +179,11 @@ class InvoicePurchaseResource extends Resource
                     titleAttribute: 'name',
                     modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
                 )
-                // ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
                 ->default(2)
                 ->preload()
                 ->native(false)
                 ->afterStateUpdated(function (Set $set) {
-                    $set('detailInvoices', null);
+                    // $set('detailInvoices', null);
                 }),
 
             Select::make('supplier_id')
@@ -199,19 +198,9 @@ class InvoicePurchaseResource extends Resource
                 ->native(false),
 
             DatePicker::make('date')
-                // ->rules(['date'])
-                // ->required()
+                ->required()
                 ->default('today')
                 ->native(false),
-
-            // Placeholder::make('payment_status'),
-                // ->hidden(fn ($operation) => $operation === 'create'),
-                // ->content(fn (DetailRequest $record): string => [
-                //     '1' => __('belum dibayar'),
-                //     '2' => __('sudah dibayar'),
-                //     '3' => __('tidak valid'),
-                // ][$record->payment_status])
-                // ->columnSpan(2),
 
             Select::make('payment_status')
                 ->required(fn () => Auth::user()->hasRole('admin'))
@@ -275,7 +264,7 @@ class InvoicePurchaseResource extends Resource
                     )
                     ->getOptionLabelFromRecordUsing(fn (DetailRequest $record) => "{$record->detail_request_name}")
                     ->native(false)
-                    ->required()
+                    // ->required()
                     ->preload()
                     ->searchable()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
@@ -367,8 +356,6 @@ class InvoicePurchaseResource extends Resource
 
         $totalPrice = $subtotalPrice + $taxes - $discounts;
 
-        // $set('subtotal_price', number_format($subtotalPrice, 0, ',', ''));
-        // $set('total_price', number_format($totalPrice, 0, ',', ''));
         $set('subtotal_price', $subtotalPrice);
         $set('total_price', $totalPrice);
     }
