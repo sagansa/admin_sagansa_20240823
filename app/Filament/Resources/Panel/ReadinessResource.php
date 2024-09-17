@@ -96,9 +96,15 @@ class ReadinessResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $readinesses = Readiness::query();
+
+        if (!Auth::user()->hasRole('admin') || !Auth::user()->hasRole('super-admin')) {
+            $readinesses->where('created_by_id', Auth::id());
+        }
 
         return $table
             ->poll('60s')
+            ->query($readinesses)
             ->columns([
                 ImageColumn::make('image_selfie')->visibility('public'),
 

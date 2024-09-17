@@ -118,7 +118,13 @@ class UtilityUsageResource extends Resource
             ->filters([
 
                 SelectFilter::make('utility_id')
-                    ->relationship('utility', 'utility_column_name'),
+                    ->label('Utility')
+                    ->relationship(
+                        name: 'utility',
+                        titleAttribute: 'utility_name',
+                        modifyQueryUsing: fn (Builder $query) => $query,
+                    )
+                    ->getOptionLabelFromRecordUsing(fn (Utility $record) => "{$record->utility_name}"),
 
             ])
             ->actions([
