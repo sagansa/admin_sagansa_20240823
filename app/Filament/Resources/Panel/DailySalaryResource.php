@@ -20,6 +20,7 @@ use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\DailySalaryResource\Pages;
 use App\Filament\Tables\DailySalaryTable;
 use App\Models\PaymentType;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -128,8 +129,10 @@ class DailySalaryResource extends Resource
                 ], layout: FiltersLayout::AboveContent)
 
             ->actions([
-                Tables\Actions\EditAction::make()->visible(fn ($record) => auth()->user()->can('update', $record)),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make()->visible(fn ($record) => auth()->user()->can('update', $record)),
                 Tables\Actions\ViewAction::make()->visible(fn ($record) => auth()->user()->can('view', $record)),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

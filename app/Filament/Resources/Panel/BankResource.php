@@ -18,6 +18,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\BankResource\Pages;
 use App\Filament\Resources\Panel\BankResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class BankResource extends Resource
 {
@@ -75,8 +76,10 @@ class BankResource extends Resource
             ->columns([TextColumn::make('name'), TextColumn::make('status')])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

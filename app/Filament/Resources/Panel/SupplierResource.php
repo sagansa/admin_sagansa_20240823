@@ -24,7 +24,9 @@ use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\SupplierResource\Pages;
 use App\Filament\Resources\Panel\SupplierResource\RelationManagers;
 use App\Models\DeliveryAddress;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Forms\Components\Group;
+use Illuminate\Database\Eloquent\Collection;
 
 class SupplierResource extends Resource
 {
@@ -123,7 +125,8 @@ class SupplierResource extends Resource
 
                 TextColumn::make('city.name'),
 
-                TextColumn::make('bank.name'),
+                TextColumn::make('bank.name')
+                    ->sortable(),
 
                 TextColumn::make('bank_account_name')
                     ->searchable()
@@ -136,7 +139,10 @@ class SupplierResource extends Resource
 
                 TextColumn::make('user.name'),
             ])
-            ->filters([])
+            ->filters([
+                SelectFilter::make('bank')
+                    ->relationship('bank', 'name')
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 // Tables\Actions\ViewAction::make(),
@@ -144,6 +150,22 @@ class SupplierResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('setStatusToThree')
+                        ->label('Set Status to Valid')
+                        ->icon('heroicon-o-check')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            Supplier::whereIn('id', $records->pluck('id'))->update(['status' => 2]);
+                        })
+                        ->color('success'),
+                    Tables\Actions\BulkAction::make('setStatusToThree')
+                        ->label('Set Status to Blaclist')
+                        ->icon('heroicon-o-x-mark')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            Supplier::whereIn('id', $records->pluck('id'))->update(['status' => 3]);
+                        })
+                        ->color('gray'),
                 ]),
             ])
             ->defaultSort('id', 'desc');

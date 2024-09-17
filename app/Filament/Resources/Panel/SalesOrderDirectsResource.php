@@ -218,7 +218,6 @@ class SalesOrderDirectsResource extends Resource
                 ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2 || Auth::user()->hasRole('storage-staff'))
                 ->relationship('deliveryService', 'name')
                 ->searchable()
-                ->reactive()
                 ->preload()
                 ->native(false),
 
@@ -229,7 +228,6 @@ class SalesOrderDirectsResource extends Resource
             Select::make('delivery_address_id')
                 ->label('Delivery Address')
                 ->required(fn (SalesOrderDirect $salesOrderDirect) => $salesOrderDirect->delivery_service_id != 33)
-                ->reactive()
                 ->relationship(
                     name: 'deliveryAddress',
                     modifyQueryUsing: function (Builder $query) {

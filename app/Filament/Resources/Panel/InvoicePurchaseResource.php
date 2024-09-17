@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Purchases;
+use App\Filament\Filters\SelectPaymentTypeFilter;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
@@ -27,6 +28,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -94,12 +96,7 @@ class InvoicePurchaseResource extends Resource
                 InvoicePurchaseTable::schema()
             )
             ->filters([
-                SelectFilter::make('payment_type_id')
-                    ->label('Payment Type')
-                    ->options([
-                        '1' => 'transfer',
-                        '2' => 'tunai'
-                    ]),
+                SelectPaymentTypeFilter::make('payment_type_id'),
 
                 SelectFilter::make('store_id')
                     ->label('Store')
@@ -113,8 +110,10 @@ class InvoicePurchaseResource extends Resource
 
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -167,9 +166,6 @@ class InvoicePurchaseResource extends Resource
                 ->directory('images/InvoicePurchase'),
 
             StoreSelect::make('store_id'),
-                // ->afterStateUpdated(function (Set $set) {
-                    // $set('detailInvoices', null);
-                // }),
 
             Select::make('payment_type_id')
                 ->required()
@@ -197,10 +193,7 @@ class InvoicePurchaseResource extends Resource
                 ->preload()
                 ->native(false),
 
-            DatePicker::make('date')
-                ->required()
-                ->default('today')
-                ->native(false),
+            DateInput::make('date'),
 
             Select::make('payment_status')
                 ->required(fn () => Auth::user()->hasRole('admin'))

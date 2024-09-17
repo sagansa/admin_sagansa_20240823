@@ -21,6 +21,7 @@ use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\ClosingCourierResource\Pages;
 use App\Models\ClosingStore;
+use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Support\Facades\Auth;
 
 class ClosingCourierResource extends Resource
@@ -153,8 +154,10 @@ class ClosingCourierResource extends Resource
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

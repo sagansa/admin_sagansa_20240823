@@ -2,9 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
-use App\Filament\Clusters\Advances;
 use App\Filament\Clusters\Purchases;
-use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\StoreSelect;
@@ -24,8 +22,8 @@ use App\Filament\Tables\AdvancePurchaseTable;
 use App\Models\CashAdvance;
 use Filament\Forms\Components\Repeater;
 use App\Models\Product;
-use App\Models\Store;
 use App\Models\Supplier;
+use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -87,8 +85,10 @@ class AdvancePurchaseResource extends Resource
             ->columns(AdvancePurchaseTable::schema())
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Panel;
 
-use App\Filament\Clusters\Cashlesses;
 use App\Filament\Clusters\Transaction\Settings;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StatusSelectInput;
@@ -19,10 +18,9 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\AccountCashlessResource\Pages;
 use App\Filament\Resources\Panel\AccountCashlessResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 
 class AccountCashlessResource extends Resource
@@ -123,8 +121,10 @@ class AccountCashlessResource extends Resource
                     ->relationship('store', 'nickname')
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

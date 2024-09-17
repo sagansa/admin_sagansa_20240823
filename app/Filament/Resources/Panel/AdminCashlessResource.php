@@ -19,6 +19,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\AdminCashlessResource\Pages;
 use App\Filament\Resources\Panel\AdminCashlessResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class AdminCashlessResource extends Resource
 {
@@ -99,8 +100,10 @@ class AdminCashlessResource extends Resource
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

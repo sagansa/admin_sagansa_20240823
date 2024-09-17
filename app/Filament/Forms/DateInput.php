@@ -13,7 +13,6 @@ class DateInput extends DatePicker
         parent::setUp();
 
         $this
-            ->rules(['date'])
             ->required()
             ->default('today')
             ->native(false);

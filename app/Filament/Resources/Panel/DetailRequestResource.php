@@ -2,25 +2,19 @@
 
 namespace App\Filament\Resources\Panel;
 
-use App\Filament\Clusters\Invoices;
 use App\Filament\Clusters\Purchases;
+use App\Filament\Filters\SelectPaymentTypeFilter;
+use App\Filament\Filters\SelectStoreFilter;
 use Filament\Forms;
 use Filament\Tables;
-use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\DetailRequest;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\DetailRequestResource\Pages;
 use App\Filament\Resources\Panel\DetailRequestResource\RelationManagers;
-use Filament\Tables\Columns\SelectColumn;
 use Illuminate\Support\Facades\Auth;
 
 class DetailRequestResource extends Resource
@@ -161,7 +155,10 @@ class DetailRequestResource extends Resource
                         ->label('Request By')
                         ->hidden(fn () => !Auth::user()->hasRole('admin')),
             ])
-            ->filters([])
+            ->filters([
+                SelectStoreFilter::make('store_id'),
+                SelectPaymentTypeFilter::make('payment_type_id'),
+            ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\ViewAction::make(),
