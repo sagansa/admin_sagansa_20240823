@@ -179,8 +179,8 @@ class InvoicePurchaseResource extends Resource
                     titleAttribute: 'name',
                     modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
                 )
-                ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
-                // ->default(2)
+                // ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
+                ->default(2)
                 ->preload()
                 ->native(false)
                 ->afterStateUpdated(function (Set $set) {
