@@ -12,7 +12,7 @@ class PaymentStatusColumn extends TextColumn
 
         $this->formatStateUsing(
             fn(string $state): string => match ($state) {
-                '1' => 'belum diperiksa',
+                '1' => 'belum dibayar',
                 '2' => 'sudah dibayar',
                 '3' => 'siap dibayar',
                 '4' => 'periksa ulang',

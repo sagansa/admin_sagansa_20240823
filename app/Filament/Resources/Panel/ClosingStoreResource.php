@@ -3,8 +3,6 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Closings;
-use App\Filament\Clusters\Purchases;
-use App\Filament\Clusters\Sales;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\ImageInput;
@@ -32,6 +30,7 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AccountCashless;
+use Filament\Tables\Filters\SelectFilter;
 
 class ClosingStoreResource extends Resource
 {
@@ -327,7 +326,10 @@ class ClosingStoreResource extends Resource
 
                 StatusColumn::make('status'),
             ])
-            ->filters([])
+            ->filters([
+                SelectFilter::make('store_id')
+                    ->relationship('store', 'nickname')
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ViewAction::make(),
