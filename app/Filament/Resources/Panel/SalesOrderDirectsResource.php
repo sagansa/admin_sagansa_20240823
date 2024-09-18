@@ -152,6 +152,7 @@ class SalesOrderDirectsResource extends Resource
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\ViewAction::make(),
                     Action::make('Update Payment Status To Valid')
+                        ->visible(fn ($record) => Auth::user()->hasRole('admin') && $record->payment_status != 2)
                         ->icon('heroicon-o-pencil-square')
                         ->action(function ($record) {
                             $record->update(['payment_status' => 2]);
