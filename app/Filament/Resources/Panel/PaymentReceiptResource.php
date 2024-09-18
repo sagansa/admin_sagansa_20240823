@@ -11,6 +11,7 @@ use App\Filament\Forms\Notes;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\Layout\Split;
 use App\Models\PaymentReceipt;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
@@ -233,18 +234,21 @@ class PaymentReceiptResource extends Resource
                     ->visibility('public')
                     ->url(fn($record) => asset('storage/' . $record->image_adjust)),
 
-                SupplierColumn::make('Supplier'),
+                // Split::make([
+                    SupplierColumn::make('Supplier'),
+                    // TextColumn::make('user.name'),
+                // ]),
 
                 TextColumn::make('created_at')
                     ->date(),
 
-                TextColumn::make('payment_for')
-                    ->formatStateUsing(
-                        fn(string $state): string => match ($state) {
-                            '1' => 'fuel service',
-                            '2' => 'daily salary',
-                            '3' => 'invoice purchase',
-                    }),
+                // TextColumn::make('payment_for')
+                //     ->formatStateUsing(
+                //         fn(string $state): string => match ($state) {
+                //             '1' => 'fuel service',
+                //             '2' => 'daily salary',
+                //             '3' => 'invoice purchase',
+                //     }),
 
                 CurrencyColumn::make('total_amount'),
 

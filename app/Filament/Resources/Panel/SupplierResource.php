@@ -15,6 +15,8 @@ use Livewire\Component;
 use Filament\Forms\Form;
 use App\Models\Supplier;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
@@ -26,6 +28,7 @@ use App\Filament\Resources\Panel\SupplierResource\RelationManagers;
 use App\Models\DeliveryAddress;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Forms\Components\Group;
+use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Collection;
 
 class SupplierResource extends Resource
@@ -97,10 +100,8 @@ class SupplierResource extends Resource
 
                         SupplierStatusSelectInput::make('status'),
 
-
                     ]),
                 ]) ->columnSpan(['lg' => 1]),
-
 
                 ]),
             Section::make()->schema([
@@ -116,36 +117,56 @@ class SupplierResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                ImageOpenUrlColumn::make('image')
-                    ->url(fn($record) => asset('storage/' . $record->image)),
+                Split::make([
+                    Stack::make([
+                        ImageOpenUrlColumn::make('image')
+                            ->url(fn($record) => asset('storage/' . $record->image))
+                            ->alignLeft(),
 
-                TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
+                        TextColumn::make('name')
+                            ->weight('medium')
+                            ->sortable()
+                            ->searchable()
+                            ->alignLeft(),
 
-                TextColumn::make('city.name'),
+                        TextColumn::make('city.name')->alignLeft(),
+                    ])->space(),
 
-                TextColumn::make('bank.name')
-                    ->sortable(),
+                    Stack::make([
+                        TextColumn::make('bank.name')
+                            ->sortable()
+                            ->weight('medium')
+                            ->alignLeft(),
 
-                TextColumn::make('bank_account_name')
-                    ->searchable()
-                    ->sortable(),
+                        TextColumn::make('bank_account_name')
+                            ->searchable()
+                            ->sortable()
+                            ->alignLeft(),
 
-                TextColumn::make('bank_account_no')
-                    ->searchable(),
+                        TextColumn::make('bank_account_no')
+                            ->searchable()
+                            ->alignLeft(),
+                    ])->space(),
 
-                StatusSupplierColumn::make('status'),
+                    Stack::make([
+                        StatusSupplierColumn::make('status')
+                            ->weight('medium')
+                            ->alignLeft(),
 
-                TextColumn::make('user.name'),
+                        TextColumn::make('user.name')
+                            ->alignLeft(),
+                    ])->space(),
+                ])->from('md'),
             ])
             ->filters([
                 SelectFilter::make('bank')
                     ->relationship('bank', 'name')
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                // Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    // Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

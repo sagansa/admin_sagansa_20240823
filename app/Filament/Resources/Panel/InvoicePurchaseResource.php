@@ -22,6 +22,7 @@ use App\Filament\Resources\Panel\InvoicePurchaseResource\Pages;
 use App\Filament\Tables\InvoicePurchaseTable;
 use App\Models\DetailRequest;
 use App\Models\Supplier;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -60,22 +61,38 @@ class InvoicePurchaseResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Section::make()->schema([
-                Grid::make(['default' => 1])->schema(
-                    static::getDetailsFormHeadSchema()),
-            ]),
+            // Section::make()->schema([
+            //     Grid::make(['default' => 1])->schema(
+            //         static::getDetailsFormHeadSchema()),
+            // ]),
 
-            Section::make()->schema([
-                Grid::make(['default' => 1])->schema([
-                    static::getItemsRepeater()
+            // Section::make()->schema([
+            //     Grid::make(['default' => 1])->schema([
+            //         static::getItemsRepeater()
+            //     ])
+            // ]),
+
+            // Section::make()->schema([
+            //     Grid::make(['default' => 1])->schema(
+            //         static::getDetailsFormBottomSchema()),
+            // ]),
+
+            Group::make()
+                ->schema([
+                    Section::make()
+                        ->schema(static::getDetailsFormHeadSchema())
+                        ->columns(2),
+
+                    Section::make()
+                        ->schema([static::getItemsRepeater()]),
                 ])
-            ]),
+                ->columnSpan(['lg' => fn (?InvoicePurchase $record) => $record === null ? 3 : 2]),
 
-            Section::make()->schema([
-                Grid::make(['default' => 1])->schema(
-                    static::getDetailsFormBottomSchema()),
-            ]),
-        ]);
+            Section::make()
+                ->schema(static::getDetailsFormBottomSchema())
+                ->columnSpan(['lg' => 1]),
+        ])
+        ->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -162,6 +179,17 @@ class InvoicePurchaseResource extends Resource
                 ->disk('public')
                 ->directory('images/InvoicePurchase'),
 
+            Select::make('supplier_id')
+                ->required()
+                ->relationship(
+                    name: 'supplier',
+                    modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '3')->orderBy('name', 'asc'),
+                )
+                ->getOptionLabelFromRecordUsing(fn (Supplier $record) => "{$record->supplier_name}")
+                ->searchable()
+                ->preload()
+                ->native(false),
+
             StoreSelect::make('store_id'),
 
             Select::make('payment_type_id')
@@ -178,17 +206,6 @@ class InvoicePurchaseResource extends Resource
                 // ->afterStateUpdated(function (Set $set) {
                     // $set('detailInvoices', null);
                 // }),
-
-            Select::make('supplier_id')
-                ->required()
-                ->relationship(
-                    name: 'supplier',
-                    modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '3')->orderBy('name', 'asc'),
-                )
-                ->getOptionLabelFromRecordUsing(fn (Supplier $record) => "{$record->supplier_name}")
-                ->searchable()
-                ->preload()
-                ->native(false),
 
             DateInput::make('date'),
 
@@ -231,7 +248,9 @@ class InvoicePurchaseResource extends Resource
             ->relationship()
             ->schema([
                 Select::make('detail_request_id')
-                    ->label('Detail Order')
+                    // ->label('Detail Order')
+                    ->hiddenLabel()
+                    ->placeholder('product')
                     ->relationship(
                         name: 'detailRequest',
                         modifyQueryUsing: function (Builder $query, callable $get) {
@@ -261,6 +280,8 @@ class InvoicePurchaseResource extends Resource
                     ->columnSpan(['md' => 4]),
 
                 TextInput::make('quantity_product')
+                    ->hiddenLabel()
+                    ->placeholder('quantity')
                     ->required()
                     ->reactive()
                     ->minValue(1)
@@ -272,6 +293,8 @@ class InvoicePurchaseResource extends Resource
                     ->columnSpan(['md' => 2]),
 
                 TextInput::make('subtotal_invoice')
+                    ->hiddenLabel()
+                    ->placeholder('subtotal')
                     ->required()
                     ->reactive()
                     ->prefix('Rp')
