@@ -85,24 +85,14 @@ class SalesOrderDirectsResource extends Resource
                     ->label('delivery')
                     ->url(fn($record) => asset('storage/' . $record->image_delivery)),
 
+                TextColumn::make('store.nickname'),
+
                 TextColumn::make('delivery_date')
                     ->label('Date'),
 
                 TextColumn::make('deliveryService.name'),
 
                 DeliveryAddressColumn::make('deliveryAddress'),
-                    // ->formatStateusing(
-                    //     fn($record): string => '<ul>' . implode('', [
-                    //         '<li>' . ($record->deliveryAddress->name ?? '') . '</li>',
-                    //         '<li>' . ($record->deliveryAddress->recipient_name ?? '') . ' - ' . ($record->deliveryAddress->recipient_telp_no ?? '') . '</li>',
-                    //         '<li>' . ($record->deliveryAddress->address ?? '') . '</li>',
-                    //         '<li>' . ($record->deliveryAddress->subdistrict->name ?? '') . ', ' . ($record->deliveryAddress->district->name ?? '') . '</li>',
-                    //         '<li>' . ($record->deliveryAddress->city->name  ?? ''). ', ' . ($record->deliveryAddress->province->name ?? '') . '</li>',
-                    //         '<li>' . ($record->deliveryAddress->postalCode->postal_code ?? '') . '</li>',
-                    //     ]) . '</ul>'
-                    // )
-                    // ->html()
-                    // ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('transferToAccount.transfer_account_name'),
 
@@ -135,6 +125,8 @@ class SalesOrderDirectsResource extends Resource
 
                 TextColumn::make('orderedBy.name')
                     ->visible(fn () => Auth::user()->hasRole('admin') || Auth::user()->hasRole('storage-staff')),
+
+                TextColumn::make('received_by'),
 
                 TextColumn::make('assignedBy.name')
                     ->visible(fn () => Auth::user()->hasRole('admin')),
@@ -222,7 +214,7 @@ class SalesOrderDirectsResource extends Resource
                 ->native(false),
 
             Placeholder::make('delivery_address')
-                ->hidden(fn ($operation) => $operation === 'create')
+                ->hidden(fn ($operation) => $operation === 'create' || Auth::user()->hasRole('customer'))
                 ->content(fn (SalesOrderDirect $record): string => $record->deliveryAddress->delivery_address_name),
 
             Select::make('delivery_address_id')
@@ -303,8 +295,11 @@ class SalesOrderDirectsResource extends Resource
                     '4' => 'siap dikirim',
                     '5' => 'perbaiki',
                     '6' => 'dikembalikan'
-                    ]
-                ),
+                ]),
+
+            TextInput::make('received_by')
+                ->hidden(fn ($operation) => $operation === 'create')
+                ->disabled(fn () => Auth::user()->hasRoler('customer')),
 
             ImageInput::make('image_delivery')
                 ->hidden(fn () => Auth::user()->hasRole('customer'))

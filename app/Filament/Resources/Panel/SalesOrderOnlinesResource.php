@@ -119,6 +119,8 @@ class SalesOrderOnlinesResource extends Resource
                     ->label('Processed By')
                     ->toggleable(isToggledHiddenByDefault: true),
 
+                TextColumn::make('received_by'),
+
                 TextColumn::make('total_price')
                     ->label('Total Price')
                     ->visible(fn () => Auth::user()->hasRole('admin'))
@@ -283,6 +285,10 @@ class SalesOrderOnlinesResource extends Resource
                     '5' => 'perbaiki',
                     '6' => 'dikembalikan'
                 ]),
+
+            TextInput::make('received_by')
+                ->hidden(fn ($operation) => $operation === 'create')
+                ->disabled(fn () => Auth::user()->hasRole('admin')),
 
             ImageInput::make('image_delivery')
                 ->label('Delivered')

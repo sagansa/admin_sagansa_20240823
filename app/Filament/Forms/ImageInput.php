@@ -19,6 +19,7 @@ class ImageInput extends FileUpload
             ->columnSpan([
                 'full'
             ])
-            ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']);
+            ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1'])
+            ;
     }
 }

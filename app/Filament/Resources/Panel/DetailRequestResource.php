@@ -15,6 +15,7 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\Panel\DetailRequestResource\Pages;
 use App\Filament\Resources\Panel\DetailRequestResource\RelationManagers;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -118,7 +119,7 @@ class DetailRequestResource extends Resource
                     ->label('Product'),
                 TextColumn::make('requestPurchase.date')
                     ->label('Request Date'),
-                TextColumn::make('product.paymentType.name')
+                TextColumn::make('paymentType.name')
                     ->label('Payment Type'),
                 TextColumn::make('store.nickname')
                     ->label('Store'),
@@ -175,6 +176,12 @@ class DetailRequestResource extends Resource
                 ActionGroup::make([
                     Tables\Actions\EditAction::make(),
                     // Tables\Actions\ViewAction::make(),
+                    Action::make('Update Payment Type To Cash')
+                        ->icon('heroicon-o-pencil-square')
+                        ->action(function ($record) {
+                            $record->update(['payment_type_id' => 2]);
+                        })
+                        ->requiresConfirmation(),
                 ])
             ])
             ->bulkActions([
