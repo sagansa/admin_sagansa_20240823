@@ -18,6 +18,11 @@ class ListSalesOrderOnlines extends ListRecords
         ];
     }
 
+    protected function getHeaderWidgets(): array
+    {
+        return SalesOrderOnlinesResource::getWidgets();
+    }
+
     public function getTabs(): array
     {
         return [

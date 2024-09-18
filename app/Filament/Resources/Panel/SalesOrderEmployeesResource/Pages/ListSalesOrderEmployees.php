@@ -18,6 +18,11 @@ class ListSalesOrderEmployees extends ListRecords
         ];
     }
 
+    protected function getHeaderWidgets(): array
+    {
+        return SalesOrderEmployeesResource::getWidgets();
+    }
+
     public function getTabs(): array
     {
         return [

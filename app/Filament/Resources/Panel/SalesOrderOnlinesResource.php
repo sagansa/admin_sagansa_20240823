@@ -29,6 +29,7 @@ use App\Filament\Forms\DeliveryAddressForm;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\SalesProductForm;
 use App\Filament\Forms\StoreSelect;
+use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Widgets\SalesOrderOnlinesStat;
 use App\Models\SalesOrderOnline;
 use App\Models\Store;
 use Filament\Tables\Actions\ActionGroup;
@@ -137,7 +138,7 @@ class SalesOrderOnlinesResource extends Resource
             ])
             ->filters([
                 SelectStoreFilter::make('store_id'),
-                DateFilter::make('delivery_date'),
+                // DateFilter::make('delivery_date'),
 
             ])
             ->actions([
@@ -182,6 +183,13 @@ class SalesOrderOnlinesResource extends Resource
     {
         return [
             //
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            SalesOrderOnlinesStat::class,
         ];
     }
 

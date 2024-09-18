@@ -12,6 +12,7 @@ use App\Filament\Forms\SalesProductForm;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\StoreSelect;
 use App\Filament\Resources\Panel\SalesOrderEmployeesResource\Pages;
+use App\Filament\Resources\Panel\SalesOrderEmployeesResource\Widgets\SalesOrderEmployeesStat;
 use App\Models\DeliveryAddress;
 use App\Models\Store;
 use App\Models\TransferToAccount;
@@ -132,6 +133,13 @@ class SalesOrderEmployeesResource extends Resource
     {
         return [
             //
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            SalesOrderEmployeesStat::class,
         ];
     }
 

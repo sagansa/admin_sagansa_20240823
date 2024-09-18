@@ -27,6 +27,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use App\Filament\Forms\SalesProductForm;
 use App\Filament\Forms\StoreSelect;
+use App\Filament\Resources\Panel\SalesOrderDirectsResource\Widgets\SalesOrderDirectsStat;
 use App\Models\DeliveryAddress;
 use App\Models\TransferToAccount;
 use Filament\Tables\Columns\Summarizers\Sum;
@@ -156,7 +157,7 @@ class SalesOrderDirectsResource extends Resource
             ])
             ->filters([
                 SelectStoreFilter::make('store_id'),
-                DateFilter::make('delivery_date'),
+                // DateFilter::make('delivery_date'),
                 SelectFilter::make('transfer_to_account_id')
                     // ->relationship('transferToAccount', 'transfer_account_name'),
             ])
@@ -185,6 +186,13 @@ class SalesOrderDirectsResource extends Resource
     {
         return [
             // ProductsRelationManager::class,
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            SalesOrderDirectsStat::class,
         ];
     }
 

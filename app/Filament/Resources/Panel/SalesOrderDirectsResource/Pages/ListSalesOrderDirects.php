@@ -18,6 +18,11 @@ class ListSalesOrderDirects extends ListRecords
         ];
     }
 
+    protected function getHeaderWidgets(): array
+    {
+        return SalesOrderDirectsResource::getWidgets();
+    }
+
     public function getTabs(): array
     {
         return [
