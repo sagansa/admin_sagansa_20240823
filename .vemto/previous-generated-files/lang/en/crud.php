@@ -2668,11 +2668,11 @@ return [
                 'placeholder' => 'Notes',
             ],
             'created_by_id' => [
-                'label' => 'Created by id',
+                'label' => 'Created by',
                 'placeholder' => 'Created by id',
             ],
             'approved_by_id' => [
-                'label' => 'Approved by id',
+                'label' => 'Approved by',
                 'placeholder' => 'Approved by id',
             ],
         ],
@@ -2714,15 +2714,13 @@ return [
         ],
     ],
     'hygieneOfRooms' => [
-        'itemTitle' => 'Hygiene Of Room',
-        'collectionTitle' => 'Hygiene Of Rooms',
         'inputs' => [
             'hygiene_id' => [
                 'label' => 'Hygiene',
                 'placeholder' => 'Hygiene id',
             ],
             'room_id' => [
-                'label' => 'Room',
+                'label' => 'Room id',
                 'placeholder' => 'Room id',
             ],
             'image' => [
@@ -2750,6 +2748,8 @@ return [
                 'label' => '',
             ],
         ],
+        'itemTitle' => 'Hygiene Of Room',
+        'collectionTitle' => 'Hygiene Of Rooms',
     ],
     'locations' => [
         'itemTitle' => 'Location',

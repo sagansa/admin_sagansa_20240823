@@ -28,6 +28,8 @@ class PaymentReceiptFactory extends Factory
             'payment_for' => fake()->numberBetween(0, 127),
             'image_adjust' => fake()->text(255),
             'notes' => fake()->text(),
+            'supplier_id' => \App\Models\Supplier::factory(),
+            'user_id' => \App\Models\User::factory(),
         ];
     }
 }

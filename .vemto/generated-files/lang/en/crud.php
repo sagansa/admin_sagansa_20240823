@@ -118,6 +118,14 @@ return [
                 'label' => 'Notes',
                 'placeholder' => 'Notes',
             ],
+            'supplier_id' => [
+                'label' => 'Supplier',
+                'placeholder' => 'Supplier id',
+            ],
+            'user_id' => [
+                'label' => 'User',
+                'placeholder' => 'User id',
+            ],
         ],
         'filament' => [
             'image' => [
@@ -149,6 +157,20 @@ return [
             ],
             'notes' => [
                 'helper_text' => '',
+                'label' => '',
+            ],
+            'supplier_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'user_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
                 'label' => '',
             ],
         ],
@@ -2646,11 +2668,11 @@ return [
                 'placeholder' => 'Notes',
             ],
             'created_by_id' => [
-                'label' => 'Created by id',
+                'label' => 'Created by',
                 'placeholder' => 'Created by id',
             ],
             'approved_by_id' => [
-                'label' => 'Approved by id',
+                'label' => 'Approved by',
                 'placeholder' => 'Approved by id',
             ],
         ],
@@ -2692,15 +2714,13 @@ return [
         ],
     ],
     'hygieneOfRooms' => [
-        'itemTitle' => 'Hygiene Of Room',
-        'collectionTitle' => 'Hygiene Of Rooms',
         'inputs' => [
             'hygiene_id' => [
                 'label' => 'Hygiene',
                 'placeholder' => 'Hygiene id',
             ],
             'room_id' => [
-                'label' => 'Room',
+                'label' => 'Room id',
                 'placeholder' => 'Room id',
             ],
             'image' => [
@@ -2728,6 +2748,8 @@ return [
                 'label' => '',
             ],
         ],
+        'itemTitle' => 'Hygiene Of Room',
+        'collectionTitle' => 'Hygiene Of Rooms',
     ],
     'locations' => [
         'itemTitle' => 'Location',

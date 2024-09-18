@@ -97,5 +97,6 @@ class DatabaseSeeder extends Seeder
         $this->call(InvoicePurchasePaymentReceiptSeeder::class);
         $this->call(UserCashlessSeeder::class);
         $this->call(StorageStockSeeder::class);
+        $this->call(ProductStorageStockSeeder::class);
     }
 }

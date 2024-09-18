@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "af4894db-c709-49b8-a2cf-10b76d3f19dc",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DeliveryAddressResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\DeliveryAddressResource;\nuse Filament\\Resources\\Components\\Tab;\nuse Illuminate\\Support\\Facades\\Auth;\nuse Illuminate\\Database\\Eloquent\\Builder;\n\nclass ListDeliveryAddresses extends ListRecords\n{\n    protected static string $resource = DeliveryAddressResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n\n    public function getTabs(): array\n    {\n        return [\n            null => Tab::make('All'),\n            'direct' => Tab::make()->query(fn ($query) => $query->where('for', '1')),\n            'employee' => Tab::make()->query(fn ($query) => $query->where('for', '2')),\n            'online' => Tab::make()->query(fn ($query) => $query->where('for', '3')),\n        ];\n    }\n}\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DeliveryAddressResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\DeliveryAddressResource;\n\nclass ListDeliveryAddresses extends ListRecords\n{\n    protected static string $resource = DeliveryAddressResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n}\n"
+        }
+    ]
+}

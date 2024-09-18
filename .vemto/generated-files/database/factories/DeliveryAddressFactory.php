@@ -35,6 +35,7 @@ class DeliveryAddressFactory extends Factory
             'district_id' => \App\Models\District::factory(),
             'subdistrict_id' => \App\Models\Subdistrict::factory(),
             'postal_code_id' => \App\Models\PostalCode::factory(),
+            'user_id' => \App\Models\User::factory(),
         ];
     }
 }
