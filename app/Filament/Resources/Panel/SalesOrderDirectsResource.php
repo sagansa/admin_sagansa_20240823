@@ -103,6 +103,18 @@ class SalesOrderDirectsResource extends Resource
 
                 DeliveryAddressColumn::make('deliveryAddress'),
 
+                TextColumn::make('receipt_no')->searchable(),
+
+                TextColumn::make('detailSalesOrders')
+                    ->label('Orders')
+                    ->html()
+                    ->formatStateUsing(function (SalesOrderDirect $record) {
+                        return implode('<br>', $record->detailSalesOrders->map(function ($item) {
+                            return "{$item->product->name} ({$item->quantity} {$item->product->unit->unit})";
+                        })->toArray());
+                    })
+                    ->extraAttributes(['class' => 'whitespace-pre-wrap']),
+
                 TextColumn::make('transferToAccount.transfer_account_name')
                     ->hidden(fn () => Auth::user()->hasRole('storage-staff')),
 
@@ -120,7 +132,7 @@ class SalesOrderDirectsResource extends Resource
                         )
                         ->label('')
                         ->prefix('Rp '))
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('total_price')
                     ->visible(fn ($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('customer'))
@@ -132,8 +144,6 @@ class SalesOrderDirectsResource extends Resource
                         )
                         ->label('')
                         ->prefix('Rp ')),
-
-                TextColumn::make('receipt_no')->searchable(),
 
                 TextColumn::make('received_by')
                     ->toggleable(isToggledHiddenByDefault: false),
