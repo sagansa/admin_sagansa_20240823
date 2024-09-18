@@ -9,6 +9,10 @@ class HygieneOfRoom extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'image' => 'array',
+    ];
+
     protected $guarded = [];
 
     public function hygiene()

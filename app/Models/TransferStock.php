@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TransferStock extends Model
 {
@@ -26,12 +28,12 @@ class TransferStock extends Model
         return $this->belongsTo(User::class, 'approved_by_id');
     }
 
-    public function receivedBy()
+    public function receivedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'received_by_id');
     }
 
-    public function sentBy()
+    public function sentBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'sent_by_id');
     }
@@ -39,5 +41,10 @@ class TransferStock extends Model
     public function products()
     {
         return $this->belongsToMany(Product::class);
+    }
+
+    public function productTransferStocks(): HasMany
+    {
+        return $this->hasMany(ProductTransferStock::class);
     }
 }

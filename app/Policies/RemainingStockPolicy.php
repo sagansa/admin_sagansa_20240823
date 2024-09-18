@@ -39,7 +39,7 @@ class RemainingStockPolicy
      */
     public function update(User $user, RemainingStock $remainingStock): bool
     {
-        return $user->can('update_panel::remaining::stock') && $remainingStock->status === 2;
+        return $user->can('update_panel::remaining::stock') && $remainingStock->status !== 2;
     }
 
     /**

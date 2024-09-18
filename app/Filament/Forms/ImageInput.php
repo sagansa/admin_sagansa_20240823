@@ -13,6 +13,7 @@ class ImageInput extends FileUpload
         $this->rules(['image'])
             // ->hiddenLabel()
             ->nullable()
+            ->openable()
             ->maxSize(1024)
             ->image()
             ->imageEditor()

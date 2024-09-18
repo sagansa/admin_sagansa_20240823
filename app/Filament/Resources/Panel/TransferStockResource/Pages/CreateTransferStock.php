@@ -9,4 +9,12 @@ use App\Filament\Resources\Panel\TransferStockResource;
 class CreateTransferStock extends CreateRecord
 {
     protected static string $resource = TransferStockResource::class;
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+
+        $data['status'] = 1;
+
+        return $data;
+    }
 }

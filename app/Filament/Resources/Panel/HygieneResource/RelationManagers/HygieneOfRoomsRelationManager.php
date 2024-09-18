@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel\HygieneResource\RelationManagers;
 
+use App\Filament\Forms\ImageInput;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -13,13 +14,15 @@ use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\FileUpload;
 use App\Filament\Resources\Panel\HygieneResource;
+use App\Models\HygieneOfRoom;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables\Actions\ActionGroup;
 
 class HygieneOfRoomsRelationManager extends RelationManager
 {
     protected static string $relationship = 'hygieneOfRooms';
 
-    protected static ?string $recordTitleAttribute = 'image';
+    protected static ?string $recordTitleAttribute = 'room.name';
 
     public function form(Form $form): Form
     {
@@ -28,17 +31,13 @@ class HygieneOfRoomsRelationManager extends RelationManager
                 Select::make('room_id')
                     ->required()
                     ->relationship('room', 'name')
-                    ->searchable()
                     ->preload()
                     ->native(false),
 
-                FileUpload::make('image')
-                    ->rules(['image'])
-                    ->nullable()
-                    ->maxSize(1024)
-                    ->image()
-                    ->imageEditor()
-                    ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
+                ImageInput::make('image')
+                    ->multiple()
+                    ->disk('public')
+                    ->directory('images/Hygiene'),
             ]),
         ]);
     }
@@ -49,13 +48,18 @@ class HygieneOfRoomsRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('room.name'),
 
-                ImageColumn::make('image')->visibility('public'),
+                ImageColumn::make('image')
+                    ->label('Images')
+                    ->circular()
+                    ->stacked(),
             ])
             ->filters([])
             ->headerActions([Tables\Actions\CreateAction::make()])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

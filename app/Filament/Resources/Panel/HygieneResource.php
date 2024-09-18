@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Store;
+use App\Filament\Filters\SelectStoreFilter;
+use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
@@ -19,6 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\HygieneResource\Pages;
 use App\Filament\Resources\Panel\HygieneResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class HygieneResource extends Resource
 {
@@ -54,23 +57,8 @@ class HygieneResource extends Resource
                 Grid::make(['default' => 1])->schema([
                     StoreSelect::make('store_id'),
 
-                    RichEditor::make('notes')
-                        ->nullable()
-                        ->string()
-                        ->fileAttachmentsVisibility('public'),
+                    Notes::make('notes'),
 
-                    Select::make('created_by_id')
-                        ->nullable()
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
-
-                    Select::make('approved_by_id')
-                        ->nullable()
-                        ->relationship('createdBy', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
                 ]),
             ]),
         ]);
@@ -81,30 +69,38 @@ class HygieneResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                TextColumn::make('store.name'),
+                TextColumn::make('store.nickname'),
 
-                TextColumn::make('notes')->limit(255),
+                TextColumn::make('created_at'),
 
-                TextColumn::make('created_by_id'),
+                TextColumn::make('createdBy.name')
+                    ->visible(fn ($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin')),
 
-                TextColumn::make('createdBy.name'),
+                TextColumn::make('approvedBy.name'),
+
+
             ])
-            ->filters([])
+            ->filters([
+                SelectStoreFilter::make('store_id'),
+            ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('id', 'desc');
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array
     {
-        return [];
+        return [RelationManagers\HygieneOfRoomsRelationManager::class];
     }
 
     public static function getPages(): array

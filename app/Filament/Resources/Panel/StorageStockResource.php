@@ -26,6 +26,7 @@ use App\Filament\Resources\Panel\StorageStockResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Support\Facades\Auth;
 
 class StorageStockResource extends Resource
@@ -82,7 +83,7 @@ class StorageStockResource extends Resource
     {
         $storageStocks = StorageStock::query();
 
-        if (!Auth::user()->hasRole('admin')) {
+        if (Auth::user()->hasRole('storage-staff')) {
             $storageStocks = $storageStocks->where('created_by_id', Auth::id());
         }
 
@@ -112,8 +113,10 @@ class StorageStockResource extends Resource
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

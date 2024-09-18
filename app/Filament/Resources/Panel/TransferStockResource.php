@@ -3,7 +3,12 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Stock;
+use App\Filament\Columns\ImageOpenUrlColumn;
+use App\Filament\Columns\StatusColumn;
+use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
+use App\Filament\Forms\Notes;
+use App\Filament\Forms\StatusSelectInput;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
@@ -23,6 +28,8 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\TransferStockResource\Pages;
 use App\Filament\Resources\Panel\TransferStockResource\RelationManagers;
+use Filament\Forms\Components\Repeater;
+use Filament\Tables\Actions\ActionGroup;
 
 class TransferStockResource extends Resource
 {
@@ -56,46 +63,68 @@ class TransferStockResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    DatePicker::make('date')
-                        ->rules(['date'])
-                        ->required()
-                        ->native(false),
 
                     ImageInput::make('image')
                         ->disk('public')
                         ->directory('images/TransferStock'),
 
-                    StoreSelect::make('from_store_id'),
+                    DateInput::make('date'),
 
-                    StoreSelect::make('to_store_id'),
-
-                    TextInput::make('status')
+                    StoreSelect::make('from_store_id')
                         ->required()
-                        ->string(),
+                        ->relationship(
+                            name: 'storeFrom',
+                            titleAttribute: 'nickname',
+                            modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),)
+                        ->preload()
+                        ->reactive()
+                        ->native(false),
 
-                    RichEditor::make('notes')
+                    StoreSelect::make('to_store_id')
                         ->required()
-                        ->string()
-                        ->fileAttachmentsVisibility('public'),
+                        ->relationship(
+                            name: 'storeTo',
+                            titleAttribute: 'nickname',
+                            modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),)
+                        ->preload()
+                        ->reactive()
+                        ->native(false),
 
-                    TextInput::make('approved_by_id')
-                        ->required()
-                        ->numeric()
-                        ->step(1),
+                    StatusSelectInput::make('status'),
 
                     Select::make('received_by_id')
                         ->required()
-                        ->relationship('receivedBy', 'name')
+                        ->relationship('receivedBy', 'name', fn (Builder $query) => $query
+                            ->whereHas('roles', fn (Builder $query) => $query
+                                ->where('name', 'staff') || $query
+                                ->where('name', 'supervisor')))
                         ->searchable()
                         ->preload()
                         ->native(false),
 
                     Select::make('sent_by_id')
                         ->required()
-                        ->relationship('approvedBy', 'name')
+                        ->relationship('sentBy', 'name', fn (Builder $query) => $query
+                            ->whereHas('roles', fn (Builder $query) => $query
+                                ->where('name', 'staff') || $query
+                                ->where('name', 'supervisor')))
                         ->searchable()
                         ->preload()
                         ->native(false),
+
+
+                ]),
+            ]),
+
+            Section::make()->schema([
+                Grid::make(['default' => 1])->schema([
+                    Repeater::make('productTransferStocks')
+                ]),
+            ]),
+
+            Section::make()->schema([
+                Grid::make(['default' => 1])->schema([
+                    Notes::make('notes'),
                 ]),
             ]),
         ]);
@@ -106,28 +135,38 @@ class TransferStockResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                TextColumn::make('date')->since(),
+                ImageOpenUrlColumn::make('image'),
 
-                ImageColumn::make('image')->visibility('public'),
+                TextColumn::make('date'),
 
-                TextColumn::make('from_store_id'),
+                TextColumn::make('storeFrom.nickname'),
 
-                TextColumn::make('storeFrom.name'),
+                TextColumn::make('storeTo.nickname'),
 
-                TextColumn::make('status'),
+                TextColumn::make('productTransferStocks', 'Product Transfer Stocks')
+                    ->label('Transfer Stocks')
+                    ->html()
+                    ->formatStateUsing(function (TransferStock $record) {
+                        return implode('<br>', $record->productTransferStocks->map(function ($productTransferStock) {
+                            return "{$productTransferStock->product->name} = {$productTransferStock->quantity} {$productTransferStock->product->unit->unit}";
+                        })->toArray());
+                    })
+                    ->extraAttributes(['class' => 'whitespace-pre-wrap']),
 
-                TextColumn::make('notes')->limit(255),
-
-                TextColumn::make('approved_by_id'),
+                StatusColumn::make('status'),
 
                 TextColumn::make('receivedBy.name'),
+
+                TextColumn::make('sentBy.name'),
 
                 TextColumn::make('approvedBy.name'),
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

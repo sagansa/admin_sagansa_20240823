@@ -23,7 +23,7 @@ class StorageStockPolicy
      */
     public function view(User $user, StorageStock $storageStock): bool
     {
-        return $user->can('view_panel::storage::stock');
+        return $user->can('view_panel::storage::stock') && $storageStock->status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class StorageStockPolicy
      */
     public function update(User $user, StorageStock $storageStock): bool
     {
-        return $user->can('update_panel::storage::stock');
+        return $user->can('update_panel::storage::stock') && $storageStock->status !== 2;
     }
 
     /**

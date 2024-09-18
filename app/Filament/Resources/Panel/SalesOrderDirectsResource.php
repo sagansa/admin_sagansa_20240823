@@ -333,7 +333,7 @@ class SalesOrderDirectsResource extends Resource
 
             TextInput::make('received_by')
                 ->hidden(fn ($operation) => $operation === 'create')
-                ->disabled(fn () => Auth::user()->hasRoler('customer')),
+                ->disabled(fn () => Auth::user()->hasRole('customer')),
 
             ImageInput::make('image_delivery')
                 ->hidden(fn () => Auth::user()->hasRole('customer'))

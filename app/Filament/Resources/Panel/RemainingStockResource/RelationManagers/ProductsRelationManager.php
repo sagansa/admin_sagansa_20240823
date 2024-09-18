@@ -52,7 +52,7 @@ class ProductsRelationManager extends RelationManager
                 TextColumn::make('quantity')
                     ->suffix(function ($record) {
                         $product = Product::find($record->id);
-                        return $product ? $product->unit->unit : '';
+                        return $product ? ' ' . $product->unit->unit . ' ' : ''; // added a space before and after the unit
                     }),
             ])
             ->filters([])
