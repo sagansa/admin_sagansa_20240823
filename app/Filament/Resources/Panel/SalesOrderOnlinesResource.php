@@ -6,6 +6,8 @@ use App\Filament\Clusters\Sales;
 use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\DeliveryStatusColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
+use App\Filament\Filters\DateFilter;
+use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Pages;
 use App\Models\DeliveryAddress;
 use Filament\Forms\Components\DatePicker;
@@ -133,26 +135,8 @@ class SalesOrderOnlinesResource extends Resource
                         ->prefix('Rp ')),
             ])
             ->filters([
-                SelectFilter::make('store_id')
-                        ->searchable()
-                        ->label('Store')
-                        ->relationship('store', 'nickName'),
-                Filter::make('delivery_date')
-                        ->form([
-                            DatePicker::make('date_from'),
-                            DatePicker::make('date_until'),
-                        ])
-                        ->query(function (Builder $query, array $data): Builder {
-                            return $query
-                                ->when(
-                                    $data['date_from'],
-                                    fn (Builder $query, $date): Builder => $query->whereDate('delivery_date', '>=', $date),
-                                )
-                                ->when(
-                                    $data['date_until'],
-                                    fn (Builder $query, $date): Builder => $query->whereDate('delivery_date', '<=', $date),
-                                );
-                        })
+                SelectStoreFilter::make('store_id'),
+                DateFilter::make('delivery_date'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()

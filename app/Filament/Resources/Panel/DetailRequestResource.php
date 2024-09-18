@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Purchases;
+use App\Filament\Filters\DateFilter;
 use App\Filament\Filters\SelectPaymentTypeFilter;
 use App\Filament\Filters\SelectStoreFilter;
 use Filament\Forms;
@@ -171,6 +172,7 @@ class DetailRequestResource extends Resource
             ->filters([
                 SelectStoreFilter::make('store_id'),
                 SelectPaymentTypeFilter::make('payment_type_id'),
+                DateFilter::make('delivery_date'),
             ])
             ->actions([
                 ActionGroup::make([

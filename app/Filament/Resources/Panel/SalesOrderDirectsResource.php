@@ -7,6 +7,8 @@ use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\DeliveryStatusColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusColumn;
+use App\Filament\Filters\DateFilter;
+use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Forms\BottomTotalPriceForm;
 use App\Filament\Forms\DeliveryAddressForm;
 use App\Filament\Forms\ImageInput;
@@ -29,6 +31,8 @@ use App\Models\TransferToAccount;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Placeholder;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Support\HtmlString;
 
 class SalesOrderDirectsResource extends Resource
@@ -85,7 +89,12 @@ class SalesOrderDirectsResource extends Resource
                     ->label('delivery')
                     ->url(fn($record) => asset('storage/' . $record->image_delivery)),
 
-                TextColumn::make('store.nickname'),
+                TextColumn::make('orderedBy.name')
+                    ->searchable()
+                    ->visible(fn () => Auth::user()->hasRole('admin') || Auth::user()->hasRole('storage-staff')),
+
+                TextColumn::make('store.nickname')
+                    ->hidden(fn () => Auth::user()->hasRole('customer')),
 
                 TextColumn::make('delivery_date')
                     ->label('Date'),
@@ -94,9 +103,11 @@ class SalesOrderDirectsResource extends Resource
 
                 DeliveryAddressColumn::make('deliveryAddress'),
 
-                TextColumn::make('transferToAccount.transfer_account_name'),
+                TextColumn::make('transferToAccount.transfer_account_name')
+                    ->hidden(fn () => Auth::user()->hasRole('storage-staff')),
 
-                StatusColumn::make('payment_status'),
+                StatusColumn::make('payment_status')
+                    ->hidden(fn () => Auth::user()->hasRole('storage-staff')),
 
                 DeliveryStatusColumn::make('delivery_status'),
 
@@ -108,7 +119,8 @@ class SalesOrderDirectsResource extends Resource
                             thousandsSeparator: '.'
                         )
                         ->label('')
-                        ->prefix('Rp ')),
+                        ->prefix('Rp '))
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('total_price')
                     ->visible(fn ($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('customer'))
@@ -121,23 +133,31 @@ class SalesOrderDirectsResource extends Resource
                         ->label('')
                         ->prefix('Rp ')),
 
-                TextColumn::make('receipt_no'),
+                TextColumn::make('receipt_no')->searchable(),
 
-                TextColumn::make('orderedBy.name')
-                    ->visible(fn () => Auth::user()->hasRole('admin') || Auth::user()->hasRole('storage-staff')),
-
-                TextColumn::make('received_by'),
+                TextColumn::make('received_by')
+                    ->toggleable(isToggledHiddenByDefault: false),
 
                 TextColumn::make('assignedBy.name')
-                    ->visible(fn () => Auth::user()->hasRole('admin')),
-
+                    ->visible(fn () => Auth::user()->hasRole('admin'))
+                    ->toggleable(isToggledHiddenByDefault: false),
 
             ])
             ->filters([
-                //
+                SelectStoreFilter::make('store_id'),
+                DateFilter::make('delivery_date'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                    Action::make('Update Payment Status To Valid')
+                        ->icon('heroicon-o-pencil-square')
+                        ->action(function ($record) {
+                            $record->update(['payment_status' => 2]);
+                        })
+                        ->requiresConfirmation(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
