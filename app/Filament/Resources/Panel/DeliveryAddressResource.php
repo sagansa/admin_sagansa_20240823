@@ -18,6 +18,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 use Humaidem\FilamentMapPicker\Fields\OSMMap;
 use Illuminate\Database\Eloquent\Builder;
@@ -235,27 +236,19 @@ class DeliveryAddressResource extends Resource
                     ->visible(fn ($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin'))
             ])
             ->filters([
-                // SelectFilter::make('for')
-                //     ->hidden(fn () => !Auth::user()->hasRole('admin'))
-                //     ->options([
-                //         '1' => 'Direct',
-                //         '2' => 'Employee',
-                //         '3' => 'Online',
-                //     ]),
-                // SelectFilter::make('user_role')
-                //     ->hidden(fn () => !Auth::user()->hasRole('admin'))
-                //     ->options([
-                //         'customer' => 'Customer',
-                //         'storage-staff' => 'Storage Staff',
-                //     ])
-                //     ->query(function (Builder $query) {
-                //         $query->join('users', 'delivery_addresses.user_id', '=', 'users.id')
-                //             ->where('users.role', request()->input('user_role'));
-                //     }),
+                SelectFilter::make('for')
+                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
+                    ->options([
+                        '1' => 'Direct',
+                        '2' => 'Employee',
+                        '3' => 'Online',
+                    ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

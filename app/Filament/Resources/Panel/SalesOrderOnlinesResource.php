@@ -31,6 +31,7 @@ use App\Filament\Forms\SalesProductForm;
 use App\Filament\Forms\StoreSelect;
 use App\Models\SalesOrderOnline;
 use App\Models\Store;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Tables\Columns\ImageColumn;
@@ -137,16 +138,19 @@ class SalesOrderOnlinesResource extends Resource
             ->filters([
                 SelectStoreFilter::make('store_id'),
                 DateFilter::make('delivery_date'),
+
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->visible(fn (SalesOrderOnline $record) => !in_array($record->delivery_status, [2])),
-                Tables\Actions\ViewAction::make()
-                    ->visible(fn (SalesOrderOnline $record) => in_array($record->delivery_status, [2])),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make()
+                        ->visible(fn (SalesOrderOnline $record) => !in_array($record->delivery_status, [2])),
+                    Tables\Actions\ViewAction::make()
+                        ->visible(fn (SalesOrderOnline $record) => in_array($record->delivery_status, [2])),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-
+                    Tables\Actions\DeleteBulkAction::make(),
                     BulkAction::make('Change Delivery Status')
                         ->icon('heroicon-m-check')
                         ->requiresConfirmation()

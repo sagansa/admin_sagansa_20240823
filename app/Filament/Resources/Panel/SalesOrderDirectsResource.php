@@ -9,6 +9,7 @@ use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Filters\DateFilter;
 use App\Filament\Filters\SelectStoreFilter;
+use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Forms\BottomTotalPriceForm;
 use App\Filament\Forms\DeliveryAddressForm;
 use App\Filament\Forms\ImageInput;
@@ -156,6 +157,8 @@ class SalesOrderDirectsResource extends Resource
             ->filters([
                 SelectStoreFilter::make('store_id'),
                 DateFilter::make('delivery_date'),
+                SelectFilter::make('transfer_to_account_id')
+                    // ->relationship('transferToAccount', 'transfer_account_name'),
             ])
             ->actions([
                 ActionGroup::make([

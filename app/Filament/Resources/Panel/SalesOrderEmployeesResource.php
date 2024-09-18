@@ -22,6 +22,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
@@ -80,7 +81,7 @@ class SalesOrderEmployeesResource extends Resource
                 DeliveryAddressColumn::make('deliveryAddress')
                     ->label('Customer'),
 
-                TextColumn::make('transferToAccount.name')
+                TextColumn::make('transferToAccount.transfer_account_name')
                     ->label('Transfer to Account'),
 
                 TextColumn::make('detailSalesOrders')
@@ -114,8 +115,10 @@ class SalesOrderEmployeesResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -137,6 +140,7 @@ class SalesOrderEmployeesResource extends Resource
         return [
             'index' => Pages\ListSalesOrderEmployees::route('/'),
             'create' => Pages\CreateSalesOrderEmployees::route('/create'),
+            // 'view' => Pages\ViewSalesOrderEmployees::route('/{record}'),
             'edit' => Pages\EditSalesOrderEmployees::route('/{record}/edit'),
         ];
     }

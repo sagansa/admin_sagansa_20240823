@@ -131,12 +131,12 @@ class DailySalaryResource extends Resource
             ->actions([
                 ActionGroup::make([
                     Tables\Actions\EditAction::make()->visible(fn ($record) => auth()->user()->can('update', $record)),
-                Tables\Actions\ViewAction::make()->visible(fn ($record) => auth()->user()->can('view', $record)),
+                    Tables\Actions\ViewAction::make()->visible(fn ($record) => auth()->user()->can('view', $record)),
                 ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\BulkAction::make('setStatusToThree')
                         ->label('Set Status to Siap Dibayar')
                         ->icon('heroicon-o-check')
