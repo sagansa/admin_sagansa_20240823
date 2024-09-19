@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\Closings;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
+use App\Filament\Filters\DateFilter;
 use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
@@ -32,7 +33,6 @@ use Filament\Forms\Set;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AccountCashless;
 use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Collection;
 
 class ClosingStoreResource extends Resource
@@ -334,6 +334,7 @@ class ClosingStoreResource extends Resource
             ])
             ->filters([
                 SelectStoreFilter::make('store_id'),
+                DateFilter::make('date'),
             ])
             ->actions([
                 ActionGroup::make([

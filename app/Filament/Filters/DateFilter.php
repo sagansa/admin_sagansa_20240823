@@ -21,11 +21,11 @@ class DateFilter extends Filter
                 return $query
                     ->when(
                         $data['date_from'],
-                        fn (Builder $query, $date): Builder => $query->whereDate('delivery_date', '>=', $date),
+                        fn (Builder $query, $date): Builder => $query->whereDate('date', '>=', $date),
                     )
                     ->when(
                         $data['date_until'],
-                        fn (Builder $query, $date): Builder => $query->whereDate('delivery_date', '<=', $date),
+                        fn (Builder $query, $date): Builder => $query->whereDate('date', '<=', $date),
                     );
             });
     }
