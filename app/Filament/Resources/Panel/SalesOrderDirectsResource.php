@@ -189,12 +189,12 @@ class SalesOrderDirectsResource extends Resource
         ];
     }
 
-    public static function getWidgets(): array
-    {
-        return [
-            SalesOrderDirectsStat::class,
-        ];
-    }
+    // public static function getWidgets(): array
+    // {
+    //     return [
+    //         SalesOrderDirectsStat::class,
+    //     ];
+    // }
 
     public static function getPages(): array
     {

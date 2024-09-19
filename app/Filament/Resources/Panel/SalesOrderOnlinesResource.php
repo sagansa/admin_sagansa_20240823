@@ -186,12 +186,12 @@ class SalesOrderOnlinesResource extends Resource
         ];
     }
 
-    public static function getWidgets(): array
-    {
-        return [
-            SalesOrderOnlinesStat::class,
-        ];
-    }
+    // public static function getWidgets(): array
+    // {
+    //     return [
+    //         SalesOrderOnlinesStat::class,
+    //     ];
+    // }
 
     public static function getPages(): array
     {

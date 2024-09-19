@@ -136,12 +136,12 @@ class SalesOrderEmployeesResource extends Resource
         ];
     }
 
-    public static function getWidgets(): array
-    {
-        return [
-            SalesOrderEmployeesStat::class,
-        ];
-    }
+    // public static function getWidgets(): array
+    // {
+    //     return [
+    //         SalesOrderEmployeesStat::class,
+    //     ];
+    // }
 
     public static function getPages(): array
     {
