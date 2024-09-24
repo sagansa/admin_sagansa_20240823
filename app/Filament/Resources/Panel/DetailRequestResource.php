@@ -16,6 +16,8 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\Panel\DetailRequestResource\Pages;
 use App\Filament\Resources\Panel\DetailRequestResource\RelationManagers;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Collection;
@@ -53,8 +55,8 @@ class DetailRequestResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            // Section::make()->schema([
-            //     Grid::make(['default' => 1])->schema([
+            Section::make()->schema([
+                Grid::make(['default' => 2])->schema([
                     Select::make('product_id')
                         ->required()
                         ->relationship('product', 'name')
@@ -101,8 +103,8 @@ class DetailRequestResource extends Resource
                         ->relationship('paymentType', 'name')
                         ->preload()
                         ->native(false),
-            //     ]),
-            // ]),
+                ]),
+            ]),
         ]);
     }
 
@@ -126,10 +128,6 @@ class DetailRequestResource extends Resource
                     ->label('Store'),
 
                 TextColumn::make('detailInvoices.quantity_product')
-                    // ->formatStateUsing(fn (DetailRequest $record) =>
-                    //     $record->detailInvoices ?
-                    //         number_format($record->detailInvoices->quantity_product, 0, ',', '.') . ' ' .
-                    //         $record->detailInvoices->product->unit->unit : '-')
                     ->formatStateUsing(fn (DetailRequest $record) => implode(', ', $record->detailInvoices->pluck('quantity_product')->all()))
                     ->label('Qty Purchase'),
 

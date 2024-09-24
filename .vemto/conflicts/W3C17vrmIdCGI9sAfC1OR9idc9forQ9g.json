@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "c31eff4d-5988-45b0-b3c9-249f7643f655",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\UtilityBillResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\UtilityBillResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateUtilityBill extends CreateRecord\n{\n    protected static string $resource = UtilityBillResource::class;\n}\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\UtilityBillResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\UtilityBillResource;\n\nclass CreateUtilityBill extends CreateRecord\n{\n    protected static string $resource = UtilityBillResource::class;\n}\n"
+        }
+    ]
+}

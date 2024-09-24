@@ -25,16 +25,14 @@ class PresenceFactory extends Factory
         return [
             'status' => fake()->word(),
             'image_in' => fake()->text(255),
-            'datetime_in' => fake()->dateTime(),
+            'start_date_time' => fake()->dateTime(),
             'latitude_in' => fake()->randomNumber(2),
             'longitude_in' => fake()->randomNumber(2),
             'image_out' => fake()->text(255),
-            'datetime_out' => fake()->dateTime(),
+            'end_date_time' => fake()->dateTime(),
             'latitude_out' => fake()->randomNumber(2),
             'longitude_out' => fake()->randomNumber(2),
-            'store_id' => \App\Models\Store::factory(),
-            'shift_store_id' => \App\Models\ShiftStore::factory(),
-            'approved_by_id' => \App\Models\User::factory(),
+            'created_by_id' => \App\Models\User::factory(),
             'approved_by_id' => \App\Models\User::factory(),
         ];
     }

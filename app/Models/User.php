@@ -535,6 +535,26 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(PaymentReceipt::class);
     }
 
+    /**
+     * Get all of the presencesCreatedBy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function presencesCreatedBy()
+    {
+        return $this->hasMany(Presence::class, 'created_by_id');
+    }
+
+    /**
+     * Get all of the presencesApprovedBy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function presencesApprovedBy()
+    {
+        return $this->hasMany(Presence::class, 'approved_by_id');
+    }
+
     protected static function boot()
     {
         parent::boot();

@@ -19,10 +19,10 @@ Route::prefix('/dashboard')
     ->group(function () {});
 
 // API
-Route::prefix('/api')
-    ->name('api.')
-    ->middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])
-    ->group(function () {});
+// Route::prefix('/api')
+//     ->name('api.')
+//     ->middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])
+//     ->group(function () {});
 
 // Site
 Route::prefix('/')->group(function () {});

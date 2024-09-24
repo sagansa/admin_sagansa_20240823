@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PresenceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +21,30 @@ Route::name('api.')
             'api.login'
         );
 
-        Route::middleware('auth:sanctum')->group(function () {});
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::get('/presences', [
+                PresenceController::class,
+                'index',
+            ])->name('presences.index');
+
+            Route::post('/presences', [
+                PresenceController::class,
+                'store',
+            ])->name('presences.store');
+
+            Route::get('/presences/{presence}', [
+                PresenceController::class,
+                'show',
+            ])->name('presences.show');
+
+            Route::put('/presences/{presence}', [
+                PresenceController::class,
+                'update',
+            ])->name('presences.update');
+
+            Route::delete('/presences/{presence}', [
+                PresenceController::class,
+                'destroy',
+            ])->name('presences.destroy');
+        });
     });

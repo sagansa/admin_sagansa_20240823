@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class ProductRemainingStock extends Pivot
+class ProductSelfConsumption extends Pivot
 {
     public $timestamps = false;
 

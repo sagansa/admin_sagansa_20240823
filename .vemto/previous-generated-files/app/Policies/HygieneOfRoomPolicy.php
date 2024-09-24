@@ -4,26 +4,23 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\HygieneOfRoom;
-use Illuminate\Auth\Access\HandlesAuthorization;
 
 class HygieneOfRoomPolicy
 {
-    use HandlesAuthorization;
-
     /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_panel::hygiene::of::room');
+        return true;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, HygieneOfRoom $hygieneOfRoom): bool
+    public function view(User $user, HygieneOfRoom $model): bool
     {
-        return $user->can('view_panel::hygiene::of::room');
+        return true;
     }
 
     /**
@@ -31,78 +28,38 @@ class HygieneOfRoomPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_panel::hygiene::of::room');
+        return true;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, HygieneOfRoom $hygieneOfRoom): bool
+    public function update(User $user, HygieneOfRoom $model): bool
     {
-        return $user->can('update_panel::hygiene::of::room');
+        return true;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, HygieneOfRoom $hygieneOfRoom): bool
+    public function delete(User $user, HygieneOfRoom $model): bool
     {
-        return $user->can('delete_panel::hygiene::of::room');
+        return true;
     }
 
     /**
-     * Determine whether the user can bulk delete.
+     * Determine whether the user can restore the model.
      */
-    public function deleteAny(User $user): bool
+    public function restore(User $user, HygieneOfRoom $model): bool
     {
-        return $user->can('delete_any_panel::hygiene::of::room');
+        return true;
     }
 
     /**
-     * Determine whether the user can permanently delete.
+     * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, HygieneOfRoom $hygieneOfRoom): bool
+    public function forceDelete(User $user, HygieneOfRoom $model): bool
     {
-        return $user->can('force_delete_panel::hygiene::of::room');
-    }
-
-    /**
-     * Determine whether the user can permanently bulk delete.
-     */
-    public function forceDeleteAny(User $user): bool
-    {
-        return $user->can('force_delete_any_panel::hygiene::of::room');
-    }
-
-    /**
-     * Determine whether the user can restore.
-     */
-    public function restore(User $user, HygieneOfRoom $hygieneOfRoom): bool
-    {
-        return $user->can('restore_panel::hygiene::of::room');
-    }
-
-    /**
-     * Determine whether the user can bulk restore.
-     */
-    public function restoreAny(User $user): bool
-    {
-        return $user->can('restore_any_panel::hygiene::of::room');
-    }
-
-    /**
-     * Determine whether the user can replicate.
-     */
-    public function replicate(User $user, HygieneOfRoom $hygieneOfRoom): bool
-    {
-        return $user->can('replicate_panel::hygiene::of::room');
-    }
-
-    /**
-     * Determine whether the user can reorder.
-     */
-    public function reorder(User $user): bool
-    {
-        return $user->can('reorder_panel::hygiene::of::room');
+        return true;
     }
 }

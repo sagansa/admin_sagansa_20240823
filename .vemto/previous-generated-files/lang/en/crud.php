@@ -3174,11 +3174,11 @@ return [
         'collectionTitle' => 'Presences',
         'inputs' => [
             'store_id' => [
-                'label' => 'Store',
+                'label' => 'Store id',
                 'placeholder' => 'Store id',
             ],
             'shift_store_id' => [
-                'label' => 'Shift store',
+                'label' => 'Shift store id',
                 'placeholder' => 'Shift store id',
             ],
             'status' => [
@@ -3218,12 +3218,20 @@ return [
                 'placeholder' => 'Longitude out',
             ],
             'created_by_id' => [
-                'label' => 'Created by',
+                'label' => 'Created by id',
                 'placeholder' => 'Created by id',
             ],
             'approved_by_id' => [
-                'label' => 'Approved by',
+                'label' => 'Approved by id',
                 'placeholder' => 'Approved by id',
+            ],
+            'start_date_time' => [
+                'label' => 'Start date time',
+                'placeholder' => 'Start date time',
+            ],
+            'end_date_time' => [
+                'label' => 'End date time',
+                'placeholder' => 'End date time',
             ],
         ],
         'filament' => [

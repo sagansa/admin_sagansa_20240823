@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "3725fc44-a67e-4d5a-9273-8a39f35bd23d",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\ClosingCourierResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\EditRecord;\nuse App\\Filament\\Resources\\Panel\\ClosingCourierResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass EditClosingCourier extends EditRecord\n{\n    protected static string $resource = ClosingCourierResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\DeleteAction::make()];\n    }\n\n    protected function mutateFormDataBeforeSave(array $data): array\n    {\n        if (Auth::user()->hasRole('admin')) {\n            $data['assigned_by_id'] = Auth::id();\n        }\n\n        return $data;\n    }\n}\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\ClosingCourierResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\EditRecord;\nuse App\\Filament\\Resources\\Panel\\ClosingCourierResource;\n\nclass EditClosingCourier extends EditRecord\n{\n    protected static string $resource = ClosingCourierResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\DeleteAction::make()];\n    }\n}\n"
+        }
+    ]
+}
