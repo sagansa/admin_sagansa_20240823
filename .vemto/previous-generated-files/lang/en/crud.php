@@ -2435,6 +2435,14 @@ return [
                 'label' => 'Longitude',
                 'placeholder' => 'Longitude',
             ],
+            'is_wfa' => [
+                'label' => 'Is wfa',
+                'placeholder' => 'Is wfa',
+            ],
+            'is_banned' => [
+                'label' => 'Is banned',
+                'placeholder' => 'Is banned',
+            ],
         ],
         'filament' => [
             'identity_no' => [
@@ -2631,6 +2639,14 @@ return [
                 'helper_text' => '',
                 'label' => '',
                 'description' => '',
+            ],
+            'is_wfa' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'is_banned' => [
+                'helper_text' => '',
+                'label' => '',
             ],
         ],
     ],
@@ -3174,12 +3190,12 @@ return [
         'collectionTitle' => 'Presences',
         'inputs' => [
             'store_id' => [
-                'label' => 'Store id',
-                'placeholder' => 'Store id',
+                'label' => 'Store',
+                'placeholder' => 'Store',
             ],
             'shift_store_id' => [
-                'label' => 'Shift store id',
-                'placeholder' => 'Shift store id',
+                'label' => 'Shift store',
+                'placeholder' => 'Shift store',
             ],
             'status' => [
                 'label' => 'Status',

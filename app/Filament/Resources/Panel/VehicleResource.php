@@ -67,7 +67,6 @@ class VehicleResource extends Resource
                         ->required()
                         ->searchable()
                         ->preload()
-                        ->native(false)
                         ->options([
                             '1' => 'motor',
                             '2' => 'mobil',
@@ -96,7 +95,6 @@ class VehicleResource extends Resource
                         ->required()
                         ->searchable()
                         ->preload()
-                        ->native(false)
                         ->options([
                             '1' => 'active',
                             '2' => 'inactive',

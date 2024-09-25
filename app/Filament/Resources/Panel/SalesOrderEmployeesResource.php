@@ -167,8 +167,7 @@ class SalesOrderEmployeesResource extends Resource
                 ->required()
                 ->default('today')
                 ->rules(['date'])
-                ->required()
-                ->native(false),
+                ->required(),
 
             Select::make('delivery_address_id')
                 ->label('Delivery Address')
@@ -181,7 +180,6 @@ class SalesOrderEmployeesResource extends Resource
                 ->getOptionLabelFromRecordUsing(fn (DeliveryAddress $record) => "{$record->delivery_address_name}")
                 ->searchable()
                 ->preload()
-                ->native(false)
                 ->createOptionForm(
                     DeliveryAddressForm::schema()
                 ),
@@ -194,8 +192,7 @@ class SalesOrderEmployeesResource extends Resource
                     ->get()
                     ->mapWithKeys(function ($item) {
                         return [$item->id => $item->transfer_name];
-                    }))
-                ->native(false),
+                    })),
 
             Select::make('payment_status')
                 ->required()

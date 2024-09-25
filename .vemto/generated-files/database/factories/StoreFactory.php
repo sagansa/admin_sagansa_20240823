@@ -29,6 +29,8 @@ class StoreFactory extends Factory
             'email' => fake()
                 ->unique()
                 ->safeEmail(),
+            'latitude' => fake()->latitude(),
+            'longitude' => fake()->longitude(),
             'status' => fake()->word(),
             'user_id' => \App\Models\User::factory(),
         ];

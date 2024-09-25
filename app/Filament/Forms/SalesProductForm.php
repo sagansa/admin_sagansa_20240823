@@ -55,15 +55,10 @@ class SalesProductForm
                         self::updateTotalPrice($get, $set);
                     }),
 
-                TextInput::make('unit_price')
-                    ->required()
+                CurrencyInput::make('unit_price')
                     ->label('Unit Price')
                     ->debounce(2000)
-                    ->minValue(0)
-                    ->numeric()
                     ->reactive()
-                    ->integer()
-                    ->prefix('Rp')
                     ->columnSpan([
                         'md' => 2,
                     ])
@@ -72,10 +67,9 @@ class SalesProductForm
                         self::updateTotalPrice($get, $set);
                     }),
 
-                TextInput::make('subtotal_price')
+                CurrencyInput::make('subtotal_price')
                     ->label('Subtotal Price')
                     ->readOnly()
-                    ->prefix('Rp')
                     ->columnSpan([
                         'md' => 2,
                     ])

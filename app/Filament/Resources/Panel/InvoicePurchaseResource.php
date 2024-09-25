@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Purchases;
 use App\Filament\Filters\SelectPaymentTypeFilter;
+use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
@@ -187,8 +188,7 @@ class InvoicePurchaseResource extends Resource
                 )
                 ->getOptionLabelFromRecordUsing(fn (Supplier $record) => "{$record->supplier_name}")
                 ->searchable()
-                ->preload()
-                ->native(false),
+                ->preload(),
 
             StoreSelect::make('store_id'),
 
@@ -201,8 +201,7 @@ class InvoicePurchaseResource extends Resource
                     modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
                 )
                 ->default(2)
-                ->preload()
-                ->native(false),
+                ->preload(),
                 // ->afterStateUpdated(function (Set $set) {
                     // $set('detailInvoices', null);
                 // }),
@@ -219,7 +218,7 @@ class InvoicePurchaseResource extends Resource
                     '2' => 'sudah dibayar',
                     '3' => 'tidak valid',
                 ])
-                ->native(false),
+                ,
 
             Select::make('order_status')
                 ->required()
@@ -230,7 +229,7 @@ class InvoicePurchaseResource extends Resource
                     '2' => 'sudah diterima',
                     '3' => 'dikembalikan',
                 ])
-                ->native(false),
+                ,
         ];
     }
 
@@ -272,7 +271,7 @@ class InvoicePurchaseResource extends Resource
                         }
                     )
                     ->getOptionLabelFromRecordUsing(fn (DetailRequest $record) => "{$record->detail_request_name}")
-                    ->native(false)
+
                     ->required()
                     ->preload()
                     ->searchable()
@@ -292,14 +291,10 @@ class InvoicePurchaseResource extends Resource
                     })
                     ->columnSpan(['md' => 2]),
 
-                TextInput::make('subtotal_invoice')
+                CurrencyInput::make('subtotal_invoice')
                     ->hiddenLabel()
                     ->placeholder('subtotal')
-                    ->required()
                     ->reactive()
-                    ->prefix('Rp')
-                    ->minValue(0)
-                    ->numeric()
                     ->debounce(2000)
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         self::updateTotalPrice($get, $set);
@@ -315,34 +310,22 @@ class InvoicePurchaseResource extends Resource
     public static function getDetailsFormBottomSchema(): array
     {
         return[
-            TextInput::make('taxes')
-                ->required()
-                ->minValue(0)
+            CurrencyInput::make('taxes')
                 ->reactive()
-                ->prefix('Rp')
-                ->numeric()
                 ->debounce(2000)
-                ->default(0)
                 ->afterStateUpdated(function (Get $get, Set $set) {
                     self::updateTotalPrice($get, $set);
                 }),
 
-            TextInput::make('discounts')
-                ->required()
-                ->minValue(0)
+            CurrencyInput::make('discounts')
                 ->reactive()
-                ->prefix('Rp')
-                ->numeric()
                 ->debounce(2000)
-                ->default(0)
                 ->afterStateUpdated(function (Get $get, Set $set) {
                     self::updateTotalPrice($get, $set);
                 }),
 
-            TextInput::make('total_price')
-                ->readOnly()
-                ->prefix('Rp')
-                ->minValue(0),
+            CurrencyInput::make('total_price')
+                ->readOnly(),
 
             Notes::make('notes'),
         ];

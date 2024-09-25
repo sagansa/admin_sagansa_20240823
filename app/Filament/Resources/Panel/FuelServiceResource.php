@@ -3,8 +3,11 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Purchases;
+use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\DateInput;
+use App\Filament\Forms\DecimalInput;
 use App\Filament\Forms\ImageInput;
+use App\Filament\Forms\NominalInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\PaymentStatusSelectInput;
 use Filament\Tables;
@@ -86,7 +89,7 @@ class FuelServiceResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn (Vehicle $record) => "{$record->no_register}")
                         ->searchable()
                         ->preload()
-                        ->native(false),
+                        ,
 
                     Select::make('supplier_id')
                         ->required()
@@ -99,7 +102,7 @@ class FuelServiceResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn (Supplier $record) => "{$record->supplier_name}")
                         ->searchable()
                         ->preload()
-                        ->native(false),
+                        ,
 
                     Select::make('payment_type_id')
                         ->required()
@@ -112,23 +115,15 @@ class FuelServiceResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
                         // ->searchable()
                         ->preload()
-                        ->native(false),
+                        ,
 
-                    TextInput::make('km')
-                        ->placeholder('km')
-                        ->hiddenLabel()
-                        ->suffix('km')
-                        ->required()
-                        ->numeric(),
+                    NominalInput::make('km')
+                        ->suffix('km'),
 
-                    TextInput::make('liter')
-                        ->placeholder('liter')
-                        ->hiddenLabel()
-                        ->suffix('liter')
-                        ->nullable()
-                        ->numeric(),
+                    DecimalInput::make('liter')
+                        ->suffix('liter'),
 
-                    TextInput::make('amount')
+                    CurrencyInput::make('amount')
                         ->required()
                         ->placeholder('Amount')
                         ->hiddenLabel()
@@ -175,7 +170,7 @@ class FuelServiceResource extends Resource
                     ->getOptionLabelFromRecordUsing(fn (Vehicle $record) => "{$record->vehicle_status}")
                     ->searchable()
                     ->preload()
-                    ->native(false),
+                    ,
 
                 SelectFilter::make('fuel_service')
                     ->label('Fuel Service')

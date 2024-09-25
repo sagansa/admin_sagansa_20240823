@@ -83,8 +83,7 @@ class StoreResource extends Resource
                             '6' => 'gudang + produksi',
                             '7' => 'warung + gudang + produksi',
                             '8' => 'tidak aktif'
-                        ])
-                        ->native(false),
+                        ]),
                 ]),
             ]),
         ]);

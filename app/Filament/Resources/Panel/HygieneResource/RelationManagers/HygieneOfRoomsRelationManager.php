@@ -11,10 +11,6 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
-use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
-use App\Filament\Resources\Panel\HygieneResource;
-use App\Models\HygieneOfRoom;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Actions\ActionGroup;
 
@@ -31,8 +27,7 @@ class HygieneOfRoomsRelationManager extends RelationManager
                 Select::make('room_id')
                     ->required()
                     ->relationship('room', 'name')
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 ImageInput::make('image')
                     ->multiple()

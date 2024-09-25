@@ -30,22 +30,19 @@ class FuelServicesRelationManager extends RelationManager
                     ->required()
                     ->relationship('supplier', 'name')
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 Select::make('vehicle_id')
                     ->required()
                     ->relationship('vehicle', 'image')
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 Select::make('payment_type_id')
                     ->required()
                     ->relationship('paymentType', 'name')
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 ImageInput::make('image')
                     ->disk('public')
@@ -74,21 +71,18 @@ class FuelServicesRelationManager extends RelationManager
                 Select::make('created_by_id')
                     ->required()
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 Select::make('approved_by_id')
                     ->required()
                     ->relationship('createdBy', 'name')
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 Select::make('fuel_service')
                     ->required()
                     ->searchable()
                     ->preload()
-                    ->native(false)
                     ->options([
                         '1' => 'fuel',
                         '2' => 'service',
@@ -98,7 +92,6 @@ class FuelServicesRelationManager extends RelationManager
                     ->required()
                     ->searchable()
                     ->preload()
-                    ->native(false)
                     ->options([
                         '1' => 'belum diperiksa',
                         '2' => 'valid',

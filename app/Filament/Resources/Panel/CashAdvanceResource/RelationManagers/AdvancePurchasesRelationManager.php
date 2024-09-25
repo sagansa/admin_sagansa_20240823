@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel\CashAdvanceResource\RelationManagers;
 
+use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\StoreSelect;
 use App\Filament\Tables\AdvancePurchaseTable;
@@ -37,38 +38,26 @@ class AdvancePurchasesRelationManager extends RelationManager
                     ->required()
                     ->relationship('supplier', 'name')
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 StoreSelect::make('store_id')
                     ->required(),
 
                 DatePicker::make('date')
                     ->rules(['date'])
-                    ->required()
-                    ->native(false),
+                    ->required(),
 
-                TextInput::make('subtotal_price')
-                    ->required()
-                    ->numeric()
-                    ->step(1),
+                CurrencyInput::make('subtotal_price'),
 
-                TextInput::make('discount_price')
-                    ->required()
-                    ->numeric()
-                    ->step(1),
+                CurrencyInput::make('discount_price'),
 
-                TextInput::make('total_price')
-                    ->required()
-                    ->numeric()
-                    ->step(1),
+                CurrencyInput::make('total_price'),
 
                 Select::make('user_id')
                     ->required()
                     ->relationship('user', 'name')
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 TextInput::make('status')
                     ->required()

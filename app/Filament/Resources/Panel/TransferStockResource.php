@@ -77,8 +77,7 @@ class TransferStockResource extends Resource
                             titleAttribute: 'nickname',
                             modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),)
                         ->preload()
-                        ->reactive()
-                        ->native(false),
+                        ->reactive(),
 
                     StoreSelect::make('to_store_id')
                         ->required()
@@ -87,8 +86,7 @@ class TransferStockResource extends Resource
                             titleAttribute: 'nickname',
                             modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),)
                         ->preload()
-                        ->reactive()
-                        ->native(false),
+                        ->reactive(),
 
                     StatusSelectInput::make('status'),
 
@@ -99,8 +97,7 @@ class TransferStockResource extends Resource
                                 ->where('name', 'staff') || $query
                                 ->where('name', 'supervisor')))
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('sent_by_id')
                         ->required()
@@ -109,8 +106,7 @@ class TransferStockResource extends Resource
                                 ->where('name', 'staff') || $query
                                 ->where('name', 'supervisor')))
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
 
                 ]),

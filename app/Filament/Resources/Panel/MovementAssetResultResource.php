@@ -58,21 +58,18 @@ class MovementAssetResultResource extends Resource
 
                     DatePicker::make('date')
                         ->rules(['date'])
-                        ->required()
-                        ->native(false),
+                        ->required(),
 
                     Select::make('status')
                         ->required()
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('user_id')
                         ->required()
                         ->relationship('user', 'name')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     RichEditor::make('notes')
                         ->nullable()

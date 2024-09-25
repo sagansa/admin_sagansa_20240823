@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Stock;
+use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
@@ -58,15 +59,13 @@ class SelfConsumptionResource extends Resource
 
                     DatePicker::make('date')
                         ->rules(['date'])
-                        ->required()
-                        ->native(false),
+                        ->required(),
 
                     Select::make('status')
                         ->required()
                         ->default('1')
                         ->searchable()
                         ->preload()
-                        ->native(false)
                         ->options([
                             '1' => 'belum diperiksa',
                             '2' => 'valid',
@@ -74,22 +73,8 @@ class SelfConsumptionResource extends Resource
                             '4' => 'periksa ulang',
                         ]),
 
-                    RichEditor::make('notes')
-                        ->nullable()
-                        ->string()
-                        ->fileAttachmentsVisibility('public'),
+                    Notes::make('notes'),
 
-                    TextInput::make('created_by_id')
-                        ->required()
-                        ->numeric()
-                        ->step(1),
-
-                    Select::make('approved_by_id')
-                        ->required()
-                        ->relationship('createdBy', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
                 ]),
             ]),
         ]);

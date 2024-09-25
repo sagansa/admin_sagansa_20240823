@@ -191,7 +191,6 @@ class RequestPurchaseResource extends Resource
                         '5' => 'not valid',
                         '6' => 'not used',
                     ])
-                    ->native(false)
                     ->default(1)
                     ->disabled(fn () => !Auth::user()->hasRole('admin'))
                     ->columnSpan(2),

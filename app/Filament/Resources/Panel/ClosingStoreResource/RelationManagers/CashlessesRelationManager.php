@@ -42,8 +42,7 @@ class CashlessesRelationManager extends RelationManager
                         }
                     )
                     ->getOptionLabelFromRecordUsing(fn (AccountCashless $record) => $record->account_cashless_name)
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 ImageInput::make('image')
                     ->disk('public')

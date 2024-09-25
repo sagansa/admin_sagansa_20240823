@@ -14,7 +14,6 @@ class SelectStoreFilter extends SelectFilter
             ->label('Store')
             ->searchable()
             ->preload()
-            ->native(false)
             ->relationship('store', 'nickname');
     }
 }

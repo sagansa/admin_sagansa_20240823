@@ -68,13 +68,11 @@ class VehicleTaxResource extends Resource
                         ->required()
                         ->relationship('vehicle', 'image')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     DatePicker::make('expired_date')
                         ->rules(['date'])
-                        ->required()
-                        ->native(false),
+                        ->required(),
 
                     RichEditor::make('notes')
                         ->nullable()
@@ -85,8 +83,7 @@ class VehicleTaxResource extends Resource
                         ->nullable()
                         ->relationship('user', 'name')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
                 ]),
             ]),
         ]);

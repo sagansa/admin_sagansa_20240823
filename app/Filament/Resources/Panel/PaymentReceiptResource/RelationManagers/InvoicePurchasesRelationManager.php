@@ -36,8 +36,7 @@ class InvoicePurchasesRelationManager extends RelationManager
                     ->required()
                     ->relationship('paymentType', 'name')
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 StoreSelect::make('store_id')
                     ->required(),
@@ -46,13 +45,11 @@ class InvoicePurchasesRelationManager extends RelationManager
                     ->required()
                     ->relationship('supplier', 'name')
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 DatePicker::make('date')
                     ->rules(['date'])
-                    ->required()
-                    ->native(false),
+                    ->required(),
 
                 TextInput::make('taxes')
                     ->required()
@@ -77,14 +74,12 @@ class InvoicePurchasesRelationManager extends RelationManager
                 Select::make('payment_status')
                     ->required()
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 Select::make('order_status')
                     ->required()
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
             ]),
         ]);
     }

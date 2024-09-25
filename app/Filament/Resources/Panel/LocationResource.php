@@ -76,35 +76,35 @@ class LocationResource extends Resource
                         ->relationship('province', 'name')
                         ->searchable()
                         ->preload()
-                        ->native(false),
+                        ,
 
                     Select::make('city_id')
                         ->required()
                         ->relationship('city', 'name')
                         ->searchable()
                         ->preload()
-                        ->native(false),
+                        ,
 
                     Select::make('district_id')
                         ->required()
                         ->relationship('district', 'name')
                         ->searchable()
                         ->preload()
-                        ->native(false),
+                        ,
 
                     Select::make('subdistrict_id')
                         ->required()
                         ->relationship('subdistrict', 'name')
                         ->searchable()
                         ->preload()
-                        ->native(false),
+                        ,
 
                     Select::make('postal_code_id')
                         ->required()
                         ->relationship('postalCode', 'id')
                         ->searchable()
                         ->preload()
-                        ->native(false),
+                        ,
                 ]),
             ]),
         ]);

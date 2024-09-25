@@ -59,8 +59,7 @@ class AccountCashlessResource extends Resource
                         ->required()
                         ->relationship('cashlessProvider', 'name')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     StoreSelect::make('store_id'),
 
@@ -68,8 +67,7 @@ class AccountCashlessResource extends Resource
                         ->required()
                         ->relationship('storeCashless', 'name')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     TextInput::make('email')
                         ->nullable()

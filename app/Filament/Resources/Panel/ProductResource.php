@@ -75,8 +75,7 @@ class ProductResource extends Resource
                     Select::make('unit_id')
                         ->required()
                         ->relationship('unit', 'unit')
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     TextInput::make('slug')
                         ->required()
@@ -101,25 +100,21 @@ class ProductResource extends Resource
                     Select::make('payment_type_id')
                         ->required()
                         ->relationship('paymentType', 'name')
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('material_group_id')
                         ->required()
                         ->relationship('materialGroup', 'name')
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('online_category_id')
                         ->required()
                         ->relationship('onlineCategory', 'name')
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     DateTimePicker::make('deleted_at')
                         ->rules(['date'])
-                        ->nullable()
-                        ->native(false),
+                        ->nullable(),
 
                     RichEditor::make('description')
                         ->nullable()

@@ -57,8 +57,7 @@ class ProductionResource extends Resource
 
                     DatePicker::make('date')
                         ->rules(['date'])
-                        ->required()
-                        ->native(false),
+                        ->required(),
 
                     RichEditor::make('notes')
                         ->required()
@@ -68,21 +67,18 @@ class ProductionResource extends Resource
                     Select::make('status')
                         ->required()
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('created_by_id')
                         ->required()
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('approved_by_id')
                         ->required()
                         ->relationship('createdBy', 'name')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
                 ]),
             ]),
         ]);

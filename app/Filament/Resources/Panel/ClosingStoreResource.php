@@ -7,6 +7,7 @@ use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Filters\DateFilter;
 use App\Filament\Filters\SelectStoreFilter;
+use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
@@ -74,44 +75,27 @@ class ClosingStoreResource extends Resource
                     Select::make('shift_store_id')
                         ->required()
                         ->relationship('shiftStore', 'name')
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     DatePicker::make('date')
                         ->rules(['date'])
                         ->default('today')
-                        ->required()
-                        ->native(false),
+                        ->required(),
 
-                    TextInput::make('cash_from_yesterday')
-                        ->prefix('Rp')
-                        ->required()
-                        ->reactive()
+                    CurrencyInput::make('cash_from_yesterday')
                         ->debounce(2000)
-                        ->minValue(0)
-                        ->numeric()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
 
-                    TextInput::make('cash_for_tomorrow')
-                        ->prefix('Rp')
-                        ->required()
-                        ->reactive()
+                    CurrencyInput::make('cash_for_tomorrow')
                         ->debounce(2000)
-                        ->minValue(0)
-                        ->numeric()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
 
-                    TextInput::make('total_cash_transfer')
-                        ->prefix('Rp')
-                        ->required()
-                        ->reactive()
+                    CurrencyInput::make('total_cash_transfer')
                         ->debounce(2000)
-                        ->minValue(0)
-                        ->numeric()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
@@ -133,7 +117,6 @@ class ClosingStoreResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn (FuelService $record) => "{$record->fuel_service_name}")
                         ->preload()
                         ->reactive()
-                        ->native(false)
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                             self::updateFuelServiceStatus($get, $set);
@@ -153,7 +136,6 @@ class ClosingStoreResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn (DailySalary $record) => "{$record->daily_salary_name}")
                         ->preload()
                         ->reactive()
-                        ->native(false)
                         ->afterStateUpdated(function (Get $get, Set $set, $state) {
                             self::updateDailySalaryStatus($state, $set);
                             self::updateTotalOmzet($get, $set);
@@ -173,7 +155,6 @@ class ClosingStoreResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn (InvoicePurchase $record) => "{$record->invoice_purchase_name}")
                         ->preload()
                         ->reactive()
-                        ->native(false)
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                             self::updateInvoicePurchaseStatus($get, $set);
@@ -189,7 +170,6 @@ class ClosingStoreResource extends Resource
                         ->schema([
                             Select::make('account_cashless_id')
                                 ->required()
-                                ->native(false)
                                 ->preload()
                                 ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                 ->relationship(
@@ -203,11 +183,8 @@ class ClosingStoreResource extends Resource
                                 )
                                 ->getOptionLabelFromRecordUsing(fn (AccountCashless $record) => $record->account_cashless_name),
 
-                            TextInput::make('bruto_apl')
-                                ->label('Bruto Total Omzet')
-                                ->prefix('Rp')
-                                ->required()
-                                ->numeric(),
+                            CurrencyInput::make('bruto_apl')
+                                ->label('Bruto Total Omzet'),
 
                             ImageInput::make('image')
                                 ->disk('public')
@@ -220,49 +197,47 @@ class ClosingStoreResource extends Resource
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
 
-                    TextInput::make('total_fuel_service')
+                    CurrencyInput::make('total_fuel_service')
+                        ->disabled()
+                        ->afterStateUpdated(function (Get $get, Set $set) {
+                            self::updateTotalOmzet($get, $set);
+                        }),
+
+                    CurrencyInput::make('total_daily_salary')
+                        ->disabled()
+                        ->afterStateUpdated(function (Get $get, Set $set) {
+                            self::updateTotalOmzet($get, $set);
+                        }),
+
+                    CurrencyInput::make('total_invoice_purchase')
                         ->prefix('Rp')
                         ->disabled()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
 
-                    TextInput::make('total_daily_salary')
+                    CurrencyInput::make('spending_total_cash')
                         ->prefix('Rp')
                         ->disabled()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
 
-                    TextInput::make('total_invoice_purchase')
+                    CurrencyInput::make('total_cash')
                         ->prefix('Rp')
                         ->disabled()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
 
-                    TextInput::make('spending_total_cash')
+                    CurrencyInput::make('total_cashless')
                         ->prefix('Rp')
                         ->disabled()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
 
-                    TextInput::make('total_cash')
-                        ->prefix('Rp')
-                        ->disabled()
-                        ->afterStateUpdated(function (Get $get, Set $set) {
-                            self::updateTotalOmzet($get, $set);
-                        }),
-
-                    TextInput::make('total_cashless')
-                        ->prefix('Rp')
-                        ->disabled()
-                        ->afterStateUpdated(function (Get $get, Set $set) {
-                            self::updateTotalOmzet($get, $set);
-                        }),
-
-                    TextInput::make('total_omzet')
+                    CurrencyInput::make('total_omzet')
                         ->prefix('Rp')
                         ->disabled()
                         ->afterStateUpdated(function (Get $get, Set $set) {
@@ -275,8 +250,7 @@ class ClosingStoreResource extends Resource
                         //     return $request->total_cash_transfer != 0;
                         // })
                         ->relationship('transferBy', 'name')
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('status')
                         ->required()
@@ -284,7 +258,6 @@ class ClosingStoreResource extends Resource
                         ->disabled(fn () => Auth::user()->hasRole('staff'))
                         ->required(fn () => Auth::user()->hasRole('admin'))
                         ->preload()
-                        ->native(false)
                         ->options([
                             '1' => 'belum diperiksa',
                             '2' => 'valid',

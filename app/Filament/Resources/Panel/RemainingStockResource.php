@@ -6,6 +6,7 @@ use App\Filament\Clusters\Stock;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\BaseSelectInput;
 use App\Filament\Forms\DateInput;
+use App\Filament\Forms\NominalInput;
 use App\Filament\Forms\StatusSelect;
 use App\Filament\Forms\StatusSelectInput;
 use App\Filament\Forms\StoreSelect;
@@ -174,13 +175,11 @@ class RemainingStockResource extends Resource
                     ->label('Product')
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->required()
-                    ->native(false)
                     ->options(Product::where('remaining', '1')->get()->pluck('name','id'))
                     ->columnSpan([
                         'md' => 5,
                     ]),
-                TextInput::make('quantity')
-                    ->required()
+                NominalInput::make('quantity')
                     ->suffix(function ($get) {
                         $product = Product::find($get('product_id'));
                         return $product ? $product->unit->unit : '';

@@ -67,7 +67,6 @@ class DeliveryAddressForm
                 ->relationship('province', 'name')
                 ->searchable()
                 ->preload()
-                ->native(false)
                 ->reactive()
                 ->afterStateUpdated(function ($state, callable $set) {
                     $set('city_id', null);
@@ -81,7 +80,6 @@ class DeliveryAddressForm
                 ->relationship('city', 'name')
                 ->searchable()
                 ->preload()
-                ->native(false)
                 ->reactive()
                 ->options(function (callable $get) {
                     $provinceId = $get('province_id');
@@ -98,7 +96,6 @@ class DeliveryAddressForm
                 ->relationship('district', 'name')
                 ->searchable()
                 ->preload()
-                ->native(false)
                 ->reactive()
                 ->options(function (callable $get) {
                     $cityId = $get('city_id');
@@ -114,7 +111,6 @@ class DeliveryAddressForm
                 ->relationship('subdistrict', 'name')
                 ->searchable()
                 ->preload()
-                ->native(false)
                 ->reactive()
                 ->options(function (callable $get) {
                     $districtId = $get('district_id');
@@ -129,7 +125,6 @@ class DeliveryAddressForm
                 ->nullable()
                 // ->relationship('postalCode', 'postal_code')
                 ->preload()
-                ->native(false)
                 ->reactive()
                 ->options(function (callable $get) {
                     $provinceId = $get('province_id');

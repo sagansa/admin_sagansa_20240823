@@ -57,8 +57,7 @@ class VehicleCertificateResource extends Resource
                         ->required()
                         ->relationship('vehicle', 'image')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     TextInput::make('bpkb')
                         ->required()

@@ -65,8 +65,7 @@ class MovementAssetResource extends Resource
                         ->required()
                         ->relationship('product', 'name')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     TextInput::make('good_cond_qty')
                         ->required()
@@ -82,8 +81,7 @@ class MovementAssetResource extends Resource
                         ->required()
                         ->relationship('storeAsset', 'notes')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
                 ]),
             ]),
         ]);

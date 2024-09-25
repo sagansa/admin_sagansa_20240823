@@ -28,8 +28,7 @@ class ProductionSupportFromsRelationManager extends RelationManager
                     ->required()
                     ->relationship('product', 'name')
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 TextInput::make('quantity')
                     ->required()

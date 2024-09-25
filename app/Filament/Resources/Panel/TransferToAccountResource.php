@@ -67,14 +67,12 @@ class TransferToAccountResource extends Resource
                         ->required()
                         ->relationship('bank', 'name')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('status')
                         ->required()
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
                 ]),
             ]),
         ]);

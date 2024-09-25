@@ -3,8 +3,10 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Purchases;
+use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
+use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -142,8 +144,7 @@ class AdvancePurchaseResource extends Resource
                 ->required()
                 ->options(Supplier::all()->where('status', '<>', 3)->pluck('supplier_name', 'id'))
                 ->searchable()
-                ->preload()
-                ->native(false),
+                ->preload(),
 
             DateInput::make('date'),
 
@@ -153,7 +154,6 @@ class AdvancePurchaseResource extends Resource
                 ->hidden(fn ($operation) => $operation === 'create')
                 ->disabled(fn () => Auth::user()->hasRole('staff'))
                 ->preload()
-                ->native(false)
                 ->options([
                     '1' => 'belum diperiksa',
                     '2' => 'valid',
@@ -199,26 +199,20 @@ class AdvancePurchaseResource extends Resource
                         self::updateUnitPrice($get, $set);
                     }),
 
-                TextInput::make('price')
-                    ->required()
-                    ->minValue(0)
-                    ->prefix('Rp')
+                CurrencyInput::make('price')
                     ->columnSpan([
                         'md' => 2,
                     ])
                     ->debounce(2000)
-                    ->numeric()
                     ->reactive()
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         self::updateUnitPrice($get, $set);
                         self::updateTotalPrice($get, $set);
                     }),
 
-                TextInput::make('unit_price')
+                CurrencyInput::make('unit_price')
                     ->label('Unit Price')
                     ->readOnly()
-                    ->integer()
-                    ->prefix('Rp')
                     ->columnSpan([
                         'md' => 2,
                     ]),
@@ -235,33 +229,19 @@ class AdvancePurchaseResource extends Resource
     {
         return [
             Section::make()->schema([
-                TextInput::make('subtotal_price')
-                    ->readOnly()
-                    ->default(0)
-                    ->numeric()
-                    ->prefix('Rp'),
+                CurrencyInput::make('subtotal_price')
+                    ->readOnly(),
 
-                TextInput::make('discount_price')
-                    ->required()
-                    ->numeric()
+                CurrencyInput::make('discount_price')
                     ->debounce(2000)
-                    ->default(0)
                     ->reactive()
-                    ->prefix('Rp')
-                   ->afterStateUpdated(fn ($state, callable $set, $get) => $set('total_price', $get('subtotal_price') - $state)),
+                    ->afterStateUpdated(fn ($state, callable $set, $get) => $set('total_price', $get('subtotal_price') - $state)),
 
-                TextInput::make('total_price')
-                    ->numeric()
-                    ->default(0)
-                    ->minValue(0)
-                    ->prefix('Rp')
+                CurrencyInput::make('total_price')
                     ->readOnly()
                     ->reactive(),
 
-                RichEditor::make('notes')
-                    ->nullable()
-                    ->string()
-                    ->fileAttachmentsVisibility('public'),
+                Notes::make('notes'),
             ]),
         ];
     }

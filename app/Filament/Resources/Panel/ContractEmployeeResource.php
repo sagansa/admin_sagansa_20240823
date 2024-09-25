@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\HRD;
+use App\Filament\Forms\CurrencyInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -62,18 +63,13 @@ class ContractEmployeeResource extends Resource
 
                     DatePicker::make('from_date')
                         ->rules(['date'])
-                        ->required()
-                        ->native(false),
+                        ->required(),
 
                     DatePicker::make('until_date')
                         ->rules(['date'])
-                        ->required()
-                        ->native(false),
+                        ->required(),
 
-                    TextInput::make('nominal_guarantee')
-                        ->required()
-                        ->numeric()
-                        ->step(1),
+                    CurrencyInput::make('nominal_guarantee'),
 
                     TextInput::make('guarantee')
                         ->required()
@@ -88,15 +84,13 @@ class ContractEmployeeResource extends Resource
                     Select::make('employee_id')
                         ->nullable()
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('user_id')
                         ->required()
                         ->relationship('user', 'name')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
                 ]),
             ]),
         ]);

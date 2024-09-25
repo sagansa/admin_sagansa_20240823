@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\Closings;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
+use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use Filament\Tables;
@@ -65,14 +66,10 @@ class ClosingCourierResource extends Resource
                     Select::make('bank_id')
                         ->required()
                         ->relationship('bank', 'name')
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
-                    TextInput::make('total_cash_to_transfer')
-                        ->label('Total Cash to Transfer')
-                        ->required()
-                        ->numeric()
-                        ->prefix('Rp'),
+                    CurrencyInput::make('total_cash_to_transfer')
+                        ->label('Total Cash to Transfer'),
                 ]),
             ]),
 
@@ -89,8 +86,7 @@ class ClosingCourierResource extends Resource
                         )
                         ->getOptionLabelFromRecordUsing(fn (ClosingStore $record) => "{$record->closing_store_name}")
                         ->preload()
-                        ->reactive()
-                        ->native(false),
+                        ->reactive(),
                         // ->afterStateUpdated(function ($state, $set) {
                         //     $totalAmount = 0;
                         //     foreach ($state as $fuelServiceId) {
@@ -114,7 +110,6 @@ class ClosingCourierResource extends Resource
                     ->hidden(fn ($operation) => $operation === 'create')
                     ->disabled(fn () => Auth::user()->hasRole('staff'))
                     ->preload()
-                    ->native(false)
                     ->options([
                         '1' => 'belum diperiksa',
                         '2' => 'valid',

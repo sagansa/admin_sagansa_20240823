@@ -83,8 +83,7 @@ class SupplierResource extends Resource
                             ->placeholder('Bank')
                             ->relationship('bank', 'name')
                             ->searchable()
-                            ->preload()
-                            ->native(false),
+                            ->preload(),
 
                         TextInput::make('bank_account_name')
                             ->nullable()

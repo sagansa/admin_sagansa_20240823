@@ -6,6 +6,7 @@ use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\SupplierColumn;
+use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use Filament\Tables;
@@ -63,7 +64,8 @@ class PaymentReceiptResource extends Resource
                 Grid::make(['default' => 1])->schema([
 
                     Radio::make('payment_for')
-                        ->hiddenLabel()
+                        // ->hiddenLabel()
+                        // ->inlineLabel()
                         ->options([
                             '1' => 'fuel/service',
                             '2' => 'daily salary',
@@ -76,8 +78,7 @@ class PaymentReceiptResource extends Resource
                         ->label('Supplier')
                         ->visible(fn ($get) => $get('payment_for') != '2')
                         ->options(Supplier::all()->where('status', '<>', 3)->pluck('supplier_name', 'id'))
-                        ->searchable()
-                        ->native(false),
+                        ->searchable(),
 
                     Select::make('user_id')
                         ->label('Employee')
@@ -87,8 +88,7 @@ class PaymentReceiptResource extends Resource
                                 ->where('name', 'staff') || $query
                                 ->where('name', 'supervisor'))->orderBy('name', 'asc'))
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('fuelServices')
                         ->visible(fn ($get) => $get('payment_for') == '1')
@@ -103,7 +103,6 @@ class PaymentReceiptResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn (FuelService $record) => "{$record->fuel_service_name}")
                         ->preload()
                         ->reactive()
-                        ->native(false)
                         ->afterStateUpdated(function ($state, $set) {
                             $totalAmount = 0;
                             foreach ($state as $fuelServiceId) {
@@ -130,7 +129,6 @@ class PaymentReceiptResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn (DailySalary $record) => "{$record->daily_salary_name}")
                         ->preload()
                         ->reactive()
-                        ->native(false)
                         ->afterStateUpdated(function ($state, $set) {
                             $totalAmount = 0;
                             foreach ($state as $dailySalaryId) {
@@ -158,7 +156,6 @@ class PaymentReceiptResource extends Resource
                         ->preload()
                         ->reactive()
                         ->searchable()
-                        ->native(false)
                         ->afterStateUpdated(function ($state, $set) {
                             $totalAmount = 0;
                             foreach ($state as $invoicePurchaseId) {
@@ -178,22 +175,10 @@ class PaymentReceiptResource extends Resource
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
 
-                    TextInput::make('total_amount')
-                        ->hiddenLabel()
-                        ->readOnly()
-                        ->default(0)
-                        ->placeholder('Total Amount')
-                        ->required()
-                        ->numeric()
-                        ->prefix('Rp'),
+                    CurrencyInput::make('total_amount')
+                        ->readOnly(),
 
-                    TextInput::make('transfer_amount')
-                        ->hiddenLabel()
-                        ->prefix('Rp')
-                        ->required()
-                        ->default(0)
-                        ->numeric()
-                        ->placeholder('Transfer Amount'),
+                    CurrencyInput::make('transfer_amount'),
 
                     ImageInput::make('image')
                         ->disk('public')

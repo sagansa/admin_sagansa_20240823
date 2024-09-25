@@ -110,7 +110,6 @@ class DeliveryAddressResource extends Resource
                             ->relationship('province', 'name')
                             ->searchable()
                             ->preload()
-                            ->native(false)
                             ->reactive()
                             ->afterStateUpdated(function ($state, callable $set) {
                                 $set('city_id', null);
@@ -124,7 +123,6 @@ class DeliveryAddressResource extends Resource
                             ->relationship('city', 'name')
                             ->searchable()
                             ->preload()
-                            ->native(false)
                             ->reactive()
                             ->options(function (callable $get) {
                                 $provinceId = $get('province_id');
@@ -141,7 +139,6 @@ class DeliveryAddressResource extends Resource
                             ->relationship('district', 'name')
                             ->searchable()
                             ->preload()
-                            ->native(false)
                             ->reactive()
                             ->options(function (callable $get) {
                                 $cityId = $get('city_id');
@@ -157,7 +154,6 @@ class DeliveryAddressResource extends Resource
                             ->relationship('subdistrict', 'name')
                             ->searchable()
                             ->preload()
-                            ->native(false)
                             ->reactive()
                             ->options(function (callable $get) {
                                 $districtId = $get('district_id');
@@ -171,7 +167,6 @@ class DeliveryAddressResource extends Resource
                             ->label('Postal Code')
                             ->nullable()
                             ->preload()
-                            ->native(false)
                             ->reactive()
                             ->options(function (callable $get) {
                                 $provinceId = $get('province_id');

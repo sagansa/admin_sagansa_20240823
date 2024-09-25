@@ -67,14 +67,12 @@ class UtilityBillResource extends Resource
                         ->getOptionLabelFromRecordUsing(fn (Utility $record) => "{$record->utility_name}")
                         ->searchable()
                         ->reactive()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     DatePicker::make('date')
                         ->rules(['date'])
                         ->default('today')
-                        ->required()
-                        ->native(false),
+                        ->required(),
 
                     TextInput::make('amount')
                         ->required()

@@ -31,8 +31,7 @@ class ProductsRelationManager extends RelationManager
                     ->disabled()
                     ->relationship('unit', 'unit')
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 TextInput::make('quantity')
                     ->required()

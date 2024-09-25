@@ -60,8 +60,7 @@ class StoreCashlessResource extends Resource
                     Select::make('status')
                         ->required()
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
                 ]),
             ]),
         ]);

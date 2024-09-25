@@ -45,8 +45,6 @@ class DetailInvoicesRelationManager extends RelationManager
                         }
                     )
                     ->getOptionLabelFromRecordUsing(fn (DetailRequest $record) => "{$record->detail_request_name}")
-
-                    ->native(false)
                     ->required()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->columnSpan(['md' => 4]),
@@ -65,8 +63,7 @@ class DetailInvoicesRelationManager extends RelationManager
                 //     ->nullable()
                 //     ->relationship('unit', 'name')
                 //     ->searchable()
-                //     ->preload()
-                //     ->native(false),
+                //     ->preload(),
 
                 TextInput::make('subtotal_invoice')
                     ->prefix('Rp ')

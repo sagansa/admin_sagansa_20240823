@@ -240,6 +240,16 @@ class EmployeeResource extends Resource
                         ->searchable()
                         ->preload()
                         ->native(false),
+
+                    Checkbox::make('is_wfa')
+                        ->rules(['boolean'])
+                        ->required()
+                        ->inline(),
+
+                    Checkbox::make('is_banned')
+                        ->rules(['boolean'])
+                        ->required()
+                        ->inline(),
                 ]),
             ]),
         ]);
@@ -317,6 +327,10 @@ class EmployeeResource extends Resource
                 TextColumn::make('marital_status'),
 
                 TextColumn::make('level_of_education'),
+
+                CheckboxColumn::make('is_wfa'),
+
+                CheckboxColumn::make('is_banned'),
             ])
             ->filters([])
             ->actions([

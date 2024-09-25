@@ -221,7 +221,6 @@ class SalesOrderOnlinesResource extends Resource
                 ->default('today')
                 ->rules(['date'])
                 ->required()
-                ->native(false)
                 ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
 
             Select::make('online_shop_provider_id')
@@ -229,7 +228,6 @@ class SalesOrderOnlinesResource extends Resource
                 ->relationship('onlineShopProvider', 'name')
                 ->searchable()
                 ->preload()
-                ->native(false)
                 ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
 
             Select::make('delivery_service_id')
@@ -237,7 +235,6 @@ class SalesOrderOnlinesResource extends Resource
                 ->relationship('deliveryService', 'name')
                 ->searchable()
                 ->preload()
-                ->native(false)
                 ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
 
             Select::make('delivery_address_id')
@@ -255,7 +252,6 @@ class SalesOrderOnlinesResource extends Resource
 
                 ->searchable()
                 ->preload()
-                ->native(false)
                 ->editOptionForm(
                     DeliveryAddressForm::schema()
                 )
@@ -272,7 +268,6 @@ class SalesOrderOnlinesResource extends Resource
             Select::make('delivery_status')
                 ->required()
                 ->hidden(fn ($operation) => $operation === 'create')
-                ->native(false)
                 ->options([
                     '1' => 'belum dikirim',
                     '2' => 'valid',

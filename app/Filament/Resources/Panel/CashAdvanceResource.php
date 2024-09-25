@@ -6,6 +6,7 @@ use App\Filament\Clusters\Advances;
 use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
+use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StatusSelectLabel;
@@ -127,7 +128,6 @@ class CashAdvanceResource extends Resource
                                 ->where('name', 'supervisor')))
                         ->searchable()
                         ->preload()
-                        ->native(false)
                         ->columnSpan([
                             'md' => 4,
                         ]),
@@ -144,14 +144,9 @@ class CashAdvanceResource extends Resource
                             'md' => 4,
                         ]),
 
-                    TextInput::make('transfer')
-                        ->required()
+                    CurrencyInput::make('transfer')
                         ->label('Transfer')
-                        ->default(0)
-                        ->minValue(0)
-                        ->numeric()
                         ->debounce(2000)
-                        ->prefix('Rp')
                         ->reactive()
                         ->afterStateUpdated(function (Set $set, Get $get) {
                             self::updatePurchase($get, $set);
@@ -160,14 +155,9 @@ class CashAdvanceResource extends Resource
                             'md' => 3,
                         ]),
 
-                    TextInput::make('before')
-                        ->required()
+                    CurrencyInput::make('before')
                         ->label('Before')
-                        ->default(0)
-                        ->minValue(0)
-                        ->numeric()
                         ->debounce(2000)
-                        ->prefix('Rp')
                         ->reactive()
                         ->afterStateUpdated(function (Set $set, Get $get) {
                             self::updatePurchase($get, $set);
@@ -176,20 +166,16 @@ class CashAdvanceResource extends Resource
                             'md' => 3,
                         ]),
 
-                     TextInput::make('purchase')
+                    CurrencyInput::make('purchase')
                         ->readOnly()
                         ->label('Purchase')
-                        ->numeric()
-                        ->prefix('Rp')
                         ->columnSpan([
                             'md' => 3,
                         ]),
 
-                    TextInput::make('remains')
+                    CurrencyInput::make('remains')
                         ->readOnly()
                         ->label('Remains')
-                        ->numeric()
-                        ->prefix('Rp')
                         ->columnSpan([
                             'md' => 3,
                         ]),

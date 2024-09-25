@@ -61,14 +61,12 @@ class MaterialGroupResource extends Resource
                         ->required()
                         ->relationship('user', 'name')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('status')
                         ->required()
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
                 ]),
             ]),
         ]);

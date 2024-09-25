@@ -61,8 +61,7 @@ class MovementAssetAuditResource extends Resource
                         ->required()
                         ->relationship('movementAsset', 'image')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     TextInput::make('good_cond_qty')
                         ->required()
@@ -78,8 +77,7 @@ class MovementAssetAuditResource extends Resource
                         ->required()
                         ->relationship('movementAssetResult', 'date')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
                 ]),
             ]),
         ]);

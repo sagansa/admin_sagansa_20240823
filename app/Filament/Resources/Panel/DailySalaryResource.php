@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\HRD;
 use App\Filament\Filters\SelectEmployeeFilter;
 use App\Filament\Forms\BaseSelectInput;
+use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\PaymentStatusSelectInput;
 use App\Filament\Forms\StoreSelect;
@@ -69,10 +70,7 @@ class DailySalaryResource extends Resource
 
                     DateInput::make('date'),
 
-                    TextInput::make('amount')
-                        ->required()
-                        ->prefix('Rp ')
-                        ->numeric(),
+                    CurrencyInput::make('amount'),
 
                     Select::make('payment_type_id')
                         ->required()
@@ -83,8 +81,7 @@ class DailySalaryResource extends Resource
                         )
                         ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     PaymentStatusSelectInput::make('status'),
 

@@ -13,19 +13,12 @@ class BottomTotalPriceForm
     {
         return [
 
-            TextInput::make('shipping_cost')
+            CurrencyInput::make('shipping_cost')
                 ->label('Shipping Cost')
-                ->numeric()
-                ->default(0)
-                ->minValue(0)
-                ->prefix('Rp ')
                 ->reactive(),
 
-            TextInput::make('total_price')
+            CurrencyInput::make('total_price')
                 ->label('Total Price')
-                ->numeric()
-                ->minValue(0)
-                ->prefix('Rp ')
                 ->readOnly()
                 ->reactive(),
 

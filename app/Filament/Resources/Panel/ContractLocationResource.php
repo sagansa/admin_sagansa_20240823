@@ -56,18 +56,15 @@ class ContractLocationResource extends Resource
                         ->required()
                         ->relationship('location', 'name')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     DatePicker::make('from_date')
                         ->rules(['date'])
-                        ->required()
-                        ->native(false),
+                        ->required(),
 
                     DatePicker::make('until_date')
                         ->rules(['date'])
-                        ->required()
-                        ->native(false),
+                        ->required(),
 
                     TextInput::make('nominal_contract')
                         ->required()

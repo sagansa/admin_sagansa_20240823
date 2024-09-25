@@ -15,7 +15,6 @@ class BaseSelectInput extends Select
             ->required()
             ->hiddenLabel()
             ->searchable()
-            ->preload()
-            ->native(false);
+            ->preload();
     }
 }

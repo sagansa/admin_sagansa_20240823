@@ -39,6 +39,7 @@ class EmployeeFactory extends Factory
             'acceptance_date' => fake()->date(),
             'signs' => fake()->text(255),
             'notes' => fake()->text(),
+            'is_wfa' => fake()->word(),
             'image_identity_id' => fake()->text(255),
             'image_selfie' => fake()->text(255),
             'gender' => \Arr::random(['male', 'female', 'other']),

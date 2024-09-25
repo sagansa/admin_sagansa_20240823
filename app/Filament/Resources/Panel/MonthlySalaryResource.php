@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\HRD;
 use App\Filament\Clusters\Salaries;
+use App\Filament\Forms\CurrencyInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -53,10 +54,7 @@ class MonthlySalaryResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    TextInput::make('amount')
-                        ->required()
-                        ->numeric()
-                        ->step(1)
+                    CurrencyInput::make('amount')
                         ->autofocus(),
                 ]),
             ]),

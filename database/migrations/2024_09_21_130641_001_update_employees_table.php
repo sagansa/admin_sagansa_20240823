@@ -14,6 +14,7 @@ return new class extends Migration {
     {
         Schema::table('employees', function (Blueprint $table) {
             $table->boolean('is_banned')->after('notes');
+            $table->boolean('is_wfa')->after('notes');
         });
     }
 
@@ -26,6 +27,7 @@ return new class extends Migration {
     {
         Schema::table('employees', function (Blueprint $table) {
             $table->dropColumn('is_banned');
+            $table->dropColumn('is_wfa');
         });
     }
 };

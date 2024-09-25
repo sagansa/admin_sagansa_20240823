@@ -11,13 +11,12 @@ class CurrencyInput extends TextInput
     {
         parent::setUp();
 
-        $this->mask(RawJs::make('$money($input)'))
+        $this
             ->prefix('Rp')
             ->required()
             ->numeric()
             ->minValue(0)
-            ->afterStateUpdated(function ($state, callable $set) {
-                $set('km_now', preg_replace('/[^\d\.]/', '', $state));
-            });
+            ->default(0)
+            ->currencyMask(thousandSeparator: '.',decimalSeparator: ',',precision: 0);
     }
 }

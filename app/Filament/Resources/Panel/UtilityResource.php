@@ -79,15 +79,13 @@ class UtilityResource extends Resource
                         ->required()
                         ->relationship('unit', 'name')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('utility_provider_id')
                         ->required()
                         ->relationship('utilityProvider', 'name')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('pre_post')
                         ->required()
@@ -95,8 +93,7 @@ class UtilityResource extends Resource
                             '1' => 'pre',
                             '2' => 'post'
                         ])
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     Select::make('category')
                         ->options([
@@ -105,8 +102,7 @@ class UtilityResource extends Resource
                             '3' => 'internet'
                         ])
                         ->required()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
 
                 ]),

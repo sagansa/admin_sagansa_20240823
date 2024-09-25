@@ -57,8 +57,7 @@ class AdminCashlessResource extends Resource
                         ->required()
                         ->relationship('cashlessProvider', 'name')
                         ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     TextInput::make('username')
                         ->nullable()

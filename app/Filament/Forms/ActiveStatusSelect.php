@@ -12,7 +12,6 @@ class ActiveStatusSelect extends Select
 
         $this
             ->required()
-            ->native(false)
             ->preload()
             ->options([
                 '1' => 'active',

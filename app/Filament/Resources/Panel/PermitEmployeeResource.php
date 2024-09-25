@@ -64,7 +64,6 @@ class PermitEmployeeResource extends Resource
                         ->placeholder('Reason')
                         // ->searchable()
                         ->preload()
-                        ->native(false)
                         ->options([
                             '1' => 'menikah',
                             '2' => 'sakit',
@@ -79,8 +78,7 @@ class PermitEmployeeResource extends Resource
                             ->required()
                             ->hiddenLabel()
                             // ->placeholder('From Date')
-                            ->prefix('From Date')
-                            ->native(false),
+                            ->prefix('From Date'),
 
                         DatePicker::make('until_date')
                             ->rules([
@@ -90,7 +88,6 @@ class PermitEmployeeResource extends Resource
                             ->required()
                             ->hiddenLabel()
                             ->prefix('Until Date')
-                            ->native(false)
                             ->minDate(fn ($get) => $get('from_date'))
                         ]),
 
@@ -102,7 +99,6 @@ class PermitEmployeeResource extends Resource
                         ->hiddenLabel()
                         ->placeholder('Status')
                         ->preload()
-                        ->native(false)
                         ->options([
                             '1' => 'belum disetujui',
                             '2' => 'disetujui',

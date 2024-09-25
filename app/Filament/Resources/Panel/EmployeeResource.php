@@ -20,6 +20,12 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Tables\Columns\CheckboxColumn;
 use App\Filament\Resources\Panel\EmployeeResource\Pages;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Tables\Columns\ToggleColumn;
+use Humaidem\FilamentMapPicker\Fields\OSMMap;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeResource extends Resource
 {
@@ -55,150 +61,206 @@ class EmployeeResource extends Resource
                 Grid::make(['default' => 1])->schema([
                     TextInput::make('identity_no')
                         ->required()
-                        ->string()
+                        ->numeric()
                         ->autofocus(),
 
                     TextInput::make('nickname')
-                        ->required()
-                        ->string(),
+                        ->required(),
 
                     TextInput::make('no_telp')
                         ->required()
-                        ->string(),
+                        ->numeric(),
 
                     TextInput::make('birth_place')
-                        ->required()
-                        ->string(),
+                        ->required(),
 
                     DatePicker::make('birth_date')
                         ->rules(['date'])
                         ->required()
-                        ->native(false),
+                        ,
 
                     TextInput::make('fathers_name')
-                        ->required()
-                        ->string(),
+                        ->label('Fathers Name')
+                        ->required(),
 
                     TextInput::make('mothers_name')
-                        ->required()
-                        ->string(),
+                        ->label('Mothers Name')
+                        ->required(),
 
-                    RichEditor::make('address')
-                        ->required()
-                        ->string()
-                        ->fileAttachmentsVisibility('public'),
+                    OSMMap::make('location')
+                        ->showMarker()
+                        ->draggable()
+                        ->extraControl([
+                            'zoomDelta'           => 1,
+                            'zoomSnap'            => 0.25,
+                            'wheelPxPerZoomLevel' => 60
+                        ])
+                        ->afterStateHydrated(function (Get $get, Set $set, $record) {
+                            if ($record) {
+                                $latitude = $record->latitude;
+                                $longitude = $record->longitude;
+
+                                if ($latitude && $longitude) {
+                                        $set('location', ['lat' => $latitude, 'lng' => $longitude]);
+                                }
+                            }
+                        })
+                        ->afterStateUpdated(function ($state, FGet $get, Set $set) {
+                            $set('latitude', $state['lat']);
+                            $set('longitude', $state['lng']);
+                        })
+                        // tiles url (refer to https://www.spatialbias.com/2018/02/qgis-3.0-xyz-tile-layers/)
+                        ->tilesUrl('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+                    ),
+
+                    TextInput::make('latitude')->readOnly()
+                        ->hiddenLabel()
+                        ->placeholder('Latitude'),
+
+                    TextInput::make('longitude')->readOnly()
+                        ->hiddenLabel()
+                        ->placeholder('Longitude'),
+
+                    TextInput::make('address')
+                        ->required(),
 
                     Select::make('province_id')
                         ->required()
                         ->relationship('province', 'name')
                         ->searchable()
                         ->preload()
-                        ->native(false),
+
+                        ->reactive()
+                        ->afterStateUpdated(function ($state, callable $set) {
+                            $set('city_id', null);
+                            $set('district_id', null);
+                            $set('subdistrict_id', null);
+                            $set('postal_code_id', null);
+                        }),
 
                     Select::make('city_id')
                         ->required()
                         ->relationship('city', 'name')
                         ->searchable()
                         ->preload()
-                        ->native(false),
+
+                        ->reactive()
+                        ->options(function (callable $get) {
+                            $provinceId = $get('province_id');
+                            return \App\Models\City::where('province_id', $provinceId)->pluck('name', 'id');
+                        })
+                        ->afterStateUpdated(function ($state, callable $set) {
+                            $set('district_id', null);
+                            $set('subdistrict_id', null);
+                            $set('postal_code_id', null);
+                        }),
 
                     Select::make('district_id')
-                        ->required()
+                        ->nullable()
                         ->relationship('district', 'name')
                         ->searchable()
                         ->preload()
-                        ->native(false),
+
+                        ->reactive()
+                        ->options(function (callable $get) {
+                            $cityId = $get('city_id');
+                            return \App\Models\District::where('city_id', $cityId)->pluck('name', 'id');
+                        })
+                        ->afterStateUpdated(function ($state, callable $set) {
+                            $set('subdistrict_id', null);
+                            $set('postal_code_id', null);
+                        }),
 
                     Select::make('subdistrict_id')
-                        ->required()
+                        ->nullable()
                         ->relationship('subdistrict', 'name')
                         ->searchable()
                         ->preload()
-                        ->native(false),
+
+                        ->reactive()
+                        ->options(function (callable $get) {
+                            $districtId = $get('district_id');
+                            return \App\Models\Subdistrict::where('district_id', $districtId)->pluck('name', 'id');
+                        })
+                        ->afterStateUpdated(function ($state, callable $set) {
+                            $set('postal_code_id', null);
+                        }),
 
                     Select::make('postal_code_id')
-                        ->required()
-                        ->relationship('postalCode', 'id')
-                        ->searchable()
+                        ->label('Postal Code')
+                        ->nullable()
                         ->preload()
-                        ->native(false),
+
+                        ->reactive()
+                        ->options(function (callable $get) {
+                            $provinceId = $get('province_id');
+                            $cityId = $get('city_id');
+                            $districtId = $get('district_id');
+                            $subdistrictId = $get('subdistrict_id');
+                            return \App\Models\PostalCode::where('province_id', $provinceId)
+                                ->where('city_id', $cityId)
+                                ->where('district_id', $districtId)
+                                ->where('subdistrict_id', $subdistrictId)
+                                ->pluck('postal_code', 'id');
+                        }),
 
                     TextInput::make('parents_no_telp')
                         ->required()
-                        ->string(),
+                        ->numeric(),
 
                     TextInput::make('siblings_name')
-                        ->required()
-                        ->string(),
+                        ->label('Siblings Name')
+                        ->required(),
 
                     TextInput::make('siblings_no_telp')
-                        ->required()
-                        ->string(),
+                        ->required(),
 
-                    Checkbox::make('bpjs')
+                    Toggle::make('bpjs')
                         ->rules(['boolean'])
-                        ->required()
-                        ->inline(),
+                        ->label('BPJS')
+                        ->required(),
 
                     TextInput::make('bank_account_no')
                         ->nullable()
+                        ->numeric()
                         ->string(),
 
                     DatePicker::make('acceptance_date')
                         ->rules(['date'])
+                        ->hidden(fn ($operation) => $operation === 'create')
+                        ->disabled(fn () => Auth::user()->hasRole('staff'))
+                        ->visible(fn ($record) => Auth::user()->hasRole('admin') || Auth::user()->hasRole('super_admin'))
                         ->nullable()
-                        ->native(false),
-
-                    TextInput::make('signs')
-                        ->nullable()
-                        ->string(),
-
-                    RichEditor::make('notes')
-                        ->required()
-                        ->string()
-                        ->fileAttachmentsVisibility('public'),
-
-                    Select::make('user_id')
-                        ->required()
-                        ->relationship('user', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ,
 
                     Select::make('bank_id')
                         ->required()
                         ->relationship('bank', 'name')
-                        ->searchable()
                         ->preload()
-                        ->native(false),
-
-                    Select::make('employee_status_id')
-                        ->required()
-                        ->relationship('employeeStatus', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ,
 
                     Select::make('gender')
                         ->required()
-                        ->in([])
-                        ->searchable()
+                        ->options([
+                            '1' => 'male',
+                            '2' => 'female',
+                        ])
                         ->preload()
-                        ->native(false),
+                        ,
 
-                    TextInput::make('major')
-                        ->nullable()
-                        ->string(),
-
-                    TextInput::make('latitude')
+                    Select::make('level_of_education')
                         ->required()
-                        ->numeric()
-                        ->step(1),
-
-                    TextInput::make('longitude')
-                        ->required()
-                        ->numeric()
-                        ->step(1),
+                        ->options([
+                            '1' => 'tidak sekolah',
+                            '2' => 'SD',
+                            '3' => 'SMP',
+                            '4' => 'SMA',
+                            '5' => 'D1',
+                            '6' => 'D3',
+                            '7' => 'D4/S1'
+                        ])
+                        ->preload()
+                        ,
 
                     ImageInput::make('image_identity_id')
                         ->disk('public')
@@ -210,27 +272,38 @@ class EmployeeResource extends Resource
 
                     Select::make('religion')
                         ->required()
-                        ->searchable()
+                        ->options([
+                            '1' => 'islam',
+                            '2' => 'kristen',
+                            '3' => 'katholik',
+                            '4' => 'hindu',
+                            '5' => 'budha',
+                            '6' => 'kong hu chu',
+                        ])
                         ->preload()
-                        ->native(false),
+                        ,
 
                     Select::make('driving_license')
                         ->required()
-                        ->searchable()
+                        ->options([
+                            '1' => 'A',
+                            '2' => 'C',
+                            '3' => 'A dan C'
+                        ])
                         ->preload()
-                        ->native(false),
+                        ,
 
                     Select::make('marital_status')
                         ->required()
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
 
-                    Select::make('level_of_education')
-                        ->required()
-                        ->searchable()
+                        ->options([
+                            '1' => 'belum menikah',
+                            '2' => 'menikah',
+                            '3' => 'duda/janda'
+                        ])
                         ->preload()
-                        ->native(false),
+                        ,
+
                 ]),
             ]),
         ]);
@@ -241,6 +314,11 @@ class EmployeeResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
+
+                ImageColumn::make('image_identity_id')->visibility('public'),
+
+                ImageColumn::make('image_selfie')->visibility('public'),
+
                 TextColumn::make('identity_no'),
 
                 TextColumn::make('nickname'),
@@ -249,23 +327,11 @@ class EmployeeResource extends Resource
 
                 TextColumn::make('birth_place'),
 
-                TextColumn::make('birth_date')->since(),
+                TextColumn::make('birth_date'),
 
                 TextColumn::make('fathers_name'),
 
                 TextColumn::make('mothers_name'),
-
-                TextColumn::make('address')->limit(255),
-
-                TextColumn::make('province.name'),
-
-                TextColumn::make('city.name'),
-
-                TextColumn::make('district.name'),
-
-                TextColumn::make('subdistrict.name'),
-
-                TextColumn::make('postalCode.id'),
 
                 TextColumn::make('parents_no_telp'),
 
@@ -273,33 +339,17 @@ class EmployeeResource extends Resource
 
                 TextColumn::make('siblings_no_telp'),
 
-                CheckboxColumn::make('bpjs'),
+                ToggleColumn::make('bpjs')->label('BPJS'),
 
                 TextColumn::make('bank_account_no'),
 
                 TextColumn::make('acceptance_date')->since(),
-
-                TextColumn::make('signs'),
-
-                TextColumn::make('notes')->limit(255),
-
-                TextColumn::make('user.name'),
 
                 TextColumn::make('bank.name'),
 
                 TextColumn::make('employeeStatus.name'),
 
                 TextColumn::make('gender'),
-
-                TextColumn::make('major'),
-
-                TextColumn::make('latitude'),
-
-                TextColumn::make('longitude'),
-
-                ImageColumn::make('image_identity_id')->visibility('public'),
-
-                ImageColumn::make('image_selfie')->visibility('public'),
 
                 TextColumn::make('religion'),
 

@@ -243,8 +243,7 @@ class SalesOrderDirectsResource extends Resource
                 ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2 || Auth::user()->hasRole('storage-staff'))
                 ->default('today')
                 ->rules(['date'])
-                ->required()
-                ->native(false),
+                ->required(),
 
             Select::make('delivery_service_id')
                 ->required()
@@ -252,8 +251,7 @@ class SalesOrderDirectsResource extends Resource
                 ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2 || Auth::user()->hasRole('storage-staff'))
                 ->relationship('deliveryService', 'name')
                 ->searchable()
-                ->preload()
-                ->native(false),
+                ->preload(),
 
             Placeholder::make('delivery_address')
                 ->hidden(fn ($operation) => $operation === 'create' || Auth::user()->hasRole('customer'))
@@ -280,7 +278,6 @@ class SalesOrderDirectsResource extends Resource
                 ->disabled(fn (SalesOrderDirect $salesOrderDirect) =>
                     Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2)
                 ->preload()
-                ->native(false)
                 ->createOptionForm(
                     DeliveryAddressForm::schema()
                 ),
@@ -295,8 +292,7 @@ class SalesOrderDirectsResource extends Resource
                     ->get()
                     ->mapWithKeys(function ($item) {
                         return [$item->id => $item->transfer_name];
-                    }))
-                ->native(false),
+                    })),
 
             TextInput::make('receipt_no')
                 ->disabled(fn () => Auth::user()->hasRole('customer') || Auth::user()->hasRole('admin'))
@@ -307,7 +303,6 @@ class SalesOrderDirectsResource extends Resource
                 ->required(fn () => Auth::user()->hasRole('admin'))
                 ->hidden(fn ($operation) => $operation === 'create' || Auth::user()->hasRole('storage-staff'))
                 ->disabled(fn () => Auth::user()->hasRole('customer'))
-                ->native(false)
                 ->reactive()
                 ->live()
                 ->options([
@@ -330,7 +325,6 @@ class SalesOrderDirectsResource extends Resource
             Select::make('delivery_status')
                 ->hidden(fn ($operation) => $operation === 'create' || !Auth::user()->hasRole('storage-staff'))
                 ->required()
-                ->native(false)
                 ->options([
                     '1' => 'belum dikirim',
                     '3' => 'sudah dikirim',

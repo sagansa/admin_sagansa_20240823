@@ -6,6 +6,7 @@ use App\Filament\Clusters\Stock;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\BaseSelectInput;
 use App\Filament\Forms\DateInput;
+use App\Filament\Forms\NominalInput;
 use App\Filament\Forms\StatusSelectInput;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
@@ -168,13 +169,11 @@ class StorageStockResource extends Resource
                     ->label('Product')
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->required()
-                    ->native(false)
                     ->options(Product::where('request', '1')->orderBy('name', 'asc')->get()->pluck('name','id'))
                     ->columnSpan([
                         'md' => 5,
                     ]),
-                TextInput::make('quantity')
-                    ->required()
+                NominalInput::make('quantity')
                     ->suffix(function ($get) {
                         $product = Product::find($get('product_id'));
                         return $product ? $product->unit->unit : '';

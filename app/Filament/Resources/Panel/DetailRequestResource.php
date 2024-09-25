@@ -61,48 +61,13 @@ class DetailRequestResource extends Resource
                         ->required()
                         ->relationship('product', 'name')
                         ->disabled()
-                        ->preload()
-                        ->native(false),
-
-            //         TextInput::make('quantity_plan')
-            //             ->required()
-            //             ->numeric()
-            //             ->step(1),
-
-                    // Select::make('status')
-                    //     ->options([
-                    //         '1' => 'process',
-                    //         '2' => 'done',
-                    //         '3' => 'reject',
-                    //         '4' => 'approved',
-                    //         '5' => 'not valid',
-                    //         '6' => 'not used',
-                    //     ]),
-
-            //         RichEditor::make('notes')
-            //             ->nullable()
-            //             ->string()
-            //             ->fileAttachmentsVisibility('public'),
-
-            //         Select::make('request_purchase_id')
-            //             ->required()
-            //             ->relationship('requestPurchase', 'date')
-            //             ->searchable()
-            //             ->preload()
-            //             ->native(false),
-
-            //         Select::make('store_id')
-            //             ->required()
-            //             ->relationship('store', 'name')
-            //             ->searchable()
-            //             ->preload()
-            //             ->native(false),
+                        ->preload(),
 
                     Select::make('payment_type_id')
                         ->required()
                         ->relationship('paymentType', 'name')
                         ->preload()
-                        ->native(false),
+                        ,
                 ]),
             ]),
         ]);

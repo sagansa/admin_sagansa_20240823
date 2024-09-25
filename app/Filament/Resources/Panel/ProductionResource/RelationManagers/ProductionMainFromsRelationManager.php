@@ -27,8 +27,7 @@ class ProductionMainFromsRelationManager extends RelationManager
                     ->required()
                     ->relationship('detailInvoice', 'created_at')
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
             ]),
         ]);
     }

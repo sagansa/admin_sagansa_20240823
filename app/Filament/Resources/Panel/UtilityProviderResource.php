@@ -60,9 +60,7 @@ class UtilityProviderResource extends Resource
 
                     Select::make('category')
                         ->required()
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
                 ]),
             ]),
         ]);

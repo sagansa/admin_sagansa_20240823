@@ -14,7 +14,6 @@ class DateInput extends DatePicker
 
         $this
             ->required()
-            ->default('today')
-            ->native(false);
+            ->default('today');
     }
 }

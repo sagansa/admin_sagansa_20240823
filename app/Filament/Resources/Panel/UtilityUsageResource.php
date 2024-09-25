@@ -67,8 +67,7 @@ class UtilityUsageResource extends Resource
                             modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
                         )
                         ->getOptionLabelFromRecordUsing(fn (Utility $record) => "{$record->utility_name}")
-                        ->preload()
-                        ->native(false),
+                        ->preload(),
 
                     TextInput::make('result')
                         ->required()

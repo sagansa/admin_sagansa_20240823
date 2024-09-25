@@ -35,13 +35,11 @@ class DailySalariesRelationManager extends RelationManager
                 Select::make('shift_store_id')
                     ->required()
                     ->relationship('shiftStore', 'name')
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 DatePicker::make('date')
                     ->rules(['date'])
-                    ->required()
-                    ->native(false),
+                    ->required(),
 
                 TextInput::make('amount')
                     ->required()
@@ -51,8 +49,7 @@ class DailySalariesRelationManager extends RelationManager
                 Select::make('payment_type_id')
                     ->required()
                     ->relationship('paymentType', 'name')
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 Select::make('status')
                     ->options([
@@ -62,15 +59,13 @@ class DailySalariesRelationManager extends RelationManager
                         '4' => 'tidak valid'
                     ])
                     ->required()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
 
                 Select::make('created_by_id')
                     ->relationship('createdBy', 'name')
                     ->nullable()
                     ->searchable()
-                    ->preload()
-                    ->native(false),
+                    ->preload(),
             ]),
         ]);
     }

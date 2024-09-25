@@ -16,7 +16,6 @@ class StatusSelectInput extends Select
             ->required(fn () => Auth::user()->hasRole('admin'))
             ->hidden(fn ($operation) => $operation === 'create')
             ->disabled(fn () => Auth::user()->hasRole('staff'))
-            ->native(false)
             ->preload()
             ->options([
                 '1' => 'belum diperiksa',
