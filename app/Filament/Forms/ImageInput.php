@@ -15,6 +15,7 @@ class ImageInput extends FileUpload
             ->nullable()
             ->openable()
             ->maxSize(1024)
+            ->optimize('webp')
             ->image()
             ->imageEditor()
             ->disk('public')
