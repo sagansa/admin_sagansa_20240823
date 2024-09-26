@@ -58,7 +58,7 @@ class VehicleResource extends Resource
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
                     ImageInput::make('image')
-                        ->disk('public')
+
                         ->directory('images/Vehicle'),
 
                     Select::make('type')

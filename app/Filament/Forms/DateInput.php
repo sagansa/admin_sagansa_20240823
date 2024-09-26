@@ -14,6 +14,7 @@ class DateInput extends DatePicker
 
         $this
             ->required()
+            ->rules(['date'])
             ->default('today');
     }
 }

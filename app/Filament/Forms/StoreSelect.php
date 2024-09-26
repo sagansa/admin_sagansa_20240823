@@ -12,6 +12,7 @@ class StoreSelect extends Select
         parent::setUp();
 
         $this->required()
+            ->inlineLabel()
             ->relationship(
                 name: 'store',
                 titleAttribute: 'nickname',

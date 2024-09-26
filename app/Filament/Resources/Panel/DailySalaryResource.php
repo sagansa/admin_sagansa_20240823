@@ -4,7 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\HRD;
 use App\Filament\Filters\SelectEmployeeFilter;
-use App\Filament\Forms\BaseSelectInput;
+use App\Filament\Forms\BaseSelect;
 use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\PaymentStatusSelectInput;
@@ -61,10 +61,10 @@ class DailySalaryResource extends Resource
     {
         return $form->schema([
             Section::make()->schema([
-                Grid::make(['default' => 1])->schema([
+                Grid::make(['default' => 2])->schema([
                     StoreSelect::make('store_id'),
 
-                    BaseSelectInput::make('shift_store_id')
+                    BaseSelect::make('shift_store_id')
                         ->placeholder('Shift Store')
                         ->relationship('shiftStore', 'name'),
 
@@ -72,7 +72,7 @@ class DailySalaryResource extends Resource
 
                     CurrencyInput::make('amount'),
 
-                    Select::make('payment_type_id')
+                    BaseSelect::make('payment_type_id')
                         ->required()
                         // ->relationship('paymentType', 'name')
                         ->relationship(

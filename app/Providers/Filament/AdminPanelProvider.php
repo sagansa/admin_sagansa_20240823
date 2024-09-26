@@ -29,7 +29,7 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Access')
                     ->icon('heroicon-o-shield-check'),
                 NavigationGroup::make()
-                    ->label('Transaction')
+                    ->label(__('navigation.transactions'))
                     ->icon('heroicon-o-shopping-cart'),
                 NavigationGroup::make()
                     ->label('Asset')
@@ -67,7 +67,7 @@ class AdminPanelProvider extends PanelProvider
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
             ])
-            // ->databaseNotifications()
+            ->databaseNotifications()
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

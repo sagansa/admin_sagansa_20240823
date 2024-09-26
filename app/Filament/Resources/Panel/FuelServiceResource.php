@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Purchases;
+use App\Filament\Forms\BaseSelect;
 use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\DecimalInput;
@@ -10,6 +11,7 @@ use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\NominalInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\PaymentStatusSelectInput;
+use App\Filament\Forms\SupplierSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -60,80 +62,58 @@ class FuelServiceResource extends Resource
     {
         return $form->schema([
             Section::make()->schema([
-                Grid::make(['default' => 1])->schema([
+
+                Grid::make(['default' => 2])->schema([
 
                     ImageInput::make('image')
-                        ->disk('public')
                         ->directory('images/FuelService'),
 
-                    DateInput::make('date')
-                        ->required(),
+                    SupplierSelect::make('supplier_id'),
+
+                    DateInput::make('date'),
 
                     Radio::make('fuel_service')
                         ->inline()
-                        ->hiddenLabel()
+                        ->inlineLabel()
                         ->required()
                         ->options([
                             '1' => 'fuel',
                             '2' => 'service',
                         ]),
 
-                    Select::make('vehicle_id')
+                    BaseSelect::make('vehicle_id')
                         ->required()
-                        ->placeholder('Vehicle')
-                        ->hiddenLabel()
                         ->relationship(
                             name: 'vehicle',
                             modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
                         )
                         ->getOptionLabelFromRecordUsing(fn (Vehicle $record) => "{$record->no_register}")
                         ->searchable()
-                        ->preload()
-                        ,
+                        ->preload(),
 
-                    Select::make('supplier_id')
-                        ->required()
-                        ->placeholder('Supplier')
-                        ->hiddenLabel()
-                        ->relationship(
-                            name: 'supplier',
-                            modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '3'),
-                        )
-                        ->getOptionLabelFromRecordUsing(fn (Supplier $record) => "{$record->supplier_name}")
-                        ->searchable()
-                        ->preload()
-                        ,
-
-                    Select::make('payment_type_id')
-                        ->required()
-                        ->placeholder('Payment Type')
-                        ->hiddenLabel()
+                    BaseSelect::make('payment_type_id')
                         ->relationship(
                             name: 'paymentType',
                             modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
                         )
-                        ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
-                        // ->searchable()
-                        ->preload()
-                        ,
+                        ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}"),
 
                     NominalInput::make('km')
+                        ->label('km')
                         ->suffix('km'),
 
                     DecimalInput::make('liter')
                         ->suffix('liter'),
 
-                    CurrencyInput::make('amount')
-                        ->required()
-                        ->placeholder('Amount')
-                        ->hiddenLabel()
-                        ->numeric()
-                        ->prefix('Rp'),
+                    CurrencyInput::make('amount'),
 
                     PaymentStatusSelectInput::make('status'),
 
-                    Notes::make('notes'),
                 ]),
+
+                Grid::make(['default' => 1])->schema([
+                    Notes::make('notes'),
+                ])
             ]),
         ]);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel\ClosingStoreResource\RelationManagers;
 
+use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Forms\ImageInput;
 use Filament\Forms;
 use Filament\Tables;
@@ -45,7 +46,7 @@ class CashlessesRelationManager extends RelationManager
                     ->preload(),
 
                 ImageInput::make('image')
-                    ->disk('public')
+
                         ->directory('images/Cashless'),
 
                 TextInput::make('bruto_apl')
@@ -76,7 +77,7 @@ class CashlessesRelationManager extends RelationManager
 
                 TextInput::make('canceled')
                     ->prefix('Rp')
-                    ->disk('public')
+
                     ->directory('images/Cashless')
                     ->required()
                     ->numeric(),
@@ -92,15 +93,15 @@ class CashlessesRelationManager extends RelationManager
 
                 ImageColumn::make('image')->visibility('public'),
 
-                TextColumn::make('bruto_apl'),
+                CurrencyColumn::make('bruto_apl')->label(__('crud.cashlesses.inputs.bruto_apl.label')),
 
-                TextColumn::make('netto_apl'),
+                CurrencyColumn::make('netto_apl'),
 
-                TextColumn::make('bruto_real'),
+                CurrencyColumn::make('bruto_real'),
 
-                TextColumn::make('netto_real'),
+                CurrencyColumn::make('netto_real'),
 
-                TextColumn::make('image_canceled'),
+                ImageColumn::make('image_canceled'),
 
                 TextColumn::make('canceled'),
             ])

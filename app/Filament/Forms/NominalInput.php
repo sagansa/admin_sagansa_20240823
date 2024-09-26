@@ -11,6 +11,7 @@ class NominalInput extends TextInput
         parent::setUp();
 
         $this
+            ->inlineLabel()
             ->required()
             ->numeric()
             ->minValue(0)

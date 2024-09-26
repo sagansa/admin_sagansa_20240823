@@ -4,7 +4,6 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Stock;
 use App\Filament\Columns\StatusColumn;
-use App\Filament\Forms\BaseSelectInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\NominalInput;
 use App\Filament\Forms\StatusSelect;
@@ -60,14 +59,13 @@ class RemainingStockResource extends Resource
     {
         return $form->schema([
             Section::make()->schema([
-                Grid::make(['default' => 1])->schema([
+                Grid::make(['default' => 2])->schema([
                     DateInput::make('date')
                         ->placeholder(__('Date')),
 
                     StoreSelect::make('store_id'),
 
-                    StatusSelectInput::make('status')
-                        ->placeholder('Status'),
+                    StatusSelectInput::make('status'),
                 ]),
             ]),
 

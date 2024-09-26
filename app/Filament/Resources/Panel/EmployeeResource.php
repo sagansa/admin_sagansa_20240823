@@ -3,6 +3,8 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\HRD;
+use App\Filament\Forms\BaseTextInput;
+use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -59,33 +61,24 @@ class EmployeeResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    TextInput::make('identity_no')
-                        ->required()
+                    BaseTextInput::make('identity_no')
                         ->numeric()
                         ->autofocus(),
 
-                    TextInput::make('nickname')
-                        ->required(),
+                    BaseTextInput::make('nickname'),
 
-                    TextInput::make('no_telp')
-                        ->required()
+                    BaseTextInput::make('no_telp')
                         ->numeric(),
 
-                    TextInput::make('birth_place')
-                        ->required(),
+                    BaseTextInput::make('birth_place'),
 
-                    DatePicker::make('birth_date')
-                        ->rules(['date'])
-                        ->required()
-                        ,
+                    DateInput::make('birth_date'),
 
-                    TextInput::make('fathers_name')
-                        ->label('Fathers Name')
-                        ->required(),
+                    BaseTextInput::make('fathers_name')
+                        ->label('Fathers Name'),
 
-                    TextInput::make('mothers_name')
-                        ->label('Mothers Name')
-                        ->required(),
+                    BaseTextInput::make('mothers_name')
+                        ->label('Mothers Name'),
 
                     OSMMap::make('location')
                         ->showMarker()
@@ -121,8 +114,7 @@ class EmployeeResource extends Resource
                         ->hiddenLabel()
                         ->placeholder('Longitude'),
 
-                    TextInput::make('address')
-                        ->required(),
+                    BaseTextInput::make('address'),
 
                     Select::make('province_id')
                         ->required()
@@ -204,16 +196,13 @@ class EmployeeResource extends Resource
                                 ->pluck('postal_code', 'id');
                         }),
 
-                    TextInput::make('parents_no_telp')
-                        ->required()
+                    BaseTextInput::make('parents_no_telp')
                         ->numeric(),
 
-                    TextInput::make('siblings_name')
-                        ->label('Siblings Name')
-                        ->required(),
+                    BaseTextInput::make('siblings_name')
+                        ->label('Siblings Name'),
 
-                    TextInput::make('siblings_no_telp')
-                        ->required(),
+                    BaseTextInput::make('siblings_no_telp'),
 
                     Toggle::make('bpjs')
                         ->rules(['boolean'])
@@ -230,14 +219,12 @@ class EmployeeResource extends Resource
                         ->hidden(fn ($operation) => $operation === 'create')
                         ->disabled(fn () => Auth::user()->hasRole('staff'))
                         ->visible(fn ($record) => Auth::user()->hasRole('admin') || Auth::user()->hasRole('super_admin'))
-                        ->nullable()
-                        ,
+                        ->nullable(),
 
                     Select::make('bank_id')
                         ->required()
                         ->relationship('bank', 'name')
-                        ->preload()
-                        ,
+                        ->preload(),
 
                     Select::make('gender')
                         ->required()
@@ -245,8 +232,7 @@ class EmployeeResource extends Resource
                             '1' => 'male',
                             '2' => 'female',
                         ])
-                        ->preload()
-                        ,
+                        ->preload(),
 
                     Select::make('level_of_education')
                         ->required()
@@ -259,15 +245,12 @@ class EmployeeResource extends Resource
                             '6' => 'D3',
                             '7' => 'D4/S1'
                         ])
-                        ->preload()
-                        ,
+                        ->preload(),
 
                     ImageInput::make('image_identity_id')
-                        ->disk('public')
                         ->directory('images/Employee'),
 
                     ImageInput::make('image_selfie')
-                        ->disk('public')
                         ->directory('images/Employee'),
 
                     Select::make('religion')
@@ -280,8 +263,7 @@ class EmployeeResource extends Resource
                             '5' => 'budha',
                             '6' => 'kong hu chu',
                         ])
-                        ->preload()
-                        ,
+                        ->preload(),
 
                     Select::make('driving_license')
                         ->required()
@@ -290,19 +272,16 @@ class EmployeeResource extends Resource
                             '2' => 'C',
                             '3' => 'A dan C'
                         ])
-                        ->preload()
-                        ,
+                        ->preload(),
 
                     Select::make('marital_status')
                         ->required()
-
                         ->options([
                             '1' => 'belum menikah',
                             '2' => 'menikah',
                             '3' => 'duda/janda'
                         ])
-                        ->preload()
-                        ,
+                        ->preload(),
 
                 ]),
             ]),

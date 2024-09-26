@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel\ClosingStoreResource\RelationManagers;
 
 use App\Filament\Forms\ImageInput;
+use App\Filament\Forms\SupplierSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -26,11 +27,7 @@ class FuelServicesRelationManager extends RelationManager
     {
         return $form->schema([
             Grid::make(['default' => 1])->schema([
-                Select::make('supplier_id')
-                    ->required()
-                    ->relationship('supplier', 'name')
-                    ->searchable()
-                    ->preload(),
+                SupplierSelect::make('supplier_id'),
 
                 Select::make('vehicle_id')
                     ->required()
@@ -45,7 +42,7 @@ class FuelServicesRelationManager extends RelationManager
                     ->preload(),
 
                 ImageInput::make('image')
-                    ->disk('public')
+
                     ->directory('images/FuelService'),
 
                 TextInput::make('km')

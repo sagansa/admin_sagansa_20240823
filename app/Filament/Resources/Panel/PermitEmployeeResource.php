@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\HRD;
 use App\Filament\Clusters\Salaries;
+use App\Filament\Forms\BaseSelect;
 use App\Filament\Forms\Notes;
 use Filament\Forms;
 use Filament\Tables;
@@ -57,11 +58,8 @@ class PermitEmployeeResource extends Resource
     {
         return $form->schema([
             Section::make()->schema([
-                Grid::make(['default' => 1])->schema([
-                    Select::make('reason')
-                        ->required()
-                        ->hiddenLabel()
-                        ->placeholder('Reason')
+                Grid::make(['default' => 2])->schema([
+                    BaseSelect::make('reason')
                         // ->searchable()
                         ->preload()
                         ->options([
@@ -91,12 +89,11 @@ class PermitEmployeeResource extends Resource
                             ->minDate(fn ($get) => $get('from_date'))
                         ]),
 
-                    Select::make('status')
+                    BaseSelect::make('status')
                         ->required(fn () => Auth::user()->hasRole('admin'))
                         ->hidden(fn ($operation) => $operation === 'create')
                         ->disabled(fn () => Auth::user()->hasRole('staff'))
                         // ->searchable()
-                        ->hiddenLabel()
                         ->placeholder('Status')
                         ->preload()
                         ->options([

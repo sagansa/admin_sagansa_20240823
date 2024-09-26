@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
 
+use App\Filament\Forms\DateInput;
 use App\Filament\Tables\DailySalaryTable;
 use App\Filament\Forms\StatusInput;
 use App\Filament\Forms\StoreSelect;
@@ -37,9 +38,7 @@ class DailySalariesRelationManager extends RelationManager
                     ->relationship('shiftStore', 'name')
                     ->preload(),
 
-                DatePicker::make('date')
-                    ->rules(['date'])
-                    ->required(),
+                DateInput::make('date'),
 
                 TextInput::make('amount')
                     ->required()

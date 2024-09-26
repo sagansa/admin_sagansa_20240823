@@ -17,6 +17,7 @@ class ImageInput extends FileUpload
             ->maxSize(1024)
             ->image()
             ->imageEditor()
+            ->disk('public')
             ->columnSpan([
                 'full'
             ])

@@ -45,20 +45,17 @@ class DeliveryAddressForm
 
             TextInput::make('longitude')->readOnly(),
 
-            TextInput::make('name')
-                ->placeholder('Rumah, Kantor, atau Lain-lain')
-                ->required(),
+            BaseTextInput::make('name')
+                ->placeholder('Rumah, Kantor, atau Lain-lain'),
 
-            TextInput::make('recipient_name')
-                ->required(),
+            BaseTextInput::make('recipient_name'),
 
             TextInput::make('recipient_telp_no')
                 ->label('Telephone')
                 ->numeric()
                 ->nullable(),
 
-            TextInput::make('address')
-                ->required(),
+            baseTextInput::make('address'),
 
             Select::make('province_id')
                 ->hiddenLabel()

@@ -5,6 +5,12 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Filters\SelectStoreFilter;
+use App\Filament\Forms\BaseSelect;
+use App\Filament\Forms\BaseTextInput;
+use App\Filament\Forms\CurrencyInput;
+use App\Filament\Forms\DateInput;
+use App\Filament\Forms\DecimalInput;
+use App\Filament\Forms\NominalInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -56,8 +62,8 @@ class UtilityBillResource extends Resource
     {
         return $form->schema([
             Section::make()->schema([
-                Grid::make(['default' => 1])->schema([
-                    Select::make('utility_id')
+                Grid::make(['default' => 2])->schema([
+                    BaseSelect::make('utility_id')
                         ->required()
                         ->relationship('utility', 'name')
                         ->relationship(
@@ -69,33 +75,23 @@ class UtilityBillResource extends Resource
                         ->reactive()
                         ->preload(),
 
-                    DatePicker::make('date')
-                        ->rules(['date'])
-                        ->default('today')
-                        ->required(),
+                    DateInput::make('date'),
 
-                    TextInput::make('amount')
-                        ->required()
+                    CurrencyInput::make('amount')
                         ->numeric()
                         ->prefix('Rp'),
 
-                    TextInput::make('initial_indicator')
-                        ->required()
+                    DecimalInput::make('initial_indicator')
                         ->suffix(function (Get $get) {
                             $utility = Utility::find($get('utility_id'));
                             return $utility ? $utility->unit->unit : '';
-                        })
-                        ->minValue(0)
-                        ->numeric(),
+                        }),
 
-                    TextInput::make('last_indicator')
-                        ->required()
+                    DecimalInput::make('last_indicator')
                         ->suffix(function (Get $get) {
                             $utility = Utility::find($get('utility_id'));
                             return $utility ? $utility->unit->unit : '';
-                        })
-                        ->minValue(0)
-                        ->numeric(),
+                        }),
                 ]),
             ]),
         ]);

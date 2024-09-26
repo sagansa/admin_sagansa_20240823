@@ -9,6 +9,7 @@ use App\Filament\Columns\SupplierColumn;
 use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
+use App\Filament\Forms\SupplierSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -74,11 +75,7 @@ class PaymentReceiptResource extends Resource
                         ->inline()
                         ->reactive(),
 
-                    Select::make('supplier_id')
-                        ->label('Supplier')
-                        ->visible(fn ($get) => $get('payment_for') != '2')
-                        ->options(Supplier::all()->where('status', '<>', 3)->pluck('supplier_name', 'id'))
-                        ->searchable(),
+                    SupplierSelect::make('supplier_id')->label(__('crud.suppliers.itemTitle')),
 
                     Select::make('user_id')
                         ->label('Employee')
@@ -181,11 +178,11 @@ class PaymentReceiptResource extends Resource
                     CurrencyInput::make('transfer_amount'),
 
                     ImageInput::make('image')
-                        ->disk('public')
+
                         ->directory('images/PaymentReceipt'),
 
                     ImageInput::make('image_adjust')
-                        ->disk('public')
+
                         ->directory('images/PaymentReceipt')
                         ->hidden(fn ($operation) => $operation === 'create'),
 

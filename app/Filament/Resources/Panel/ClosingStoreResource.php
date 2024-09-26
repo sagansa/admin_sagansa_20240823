@@ -8,6 +8,8 @@ use App\Filament\Columns\StatusColumn;
 use App\Filament\Filters\DateFilter;
 use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Forms\CurrencyInput;
+use App\Filament\Forms\CurrencyRepeaterInput;
+use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
@@ -69,18 +71,16 @@ class ClosingStoreResource extends Resource
     {
         return $form->schema([
             Section::make()->schema([
-                Grid::make(['default' => 1])->schema([
+                Grid::make(['default' => 2])->schema([
                     StoreSelect::make('store_id'),
 
                     Select::make('shift_store_id')
                         ->required()
+                        ->inlineLabel()
                         ->relationship('shiftStore', 'name')
                         ->preload(),
 
-                    DatePicker::make('date')
-                        ->rules(['date'])
-                        ->default('today')
-                        ->required(),
+                    DateInput::make('date'),
 
                     CurrencyInput::make('cash_from_yesterday')
                         ->debounce(2000)
@@ -99,6 +99,16 @@ class ClosingStoreResource extends Resource
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
+
+                    Select::make('transfer_by_id')
+                        ->nullable()
+                        ->inlineLabel()
+                        ->relationship('transferBy', 'name', fn (Builder $query) => $query
+                            ->whereHas('roles', fn (Builder $query) => $query
+                                ->where('name', 'staff') || $query
+                                ->where('name', 'supervisor')))
+                        ->preload()
+                        ->visible(fn ($get) => $get('total_cash_transfer') !== 0),
                 ]),
             ]),
 
@@ -106,6 +116,7 @@ class ClosingStoreResource extends Resource
                 Grid::make(['default' => 1])->schema([
                     Select::make('fuelServices')
                         ->multiple()
+                        ->inlineLabel()
                         ->relationship(
                             name: 'fuelServices',
                             modifyQueryUsing: fn (Builder $query, $get) => $query
@@ -124,6 +135,7 @@ class ClosingStoreResource extends Resource
 
                     Select::make('dailySalaries')
                         ->multiple()
+                        ->inlineLabel()
                         ->relationship(
                             name: 'dailySalaries',
                             modifyQueryUsing: fn (Builder $query, $get) => $query
@@ -143,6 +155,7 @@ class ClosingStoreResource extends Resource
 
                     Select::make('invoicePurchases')
                         ->multiple()
+                        ->inlineLabel()
                         ->relationship(
                             name: 'invoicePurchases',
                             modifyQueryUsing: fn (Builder $query, $get) => $query
@@ -170,6 +183,7 @@ class ClosingStoreResource extends Resource
                         ->schema([
                             Select::make('account_cashless_id')
                                 ->required()
+                                ->hiddenLabel()
                                 ->preload()
                                 ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                 ->relationship(
@@ -183,77 +197,66 @@ class ClosingStoreResource extends Resource
                                 )
                                 ->getOptionLabelFromRecordUsing(fn (AccountCashless $record) => $record->account_cashless_name),
 
-                            CurrencyInput::make('bruto_apl')
-                                ->label('Bruto Total Omzet'),
+                            CurrencyRepeaterInput::make('bruto_apl')
+                                ->placeholder('Bruto Total Omzet'),
 
                             ImageInput::make('image')
-                                ->disk('public')
+                                ->hiddenLabel()
                                 ->directory('images/ClosingStore'),
                         ])
 
                 ])
             ]),
 
-            Section::make()->schema([
-                Grid::make(['default' => 1])->schema([
+            Section::make('TIDAK PERLU DIISI')->schema([
+                Grid::make(['default' => 2])->schema([
 
                     CurrencyInput::make('total_fuel_service')
-                        ->disabled()
+                        ->readOnly()
+                        ->inlineLabel()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
 
                     CurrencyInput::make('total_daily_salary')
-                        ->disabled()
+                        ->readOnly()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
 
                     CurrencyInput::make('total_invoice_purchase')
-                        ->prefix('Rp')
-                        ->disabled()
+                        ->readOnly()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
 
                     CurrencyInput::make('spending_total_cash')
-                        ->prefix('Rp')
-                        ->disabled()
+                        ->readOnly()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
 
                     CurrencyInput::make('total_cash')
-                        ->prefix('Rp')
-                        ->disabled()
+                        ->readOnly()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
 
                     CurrencyInput::make('total_cashless')
-                        ->prefix('Rp')
-                        ->disabled()
+                        ->readOnly()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
 
                     CurrencyInput::make('total_omzet')
-                        ->prefix('Rp')
-                        ->disabled()
+                        ->readOnly()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
                         }),
 
-                    Select::make('transfer_by_id')
-                        ->nullable()
-                        // ->required(function ($request) {
-                        //     return $request->total_cash_transfer != 0;
-                        // })
-                        ->relationship('transferBy', 'name')
-                        ->preload(),
-
                     Select::make('status')
                         ->required()
+                        ->inlineLabel()
                         ->hidden(fn ($operation) => $operation === 'create')
                         ->disabled(fn () => Auth::user()->hasRole('staff'))
                         ->required(fn () => Auth::user()->hasRole('admin'))

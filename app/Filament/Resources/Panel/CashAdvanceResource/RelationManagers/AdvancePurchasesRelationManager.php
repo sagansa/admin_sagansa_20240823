@@ -3,8 +3,10 @@
 namespace App\Filament\Resources\Panel\CashAdvanceResource\RelationManagers;
 
 use App\Filament\Forms\CurrencyInput;
+use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\StoreSelect;
+use App\Filament\Forms\SupplierSelect;
 use App\Filament\Tables\AdvancePurchaseTable;
 use App\Models\AdvancePurchase;
 use Filament\Tables;
@@ -31,21 +33,15 @@ class AdvancePurchasesRelationManager extends RelationManager
         return $form->schema([
             Grid::make(['default' => 1])->schema([
                 ImageInput::make('image')
-                    ->disk('public')
+
                     ->directory('images/AdvancePurchase'),
 
-                Select::make('supplier_id')
-                    ->required()
-                    ->relationship('supplier', 'name')
-                    ->searchable()
-                    ->preload(),
+                SupplierSelect::make('supplier_id'),
 
                 StoreSelect::make('store_id')
                     ->required(),
 
-                DatePicker::make('date')
-                    ->rules(['date'])
-                    ->required(),
+                DateInput::make('date'),
 
                 CurrencyInput::make('subtotal_price'),
 

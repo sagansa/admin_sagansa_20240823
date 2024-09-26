@@ -5,10 +5,12 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\Purchases;
 use App\Filament\Filters\SelectPaymentTypeFilter;
 use App\Filament\Forms\CurrencyInput;
+use App\Filament\Forms\CurrencyRepeaterInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
+use App\Filament\Forms\SupplierSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -62,21 +64,6 @@ class InvoicePurchaseResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            // Section::make()->schema([
-            //     Grid::make(['default' => 1])->schema(
-            //         static::getDetailsFormHeadSchema()),
-            // ]),
-
-            // Section::make()->schema([
-            //     Grid::make(['default' => 1])->schema([
-            //         static::getItemsRepeater()
-            //     ])
-            // ]),
-
-            // Section::make()->schema([
-            //     Grid::make(['default' => 1])->schema(
-            //         static::getDetailsFormBottomSchema()),
-            // ]),
 
             Group::make()
                 ->schema([
@@ -177,18 +164,10 @@ class InvoicePurchaseResource extends Resource
 
         return [
             ImageInput::make('image')
-                ->disk('public')
+
                 ->directory('images/InvoicePurchase'),
 
-            Select::make('supplier_id')
-                ->required()
-                ->relationship(
-                    name: 'supplier',
-                    modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '3')->orderBy('name', 'asc'),
-                )
-                ->getOptionLabelFromRecordUsing(fn (Supplier $record) => "{$record->supplier_name}")
-                ->searchable()
-                ->preload(),
+            SupplierSelect::make('supplier_id'),
 
             StoreSelect::make('store_id'),
 
@@ -201,6 +180,7 @@ class InvoicePurchaseResource extends Resource
                     modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
                 )
                 ->default(2)
+                ->inlineLabel()
                 ->preload(),
                 // ->afterStateUpdated(function (Set $set) {
                     // $set('detailInvoices', null);
@@ -213,6 +193,7 @@ class InvoicePurchaseResource extends Resource
                 ->disabled(fn () => !Auth::user()->hasRole('admin'))
                 ->hidden(fn ($operation) => $operation === 'create')
                 ->preload()
+                ->inlineLabel()
                 ->options([
                     '1' => 'belum dibayar',
                     '2' => 'sudah dibayar',
@@ -224,6 +205,7 @@ class InvoicePurchaseResource extends Resource
                 ->required()
                 ->hidden(fn ($operation) => $operation === 'create')
                 ->preload()
+                ->inlineLabel()
                 ->options([
                     '1' => 'belum diterima',
                     '2' => 'sudah diterima',
@@ -291,11 +273,8 @@ class InvoicePurchaseResource extends Resource
                     })
                     ->columnSpan(['md' => 2]),
 
-                CurrencyInput::make('subtotal_invoice')
-                    ->hiddenLabel()
+                CurrencyRepeaterInput::make('subtotal_invoice')
                     ->placeholder('subtotal')
-                    ->reactive()
-                    ->debounce(2000)
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         self::updateTotalPrice($get, $set);
                     })
@@ -313,6 +292,7 @@ class InvoicePurchaseResource extends Resource
             CurrencyInput::make('taxes')
                 ->reactive()
                 ->debounce(2000)
+                ->inlineLabel()
                 ->afterStateUpdated(function (Get $get, Set $set) {
                     self::updateTotalPrice($get, $set);
                 }),
@@ -320,11 +300,13 @@ class InvoicePurchaseResource extends Resource
             CurrencyInput::make('discounts')
                 ->reactive()
                 ->debounce(2000)
+                ->inlineLabel()
                 ->afterStateUpdated(function (Get $get, Set $set) {
                     self::updateTotalPrice($get, $set);
                 }),
 
             CurrencyInput::make('total_price')
+                ->inlineLabel()
                 ->readOnly(),
 
             Notes::make('notes'),

@@ -55,7 +55,7 @@ class DeliveryAddressResource extends Resource
     {
         return $form->schema([
             Section::make()->schema([
-                Grid::make(['default' => 1])
+                Grid::make(['default' => 2])
                     ->schema([
                         OSMMap::make('location')
                             ->label('Location')
@@ -104,8 +104,7 @@ class DeliveryAddressResource extends Resource
                             ->required(),
 
                         Select::make('province_id')
-                            ->hiddenLabel()
-                            ->placeholder('Province')
+                            ->label('Province')
                             ->required()
                             ->relationship('province', 'name')
                             ->searchable()

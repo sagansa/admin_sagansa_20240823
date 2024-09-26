@@ -22,14 +22,15 @@ class SalesProductForm
             ->schema([
 
                 Select::make('product_id')
-                    ->label('Product')
+                    ->placeholder('Product')
+                    ->hiddenLabel()
                     ->searchable()
                     ->options(Product::query()
                         ->whereNotIn('online_category_id', [4])
                         ->pluck('name', 'id')
                         ->map(function ($name, $id) {
                             $product = Product::find($id);
-                            return $product->product_name;
+                            return $product->name;
                     }))
                     ->required()
                     ->reactive()
@@ -40,7 +41,8 @@ class SalesProductForm
                     ->searchable(),
 
                 TextInput::make('quantity')
-                    ->label('Quantity')
+                    ->hiddenLabel()
+                    ->placeholder('Quantity')
                     ->numeric()
                     ->default(1)
                     ->minValue(1)
@@ -50,15 +52,17 @@ class SalesProductForm
                         'md' => 2,
                     ])
                     ->reactive()
+                    ->suffix(function (Get $get) {
+                        $product = Product::find($get('product_id'));
+                        return $product ? $product->unit->unit : '';
+                    })
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         self::updateSubtotalPrice($get, $set);
                         self::updateTotalPrice($get, $set);
                     }),
 
-                CurrencyInput::make('unit_price')
-                    ->label('Unit Price')
-                    ->debounce(2000)
-                    ->reactive()
+                CurrencyRepeaterInput::make('unit_price')
+                    ->placeholder('Unit Price')
                     ->columnSpan([
                         'md' => 2,
                     ])
@@ -67,8 +71,8 @@ class SalesProductForm
                         self::updateTotalPrice($get, $set);
                     }),
 
-                CurrencyInput::make('subtotal_price')
-                    ->label('Subtotal Price')
+                CurrencyRepeaterInput::make('subtotal_price')
+                    ->placeholder('Subtotal Price')
                     ->readOnly()
                     ->columnSpan([
                         'md' => 2,

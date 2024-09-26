@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
@@ -42,11 +43,16 @@ class AppServiceProvider extends ServiceProvider
         // });
 
         DatePicker::configureUsing(function(DatePicker $datePicker) {
-            $datePicker->native(false);
+            $datePicker->native(false)->inlineLabel();
         });
 
         // Section::configureUsing(function(Section $section) {
         //     $section->columns()->compact();
         // });
+
+        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
+            $switch
+                ->locales(['id','en']); // also accepts a closure
+        });
     }
 }

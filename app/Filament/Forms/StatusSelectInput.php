@@ -12,7 +12,7 @@ class StatusSelectInput extends Select
         parent::setUp();
 
         $this
-            ->hiddenLabel()
+            ->inlineLabel()
             ->required(fn () => Auth::user()->hasRole('admin'))
             ->hidden(fn ($operation) => $operation === 'create')
             ->disabled(fn () => Auth::user()->hasRole('staff'))

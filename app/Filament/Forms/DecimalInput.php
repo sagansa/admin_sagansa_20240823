@@ -13,6 +13,7 @@ class DecimalInput extends TextInput
         $this
             ->required()
             ->numeric()
+            ->inlineLabel()
             ->minValue(0)
             ->default(0)
             ->currencyMask(thousandSeparator: '.',decimalSeparator: ',',precision: 2);

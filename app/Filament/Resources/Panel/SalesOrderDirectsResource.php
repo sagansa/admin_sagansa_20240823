@@ -11,11 +11,13 @@ use App\Filament\Filters\DateFilter;
 use App\Filament\Filters\SelectStoreFilter;
 use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Forms\BottomTotalPriceForm;
+use App\Filament\Forms\DateInput;
 use App\Filament\Forms\DeliveryAddressForm;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Resources\Panel\SalesOrderDirectsResource\Pages;
 use App\Models\SalesOrderDirect;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -53,17 +55,24 @@ class SalesOrderDirectsResource extends Resource
     {
         return $form->schema([
 
-            Section::make()
-                ->schema(static::getDetailsFormHeadSchema()),
+            Group::make()
+                ->schema([
+                    Section::make()
+                        ->schema(static::getDetailsFormHeadSchema())
+                        ->columns(2),
 
-            Section::make('Detail Order')->schema([
-                SalesProductForm::getItemsRepeater()
-            ]),
+                    Section::make('Detail Order')->schema([
+                        SalesProductForm::getItemsRepeater()
+                        ]),
+            ])
+            ->columnSpan(['lg' => fn (?SalesOrderDirect $record) => $record === null ? 3 : 2]),
             // ->disabled(fn (SalesOrderDirect $record) => $record->payment_status === 2),
 
             Section::make()
                  ->schema(BottomTotalPriceForm::schema())
-        ]);
+                 ->columnSpan(['lg' => 1]),
+        ])
+        ->columns(3);
         // ->disabled(fn (?SalesOrderDirect $record) => $record !== null && $record->payment_status == 2 && $record->delivery_status == 2);
     }
 
@@ -229,36 +238,35 @@ class SalesOrderDirectsResource extends Resource
                     || Auth::user()->hasRole('storage-staff')
                 )
                 ->required()
-                ->disk('public')
                 ->directory('images/Direct/Payment'),
+
+            ImageInput::make('image_delivery')
+                ->hidden(fn () => Auth::user()->hasRole('customer'))
+                ->disabled(fn () => Auth::user()->hasRole('admin'))
+                ->label('Delivered')
+                ->directory('images/Direct/Delivery'),
 
             StoreSelect::make('store_id')
                 ->required(fn () => Auth::user()->hasRole('admin'))
                 ->hidden(fn () => Auth::user()->hasRole('customer'))
                 ->disabled(fn () => Auth::user()->hasRole('storage-staff')),
 
-            DatePicker::make('delivery_date')
-                ->required()
+            DateInput::make('delivery_date')
                 ->label('Delivery Date')
-                ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2 || Auth::user()->hasRole('storage-staff'))
-                ->default('today')
-                ->rules(['date'])
-                ->required(),
+                ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2 || Auth::user()->hasRole('storage-staff')),
 
             Select::make('delivery_service_id')
                 ->required()
+                ->inlineLabel()
                 ->label('Delivery Service')
                 ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2 || Auth::user()->hasRole('storage-staff'))
                 ->relationship('deliveryService', 'name')
                 ->searchable()
                 ->preload(),
 
-            Placeholder::make('delivery_address')
-                ->hidden(fn ($operation) => $operation === 'create' || Auth::user()->hasRole('customer'))
-                ->content(fn (SalesOrderDirect $record): string => $record->deliveryAddress->delivery_address_name),
-
             Select::make('delivery_address_id')
                 ->label('Delivery Address')
+                ->inlineLabel()
                 ->required(fn (SalesOrderDirect $salesOrderDirect) => $salesOrderDirect->delivery_service_id != 33)
                 ->relationship(
                     name: 'deliveryAddress',
@@ -284,6 +292,7 @@ class SalesOrderDirectsResource extends Resource
 
             Select::make('transfer_to_account_id')
                 ->required()
+                ->inlineLabel()
                 ->label('Transfer To Account')
                 ->hidden(fn () => Auth::user()->hasRole('storage-staff'))
                 ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 1)
@@ -296,6 +305,7 @@ class SalesOrderDirectsResource extends Resource
 
             TextInput::make('receipt_no')
                 ->disabled(fn () => Auth::user()->hasRole('customer') || Auth::user()->hasRole('admin'))
+                ->inlineLabel()
                 ->hidden(fn ($operation) => $operation === 'create' && fn(SalesOrderDirect $salesOrderDirect) => $salesOrderDirect->deliveryStatus == 3)
                 ->required(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('storage-staff') && $salesOrderDirect->delivery_status == 3),
 
@@ -304,27 +314,16 @@ class SalesOrderDirectsResource extends Resource
                 ->hidden(fn ($operation) => $operation === 'create' || Auth::user()->hasRole('storage-staff'))
                 ->disabled(fn () => Auth::user()->hasRole('customer'))
                 ->reactive()
-                ->live()
+                ->inlineLabel()
                 ->options([
                     '1' => 'belum diperiksa',
                     '2' => 'valid',
                 ]),
 
-            Placeholder::make('delivery_status')
-                ->hidden(fn ($operation) => $operation === 'create')
-                ->label('Delivery Status')
-                ->content(fn (SalesOrderDirect $record): HtmlString => new HtmlString(match ($record->delivery_status) {
-                    1 => '<span class="badge badge-warning">belum dikirim</span>',
-                    3 => '<span class="badge badge-success">sudah dikirim</span>',
-                    4 => '<span class="badge badge-info">siap dikirim</span>',
-                    5 => '<span class="badge badge-danger">perbaiki</span>',
-                    6 => '<span class="badge badge-secondary">dikembalikan</span>',
-                    // default => '<span class="badge badge-dark">unknown</span>',
-                })),
-
             Select::make('delivery_status')
                 ->hidden(fn ($operation) => $operation === 'create' || !Auth::user()->hasRole('storage-staff'))
                 ->required()
+                ->inlineLabel()
                 ->options([
                     '1' => 'belum dikirim',
                     '3' => 'sudah dikirim',
@@ -335,14 +334,27 @@ class SalesOrderDirectsResource extends Resource
 
             TextInput::make('received_by')
                 ->hidden(fn ($operation) => $operation === 'create')
+                ->inlineLabel()
                 ->disabled(fn () => Auth::user()->hasRole('customer')),
 
-            ImageInput::make('image_delivery')
-                ->hidden(fn () => Auth::user()->hasRole('customer'))
-                ->disabled(fn () => Auth::user()->hasRole('admin'))
-                ->label('Delivered')
-                ->disk('public')
-                ->directory('images/Direct/Delivery'),
+            Placeholder::make('delivery_status')
+                ->hidden(fn ($operation) => $operation === 'create')
+                ->label('Delivery Status')
+                ->inlineLabel()
+                ->content(fn (SalesOrderDirect $record): HtmlString => new HtmlString(match ($record->delivery_status) {
+                    1 => '<span class="badge badge-warning">belum dikirim</span>',
+                    3 => '<span class="badge badge-success">sudah dikirim</span>',
+                    4 => '<span class="badge badge-info">siap dikirim</span>',
+                    5 => '<span class="badge badge-danger">perbaiki</span>',
+                    6 => '<span class="badge badge-secondary">dikembalikan</span>',
+                    // default => '<span class="badge badge-dark">unknown</span>',
+                })),
+
+            Placeholder::make('delivery_address')
+                ->hidden(fn ($operation) => $operation === 'create' || Auth::user()->hasRole('customer'))
+                ->content(fn (SalesOrderDirect $record): string => $record->deliveryAddress->delivery_address_name),
+
+
         ];
     }
 }

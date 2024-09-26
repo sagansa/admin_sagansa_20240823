@@ -7,6 +7,7 @@ use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\BottomTotalPriceForm;
+use App\Filament\Forms\DateInput;
 use App\Filament\Forms\DeliveryAddressForm;
 use App\Filament\Forms\SalesProductForm;
 use App\Filament\Forms\ImageInput;
@@ -158,19 +159,16 @@ class SalesOrderEmployeesResource extends Resource
         return [
             ImageInput::make('image_payment')
                 ->label('Transfer')
-                ->disk('public')
+
                 ->directory('images/Employee'),
 
             StoreSelect::make('store_id'),
 
-            DatePicker::make('delivery_date')
-                ->required()
-                ->default('today')
-                ->rules(['date'])
-                ->required(),
+            DateInput::make('delivery_date'),
 
             Select::make('delivery_address_id')
                 ->label('Delivery Address')
+                ->inlineLabel()
                 ->required()
                 ->relationship(
                     name: 'deliveryAddress',
@@ -186,6 +184,7 @@ class SalesOrderEmployeesResource extends Resource
 
             Select::make('transfer_to_account_id')
                 ->label('Transfer To Account')
+                ->inlineLabel()
                 ->required()
                 ->relationship('transferToAccount', 'name')
                 ->options(TransferToAccount::where('status', 1)
@@ -196,7 +195,7 @@ class SalesOrderEmployeesResource extends Resource
 
             Select::make('payment_status')
                 ->required()
-                ->default(1)
+                ->inlineLabel()
                 ->options([
                     '1' => 'belum diperiksa',
                     '2' => 'valid',

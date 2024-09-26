@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Stock;
+use App\Filament\Forms\DateInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
@@ -57,9 +58,7 @@ class SelfConsumptionResource extends Resource
                 Grid::make(['default' => 1])->schema([
                     StoreSelect::make('store_id'),
 
-                    DatePicker::make('date')
-                        ->rules(['date'])
-                        ->required(),
+                    DateInput::make('date'),
 
                     Select::make('status')
                         ->required()
@@ -90,8 +89,6 @@ class SelfConsumptionResource extends Resource
                 TextColumn::make('date')->since(),
 
                 TextColumn::make('status'),
-
-                TextColumn::make('notes')->limit(255),
 
                 TextColumn::make('created_by_id'),
 

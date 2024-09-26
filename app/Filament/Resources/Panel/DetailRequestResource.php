@@ -59,12 +59,14 @@ class DetailRequestResource extends Resource
                 Grid::make(['default' => 2])->schema([
                     Select::make('product_id')
                         ->required()
+                        ->inlineLabel()
                         ->relationship('product', 'name')
                         ->disabled()
                         ->preload(),
 
                     Select::make('payment_type_id')
                         ->required()
+                        ->inlineLabel()
                         ->relationship('paymentType', 'name')
                         ->preload()
                         ,

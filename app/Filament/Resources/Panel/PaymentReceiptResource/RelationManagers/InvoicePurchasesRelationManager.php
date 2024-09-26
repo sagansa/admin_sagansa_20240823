@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
 
+use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\StoreSelect;
+use App\Filament\Forms\SupplierSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -29,7 +31,7 @@ class InvoicePurchasesRelationManager extends RelationManager
         return $form->schema([
             Grid::make(['default' => 1])->schema([
                 ImageInput::make('image')
-                    ->disk('public')
+
                     ->directory('images/InvoicePurchase'),
 
                 Select::make('payment_type_id')
@@ -41,15 +43,9 @@ class InvoicePurchasesRelationManager extends RelationManager
                 StoreSelect::make('store_id')
                     ->required(),
 
-                Select::make('supplier_id')
-                    ->required()
-                    ->relationship('supplier', 'name')
-                    ->searchable()
-                    ->preload(),
+                SupplierSelect::make('supplier_id'),
 
-                DatePicker::make('date')
-                    ->rules(['date'])
-                    ->required(),
+                DateInput::make('date'),
 
                 TextInput::make('taxes')
                     ->required()

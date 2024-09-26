@@ -130,7 +130,7 @@ class StorageStockResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // RelationManagers\ProductsRelationManager::class,
+            RelationManagers\ProductsRelationManager::class,
         ];
     }
 

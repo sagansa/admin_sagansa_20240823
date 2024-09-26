@@ -4,10 +4,12 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Purchases;
 use App\Filament\Forms\CurrencyInput;
+use App\Filament\Forms\CurrencyRepeaterInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
+use App\Filament\Forms\SupplierSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -121,13 +123,15 @@ class AdvancePurchaseResource extends Resource
     {
         return [
             ImageInput::make('image')
-                ->disk('public')
                 ->directory('images/AdvancePurchase'),
+
+            SupplierSelect::make('supplier_id'),
 
             Select::make('cash_advance_id')
                     ->required(fn () => Auth::user()->hasRole('staff'))
                     ->disabled(fn () => Auth::user()->hasRole('admin'))
                     ->label('Cash Advance')
+                    ->inlineLabel()
                     ->relationship(
                         name: 'cashAdvance',
                         modifyQueryUsing: fn (Builder $query) =>
@@ -139,17 +143,11 @@ class AdvancePurchaseResource extends Resource
 
             StoreSelect::make('store_id'),
 
-            Select::make('supplier_id')
-                ->label('Supplier')
-                ->required()
-                ->options(Supplier::all()->where('status', '<>', 3)->pluck('supplier_name', 'id'))
-                ->searchable()
-                ->preload(),
-
             DateInput::make('date'),
 
             Select::make('status')
                 ->required()
+                ->inlineLabel()
                 ->required(fn () => Auth::user()->hasRole('admin'))
                 ->hidden(fn ($operation) => $operation === 'create')
                 ->disabled(fn () => Auth::user()->hasRole('staff'))
@@ -169,7 +167,9 @@ class AdvancePurchaseResource extends Resource
             ->relationship()
             ->schema([
                 Select::make('product_id')
-                    ->label('Product')
+                    // ->label('Product')
+                    ->hiddenLabel()
+                    ->placeholder('Product')
                     ->searchable()
                     ->options(Product::query()->pluck('name', 'id'))
                     ->required()
@@ -183,6 +183,8 @@ class AdvancePurchaseResource extends Resource
                 TextInput::make('quantity')
                     ->label('Quantity')
                     ->numeric()
+                    ->hiddenlabel()
+                    ->placeholder('quantity')
                     ->default(1)
                     ->minValue(1)
                     ->required()
@@ -199,7 +201,7 @@ class AdvancePurchaseResource extends Resource
                         self::updateUnitPrice($get, $set);
                     }),
 
-                CurrencyInput::make('price')
+                CurrencyRepeaterInput::make('price')
                     ->columnSpan([
                         'md' => 2,
                     ])
@@ -210,7 +212,7 @@ class AdvancePurchaseResource extends Resource
                         self::updateTotalPrice($get, $set);
                     }),
 
-                CurrencyInput::make('unit_price')
+                CurrencyRepeaterInput::make('unit_price')
                     ->label('Unit Price')
                     ->readOnly()
                     ->columnSpan([

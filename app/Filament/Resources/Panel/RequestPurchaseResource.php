@@ -20,11 +20,14 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\Panel\RequestPurchaseResource\Pages;
 use App\Models\Product;
+use Awcodes\TableRepeater\Components\TableRepeater;
+use Awcodes\TableRepeater\Header;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Get;
 use Filament\Tables\Actions\ActionGroup;
+// use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 use Illuminate\Support\Facades\Auth;
 
 class RequestPurchaseResource extends Resource
@@ -60,7 +63,7 @@ class RequestPurchaseResource extends Resource
     {
         return $form->schema([
             Section::make()->schema([
-                Grid::make(['default' => 1])->schema([
+                Grid::make(['md' => 2])->schema([
                     StoreSelect::make('store_id'),
 
                     DateInput::make('date'),
@@ -164,25 +167,30 @@ class RequestPurchaseResource extends Resource
             ->schema([
                 Select::make('product_id')
                     ->relationship('product', 'name')
+                    ->hiddenLabel()
+                    ->placeholder('Product')
                     ->required()
                     ->preload()
                     ->searchable()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     // ->disabled(fn (Get $get) => $get('status') != 1)
                     ->reactive()
-                    ->columnSpan(4),
+                    ->columnSpan(3),
 
                 TextInput::make('quantity_plan')
                     ->required()
+                    ->hiddenLabel()
+                    ->placeholder('Quantity Plan')
                     ->minValue(1)
                     ->numeric()
                     ->suffix(function (Get $get) {
                         $product = Product::find($get('product_id'));
                         return $product ? $product->unit->unit : '';
                     })
-                    ->columnSpan(2),
+                    ->columnSpan(1),
 
                 Select::make('status')
+                    ->hiddenLabel()
                     ->options([
                         '1' => 'process',
                         '2' => 'done',
@@ -197,7 +205,7 @@ class RequestPurchaseResource extends Resource
 
             ])
             ->columns([
-                'md' => 8,
+                'md' => 6,
             ])
             ->defaultItems(1);
     }

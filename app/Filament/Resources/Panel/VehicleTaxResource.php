@@ -4,7 +4,9 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Asset;
 use App\Filament\Clusters\Vehicles;
+use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
+use App\Filament\Forms\Notes;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -56,7 +58,7 @@ class VehicleTaxResource extends Resource
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
                     ImageInput::make('image')
-                        ->disk('public')
+
                         ->directory('images/VehicleTax'),
 
                     TextInput::make('amount_tax')
@@ -70,20 +72,10 @@ class VehicleTaxResource extends Resource
                         ->searchable()
                         ->preload(),
 
-                    DatePicker::make('expired_date')
-                        ->rules(['date'])
-                        ->required(),
+                    DateInput::make('expired_date'),
 
-                    RichEditor::make('notes')
-                        ->nullable()
-                        ->string()
-                        ->fileAttachmentsVisibility('public'),
+                    Notes::make('notes'),
 
-                    Select::make('user_id')
-                        ->nullable()
-                        ->relationship('user', 'name')
-                        ->searchable()
-                        ->preload(),
                 ]),
             ]),
         ]);

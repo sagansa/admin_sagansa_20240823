@@ -2,10 +2,7 @@
 
 namespace App\Filament\Forms;
 
-use App\Models\SalesOrderOnline;
 use Filament\Forms\Components\{RichEditor, TextInput};
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 
 class BottomTotalPriceForm
 {

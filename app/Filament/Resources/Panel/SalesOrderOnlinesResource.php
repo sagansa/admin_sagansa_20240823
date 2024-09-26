@@ -11,6 +11,7 @@ use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Pages;
 use App\Models\DeliveryAddress;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -25,6 +26,7 @@ use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Forms\BottomTotalPriceForm;
+use App\Filament\Forms\DateInput;
 use App\Filament\Forms\DeliveryAddressForm;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\SalesProductForm;
@@ -52,18 +54,25 @@ class SalesOrderOnlinesResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-                Section::make('Order')
-                    ->schema(static::getDetailsFormHeadSchema())
-                    ->columns(2),
 
-                Section::make('Detail Order')->schema([
-                    SalesProductForm::getItemsRepeater()
-                    ])
-                    ->disabled(fn () => Auth::user()->hasRole('storage-staff')),
+            Group::make()
+                ->schema([
+                    Section::make('Order')
+                        ->schema(static::getDetailsFormHeadSchema())
+                        ->columns(2),
+
+                    Section::make('Detail Order')->schema([
+                        SalesProductForm::getItemsRepeater()
+                        ])
+                        ->disabled(fn () => Auth::user()->hasRole('storage-staff')),
+                ])
+                ->columnSpan(['lg' => fn (?SalesOrderOnline $record) => $record === null ? 3 : 2]),
 
                 Section::make('Total Price')
-                    ->schema(BottomTotalPriceForm::schema()),
+                    ->schema(BottomTotalPriceForm::schema())
+                    ->columnSpan(['lg' => 1]),
             ])
+            ->columns(3)
             ->disabled(fn (?SalesOrderOnline $record) => $record !== null && $record->delivery_status == 2);
     }
 
@@ -209,32 +218,8 @@ class SalesOrderOnlinesResource extends Resource
         return [
             ImageInput::make('image_payment')
                 ->label('From Online Shop')
-                ->disk('public')
+
                 ->directory('images/Online/Payment')
-                ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
-
-            StoreSelect::make('store_id')
-                ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
-
-            DatePicker::make('delivery_date')
-                ->required()
-                ->default('today')
-                ->rules(['date'])
-                ->required()
-                ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
-
-            Select::make('online_shop_provider_id')
-                ->required()
-                ->relationship('onlineShopProvider', 'name')
-                ->searchable()
-                ->preload()
-                ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
-
-            Select::make('delivery_service_id')
-                ->required()
-                ->relationship('deliveryService', 'name')
-                ->searchable()
-                ->preload()
                 ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
 
             Select::make('delivery_address_id')
@@ -259,14 +244,38 @@ class SalesOrderOnlinesResource extends Resource
                     DeliveryAddressForm::schema()
                 ),
 
+            StoreSelect::make('store_id')
+                ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
+
+            DateInput::make('delivery_date')
+                ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
+
+            Select::make('online_shop_provider_id')
+                ->required()
+                ->inlineLabel()
+                ->relationship('onlineShopProvider', 'name')
+                ->searchable()
+                ->preload()
+                ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
+
+            Select::make('delivery_service_id')
+                ->required()
+                ->inlineLabel()
+                ->relationship('deliveryService', 'name')
+                ->searchable()
+                ->preload()
+                ->disabled(fn () => auth()->user()->hasRole('storage-staff')),
 
             TextInput::make('receipt_no')
+                ->inlineLabel()
+                ->nullable()
                 ->label('Receipt No'),
                 // ->hidden(fn ($operation) => $operation === 'create')
                 // ->required(fn (SalesOrderOnline $record) => $record->delivery_status == 3),
 
             Select::make('delivery_status')
                 ->required()
+                ->inlineLabel()
                 ->hidden(fn ($operation) => $operation === 'create')
                 ->options([
                     '1' => 'belum dikirim',
@@ -278,12 +287,12 @@ class SalesOrderOnlinesResource extends Resource
                 ]),
 
             TextInput::make('received_by')
+                ->inlineLabel()
                 ->hidden(fn ($operation) => $operation === 'create')
                 ->disabled(fn () => Auth::user()->hasRole('admin')),
 
             ImageInput::make('image_delivery')
                 ->label('Delivered')
-                ->disk('public')
                 ->directory('images/Online/Delivery'),
         ];
     }

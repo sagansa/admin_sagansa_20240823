@@ -61,17 +61,17 @@ class ReadinessResource extends Resource
                 Grid::make(['default' => 1])->schema([
                     ImageInput::make('image_selfie')
                         ->label('Selfie')
-                        ->disk('public')
+
                         ->directory('images/Readiness'),
 
                     ImageInput::make('left_hand')
                         ->label('Left Hand')
-                        ->disk('public')
+
                         ->directory('images/Readiness'),
 
                     ImageInput::make('right_hand')
                         ->label('Right Hand')
-                        ->disk('public')
+
                         ->directory('images/Readiness'),
 
                     Select::make('status')
@@ -79,7 +79,6 @@ class ReadinessResource extends Resource
                         ->hidden(fn ($operation) => $operation === 'create')
                         ->disabled(fn () => Auth::user()->hasRole('staff'))
                         ->preload()
-                        ->native(false)
                         ->options([
                             '1' => 'belum diperiksa',
                             '2' => 'valid',

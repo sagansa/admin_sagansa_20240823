@@ -7,6 +7,7 @@ use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\CurrencyInput;
+use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StatusSelectLabel;
@@ -86,7 +87,6 @@ class CashAdvanceResource extends Resource
 
                 CurrencyColumn::make('before'),
 
-
                 CurrencyColumn::make('purchase'),
 
                 CurrencyColumn::make('remains'),
@@ -115,12 +115,13 @@ class CashAdvanceResource extends Resource
         return [
             Grid::make(['default' => 1])->schema([
                 ImageInput::make('image')
-                    ->disk('public')
+
                     ->directory('images/CashAdvance'),
 
                 Group::make()->schema([
                     Select::make('user_id')
                         ->label('User')
+                        ->inlineLabel()
                         ->required()
                         ->relationship('user', 'name', fn (Builder $query) => $query
                             ->whereHas('roles', fn (Builder $query) => $query
@@ -132,14 +133,14 @@ class CashAdvanceResource extends Resource
                             'md' => 4,
                         ]),
 
-                    DatePicker::make('date')
-                        ->default('today')
+                    DateInput::make('date')
                         ->columnSpan([
                             'md' => 4,
                         ]),
 
                     StatusSelectLabel::make('status')
                         ->label('Status')
+                        ->inlineLabel()
                         ->columnSpan([
                             'md' => 4,
                         ]),

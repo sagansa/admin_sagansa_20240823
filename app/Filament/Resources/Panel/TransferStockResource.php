@@ -65,7 +65,7 @@ class TransferStockResource extends Resource
                 Grid::make(['default' => 1])->schema([
 
                     ImageInput::make('image')
-                        ->disk('public')
+
                         ->directory('images/TransferStock'),
 
                     DateInput::make('date'),

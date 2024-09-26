@@ -13,6 +13,7 @@ class CurrencyInput extends TextInput
 
         $this
             ->prefix('Rp')
+            ->inlineLabel()
             ->required()
             ->numeric()
             ->minValue(0)

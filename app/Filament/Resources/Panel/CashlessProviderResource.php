@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Cashlesses;
 use App\Filament\Clusters\Transaction\Settings;
+use App\Filament\Forms\BaseTextInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -52,8 +53,7 @@ class CashlessProviderResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    TextInput::make('name')
-                        ->required()
+                    BaseTextInput::make('name')
                         ->string()
                         ->unique(
                             'cashless_providers',

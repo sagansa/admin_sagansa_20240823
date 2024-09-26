@@ -81,6 +81,7 @@ class ProductsRelationManager extends RelationManager
 
                 //     Tables\Actions\DetachBulkAction::make(),
                 // ]),
-            ]);
+            ])
+            ->defaultSort('name', 'asc');
     }
 }

@@ -7,7 +7,6 @@ use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusSupplierColumn;
 use App\Filament\Forms\AddressForm;
 use App\Filament\Forms\ImageInput;
-use App\Filament\Forms\StatusSelectInput;
 use App\Filament\Forms\SupplierStatusSelectInput;
 use Filament\Forms;
 use Filament\Tables;
@@ -66,7 +65,6 @@ class SupplierResource extends Resource
                     Grid::make(['default' => 1])->schema([
 
                         ImageInput::make('image')
-                            ->disk('public')
                             ->directory('images/Supplier'),
 
                         TextInput::make('name')
@@ -114,7 +112,7 @@ class SupplierResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->poll('60s')
+            // ->poll('60s')
             ->columns([
                 Split::make([
                     Stack::make([
