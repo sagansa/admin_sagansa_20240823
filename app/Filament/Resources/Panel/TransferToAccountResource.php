@@ -3,6 +3,11 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Transaction\Settings;
+use App\Filament\Columns\ActiveColumn;
+use App\Filament\Forms\ActiveStatusSelect;
+use App\Filament\Forms\BaseSelect;
+use App\Filament\Forms\BaseTextInput;
+use App\Filament\Forms\NominalInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -18,6 +23,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\TransferToAccountResource\Pages;
 use App\Filament\Resources\Panel\TransferToAccountResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class TransferToAccountResource extends Resource
 {
@@ -52,27 +58,15 @@ class TransferToAccountResource extends Resource
     {
         return $form->schema([
             Section::make()->schema([
-                Grid::make(['default' => 1])->schema([
-                    TextInput::make('name')
-                        ->required()
-                        ->string()
-                        ->autofocus(),
+                Grid::make(['default' => 2])->schema([
+                    BaseTextInput::make('name'),
 
-                    TextInput::make('number')
-                        ->required()
-                        ->numeric()
-                        ->step(1),
+                    NominalInput::make('number'),
 
-                    Select::make('bank_id')
-                        ->required()
-                        ->relationship('bank', 'name')
-                        ->searchable()
-                        ->preload(),
+                    BaseSelect::make('bank_id')
+                        ->relationship('bank', 'name'),
 
-                    Select::make('status')
-                        ->required()
-                        ->searchable()
-                        ->preload(),
+                    ActiveStatusSelect::make('status'),
                 ]),
             ]),
         ]);
@@ -83,18 +77,20 @@ class TransferToAccountResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')->searchable(),
 
-                TextColumn::make('number'),
+                TextColumn::make('number')->searchable(),
 
-                TextColumn::make('bank.name'),
+                TextColumn::make('bank.name')->searchable(),
 
-                TextColumn::make('status'),
+                ActiveColumn::make('status'),
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

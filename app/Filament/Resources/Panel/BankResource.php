@@ -3,6 +3,9 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Transaction\Settings;
+use App\Filament\Columns\ActiveColumn;
+use App\Filament\Forms\ActiveStatusSelect;
+use App\Filament\Forms\BaseTextInput;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Bank;
@@ -54,15 +57,9 @@ class BankResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    TextInput::make('name')
-                        ->required()
-                        ->string()
-                        ->autofocus(),
+                    BaseTextInput::make('name'),
 
-                    Select::make('status')
-                        ->required()
-                        ->searchable()
-                        ->preload(),
+                    ActiveStatusSelect::make('status'),
                 ]),
             ]),
         ]);
@@ -72,7 +69,7 @@ class BankResource extends Resource
     {
         return $table
             ->poll('60s')
-            ->columns([TextColumn::make('name'), TextColumn::make('status')])
+            ->columns([TextColumn::make('name')->searchable(), ActiveColumn::make('status')])
             ->filters([])
             ->actions([
                 ActionGroup::make([

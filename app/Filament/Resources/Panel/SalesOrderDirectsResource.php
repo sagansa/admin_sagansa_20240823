@@ -321,7 +321,7 @@ class SalesOrderDirectsResource extends Resource
                 ]),
 
             Select::make('delivery_status')
-                ->hidden(fn ($operation) => $operation === 'create' || !Auth::user()->hasRole('storage-staff'))
+                ->hidden(fn ($operation) => $operation === 'create' || Auth::user()->hasRole('storage-staff'))
                 ->required()
                 ->inlineLabel()
                 ->options([
@@ -338,7 +338,7 @@ class SalesOrderDirectsResource extends Resource
                 ->disabled(fn () => Auth::user()->hasRole('customer')),
 
             Placeholder::make('delivery_status')
-                ->hidden(fn ($operation) => $operation === 'create')
+                ->hidden(fn ($operation) => $operation === 'create' || !Auth::user()->hasRole('storage-staff'))
                 ->label('Delivery Status')
                 ->inlineLabel()
                 ->content(fn (SalesOrderDirect $record): HtmlString => new HtmlString(match ($record->delivery_status) {

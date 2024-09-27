@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Cashlesses;
 use App\Filament\Clusters\Transaction\Settings;
+use App\Filament\Forms\BaseTextInput;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
@@ -20,6 +21,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\UserCashlessResource\Pages;
 use App\Filament\Resources\Panel\UserCashlessResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class UserCashlessResource extends Resource
 {
@@ -68,14 +70,10 @@ class UserCashlessResource extends Resource
                         ->searchable()
                         ->preload(),
 
-                    TextInput::make('email')
-                        ->required()
-                        ->string()
+                    BaseTextInput::make('email')
                         ->email(),
 
-                    TextInput::make('username')
-                        ->required()
-                        ->string(),
+                    BaseTextInput::make('username'),
 
                     TextInput::make('password')
                         ->required(
@@ -86,9 +84,7 @@ class UserCashlessResource extends Resource
                         ->minLength(6)
                         ->password(),
 
-                    TextInput::make('no_telp')
-                        ->required()
-                        ->string(),
+                    BaseTextInput::make('no_telp'),
                 ]),
             ]),
         ]);
@@ -101,7 +97,7 @@ class UserCashlessResource extends Resource
             ->columns([
                 TextColumn::make('cashlessProvider.name'),
 
-                TextColumn::make('store.name'),
+                TextColumn::make('store.nickname'),
 
                 TextColumn::make('storeCashless.name'),
 
@@ -115,8 +111,10 @@ class UserCashlessResource extends Resource
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

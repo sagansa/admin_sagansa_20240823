@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Transaction\Settings;
+use App\Filament\Forms\BaseTextInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -17,6 +18,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\OnlineShopProviderResource\Pages;
 use App\Filament\Resources\Panel\OnlineShopProviderResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class OnlineShopProviderResource extends Resource
 {
@@ -51,11 +53,8 @@ class OnlineShopProviderResource extends Resource
     {
         return $form->schema([
             Section::make()->schema([
-                Grid::make(['default' => 1])->schema([
-                    TextInput::make('name')
-                        ->required()
-                        ->string()
-                        ->autofocus(),
+                Grid::make(['default' => 2])->schema([
+                    BaseTextInput::make('name'),
                 ]),
             ]),
         ]);
@@ -65,11 +64,13 @@ class OnlineShopProviderResource extends Resource
     {
         return $table
             ->poll('60s')
-            ->columns([TextColumn::make('name')])
+            ->columns([TextColumn::make('name')->searchable()])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
