@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\Transaction\Settings;
 use App\Filament\Columns\ActiveColumn;
 use App\Filament\Forms\ActiveStatusSelect;
+use App\Filament\Forms\BaseTextInput;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
@@ -21,6 +22,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\UtilityResource\Pages;
 use App\Filament\Resources\Panel\UtilityResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -60,15 +62,11 @@ class UtilityResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    TextInput::make('number')
-                        ->required()
-                        ->string()
+                    BaseTextInput::make('number')
                         ->unique('utilities', 'number', ignoreRecord: true)
                         ->autofocus(),
 
-                    TextInput::make('name')
-                        ->required()
-                        ->string(),
+                    BaseTextInput::make('name'),
 
                     StoreSelect::make('store_id')
                         ->required(),
@@ -170,8 +168,10 @@ class UtilityResource extends Resource
 
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

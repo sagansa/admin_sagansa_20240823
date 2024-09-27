@@ -4,6 +4,9 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Products;
 use App\Filament\Clusters\Transaction\Settings;
+use App\Filament\Columns\ActiveColumn;
+use App\Filament\Forms\ActiveStatusSelect;
+use App\Filament\Forms\BaseTextInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -19,6 +22,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\OnlineCategoryResource\Pages;
 use App\Filament\Resources\Panel\OnlineCategoryResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class OnlineCategoryResource extends Resource
 {
@@ -52,15 +56,9 @@ class OnlineCategoryResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    TextInput::make('name')
-                        ->required()
-                        ->string()
-                        ->autofocus(),
+                    BaseTextInput::make('name'),
 
-                    Select::make('status')
-                        ->required()
-                        ->searchable()
-                        ->preload(),
+                    ActiveStatusSelect::make('status'),
                 ]),
             ]),
         ]);
@@ -70,11 +68,13 @@ class OnlineCategoryResource extends Resource
     {
         return $table
             ->poll('60s')
-            ->columns([TextColumn::make('name'), TextColumn::make('status')])
+            ->columns([TextColumn::make('name')->searchable(), ActiveColumn::make('status')])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

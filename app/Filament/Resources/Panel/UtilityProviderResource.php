@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Transaction\Settings;
+use App\Filament\Forms\BaseTextInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -18,6 +19,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\UtilityProviderResource\Pages;
 use App\Filament\Resources\Panel\UtilityProviderResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class UtilityProviderResource extends Resource
 {
@@ -53,12 +55,14 @@ class UtilityProviderResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    TextInput::make('name')
-                        ->required()
-                        ->string()
-                        ->autofocus(),
+                    BaseTextInput::make('name'),
 
                     Select::make('category')
+                        ->options([
+                            '1' => 'listrik',
+                            '2' => 'air',
+                            '3' => 'internet'
+                        ])
                         ->required()
                         ->preload(),
                 ]),
@@ -70,11 +74,24 @@ class UtilityProviderResource extends Resource
     {
         return $table
             ->poll('60s')
-            ->columns([TextColumn::make('name'), TextColumn::make('category')])
+            ->columns([
+                TextColumn::make('name')->searchable(),
+
+                TextColumn::make('category')
+                    ->formatStateUsing(
+                        fn(string $state): string => match ($state) {
+                            '1' => 'listrik',
+                            '2' => 'air',
+                            '3' => 'internet'
+                        }
+                    ),
+        ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
