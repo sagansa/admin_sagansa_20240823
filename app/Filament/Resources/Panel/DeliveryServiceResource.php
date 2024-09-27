@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Sales;
 use App\Filament\Clusters\Transaction\Settings;
+use App\Filament\Columns\ActiveColumn;
+use App\Filament\Forms\ActiveStatusSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -56,13 +58,11 @@ class DeliveryServiceResource extends Resource
                 Grid::make(['default' => 1])->schema([
                     TextInput::make('name')
                         ->required()
+                        ->inlineLabel()
                         ->string()
                         ->autofocus(),
 
-                    Select::make('status')
-                        ->required()
-                        ->searchable()
-                        ->preload(),
+                    ActiveStatusSelect::make('status'),
                 ]),
             ]),
         ]);
@@ -72,7 +72,7 @@ class DeliveryServiceResource extends Resource
     {
         return $table
             ->poll('60s')
-            ->columns([TextColumn::make('name'), TextColumn::make('status')])
+            ->columns([TextColumn::make('name')->searchable(), ActiveColumn::make('status')])
             ->filters([])
             ->actions([
                 Tables\Actions\EditAction::make(),

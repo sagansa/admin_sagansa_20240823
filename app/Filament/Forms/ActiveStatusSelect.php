@@ -12,6 +12,7 @@ class ActiveStatusSelect extends Select
 
         $this
             ->required()
+            ->inlineLabel()
             ->preload()
             ->options([
                 '1' => 'active',
