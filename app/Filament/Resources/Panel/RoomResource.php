@@ -17,6 +17,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\RoomResource\Pages;
 use App\Filament\Resources\Panel\RoomResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class RoomResource extends Resource
 {
@@ -66,8 +67,10 @@ class RoomResource extends Resource
             ->columns([TextColumn::make('name')])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Store as ClustersStore;
+use App\Filament\Forms\BaseTextInput;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Store;
@@ -18,6 +19,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\StoreResource\Pages;
 use App\Filament\Resources\Panel\StoreResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class StoreResource extends Resource
 {
@@ -51,23 +53,17 @@ class StoreResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    TextInput::make('name')
-                        ->required()
-                        ->string()
+                    BaseTextInput::make('name')
                         ->autofocus(),
 
-                    TextInput::make('nickname')
-                        ->required()
-                        ->string(),
+                    BaseTextInput::make('nickname'),
 
                     TextInput::make('no_telp')
                         ->label('Telephone')
                         ->nullable()
                         ->string(),
 
-                    TextInput::make('email')
-                        ->required()
-                        ->string()
+                    BaseTextInput::make('email')
                         ->unique('stores', 'email', ignoreRecord: true)
                         ->email(),
 
@@ -94,13 +90,13 @@ class StoreResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')->searchable()->sortable(),
 
-                TextColumn::make('nickname'),
+                TextColumn::make('nickname')->searchable()->sortable(),
 
-                TextColumn::make('no_telp'),
+                TextColumn::make('no_telp')->searchable(),
 
-                TextColumn::make('email'),
+                TextColumn::make('email')->searchable(),
 
                 TextColumn::make('user.name'),
 
@@ -121,8 +117,10 @@ class StoreResource extends Resource
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                // Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([

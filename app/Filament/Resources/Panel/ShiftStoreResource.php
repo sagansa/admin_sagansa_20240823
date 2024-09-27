@@ -19,6 +19,7 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\ShiftStoreResource\Pages;
 use App\Filament\Resources\Panel\ShiftStoreResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class ShiftStoreResource extends Resource
 {
@@ -67,14 +68,16 @@ class ShiftStoreResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                TextColumn::make('store.name'),
+                // TextColumn::make('store.name'),
 
                 TextColumn::make('name'),
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
