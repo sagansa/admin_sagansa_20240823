@@ -5,6 +5,9 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\Asset;
 use App\Filament\Clusters\Vehicles;
 use App\Filament\Columns\ActiveColumn;
+use App\Filament\Forms\ActiveStatusSelect;
+use App\Filament\Forms\BaseSelect;
+use App\Filament\Forms\BaseTextInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
@@ -23,6 +26,7 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\VehicleResource\Pages;
 use App\Filament\Resources\Panel\VehicleResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Support\Facades\Auth;
 
 class VehicleResource extends Resource
@@ -57,48 +61,22 @@ class VehicleResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    ImageInput::make('image')
 
+                    ImageInput::make('image')
                         ->directory('images/Vehicle'),
 
-                    Select::make('type')
-                        ->hiddenLabel()
-                        ->placeholder('Type')
-                        ->required()
-                        ->searchable()
-                        ->preload()
+                    BaseSelect::make('type')
                         ->options([
                             '1' => 'motor',
                             '2' => 'mobil',
                             '3' => 'truk',
                         ]),
 
-                    TextInput::make('no_register')
-                        ->hiddenLabel()
-                        ->placeholder('No Register')
-                        ->required()
-                        ->required()
-                        ->string(),
+                    BaseTextInput::make('no_register'),
 
-                    StoreSelect::make('store_id')
-                        ->hiddenLabel()
-                        ->placeholder('Store')
-                        ->required(),
+                    StoreSelect::make('store_id'),
 
-                    Select::make('status')
-                        ->hiddenLabel()
-                        ->placeholder('Type')
-                        ->required(fn () => Auth::user()->hasRole('admin'))
-                        ->hidden(fn ($operation) => $operation === 'create')
-                        ->disabled(fn () => Auth::user()->hasRole('staff'))
-                        ->required()
-                        ->required()
-                        ->searchable()
-                        ->preload()
-                        ->options([
-                            '1' => 'active',
-                            '2' => 'inactive',
-                        ]),
+                    ActiveStatusSelect::make('status'),
 
                     Notes::make('notes'),
                 ]),
@@ -121,8 +99,10 @@ class VehicleResource extends Resource
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

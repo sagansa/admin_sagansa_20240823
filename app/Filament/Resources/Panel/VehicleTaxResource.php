@@ -4,6 +4,9 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Asset;
 use App\Filament\Clusters\Vehicles;
+use App\Filament\Columns\ImageOpenUrlColumn;
+use App\Filament\Forms\BaseSelect;
+use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
@@ -24,6 +27,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\VehicleTaxResource\Pages;
 use App\Filament\Resources\Panel\VehicleTaxResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class VehicleTaxResource extends Resource
 {
@@ -58,19 +62,13 @@ class VehicleTaxResource extends Resource
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
                     ImageInput::make('image')
-
                         ->directory('images/VehicleTax'),
 
-                    TextInput::make('amount_tax')
-                        ->required()
-                        ->numeric()
-                        ->step(1),
+                    BaseSelect::make('vehicle_id')
+                        ->relationship('vehicle', 'no_register')
+                        ->searchable(),
 
-                    Select::make('vehicle_id')
-                        ->required()
-                        ->relationship('vehicle', 'image')
-                        ->searchable()
-                        ->preload(),
+                    CurrencyInput::make('amount_tax'),
 
                     DateInput::make('expired_date'),
 
@@ -86,7 +84,7 @@ class VehicleTaxResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                ImageColumn::make('image')->visibility('public'),
+                ImageOpenUrlColumn::make('image')->visibility('public'),
 
                 TextColumn::make('amount_tax'),
 
@@ -94,14 +92,14 @@ class VehicleTaxResource extends Resource
 
                 TextColumn::make('expired_date')->since(),
 
-                TextColumn::make('notes')->limit(255),
-
                 TextColumn::make('user.name'),
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

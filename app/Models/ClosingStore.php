@@ -9,7 +9,21 @@ class ClosingStore extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    // protected $guarded = [];
+
+    protected $fillable = [
+        'store_id',
+        'shift_store_id',
+        'date',
+        'cash_from_yesterday',
+        'cash_for_tomorrow',
+        'transfer_by_id',
+        'total_cash_transfer',
+        'status',
+        'notes',
+        'created_by_id',
+        'approved_by_id'
+    ];
 
     public function shiftStore()
     {

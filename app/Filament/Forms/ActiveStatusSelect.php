@@ -3,6 +3,7 @@
 namespace App\Filament\Forms;
 
 use Filament\Forms\Components\Select;
+use Illuminate\Support\Facades\Auth;
 
 class ActiveStatusSelect extends Select
 {
@@ -11,7 +12,9 @@ class ActiveStatusSelect extends Select
         parent::setUp();
 
         $this
-            ->required()
+            ->required(fn () => Auth::user()->hasRole('admin'))
+            ->hidden(fn ($operation) => $operation === 'create')
+            ->disabled(fn () => Auth::user()->hasRole('staff'))
             ->inlineLabel()
             ->preload()
             ->options([
