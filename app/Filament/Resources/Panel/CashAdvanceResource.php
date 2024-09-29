@@ -167,7 +167,7 @@ class CashAdvanceResource extends Resource
                             'md' => 3,
                         ]),
 
-                    CurrencyInput::make('before')
+                    CurrencyMinusInput::make('before')
                         ->label('Before')
                         ->debounce(2000)
                         ->reactive()
