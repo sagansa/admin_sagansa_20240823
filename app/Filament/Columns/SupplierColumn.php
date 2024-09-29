@@ -11,6 +11,7 @@ class SupplierColumn extends TextColumn
         parent::setUp();
 
         $this->copyable()
+            ->searchable()
             ->formatStateUsing(
                 fn($record): string => '<ul>' . implode('', [
                     '<li>Nama Supplier: ' . $record->supplier->name . '</li>',

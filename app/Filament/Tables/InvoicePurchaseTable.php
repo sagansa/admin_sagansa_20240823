@@ -9,6 +9,7 @@ use App\Filament\Columns\SupplierColumn;
 use App\Models\InvoicePurchase;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\Facades\Auth;
 
 class InvoicePurchaseTable
 {
@@ -30,8 +31,8 @@ class InvoicePurchaseTable
 
             SupplierColumn::make('Supplier'),
 
-            TextColumn::make('user.name')
-                ->toggleable(isToggledHiddenByDefault: true),
+            // TextColumn::make('user.name')
+            //     ->toggleable(isToggledHiddenByDefault: true),
 
             TextColumn::make('detailInvoices')
                 ->label('Detail Purchases')
@@ -89,7 +90,9 @@ class InvoicePurchaseTable
                     }
                 ),
 
-            TextColumn::make('createdBy.name'),
+            TextColumn::make('createdBy.name')
+                ->hidden(fn () => Auth::user()->hasRole('staff'))
+                ->toggleable(isToggledHiddenByDefault: true),
         ];
     }
 }

@@ -65,7 +65,7 @@ class SalesOrderDirectsResource extends Resource
                         SalesProductForm::getItemsRepeater()
                         ]),
             ])
-            ->columnSpan(['lg' => fn (?SalesOrderDirect $record) => $record === null ? 3 : 2]),
+            ->columnSpan(['lg' => 2]),
             // ->disabled(fn (SalesOrderDirect $record) => $record->payment_status === 2),
 
             Section::make()

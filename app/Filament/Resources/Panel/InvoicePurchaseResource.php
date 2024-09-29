@@ -74,7 +74,7 @@ class InvoicePurchaseResource extends Resource
                     Section::make()
                         ->schema([static::getItemsRepeater()]),
                 ])
-                ->columnSpan(['lg' => fn (?InvoicePurchase $record) => $record === null ? 3 : 2]),
+                ->columnSpan(['lg' => 2]),
 
             Section::make()
                 ->schema(static::getDetailsFormBottomSchema())
@@ -164,7 +164,6 @@ class InvoicePurchaseResource extends Resource
 
         return [
             ImageInput::make('image')
-
                 ->directory('images/InvoicePurchase'),
 
             SupplierSelect::make('supplier_id'),

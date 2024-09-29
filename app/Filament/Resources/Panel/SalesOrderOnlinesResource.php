@@ -66,11 +66,11 @@ class SalesOrderOnlinesResource extends Resource
                         ])
                         ->disabled(fn () => Auth::user()->hasRole('storage-staff')),
                 ])
-                ->columnSpan(['lg' => fn (?SalesOrderOnline $record) => $record === null ? 3 : 2]),
+                ->columnSpan(['lg' => 2]),
 
-                Section::make('Total Price')
-                    ->schema(BottomTotalPriceForm::schema())
-                    ->columnSpan(['lg' => 1]),
+            Section::make('Total Price')
+                ->schema(BottomTotalPriceForm::schema())
+                ->columnSpan(['lg' => 1]),
             ])
             ->columns(3)
             ->disabled(fn (?SalesOrderOnline $record) => $record !== null && $record->delivery_status == 2);

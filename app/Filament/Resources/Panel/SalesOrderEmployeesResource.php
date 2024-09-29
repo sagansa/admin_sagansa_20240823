@@ -19,6 +19,7 @@ use App\Models\Store;
 use App\Models\TransferToAccount;
 use App\Models\SalesOrderEmployee;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
@@ -46,17 +47,22 @@ class SalesOrderEmployeesResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Section::make()
-                ->schema(static::getDetailsFormHeadSchema())
-                ->columns(2),
+            Group::make()->schema([
+                Section::make()
+                    ->schema(static::getDetailsFormHeadSchema())
+                    ->columns(2),
 
-            Section::make('Detail Order')->schema([
-                SalesProductForm::getItemsRepeater()
-            ]),
+                Section::make('Detail Order')->schema([
+                    SalesProductForm::getItemsRepeater()
+                ]),
+            ])
+            ->columnSpan(['lg' => 2]),
 
             Section::make()
                 ->schema(BottomTotalPriceForm::schema())
+                ->columnSpan(['lg' => 1]),
         ])
+        ->columns(3)
         ->disabled(fn (?SalesOrderEmployee $record) => $record !== null && $record->payment_status == 2);
     }
 

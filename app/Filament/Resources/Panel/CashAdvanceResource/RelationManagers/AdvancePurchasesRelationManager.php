@@ -33,7 +33,6 @@ class AdvancePurchasesRelationManager extends RelationManager
         return $form->schema([
             Grid::make(['default' => 1])->schema([
                 ImageInput::make('image')
-
                     ->directory('images/AdvancePurchase'),
 
                 SupplierSelect::make('supplier_id'),

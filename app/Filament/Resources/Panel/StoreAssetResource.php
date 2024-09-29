@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Asset;
 use App\Filament\Clusters\Movements;
+use App\Filament\Columns\ActiveColumn;
+use App\Filament\Forms\ActiveStatusSelect;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
@@ -21,6 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\StoreAssetResource\Pages;
 use App\Filament\Resources\Panel\StoreAssetResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class StoreAssetResource extends Resource
 {
@@ -58,10 +61,7 @@ class StoreAssetResource extends Resource
 
                     Notes::make('notes'),
 
-                    Select::make('status')
-                        ->required()
-                        ->searchable()
-                        ->preload(),
+                    ActiveStatusSelect::make('status'),
                 ]),
             ]),
         ]);
@@ -72,16 +72,16 @@ class StoreAssetResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                TextColumn::make('store.name'),
+                TextColumn::make('store.nickname'),
 
-                TextColumn::make('notes')->limit(255),
-
-                TextColumn::make('status'),
+                ActiveColumn::make('status'),
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                    ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
