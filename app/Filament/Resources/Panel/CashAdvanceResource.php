@@ -128,7 +128,7 @@ class CashAdvanceResource extends Resource
                         ->action(function (Collection $records) {
                             CashAdvance::whereIn('id', $records->pluck('id'))->update(['status' => 2]);
                         })
-                        ->color('warning'),
+                        ->color('success'),
                 ]),
             ])
             ->defaultSort('date', 'desc');

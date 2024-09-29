@@ -30,6 +30,7 @@ use App\Models\Supplier;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 class AdvancePurchaseResource extends Resource
 {
@@ -97,6 +98,14 @@ class AdvancePurchaseResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('setStatusToValid')
+                        ->label('Set Status to Valid')
+                        ->icon('heroicon-o-check')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            AdvancePurchase::whereIn('id', $records->pluck('id'))->update(['status' => 2]);
+                        })
+                        ->color('success'),
                 ]),
             ])
             ->defaultSort('date', 'desc');
