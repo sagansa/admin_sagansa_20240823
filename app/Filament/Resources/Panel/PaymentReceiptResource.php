@@ -28,6 +28,7 @@ use App\Models\FuelService;
 use App\Models\InvoicePurchase;
 use App\Models\Supplier;
 use Filament\Forms\Components\Radio;
+use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -240,10 +241,10 @@ class PaymentReceiptResource extends Resource
 
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                    // ->visible(fn ($record) => self::calculateDifference($record) !== 0),
-                Tables\Actions\ViewAction::make(),
-                    // ->visible(fn ($record) => self::calculateDifference($record) === 0),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                    ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

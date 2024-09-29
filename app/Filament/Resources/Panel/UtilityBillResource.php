@@ -29,6 +29,7 @@ use App\Filament\Resources\Panel\UtilityBillResource\Pages;
 use App\Filament\Resources\Panel\UtilityBillResource\RelationManagers;
 use App\Models\Utility;
 use Filament\Forms\Get;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 
 class UtilityBillResource extends Resource
@@ -129,8 +130,10 @@ class UtilityBillResource extends Resource
                     ->getOptionLabelFromRecordUsing(fn (Utility $record) => "{$record->utility_name}"),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                // Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
