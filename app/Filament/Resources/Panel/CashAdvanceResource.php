@@ -35,9 +35,9 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Tables\Actions\ActionGroup;
-use Filament\Forms\Components\Placeholder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Filament\Tables\Filters\SelectFilter;
 
 class CashAdvanceResource extends Resource
 {
@@ -96,9 +96,9 @@ class CashAdvanceResource extends Resource
 
                 CurrencyColumn::make('transfer'),
 
-                CurrencyColumn::make('before'),
-
                 CurrencyColumn::make('purchase'),
+
+                CurrencyColumn::make('before'),
 
                 CurrencyColumn::make('remains'),
 
@@ -106,7 +106,11 @@ class CashAdvanceResource extends Resource
 
                 StatusColumn::make('status'),
             ])
-            ->filters([])
+            ->filters([
+                SelectFilter::make('user_id')
+                    ->label('user')
+                    ->relationship('user', 'name')
+            ])
             ->actions([
                 ActionGroup::make([
                     Tables\Actions\EditAction::make(),
@@ -263,16 +267,6 @@ class CashAdvanceResource extends Resource
                     ->disabled()
                     ->relationship('store', 'nickname')
                     ->columnSpan(2),
-
-                // Placeholder::make('supplier')
-                //     ->hiddenLabel()
-                //     ->columnSpan(2)
-                //     ->content(fn (AdvancePurchase $record): string => $record->store->nickname),
-
-                // Placeholder::make('store')
-                //     ->hiddenLabel()
-                //     ->columnSpan(2)
-                //     ->content(fn (AdvancePurchase $record): string => $record->store->nickname),
 
                 CurrencyRepeaterInput::make('total_price')
                     ->afterStateUpdated(function (Get $get, Set $set) {
