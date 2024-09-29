@@ -7,10 +7,14 @@ use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\CurrencyInput;
+use App\Filament\Forms\CurrencyMinusInput;
+use App\Filament\Forms\CurrencyRepeaterInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StatusSelectLabel;
+use App\Filament\Forms\StoreSelect;
+use App\Filament\Forms\SupplierSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -27,9 +31,11 @@ use App\Filament\Resources\Panel\CashAdvanceResource\Pages;
 use App\Filament\Resources\Panel\CashAdvanceResource\RelationManagers;
 use App\Models\AdvancePurchase;
 use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Forms\Components\Placeholder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -65,6 +71,11 @@ class CashAdvanceResource extends Resource
         return $form->schema([
             Section::make()
                 ->schema(static::getDetailsFormHeadSchema()),
+
+            Section::make()
+                ->schema([
+                    static::getItemsRepeater()
+                ])
         ]);
     }
 
@@ -150,7 +161,7 @@ class CashAdvanceResource extends Resource
                         ->debounce(2000)
                         ->reactive()
                         ->afterStateUpdated(function (Set $set, Get $get) {
-                            self::updatePurchase($get, $set);
+                            self::updateTotalPurchase($get, $set);
                         })
                         ->columnSpan([
                             'md' => 3,
@@ -161,7 +172,7 @@ class CashAdvanceResource extends Resource
                         ->debounce(2000)
                         ->reactive()
                         ->afterStateUpdated(function (Set $set, Get $get) {
-                            self::updatePurchase($get, $set);
+                            self::updateTotalPurchase($get, $set);
                         })
                         ->columnSpan([
                             'md' => 3,
@@ -170,11 +181,14 @@ class CashAdvanceResource extends Resource
                     CurrencyInput::make('purchase')
                         ->readOnly()
                         ->label('Purchase')
+                        ->afterStateUpdated(function (Set $set, Get $get) {
+                            self::updateTotalPurchase($get, $set);
+                        })
                         ->columnSpan([
                             'md' => 3,
                         ]),
 
-                    CurrencyInput::make('remains')
+                    CurrencyMinusInput::make('remains')
                         ->readOnly()
                         ->label('Remains')
                         ->columnSpan([
@@ -187,13 +201,17 @@ class CashAdvanceResource extends Resource
 
                 Notes::make('notes'),
 
-            ]),
+            ])->afterStateUpdated(function (Set $set, Get $get) {
+                self::updateTotalPurchase($get, $set);
+            }),
         ];
     }
 
     public static function getRelations(): array
     {
-        return [RelationManagers\AdvancePurchasesRelationManager::class];
+        return [
+            // RelationManagers\AdvancePurchasesRelationManager::class
+        ];
     }
 
     public static function getPages(): array
@@ -206,21 +224,64 @@ class CashAdvanceResource extends Resource
         ];
     }
 
-    protected static function updatePurchase(Get $get, Set $set): void
+    protected static function updateTotalPurchase(Get $get, Set $set): void
     {
-        $selectedAdvancePurchases = collect($get('advancePurchases'))->filter(fn($advancePurchase) => !empty($advancePurchase['advance_purchase_id']));
+        $repeaterItems = $get('advancePurchases') ?? [];
 
-        $totalPrices = AdvancePurchase::whereIn('id', $selectedAdvancePurchases->pluck('advance_purchase_id'))->pluck('total_price', 'id');
-        $purchase = $selectedAdvancePurchases->reduce(function ($purchase, $advancePurchase) use ($totalPrices) {
-            return $purchase + ($totalPrices[$advancePurchase['advance_purchase_id']] ?? 0);
-        }, 0);
+        $totalPurchase = 0;
 
-        $set('purchase', $purchase);
+        foreach ($repeaterItems as $item) {
+            if (isset($item['total_price'])) {
+                $totalPurchase += (int) $item['total_price'];
+            }
+        }
+
+        $set('purchase', $totalPurchase);
 
         $transfer = $get('transfer') !== null ? (int) $get('transfer') : 0;
         $before = $get('before') !== null ? (int) $get('before') : 0;
-        $remains = $transfer + $before - $purchase;
+        $remains = $transfer + $before - $totalPurchase;
 
         $set('remains', $remains);
+    }
+
+    public static function getItemsRepeater(): Repeater
+    {
+        return Repeater::make('advancePurchases')
+            ->hiddenLabel()
+            ->columns(['md' => 8])
+            ->relationship()
+            ->schema([
+                Select::make('supplier_id')
+                    ->hiddenLabel()
+                    ->disabled()
+                    ->relationship('supplier', 'name')
+                    ->columnSpan(4),
+
+                Select::make('store_id')
+                    ->hiddenLabel()
+                    ->disabled()
+                    ->relationship('store', 'nickname')
+                    ->columnSpan(2),
+
+                // Placeholder::make('supplier')
+                //     ->hiddenLabel()
+                //     ->columnSpan(2)
+                //     ->content(fn (AdvancePurchase $record): string => $record->store->nickname),
+
+                // Placeholder::make('store')
+                //     ->hiddenLabel()
+                //     ->columnSpan(2)
+                //     ->content(fn (AdvancePurchase $record): string => $record->store->nickname),
+
+                CurrencyRepeaterInput::make('total_price')
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        self::updateTotalPurchase($get, $set);
+                    })
+                    ->columnSpan(2),
+            ])
+            ->afterStateUpdated(function (Get $get, Set $set) {
+                self::updateTotalPurchase($get, $set);
+            });
     }
 }
