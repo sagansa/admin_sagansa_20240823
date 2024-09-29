@@ -38,6 +38,7 @@ use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Collection;
 
 class CashAdvanceResource extends Resource
 {
@@ -120,6 +121,14 @@ class CashAdvanceResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\BulkAction::make('setStatusToSudahDiperiksa')
+                        ->label('Set Status to Sudah Diperiksa')
+                        ->icon('heroicon-o-check')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            CashAdvance::whereIn('id', $records->pluck('id'))->update(['status' => 2]);
+                        })
+                        ->color('warning'),
                 ]),
             ])
             ->defaultSort('date', 'desc');
