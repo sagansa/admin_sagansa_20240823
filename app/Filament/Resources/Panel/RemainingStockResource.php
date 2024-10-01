@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Bulks\ValidBulkAction;
 use App\Filament\Clusters\Stock;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Filters\SelectStoreFilter;
@@ -27,6 +28,7 @@ use App\Models\Product;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\ActionGroup;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class RemainingStockResource extends Resource
@@ -127,6 +129,10 @@ class RemainingStockResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ValidBulkAction::make('setStatusToValid')
+                        ->action(function (Collection $records) {
+                            RemainingStock::whereIn('id', $records->pluck('id'))->update(['status' => 2]);
+                        }),
                 ]),
             ])
             ->defaultSort('date', 'desc');

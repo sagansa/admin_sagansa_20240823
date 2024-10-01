@@ -2,17 +2,17 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Bulks\ValidBulkAction;
 use App\Filament\Clusters\Stock;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusColumn;
+use App\Filament\Forms\BaseSelect;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StatusSelectInput;
 use App\Filament\Forms\StoreSelect;
-use Filament\Forms;
 use Filament\Tables;
-use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\TransferStock;
@@ -21,15 +21,11 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ImageColumn;
-use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\TransferStockResource\Pages;
-use App\Filament\Resources\Panel\TransferStockResource\RelationManagers;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Actions\ActionGroup;
+use Illuminate\Database\Eloquent\Collection;
 
 class TransferStockResource extends Resource
 {
@@ -65,8 +61,11 @@ class TransferStockResource extends Resource
                 Grid::make(['default' => 1])->schema([
 
                     ImageInput::make('image')
-
                         ->directory('images/TransferStock'),
+
+                ]),
+
+                Grid::make(['default' => 2])->schema([
 
                     DateInput::make('date'),
 
@@ -90,25 +89,19 @@ class TransferStockResource extends Resource
 
                     StatusSelectInput::make('status'),
 
-                    Select::make('received_by_id')
-                        ->required()
+                    BaseSelect::make('received_by_id')
                         ->relationship('receivedBy', 'name', fn (Builder $query) => $query
                             ->whereHas('roles', fn (Builder $query) => $query
                                 ->where('name', 'staff') || $query
                                 ->where('name', 'supervisor')))
-                        ->searchable()
-                        ->preload(),
+                        ->searchable(),
 
-                    Select::make('sent_by_id')
-                        ->required()
+                    BaseSelect::make('sent_by_id')
                         ->relationship('sentBy', 'name', fn (Builder $query) => $query
                             ->whereHas('roles', fn (Builder $query) => $query
                                 ->where('name', 'staff') || $query
                                 ->where('name', 'supervisor')))
-                        ->searchable()
-                        ->preload(),
-
-
+                        ->searchable(),
                 ]),
             ]),
 
@@ -167,6 +160,10 @@ class TransferStockResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ValidBulkAction::make('setStatusToValid')
+                        ->action(function (Collection $records) {
+                            TransferStock::whereIn('id', $records->pluck('id'))->update(['status' => 2]);
+                        }),
                 ]),
             ])
             ->defaultSort('id', 'desc');

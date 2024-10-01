@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Bulks\ValidBulkAction;
 use App\Filament\Clusters\Stock;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusColumn;
@@ -21,7 +22,9 @@ use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\UtilityUsageResource\Pages;
 use App\Models\Utility;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class UtilityUsageResource extends Resource
@@ -106,7 +109,7 @@ class UtilityUsageResource extends Resource
 
                 TextColumn::make('utility.utility_column_name'),
 
-                TextColumn::make('result'),
+                TextColumn::make('result')->numeric(thousandsSeparator: '.'),
 
                 StatusColumn::make('status'),
 
@@ -127,12 +130,18 @@ class UtilityUsageResource extends Resource
 
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ValidBulkAction::make('setStatusToValid')
+                        ->action(function (Collection $records) {
+                            UtilityUsage::whereIn('id', $records->pluck('id'))->update(['status' => 2]);
+                        }),
                 ]),
             ])
             ->defaultSort('id', 'desc');

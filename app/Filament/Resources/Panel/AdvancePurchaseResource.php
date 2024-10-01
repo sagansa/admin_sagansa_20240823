@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Bulks\ValidBulkAction;
 use App\Filament\Clusters\Purchases;
 use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\CurrencyRepeaterInput;
@@ -28,6 +29,7 @@ use Filament\Forms\Components\Repeater;
 use App\Models\Product;
 use App\Models\Supplier;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -97,15 +99,11 @@ class AdvancePurchaseResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make('setStatusToValid')
-                        ->label('Set Status to Valid')
-                        ->icon('heroicon-o-check')
-                        ->requiresConfirmation()
+                    DeleteBulkAction::make(),
+                    ValidBulkAction::make('setStatusToValid')
                         ->action(function (Collection $records) {
                             AdvancePurchase::whereIn('id', $records->pluck('id'))->update(['status' => 2]);
-                        })
-                        ->color('success'),
+                        }),
                 ]),
             ])
             ->defaultSort('date', 'desc');

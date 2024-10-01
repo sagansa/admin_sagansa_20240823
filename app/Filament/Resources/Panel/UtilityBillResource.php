@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
+use App\Filament\Bulks\ValidBulkAction;
 use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Filters\SelectStoreFilter;
@@ -31,6 +32,7 @@ use App\Models\Utility;
 use Filament\Forms\Get;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Collection;
 
 class UtilityBillResource extends Resource
 {

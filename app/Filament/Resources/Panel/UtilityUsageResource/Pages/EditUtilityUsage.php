@@ -18,7 +18,7 @@ class EditUtilityUsage extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        if (Auth::user()->hasRole('admin') || Auth::user()->hasRole('supervisor')) {
+        if (Auth::user()->hasRole('admin')) {
             $data['approved_by_id'] = Auth::id();
         }
 
