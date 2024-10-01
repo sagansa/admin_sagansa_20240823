@@ -2,9 +2,12 @@
 
 namespace App\Providers\Filament;
 
+use App\Models\Employee;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
@@ -18,6 +21,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
+use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -53,8 +58,9 @@ class AdminPanelProvider extends PanelProvider
             ->PasswordReset()
             ->registration()
             ->emailVerification()
+            // ->profile()
             ->colors([
-                'primary' => Color::Sky,
+                'primary' => Color::Red,
             ])
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
@@ -82,8 +88,30 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->userMenuItems([
+                'profile' => MenuItem::make()
+                    ->label(fn() => auth()->user()->name)
+                    ->url(fn (): string => EditProfilePage::getUrl())
+                    ->icon('heroicon-m-user-circle')
+            ])
             ->plugins([
-                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make('super_admin')
+                FilamentShieldPlugin::make('super_admin'),
+                FilamentEditProfilePlugin::make()
+                    // ->slug('my-profile')
+                    ->setTitle('My Profile')
+                    ->setNavigationLabel('My Profile')
+                    // ->setNavigationGroup('Group Profile')
+                    ->setIcon('heroicon-o-user')
+                    // ->setSort(10)
+                    // ->canAccess(fn () => auth()->user()->id === 1)
+                    // ->shouldRegisterNavigation(false)
+                    ->shouldShowDeleteAccountForm(false)
+                    // ->shouldShowSanctumTokens()
+                    // ->shouldShowBrowserSessionsForm()
+                    // ->shouldShowAvatarForm()
+                    // ->customProfileComponents([
+                    //     Employee::class,
+                    // ]),
             ]);
     }
 }

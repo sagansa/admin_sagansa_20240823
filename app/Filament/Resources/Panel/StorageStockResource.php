@@ -111,6 +111,9 @@ class StorageStockResource extends Resource
                         })->toArray());
                     })
                     ->extraAttributes(['class' => 'whitespace-pre-wrap']),
+
+                TextColumn::make('created_at')
+                    ->visible(fn ($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin'))
             ])
             ->filters([])
             ->actions([
