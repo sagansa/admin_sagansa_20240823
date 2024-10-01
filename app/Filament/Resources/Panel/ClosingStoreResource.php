@@ -72,7 +72,12 @@ class ClosingStoreResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 2])->schema([
-                    StoreSelect::make('store_id'),
+                    StoreSelect::make('store_id')
+                        ->afterStateUpdated(function ($state, callable $set) {
+                            if ($state) {
+                                $set('cash_from_yesterday', ClosingStoreResource::getCashForTomorrow($state));
+                            }
+                        }),
 
                     Select::make('shift_store_id')
                         ->required()
@@ -449,9 +454,13 @@ class ClosingStoreResource extends Resource
         $set('total_omzet', $totalOmzet);
     }
 
-}
+    public static function getCashForTomorrow($storeId)
+    {
+        $cashFromYesterday = ClosingStore::where('store_id', $storeId)
+            ->latest('created_at')
+            ->first();
 
-// spending_cash_total = fuelService + dailySalary + invoicePurchase
-// penjumlahan cashless bruto_apl = cashless_total
-// cash_total = cash_for_tomorrow - cash_from_yesterday + spending_cash_total + total_cash_transfer
-// omzet = cash_total + cashless_total
+        return $cashFromYesterday ? $cashFromYesterday->cash_for_tomorrow : 0;
+    }
+
+}

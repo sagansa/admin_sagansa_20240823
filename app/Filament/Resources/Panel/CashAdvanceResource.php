@@ -139,7 +139,6 @@ class CashAdvanceResource extends Resource
         return [
             Grid::make(['default' => 1])->schema([
                 ImageInput::make('image')
-
                     ->directory('images/CashAdvance'),
 
                 Group::make()->schema([
@@ -155,7 +154,13 @@ class CashAdvanceResource extends Resource
                         ->preload()
                         ->columnSpan([
                             'md' => 4,
-                        ]),
+                        ])
+                        ->reactive()
+                        ->afterStateUpdated(function ($state, callable $set) {
+                            if ($state) {
+                                $set('before', CashAdvanceResource::getRemainBefore($state));
+                            }
+                        }),
 
                     DateInput::make('date')
                         ->columnSpan([
@@ -286,5 +291,14 @@ class CashAdvanceResource extends Resource
             ->afterStateUpdated(function (Get $get, Set $set) {
                 self::updateTotalPurchase($get, $set);
             });
+    }
+
+    public static function getRemainBefore($userId)
+    {
+        $remainBefore = CashAdvance::where('user_id', $userId)
+            ->latest('created_at')
+            ->first();
+
+        return $remainBefore ? $remainBefore->remains : 0;
     }
 }
