@@ -11,6 +11,7 @@ class CurrencyColumn extends TextColumn
         parent::setUp();
 
         $this
+            ->alignRight()
             ->numeric(thousandsSeparator: '.')
             ->prefix('Rp ');
     }

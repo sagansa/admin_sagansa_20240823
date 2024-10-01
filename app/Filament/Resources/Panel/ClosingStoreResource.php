@@ -272,7 +272,9 @@ class ClosingStoreResource extends Resource
                             '3' => 'diperbaiki',
                             '4' => 'periksa ulang',
                         ]),
+                    ]),
 
+                Grid::make(['default' => 1])->schema([
                     Notes::make('notes'),
                 ])
             ]),
