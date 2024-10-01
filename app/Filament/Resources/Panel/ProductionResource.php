@@ -3,6 +3,10 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Stock;
+use App\Filament\Columns\StatusColumn;
+use App\Filament\Forms\DateInput;
+use App\Filament\Forms\Notes;
+use App\Filament\Forms\StatusSelectInput;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
@@ -20,6 +24,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\ProductionResource\Pages;
 use App\Filament\Resources\Panel\ProductionResource\RelationManagers;
+use Filament\Tables\Actions\ActionGroup;
 
 class ProductionResource extends Resource
 {
@@ -55,30 +60,11 @@ class ProductionResource extends Resource
                 Grid::make(['default' => 1])->schema([
                     StoreSelect::make('store_id'),
 
-                    DatePicker::make('date')
-                        ->rules(['date'])
-                        ->required(),
+                    DateInput::make('date'),
 
-                    RichEditor::make('notes')
-                        ->required()
-                        ->string()
-                        ->fileAttachmentsVisibility('public'),
+                    StatusSelectInput::make('status'),
 
-                    Select::make('status')
-                        ->required()
-                        ->searchable()
-                        ->preload(),
-
-                    Select::make('created_by_id')
-                        ->required()
-                        ->searchable()
-                        ->preload(),
-
-                    Select::make('approved_by_id')
-                        ->required()
-                        ->relationship('createdBy', 'name')
-                        ->searchable()
-                        ->preload(),
+                    Notes::make('notes'),
                 ]),
             ]),
         ]);
@@ -89,22 +75,22 @@ class ProductionResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                TextColumn::make('store.name'),
+                TextColumn::make('store.nickname'),
 
-                TextColumn::make('date')->since(),
+                TextColumn::make('date'),
 
-                TextColumn::make('notes')->limit(255),
-
-                TextColumn::make('status'),
-
-                TextColumn::make('created_by_id'),
+                StatusColumn::make('status'),
 
                 TextColumn::make('createdBy.name'),
+
+                TextColumn::make('approvedBy.name'),
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

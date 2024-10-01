@@ -278,7 +278,7 @@ class ClosingStoreResource extends Resource
     {
         $query = ClosingStore::query();
 
-        if (!Auth::user()->hasRole('admin')) {
+        if (!Auth::user()->hasRole('admin') || !Auth::user()->hasRole('super_admin')) {
             $query->where('created_by_id', Auth::id());
         }
 
