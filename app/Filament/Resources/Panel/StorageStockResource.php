@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Stock;
 use App\Filament\Columns\StatusColumn;
+use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Forms\BaseSelectInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\NominalInput;
@@ -98,7 +99,8 @@ class StorageStockResource extends Resource
 
 
                 TextColumn::make('createdBy.name')
-                    ->hidden(fn () => !Auth::user()->hasRole('admin')),
+                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 StatusColumn::make('status'),
 
@@ -115,7 +117,9 @@ class StorageStockResource extends Resource
                 TextColumn::make('created_at')
                     ->visible(fn ($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin'))
             ])
-            ->filters([])
+            ->filters([
+                SelectStoreFilter::make('store_id')
+            ])
             ->actions([
                 ActionGroup::make([
                     Tables\Actions\EditAction::make(),
