@@ -112,48 +112,34 @@ class SupplierResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            // ->poll('60s')
+            ->poll('60s')
             ->columns([
-                Split::make([
-                    Stack::make([
-                        ImageOpenUrlColumn::make('image')
-                            ->url(fn($record) => asset('storage/' . $record->image))
-                            ->alignLeft(),
 
-                        TextColumn::make('name')
-                            ->weight('medium')
-                            ->sortable()
-                            ->searchable()
-                            ->alignLeft(),
+                ImageOpenUrlColumn::make('image')
+                    ->url(fn($record) => asset('storage/' . $record->image))
+                    ->alignLeft(),
 
-                        TextColumn::make('city.name')->alignLeft(),
-                    ])->space(),
+                TextColumn::make('name')
+                    ->weight('medium')
+                    ->sortable()
+                    ->searchable(),
 
-                    Stack::make([
-                        TextColumn::make('bank.name')
-                            ->sortable()
-                            ->weight('medium')
-                            ->alignLeft(),
+                TextColumn::make('city.name')->alignLeft(),
 
-                        TextColumn::make('bank_account_name')
-                            ->searchable()
-                            ->sortable()
-                            ->alignLeft(),
+                TextColumn::make('bank.name')
+                    ->sortable(),
 
-                        TextColumn::make('bank_account_no')
-                            ->searchable()
-                            ->alignLeft(),
-                    ])->space(),
+                TextColumn::make('bank_account_name')
+                    ->searchable(),
 
-                    Stack::make([
-                        StatusSupplierColumn::make('status')
-                            ->weight('medium')
-                            ->alignLeft(),
+                TextColumn::make('bank_account_no')
+                    ->searchable(),
 
-                        TextColumn::make('user.name')
-                            ->alignLeft(),
-                    ])->space(),
-                ])->from('md'),
+                StatusSupplierColumn::make('status')
+                    ->weight('medium'),
+
+                TextColumn::make('user.name'),
+
             ])
             ->filters([
                 SelectFilter::make('bank')
