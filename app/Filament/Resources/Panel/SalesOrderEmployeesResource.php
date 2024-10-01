@@ -106,7 +106,6 @@ class SalesOrderEmployeesResource extends Resource
                 CurrencyColumn::make('total_price')
                     ->label('Total Price')
                     ->summarize(Sum::make()
-                        ->alignRight()
                         ->numeric(
                             thousandsSeparator: '.'
                         )

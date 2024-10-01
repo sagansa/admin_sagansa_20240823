@@ -149,7 +149,6 @@ class SalesOrderDirectsResource extends Resource
                 CurrencyColumn::make('total_price')
                     ->visible(fn ($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('customer'))
                     ->summarize(Sum::make()
-                        ->alignRight()
                         ->numeric(
                             thousandsSeparator: '.'
                         )

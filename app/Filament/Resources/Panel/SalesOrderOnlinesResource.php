@@ -134,7 +134,6 @@ class SalesOrderOnlinesResource extends Resource
                     ->label('Total Price')
                     ->visible(fn () => Auth::user()->hasRole('admin'))
                     ->summarize(Sum::make()
-                        ->alignRight()
                         ->numeric(
                             thousandsSeparator: '.'
                         )
