@@ -3,14 +3,13 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Sales;
+use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\DeliveryStatusColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
-use App\Filament\Filters\DateFilter;
 use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Pages;
 use App\Models\DeliveryAddress;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -23,8 +22,6 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Filament\Tables\Columns\Summarizers\Sum;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Forms\BottomTotalPriceForm;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\DeliveryAddressForm;
@@ -33,7 +30,6 @@ use App\Filament\Forms\SalesProductForm;
 use App\Filament\Forms\StoreSelect;
 use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Widgets\SalesOrderOnlinesStat;
 use App\Models\SalesOrderOnline;
-use App\Models\Store;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkAction;
 use Illuminate\Database\Eloquent\Collection;
@@ -134,11 +130,11 @@ class SalesOrderOnlinesResource extends Resource
 
                 TextColumn::make('received_by'),
 
-                TextColumn::make('total_price')
+                CurrencyColumn::make('total_price')
                     ->label('Total Price')
                     ->visible(fn () => Auth::user()->hasRole('admin'))
-                    ->formatStateUsing(fn (SalesOrderOnline $record) => 'Rp ' . number_format($record->total_price, 0, ',', '.'))
                     ->summarize(Sum::make()
+                        ->alignRight()
                         ->numeric(
                             thousandsSeparator: '.'
                         )

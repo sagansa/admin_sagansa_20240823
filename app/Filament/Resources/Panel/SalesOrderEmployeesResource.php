@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Sales;
+use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusColumn;
@@ -102,10 +103,10 @@ class SalesOrderEmployeesResource extends Resource
                     })
                     ->extraAttributes(['class' => 'whitespace-pre-wrap']),
 
-                TextColumn::make('total_price')
+                CurrencyColumn::make('total_price')
                     ->label('Total Price')
-                    ->formatStateUsing(fn (SalesOrderEmployee $record) => 'Rp ' . number_format($record->total_price, 0, ',', '.'))
                     ->summarize(Sum::make()
+                        ->alignRight()
                         ->numeric(
                             thousandsSeparator: '.'
                         )
