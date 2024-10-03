@@ -26,7 +26,7 @@ class StoreConsumptionResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Stock';
+    protected static ?string $navigationGroup = 'Admin';
 
     public static function getModelLabel(): string
     {
@@ -48,6 +48,23 @@ class StoreConsumptionResource extends Resource
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
+                    Select::make('for')
+                        ->required()
+                        ->searchable()
+                        ->preload()
+                        ->native(false)
+                        ->options([
+                            'remaining store' => 'Remaining store',
+                            'remaining storage' => 'Remaining storage',
+                            'employee consumption' => 'Employee consumption',
+                            'store consumption' => 'Store consumption',
+                        ]),
+
+                    DatePicker::make('date')
+                        ->rules(['date'])
+                        ->required()
+                        ->native(false),
+
                     Select::make('store_id')
                         ->required()
                         ->relationship('store', 'name')
@@ -55,9 +72,11 @@ class StoreConsumptionResource extends Resource
                         ->preload()
                         ->native(false),
 
-                    DatePicker::make('date')
-                        ->rules(['date'])
+                    Select::make('user_id')
                         ->required()
+                        ->relationship('user', 'name')
+                        ->searchable()
+                        ->preload()
                         ->native(false),
                 ]),
             ]),
@@ -69,9 +88,13 @@ class StoreConsumptionResource extends Resource
         return $table
             ->poll('60s')
             ->columns([
-                TextColumn::make('store.name'),
+                TextColumn::make('for'),
 
                 TextColumn::make('date')->since(),
+
+                TextColumn::make('store.name'),
+
+                TextColumn::make('user.name'),
             ])
             ->filters([])
             ->actions([

@@ -70,6 +70,20 @@ class PaymentReceiptResource extends Resource
                             '3' => 'invoice',
                         ]),
 
+                    Select::make('supplier_id')
+                        ->nullable()
+                        ->relationship('supplier', 'name')
+                        ->searchable()
+                        ->preload()
+                        ->native(false),
+
+                    Select::make('user_id')
+                        ->nullable()
+                        ->relationship('user', 'name')
+                        ->searchable()
+                        ->preload()
+                        ->native(false),
+
                     TextInput::make('total_amount')
                         ->required()
                         ->numeric()
@@ -108,6 +122,10 @@ class PaymentReceiptResource extends Resource
 
                 TextColumn::make('payment_for'),
 
+                TextColumn::make('supplier.name'),
+
+                TextColumn::make('user.name'),
+
                 TextColumn::make('total_amount')->numeric(
                     decimalSeparator: ',',
                     thousandsSeparator: '.'
@@ -135,7 +153,11 @@ class PaymentReceiptResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            RelationManagers\FuelServicesRelationManager::class,
+            RelationManagers\DailySalariesRelationManager::class,
+            RelationManagers\InvoicePurchasesRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

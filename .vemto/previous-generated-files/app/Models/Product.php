@@ -89,6 +89,16 @@ class Product extends Model
         return $this->belongsToMany(StorageStock::class);
     }
 
+    public function detailStockCards()
+    {
+        return $this->hasMany(DetailStockCard::class);
+    }
+
+    public function detailTransferCards()
+    {
+        return $this->hasMany(DetailTransferCard::class);
+    }
+
     public static function boot()
     {
         parent::boot();

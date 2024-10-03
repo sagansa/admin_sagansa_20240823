@@ -36,6 +36,7 @@ use Filament\Forms\Set;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AccountCashless;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\ColumnGroup;
 use Illuminate\Database\Eloquent\Collection;
 
 class ClosingStoreResource extends Resource
@@ -301,11 +302,16 @@ class ClosingStoreResource extends Resource
                 TextColumn::make('date')
                     ->sortable(),
 
-                CurrencyColumn::make('cash_from_yesterday'),
+                ColumnGroup::make('Cash', [
+                    CurrencyColumn::make('cash_from_yesterday')
+                        ->label('From Yesterday'),
 
-                CurrencyColumn::make('cash_for_tomorrow'),
+                    CurrencyColumn::make('cash_for_tomorrow')
+                        ->label('For Tomorrow'),
 
-                CurrencyColumn::make('total_cash_transfer'),
+                    CurrencyColumn::make('total_cash_transfer')
+                        ->label('Total Transfer'),
+                ])->alignCenter(),
 
                 TextColumn::make('createdBy.name')
                     ->hidden(fn () => !Auth::user()->hasRole('admin')),

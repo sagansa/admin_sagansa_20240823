@@ -9,6 +9,7 @@ use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\BaseSelect;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
+use App\Filament\Forms\NominalInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StatusSelectInput;
 use App\Filament\Forms\StoreSelect;
@@ -23,9 +24,11 @@ use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\TransferStockResource\Pages;
+use App\Models\Product;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class TransferStockResource extends Resource
 {
@@ -96,18 +99,36 @@ class TransferStockResource extends Resource
                                 ->where('name', 'supervisor')))
                         ->searchable(),
 
-                    BaseSelect::make('sent_by_id')
-                        ->relationship('sentBy', 'name', fn (Builder $query) => $query
-                            ->whereHas('roles', fn (Builder $query) => $query
-                                ->where('name', 'staff') || $query
-                                ->where('name', 'supervisor')))
-                        ->searchable(),
+                    // BaseSelect::make('sent_by_id')
+                    //     ->relationship('sentBy', 'name', fn (Builder $query) => $query
+                    //         ->whereHas('roles', fn (Builder $query) => $query
+                    //             ->where('name', 'staff') || $query
+                    //             ->where('name', 'supervisor')))
+                    //     ->searchable(),
                 ]),
             ]),
 
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
                     Repeater::make('productTransferStocks')
+                        ->schema([
+                            Select::make('product_id')
+                                ->label('Product')
+                                ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                                ->required()
+                                ->options(Product::where('remaining', '1')->get()->pluck('name','id'))
+                                ->columnSpan([
+                                    'md' => 5,
+                                ]),
+                            NominalInput::make('quantity')
+                                ->suffix(function ($get) {
+                                    $product = Product::find($get('product_id'));
+                                    return $product ? $product->unit->unit : '';
+                                })
+                                ->columnSpan([
+                                    'md' => 5,
+                                ]),
+                        ])
                 ]),
             ]),
 
@@ -121,6 +142,15 @@ class TransferStockResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $transferStocks = TransferStock::query();
+
+        if (Auth::user()->hasRole('staff') || Auth::user()->hasRole('supervisor')) {
+            $transferStocks->where(function($query) {
+                $query->where('received_by_id', Auth::id())
+                    ->orWhere('sent_by_id', Auth::id());
+            });
+        }
+
         return $table
             ->poll('60s')
             ->columns([
@@ -148,7 +178,7 @@ class TransferStockResource extends Resource
 
                 TextColumn::make('sentBy.name'),
 
-                TextColumn::make('approvedBy.name'),
+
             ])
             ->filters([])
             ->actions([

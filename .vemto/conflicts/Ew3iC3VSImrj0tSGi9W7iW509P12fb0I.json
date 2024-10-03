@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "6db572bb-2035-4d88-a2ab-53b527f4be1c",
+            "currentContent": "<?php\n\nnamespace Database\\Factories;\n\nuse App\\Models\\Vehicle;\nuse Illuminate\\Support\\Str;\nuse Illuminate\\Database\\Eloquent\\Factories\\Factory;\n\nclass VehicleFactory extends Factory\n{\n    /**\n     * The name of the factory's corresponding model.\n     *\n     * @var string\n     */\n    protected $model = Vehicle::class;\n\n    /**\n     * Define the model's default state.\n     *\n     * @return array<string, mixed>\n     */\n    public function definition(): array\n    {\n        return [\n            'no_register' => fake()->text(10),\n            'type' => fake()->text(10),\n            'status' => fake()->numberBetween(1, 2),\n            'notes' => fake()->optional(),\n            'store_id' => \\App\\Models\\Store::factory(),\n            'user_id' => \\App\\Models\\User::factory(),\n        ];\n    }\n}\n",
+            "newContent": "<?php\n\nnamespace Database\\Factories;\n\nuse App\\Models\\Vehicle;\nuse Illuminate\\Support\\Str;\nuse Illuminate\\Database\\Eloquent\\Factories\\Factory;\n\nclass VehicleFactory extends Factory\n{\n    /**\n     * The name of the factory's corresponding model.\n     *\n     * @var string\n     */\n    protected $model = Vehicle::class;\n\n    /**\n     * Define the model's default state.\n     *\n     * @return array<string, mixed>\n     */\n    public function definition(): array\n    {\n        return [\n            'no_register' => fake()->text(255),\n            'type' => fake()->word(),\n            'status' => fake()->word(),\n            'notes' => fake()->text(),\n            'store_id' => \\App\\Models\\Store::factory(),\n            'user_id' => \\App\\Models\\User::factory(),\n        ];\n    }\n}\n"
+        }
+    ]
+}

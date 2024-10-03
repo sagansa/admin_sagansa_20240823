@@ -101,5 +101,15 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductSelfConsumptionSeeder::class);
         $this->call(ProductTransferStockSeeder::class);
         $this->call(PresenceSeeder::class);
+        $this->call(StockCardSeeder::class);
+        $this->call(DetailStockCardSeeder::class);
+        $this->call(TransferCardSeeder::class);
+        $this->call(DetailTransferCardSeeder::class);
+        $this->call(TransferCardStorageSeeder::class);
+        $this->call(TransferCardStoreSeeder::class);
+        $this->call(RemainingStorageSeeder::class);
+        $this->call(EmployeeConsumptionSeeder::class);
+        $this->call(StoreConsumptionSeeder::class);
+        $this->call(RemainingStoreSeeder::class);
     }
 }

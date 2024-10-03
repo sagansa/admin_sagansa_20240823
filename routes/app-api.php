@@ -14,42 +14,37 @@ use App\Http\Controllers\Api\PresenceController;
 |
 */
 
-// Route::name('api.')
-//     ->prefix('api')
-//     ->group(function () {
-//         Route::post('/login', [AuthController::class, 'login'])->name(
-//             'api.login'
-//         );
+Route::name('api.')
+    ->prefix('api')
+    ->group(function () {
+        Route::post('/login', [AuthController::class, 'login'])->name(
+            'api.login'
+        );
 
-//         Route::middleware('auth:sanctum')->group(function () {
-//             Route::get('/presences', [
-//                 PresenceController::class,
-//                 'index',
-//             ])->name('presences.index');
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::get('/presences', [
+                PresenceController::class,
+                'index',
+            ])->name('presences.index');
 
-//             Route::post('/presences', [
-//                 PresenceController::class,
-//                 'store',
-//             ])->name('presences.store');
+            Route::post('/presences', [
+                PresenceController::class,
+                'store',
+            ])->name('presences.store');
 
-//             Route::get('/presences/{presence}', [
-//                 PresenceController::class,
-//                 'show',
-//             ])->name('presences.show');
+            Route::get('/presences/{presence}', [
+                PresenceController::class,
+                'show',
+            ])->name('presences.show');
 
-//             Route::put('/presences/{presence}', [
-//                 PresenceController::class,
-//                 'update',
-//             ])->name('presences.update');
+            Route::put('/presences/{presence}', [
+                PresenceController::class,
+                'update',
+            ])->name('presences.update');
 
-//             Route::delete('/presences/{presence}', [
-//                 PresenceController::class,
-//                 'destroy',
-//             ])->name('presences.destroy');
-
-//             Route::get('/get-presence-today', [
-//                 PresenceController::class,
-//                 'getPresenceToday',
-//             ]);
-//         });
-//     });
+            Route::delete('/presences/{presence}', [
+                PresenceController::class,
+                'destroy',
+            ])->name('presences.destroy');
+        });
+    });

@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Panel;
 
-use App\Filament\Clusters\Products;
 use App\Filament\Clusters\Transaction\Settings;
 use App\Filament\Columns\ActiveColumn;
 use App\Filament\Forms\ActiveStatusSelect;
@@ -26,7 +25,6 @@ use App\Filament\Resources\Panel\ProductResource\Pages;
 use Filament\Forms\Set;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Str;
 
 class ProductResource extends Resource
@@ -62,7 +60,6 @@ class ProductResource extends Resource
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
                     ImageInput::make('image')
-
                         ->directory('images/Product'),
 
                     TextInput::make('name')
@@ -151,6 +148,10 @@ class ProductResource extends Resource
                 TextColumn::make('user.name'),
             ])
             ->filters([
+
+                SelectFilter::make('material_group_id')
+                    ->label('Material Group')
+                    ->relationship('materialGroup', 'name'),
 
                 SelectFilter::make('remaining')
                     ->options([

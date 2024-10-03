@@ -101,16 +101,16 @@ class EmployeeResource extends Resource
                 Tab::make('Contact Information')
                     ->schema([
                         BaseTextInput::make('fathers_name')
-                            ->label('Fathers Name'),
+                            ->label('Father\'s Name'),
 
                         BaseTextInput::make('mothers_name')
-                            ->label('Mothers Name'),
+                            ->label('Mother\'s Name'),
 
                         BaseTextInput::make('parents_no_telp')
                             ->numeric(),
 
                         BaseTextInput::make('siblings_name')
-                            ->label('Siblings Name'),
+                            ->label('Sibling\'s Name'),
 
                         BaseTextInput::make('siblings_no_telp'),
 
@@ -314,13 +314,13 @@ class EmployeeResource extends Resource
 
                 TextColumn::make('birth_date')->sortable(),
 
-                TextColumn::make('fathers_name'),
+                TextColumn::make('fathers_name')->label('Father\'s Name'),
 
-                TextColumn::make('mothers_name'),
+                TextColumn::make('mothers_name')->label('Mother\'s Name'),
 
                 TextColumn::make('parents_no_telp'),
 
-                TextColumn::make('siblings_name'),
+                TextColumn::make('siblings_name')->label('Sibling\'s Name'),
 
                 TextColumn::make('siblings_no_telp'),
 

@@ -138,7 +138,7 @@ class ClosingCourierResource extends Resource
 
     public static function getRelations(): array
     {
-        return [RelationManagers\ClosingStoresRelationManager::class];
+        return [];
     }
 
     public static function getPages(): array

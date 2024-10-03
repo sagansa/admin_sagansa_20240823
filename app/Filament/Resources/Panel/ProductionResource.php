@@ -57,14 +57,10 @@ class ProductionResource extends Resource
     {
         return $form->schema([
             Section::make()->schema([
-                Grid::make(['default' => 1])->schema([
+                Grid::make(['default' => 2])->schema([
                     StoreSelect::make('store_id'),
 
                     DateInput::make('date'),
-
-                    StatusSelectInput::make('status'),
-
-                    Notes::make('notes'),
                 ]),
             ]),
         ]);

@@ -79,18 +79,6 @@ class DailySalaryResource extends Resource
                         ->searchable()
                         ->preload()
                         ->native(false),
-
-                    Select::make('status')
-                        ->required()
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
-
-                    Select::make('created_by_id')
-                        ->nullable()
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
                 ]),
             ]),
         ]);
@@ -111,9 +99,11 @@ class DailySalaryResource extends Resource
 
                 TextColumn::make('paymentType.name'),
 
-                TextColumn::make('status'),
-
                 TextColumn::make('created_by_id'),
+
+                TextColumn::make('createdBy.name'),
+
+                TextColumn::make('status'),
             ])
             ->filters([])
             ->actions([

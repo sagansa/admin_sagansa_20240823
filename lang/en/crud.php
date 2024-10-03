@@ -2,8 +2,6 @@
 
 return [
     'dailySalaries' => [
-        'itemTitle' => 'Daily Salary',
-        'collectionTitle' => 'Daily Salaries',
         'inputs' => [
             'store_id' => [
                 'label' => 'Store',
@@ -30,8 +28,12 @@ return [
                 'placeholder' => 'Status',
             ],
             'created_by_id' => [
-                'label' => 'Created by',
+                'label' => 'Created by id',
                 'placeholder' => 'Created by id',
+            ],
+            'approved_by_id' => [
+                'label' => 'Approved by id',
+                'placeholder' => 'Approved by id',
             ],
         ],
         'filament' => [
@@ -89,6 +91,8 @@ return [
                 'label' => '',
             ],
         ],
+        'itemTitle' => 'Daily Salary',
+        'collectionTitle' => 'Daily Salaries',
     ],
     'paymentReceipts' => [
         'itemTitle' => 'Payment Receipt',
@@ -3837,12 +3841,20 @@ return [
         'collectionTitle' => 'Store Consumptions',
         'inputs' => [
             'store_id' => [
-                'label' => 'Store',
+                'label' => 'Store id',
                 'placeholder' => 'Store id',
             ],
             'date' => [
                 'label' => 'Date',
                 'placeholder' => 'Date',
+            ],
+            'for' => [
+                'label' => 'For',
+                'placeholder' => 'For',
+            ],
+            'user_id' => [
+                'label' => 'User id',
+                'placeholder' => 'User id',
             ],
         ],
         'filament' => [
@@ -3855,6 +3867,20 @@ return [
             ],
             'date' => [
                 'helper_text' => '',
+                'label' => '',
+            ],
+            'for' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'user_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
                 'label' => '',
             ],
         ],
@@ -4722,6 +4748,329 @@ return [
                 'label' => '',
             ],
             'approved_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'transferCardStorages' => [
+        'itemTitle' => 'Transfer Card Storage',
+        'collectionTitle' => 'Transfer Card Storages',
+        'inputs' => [
+            'date' => [
+                'label' => 'Date',
+                'placeholder' => 'Date',
+            ],
+            'image' => [
+                'label' => 'Image',
+                'placeholder' => 'Image',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'from_store_id' => [
+                'label' => 'From store id',
+                'placeholder' => 'From store id',
+            ],
+            'to_store_id' => [
+                'label' => 'To store id',
+                'placeholder' => 'To store id',
+            ],
+            'sent_by_id' => [
+                'label' => 'Sent by id',
+                'placeholder' => 'Sent by id',
+            ],
+            'received_by_id' => [
+                'label' => 'Received by id',
+                'placeholder' => 'Received by id',
+            ],
+            'for' => [
+                'label' => 'For',
+                'placeholder' => 'For',
+            ],
+        ],
+        'filament' => [
+            'date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'image' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'from_store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'to_store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'sent_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'received_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'for' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'remainingStores' => [
+        'itemTitle' => 'Remaining Store',
+        'collectionTitle' => 'Remaining Stores',
+        'inputs' => [
+            'for' => [
+                'label' => 'For',
+                'placeholder' => 'For',
+            ],
+            'date' => [
+                'label' => 'Date',
+                'placeholder' => 'Date',
+            ],
+            'store_id' => [
+                'label' => 'Store id',
+                'placeholder' => 'Store id',
+            ],
+            'user_id' => [
+                'label' => 'User id',
+                'placeholder' => 'User id',
+            ],
+        ],
+        'filament' => [
+            'for' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'user_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'remainingStorages' => [
+        'itemTitle' => 'Remaining Storage',
+        'collectionTitle' => 'Remaining Storages',
+        'inputs' => [
+            'for' => [
+                'label' => 'For',
+                'placeholder' => 'For',
+            ],
+            'date' => [
+                'label' => 'Date',
+                'placeholder' => 'Date',
+            ],
+            'store_id' => [
+                'label' => 'Store id',
+                'placeholder' => 'Store id',
+            ],
+            'user_id' => [
+                'label' => 'User id',
+                'placeholder' => 'User id',
+            ],
+        ],
+        'filament' => [
+            'for' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'user_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'employeeConsumptions' => [
+        'itemTitle' => 'Employee Consumption',
+        'collectionTitle' => 'Employee Consumptions',
+        'inputs' => [
+            'for' => [
+                'label' => 'For',
+                'placeholder' => 'For',
+            ],
+            'date' => [
+                'label' => 'Date',
+                'placeholder' => 'Date',
+            ],
+            'store_id' => [
+                'label' => 'Store id',
+                'placeholder' => 'Store id',
+            ],
+            'user_id' => [
+                'label' => 'User id',
+                'placeholder' => 'User id',
+            ],
+        ],
+        'filament' => [
+            'for' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'user_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'transferCardStores' => [
+        'itemTitle' => 'Transfer Card Store',
+        'collectionTitle' => 'Transfer Card Stores',
+        'inputs' => [
+            'date' => [
+                'label' => 'Date',
+                'placeholder' => 'Date',
+            ],
+            'image' => [
+                'label' => 'Image',
+                'placeholder' => 'Image',
+            ],
+            'status' => [
+                'label' => 'Status',
+                'placeholder' => 'Status',
+            ],
+            'from_store_id' => [
+                'label' => 'From store id',
+                'placeholder' => 'From store id',
+            ],
+            'to_store_id' => [
+                'label' => 'To store id',
+                'placeholder' => 'To store id',
+            ],
+            'sent_by_id' => [
+                'label' => 'Sent by id',
+                'placeholder' => 'Sent by id',
+            ],
+            'received_by_id' => [
+                'label' => 'Received by id',
+                'placeholder' => 'Received by id',
+            ],
+            'for' => [
+                'label' => 'For',
+                'placeholder' => 'For',
+            ],
+        ],
+        'filament' => [
+            'date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'image' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'from_store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'to_store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'sent_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'received_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'for' => [
                 'helper_text' => '',
                 'loading_message' => '',
                 'no_result_message' => '',

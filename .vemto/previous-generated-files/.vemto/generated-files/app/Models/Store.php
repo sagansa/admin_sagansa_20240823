@@ -125,4 +125,24 @@ class Store extends Model
     {
         return $this->hasMany(StorageStock::class);
     }
+
+    public function presences()
+    {
+        return $this->hasMany(Presence::class);
+    }
+
+    public function stockCards()
+    {
+        return $this->hasMany(StockCard::class);
+    }
+
+    public function transferCardsStoreFrom()
+    {
+        return $this->hasMany(TransferCard::class, 'from_store_id');
+    }
+
+    public function transferCardsStoreTo()
+    {
+        return $this->hasMany(TransferCard::class, 'to_store_id');
+    }
 }

@@ -555,6 +555,46 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Presence::class, 'approved_by_id');
     }
 
+    /**
+     * Get all of the stockCards.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function stockCards()
+    {
+        return $this->hasMany(StockCard::class);
+    }
+
+    /**
+     * Get all of the transferCardsApprovedBy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function transferCardsApprovedBy()
+    {
+        return $this->hasMany(TransferCard::class, 'approved_by_id');
+    }
+
+    /**
+     * Get all of the transferCardsSentBy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function transferCardsSentBy()
+    {
+        return $this->hasMany(TransferCard::class, 'sent_by_id');
+    }
+
+    /**
+     * Get all of the transferCardsReceivedBy.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function transferCardsReceivedBy()
+    {
+        return $this->hasMany(TransferCard::class, 'received_by_id');
+    }
+
     protected static function boot()
     {
         parent::boot();

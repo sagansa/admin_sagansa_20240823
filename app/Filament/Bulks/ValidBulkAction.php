@@ -11,9 +11,7 @@ class ValidBulkAction extends BulkAction
         parent::setUp();
 
         $this
-            ->label('Set Status to Valid')
             ->icon('heroicon-o-check')
-            ->requiresConfirmation()
-            ->color('success');
+            ->requiresConfirmation();
     }
 }

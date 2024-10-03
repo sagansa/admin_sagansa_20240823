@@ -48,11 +48,6 @@ class DetailInvoicesRelationManager extends RelationManager
                     ->preload()
                     ->native(false),
 
-                TextInput::make('subtotal_price')
-                    ->required()
-                    ->numeric()
-                    ->step(1),
-
                 TextInput::make('status')
                     ->required()
                     ->numeric()
@@ -72,8 +67,6 @@ class DetailInvoicesRelationManager extends RelationManager
                 TextColumn::make('quantity_invoice'),
 
                 TextColumn::make('unit.name'),
-
-                TextColumn::make('subtotal_price'),
 
                 TextColumn::make('status'),
             ])

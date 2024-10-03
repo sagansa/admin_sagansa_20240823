@@ -167,7 +167,12 @@ class ClosingStoreResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            RelationManagers\CashlessesRelationManager::class,
+            RelationManagers\InvoicePurchasesRelationManager::class,
+            RelationManagers\DailySalariesRelationManager::class,
+            RelationManagers\FuelServicesRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

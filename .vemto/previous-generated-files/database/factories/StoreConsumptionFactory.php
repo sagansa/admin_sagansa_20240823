@@ -25,6 +25,7 @@ class StoreConsumptionFactory extends Factory
         return [
             'date' => fake()->date(),
             'store_id' => \App\Models\Store::factory(),
+            'user_id' => \App\Models\User::factory(),
         ];
     }
 }

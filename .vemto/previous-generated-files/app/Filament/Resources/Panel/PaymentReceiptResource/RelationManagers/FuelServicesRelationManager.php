@@ -21,7 +21,7 @@ class FuelServicesRelationManager extends RelationManager
 {
     protected static string $relationship = 'fuelServices';
 
-    protected static ?string $recordTitleAttribute = 'image';
+    protected static ?string $recordTitleAttribute = 'date';
 
     public function form(Form $form): Form
     {

@@ -30,4 +30,22 @@ class DetailInvoice extends Model
     {
         return $this->hasMany(ProductionMainFrom::class);
     }
+
+    public function getDetailInvoiceNameAttribute()
+    {
+        $detailInvoices = [
+            "Product: " . ($this->detailRequest->product->name ? : ''),
+            "Quantity: " . ($this->quantity_product . ' ' . $this->detailRequest->product->unit->unit ? : ''),
+            "Date: " . ($this->invoicePurchase->date ? : ''),
+        ];
+
+        return implode("\n", $detailInvoices);
+    }
+
+    // public function getDetailInvoiceNameAttribute()
+    // {
+    //     return $this->detailRequest->product->name . ' | ' . $this->quantity_product . ' ' . $this->detailRequest->product->unit->unit . ' | ' . $this->invoicePurchase->date;
+    // }
+
+
 }
