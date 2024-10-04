@@ -26,6 +26,7 @@ use App\Filament\Resources\Panel\HygieneResource\RelationManagers;
 use App\Models\Room;
 use Filament\Forms\Components\Repeater;
 use Filament\Tables\Actions\ActionGroup;
+use Illuminate\Support\Facades\Auth;
 
 class HygieneResource extends Resource
 {
@@ -74,8 +75,16 @@ class HygieneResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $query = Hygiene::query();
+
+        if (Auth::user()->hasRole('staff')) {
+            $query->where('created_by_id', Auth::id());
+        }
+
+        $query->where('for', 'remaining_store');
         return $table
             ->poll('60s')
+            ->query($query)
             ->columns([
                 TextColumn::make('store.nickname'),
 
