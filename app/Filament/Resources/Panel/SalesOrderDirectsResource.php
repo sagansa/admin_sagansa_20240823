@@ -8,7 +8,6 @@ use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\DeliveryStatusColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\StatusColumn;
-use App\Filament\Filters\DateFilter;
 use App\Filament\Filters\SelectStoreFilter;
 use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Forms\BottomTotalPriceForm;
@@ -17,7 +16,6 @@ use App\Filament\Forms\DeliveryAddressForm;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Resources\Panel\SalesOrderDirectsResource\Pages;
 use App\Models\SalesOrderDirect;
-use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
@@ -95,7 +93,8 @@ class SalesOrderDirectsResource extends Resource
 
                 ImageOpenUrlColumn::make('image_payment')
                     ->label('Payment')
-                    ->url(fn($record) => asset('storage/' . $record->image_payment)),
+                    ->url(fn($record) => asset('storage/' . $record->image_payment))
+                    ->visible(fn () => Auth::user()->hasRole('admin') || Auth::user()->hasRole('customer')),
 
                 ImageOpenUrlColumn::make('image_delivery')
                     ->label('delivery')
