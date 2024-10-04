@@ -81,7 +81,6 @@ class HygieneResource extends Resource
             $query->where('created_by_id', Auth::id());
         }
 
-        $query->where('for', 'remaining_store');
         return $table
             ->poll('60s')
             ->query($query)
