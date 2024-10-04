@@ -34,7 +34,7 @@ class AdminPanelProvider extends PanelProvider
                     ->label('Access')
                     ->icon('heroicon-o-shield-check'),
                 NavigationGroup::make()
-                    ->label(__('navigation.transactions'))
+                    ->label('Transaction')
                     ->icon('heroicon-o-shopping-cart'),
                 NavigationGroup::make()
                     ->label('Asset')
