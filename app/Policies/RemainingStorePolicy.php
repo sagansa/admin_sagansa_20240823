@@ -23,7 +23,7 @@ class RemainingStorePolicy
      */
     public function view(User $user, RemainingStore $remainingStore): bool
     {
-        return $user->can('view_panel::remaining::store');
+        return $user->can('view_panel::remaining::store') && $remainingStore->status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class RemainingStorePolicy
      */
     public function update(User $user, RemainingStore $remainingStore): bool
     {
-        return $user->can('update_panel::remaining::store');
+        return $user->can('update_panel::remaining::store') && $remainingStore->status !== 2;
     }
 
     /**

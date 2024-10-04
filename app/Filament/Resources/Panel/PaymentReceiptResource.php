@@ -13,20 +13,17 @@ use App\Filament\Forms\SupplierSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\Layout\Split;
 use App\Models\PaymentReceipt;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\PaymentReceiptResource\Pages;
 use App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
 use App\Models\DailySalary;
 use App\Models\FuelService;
 use App\Models\InvoicePurchase;
-use App\Models\Supplier;
 use Filament\Forms\Components\Radio;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
@@ -66,8 +63,6 @@ class PaymentReceiptResource extends Resource
                 Grid::make(['default' => 1])->schema([
 
                     Radio::make('payment_for')
-                        // ->hiddenLabel()
-                        // ->inlineLabel()
                         ->options([
                             '1' => 'fuel/service',
                             '2' => 'daily salary',
@@ -217,21 +212,10 @@ class PaymentReceiptResource extends Resource
                     ->visibility('public')
                     ->url(fn($record) => asset('storage/' . $record->image_adjust)),
 
-                // Split::make([
-                    SupplierColumn::make('Supplier'),
-                    // TextColumn::make('user.name'),
-                // ]),
+                SupplierColumn::make('Supplier'),
 
                 TextColumn::make('created_at')
                     ->date(),
-
-                // TextColumn::make('payment_for')
-                //     ->formatStateUsing(
-                //         fn(string $state): string => match ($state) {
-                //             '1' => 'fuel service',
-                //             '2' => 'daily salary',
-                //             '3' => 'invoice purchase',
-                //     }),
 
                 CurrencyColumn::make('total_amount'),
 
