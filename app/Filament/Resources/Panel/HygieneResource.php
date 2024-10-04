@@ -61,7 +61,7 @@ class HygieneResource extends Resource
                 Grid::make(['default' => 1])->schema([
                     StoreSelect::make('store_id'),
 
-                    Notes::make('notes'),
+                    // Notes::make('notes'),
 
                 ]),
             ]),
