@@ -4,6 +4,8 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Store;
 use App\Filament\Filters\SelectStoreFilter;
+use App\Filament\Forms\BaseRepeaterSelect;
+use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
@@ -21,6 +23,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\HygieneResource\Pages;
 use App\Filament\Resources\Panel\HygieneResource\RelationManagers;
+use App\Models\Room;
+use Filament\Forms\Components\Repeater;
 use Filament\Tables\Actions\ActionGroup;
 
 class HygieneResource extends Resource
@@ -61,6 +65,10 @@ class HygieneResource extends Resource
 
                 ]),
             ]),
+
+            Section::make()->schema(
+                self::getItemsRepeater(),
+            ),
         ]);
     }
 
@@ -100,7 +108,9 @@ class HygieneResource extends Resource
 
     public static function getRelations(): array
     {
-        return [RelationManagers\HygieneOfRoomsRelationManager::class];
+        return [
+            // RelationManagers\HygieneOfRoomsRelationManager::class
+        ];
     }
 
     public static function getPages(): array
@@ -110,6 +120,34 @@ class HygieneResource extends Resource
             'create' => Pages\CreateHygiene::route('/create'),
             'view' => Pages\ViewHygiene::route('/{record}'),
             'edit' => Pages\EditHygiene::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getItemsRepeater(): array
+    {
+        $rooms = Room::orderBy('name', 'asc')->get()->map(function ($item) {
+            return [
+                'room_id' => $item->id,
+                'image' => $item->image,
+            ];
+        })->toArray();
+
+        return [
+            Repeater::make('hygieneOfRooms')
+                ->hiddenLabel()
+                ->default($rooms)
+                ->relationship()
+                ->addable(false)
+                ->deletable(false)
+                ->schema([
+                    BaseRepeaterSelect::make('room_id')
+                        ->relationship('room', 'name'),
+
+                    ImageInput::make('image')
+                        ->multiple()
+                        ->hiddenLabel()
+                        ->directory('images/Hygiene'),
+            ])
         ];
     }
 }

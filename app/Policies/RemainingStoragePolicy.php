@@ -23,7 +23,7 @@ class RemainingStoragePolicy
      */
     public function view(User $user, RemainingStorage $remainingStorage): bool
     {
-        return $user->can('view_panel::remaining::storage');
+        return $user->can('view_panel::remaining::storage') && $remainingStorage->status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class RemainingStoragePolicy
      */
     public function update(User $user, RemainingStorage $remainingStorage): bool
     {
-        return $user->can('update_panel::remaining::storage');
+        return $user->can('update_panel::remaining::storage') && $remainingStorage->status === 2;
     }
 
     /**

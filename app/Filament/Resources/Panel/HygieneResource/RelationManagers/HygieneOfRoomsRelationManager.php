@@ -31,7 +31,6 @@ class HygieneOfRoomsRelationManager extends RelationManager
 
                 ImageInput::make('image')
                     ->multiple()
-
                     ->directory('images/Hygiene'),
             ]),
         ]);

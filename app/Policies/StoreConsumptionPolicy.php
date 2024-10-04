@@ -23,7 +23,7 @@ class StoreConsumptionPolicy
      */
     public function view(User $user, StoreConsumption $storeConsumption): bool
     {
-        return $user->can('view_panel::store::consumption');
+        return $user->can('view_panel::store::consumption') && $storeConsumption->status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class StoreConsumptionPolicy
      */
     public function update(User $user, StoreConsumption $storeConsumption): bool
     {
-        return $user->can('update_panel::store::consumption');
+        return $user->can('update_panel::store::consumption') && $storeConsumption->status !== 2;
     }
 
     /**

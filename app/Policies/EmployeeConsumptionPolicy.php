@@ -23,7 +23,7 @@ class EmployeeConsumptionPolicy
      */
     public function view(User $user, EmployeeConsumption $employeeConsumption): bool
     {
-        return $user->can('view_panel::employee::consumption');
+        return $user->can('view_panel::employee::consumption') && $employeeConsumption->status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class EmployeeConsumptionPolicy
      */
     public function update(User $user, EmployeeConsumption $employeeConsumption): bool
     {
-        return $user->can('update_panel::employee::consumption');
+        return $user->can('update_panel::employee::consumption') && $employeeConsumption->status !== 2;
     }
 
     /**

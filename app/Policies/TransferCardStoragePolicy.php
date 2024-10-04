@@ -23,7 +23,7 @@ class TransferCardStoragePolicy
      */
     public function view(User $user, TransferCardStorage $transferCardStorage): bool
     {
-        return $user->can('view_panel::transfer::card::storage');
+        return $user->can('view_panel::transfer::card::storage') && $transferCardStorage->status === 2;
     }
 
     /**
@@ -39,7 +39,7 @@ class TransferCardStoragePolicy
      */
     public function update(User $user, TransferCardStorage $transferCardStorage): bool
     {
-        return $user->can('update_panel::transfer::card::storage');
+        return $user->can('update_panel::transfer::card::storage') && $transferCardStorage->status !== 2;
     }
 
     /**
