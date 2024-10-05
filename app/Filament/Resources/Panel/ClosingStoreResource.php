@@ -394,7 +394,7 @@ class ClosingStoreResource extends Resource
         foreach ($state as $invoicePurchaseId) {
             $invoicePurchase = InvoicePurchase::find($invoicePurchaseId);
             if ($invoicePurchase) {
-                $invoicePurchase->status = 2;
+                $invoicePurchase->payment_status = 2;
                 $invoicePurchase->save();
             }
         }
