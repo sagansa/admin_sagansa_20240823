@@ -77,9 +77,9 @@ class DailySalaryResource extends Resource
                         // ->relationship('paymentType', 'name')
                         ->relationship(
                             name: 'paymentType',
-                            modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
+                            modifyQueryUsing: fn(Builder $query) => $query->where('status', '1'),
                         )
-                        ->getOptionLabelFromRecordUsing(fn (PaymentType $record) => "{$record->name}")
+                        ->getOptionLabelFromRecordUsing(fn(PaymentType $record) => "{$record->name}")
                         ->searchable()
                         ->preload(),
 
@@ -110,12 +110,12 @@ class DailySalaryResource extends Resource
                 SelectFilter::make('payment_type_id')
                     ->label('Payment Type')
                     ->preload()
-                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
-                    ->relationship('paymentType', 'name', fn (Builder $query) => $query->where('status','1')),
+                    ->hidden(fn() => !Auth::user()->hasRole('admin'))
+                    ->relationship('paymentType', 'name', fn(Builder $query) => $query->where('status', '1')),
 
                 SelectFilter::make('status')
                     ->label('Status')
-                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
+                    ->hidden(fn() => !Auth::user()->hasRole('admin'))
                     ->options([
                         '1' => 'belum diperiksa',
                         '2' => 'sudah dibayar',
@@ -123,12 +123,12 @@ class DailySalaryResource extends Resource
                         '4' => 'perbaiki',
                     ])
 
-                ], layout: FiltersLayout::AboveContent)
+            ], layout: FiltersLayout::AboveContent)
 
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make()->visible(fn ($record) => auth()->user()->can('update', $record)),
-                    Tables\Actions\ViewAction::make()->visible(fn ($record) => auth()->user()->can('view', $record)),
+                    Tables\Actions\EditAction::make()->visible(fn($record) => auth()->user()->can('update', $record)),
+                    Tables\Actions\ViewAction::make()->visible(fn($record) => auth()->user()->can('view', $record)),
                 ])
             ])
             ->bulkActions([
@@ -140,6 +140,14 @@ class DailySalaryResource extends Resource
                         ->requiresConfirmation()
                         ->action(function (Collection $records) {
                             DailySalary::whereIn('id', $records->pluck('id'))->update(['status' => 3]);
+                        })
+                        ->color('warning'),
+                    Tables\Actions\BulkAction::make('setStatusToThree')
+                        ->label('Set Status to Belum Dibayar')
+                        ->icon('heroicon-o-check')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records) {
+                            DailySalary::whereIn('id', $records->pluck('id'))->update(['status' => 1]);
                         })
                         ->color('warning'),
                 ]),

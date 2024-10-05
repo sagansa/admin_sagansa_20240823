@@ -75,25 +75,25 @@ class PaymentReceiptResource extends Resource
 
                     Select::make('user_id')
                         ->label('Employee')
-                        ->visible(fn ($get) => $get('payment_for') == '2')
-                        ->relationship('user', 'name', fn (Builder $query) => $query
-                            ->whereHas('roles', fn (Builder $query) => $query
+                        ->visible(fn($get) => $get('payment_for') == '2')
+                        ->relationship('user', 'name', fn(Builder $query) => $query
+                            ->whereHas('roles', fn(Builder $query) => $query
                                 ->where('name', 'staff') || $query
                                 ->where('name', 'supervisor'))->orderBy('name', 'asc'))
                         ->searchable()
                         ->preload(),
 
                     Select::make('fuelServices')
-                        ->visible(fn ($get) => $get('payment_for') == '1')
+                        ->visible(fn($get) => $get('payment_for') == '1')
                         ->multiple()
                         ->relationship(
                             name: 'fuelServices',
-                            modifyQueryUsing: fn (Builder $query) => $query
+                            modifyQueryUsing: fn(Builder $query) => $query
                                 ->where('payment_type_id', '1')
                                 ->where('status', '1')
                                 ->orderBy('date', 'desc')
                         )
-                        ->getOptionLabelFromRecordUsing(fn (FuelService $record) => "{$record->fuel_service_name}")
+                        ->getOptionLabelFromRecordUsing(fn(FuelService $record) => "{$record->fuel_service_name}")
                         ->preload()
                         ->reactive()
                         ->afterStateUpdated(function ($state, $set) {
@@ -110,16 +110,16 @@ class PaymentReceiptResource extends Resource
                         }),
 
                     Select::make('dailySalaries')
-                        ->visible(fn ($get) => $get('payment_for') == '2')
+                        ->visible(fn($get) => $get('payment_for') == '2')
                         ->multiple()
                         ->relationship(
                             name: 'dailySalaries',
-                            modifyQueryUsing: fn (Builder $query) => $query
+                            modifyQueryUsing: fn(Builder $query) => $query
                                 ->where('payment_type_id', '1')
                                 ->where('status', '3')
                                 ->orderBy('date', 'desc')
                         )
-                        ->getOptionLabelFromRecordUsing(fn (DailySalary $record) => "{$record->daily_salary_name}")
+                        ->getOptionLabelFromRecordUsing(fn(DailySalary $record) => "{$record->daily_salary_name}")
                         ->preload()
                         ->reactive()
                         ->afterStateUpdated(function ($state, $set) {
@@ -136,16 +136,16 @@ class PaymentReceiptResource extends Resource
                         }),
 
                     Select::make('invoicePurchases')
-                        ->visible(fn ($get) => $get('payment_for') == '3')
+                        ->visible(fn($get) => $get('payment_for') == '3')
                         ->multiple()
                         ->relationship(
                             name: 'invoicePurchases',
-                            modifyQueryUsing: fn (Builder $query) => $query
+                            modifyQueryUsing: fn(Builder $query) => $query
                                 ->where('payment_type_id', '1')
                                 ->where('payment_status', '1')
                                 ->orderBy('date', 'desc')
                         )
-                        ->getOptionLabelFromRecordUsing(fn (InvoicePurchase $record) => "{$record->invoice_purchase_name}")
+                        ->getOptionLabelFromRecordUsing(fn(InvoicePurchase $record) => "{$record->invoice_purchase_name}")
                         ->preload()
                         ->reactive()
                         ->searchable()
@@ -180,10 +180,10 @@ class PaymentReceiptResource extends Resource
                     ImageInput::make('image_adjust')
 
                         ->directory('images/PaymentReceipt')
-                        ->hidden(fn ($operation) => $operation === 'create'),
+                        ->hidden(fn($operation) => $operation === 'create'),
 
                     Notes::make('notes')
-                        ->hidden(fn ($operation) => $operation === 'create'),
+                        ->hidden(fn($operation) => $operation === 'create'),
 
                 ]),
             ]),
@@ -228,7 +228,7 @@ class PaymentReceiptResource extends Resource
                 ActionGroup::make([
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\ViewAction::make(),
-                    ])
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

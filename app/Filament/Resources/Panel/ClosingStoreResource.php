@@ -109,12 +109,12 @@ class ClosingStoreResource extends Resource
                     Select::make('transfer_by_id')
                         ->nullable()
                         ->inlineLabel()
-                        ->relationship('transferBy', 'name', fn (Builder $query) => $query
-                            ->whereHas('roles', fn (Builder $query) => $query
+                        ->relationship('transferBy', 'name', fn(Builder $query) => $query
+                            ->whereHas('roles', fn(Builder $query) => $query
                                 ->where('name', 'staff') || $query
                                 ->where('name', 'supervisor')))
                         ->preload()
-                        ->visible(fn ($get) => $get('total_cash_transfer') !== 0),
+                        ->visible(fn($get) => $get('total_cash_transfer') !== 0),
                 ]),
             ]),
 
@@ -125,13 +125,13 @@ class ClosingStoreResource extends Resource
                         ->inlineLabel()
                         ->relationship(
                             name: 'fuelServices',
-                            modifyQueryUsing: fn (Builder $query, $get) => $query
+                            modifyQueryUsing: fn(Builder $query, $get) => $query
                                 ->where('payment_type_id', '2')
                                 ->where('status', '1')
                                 ->whereDate('date', '>=', now()->subDays(10)) // add this line
                                 ->orderBy('date', 'desc')
                         )
-                        ->getOptionLabelFromRecordUsing(fn (FuelService $record) => "{$record->fuel_service_name}")
+                        ->getOptionLabelFromRecordUsing(fn(FuelService $record) => "{$record->fuel_service_name}")
                         ->preload()
                         ->reactive()
                         ->afterStateUpdated(function (Get $get, Set $set) {
@@ -144,14 +144,14 @@ class ClosingStoreResource extends Resource
                         ->inlineLabel()
                         ->relationship(
                             name: 'dailySalaries',
-                            modifyQueryUsing: fn (Builder $query, $get) => $query
+                            modifyQueryUsing: fn(Builder $query, $get) => $query
                                 ->where('payment_type_id', '2')
                                 ->where('status', '1')
-                                ->when($get('store_id'), fn ($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
-                                ->whereDate('date', '>=', now()->subDays(10)) // add this line
+                                ->when($get('store_id'), fn($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
+                                ->whereDate('date', '>=', now()->subDays(15)) // add this line
                                 ->orderBy('date', 'desc')
                         )
-                        ->getOptionLabelFromRecordUsing(fn (DailySalary $record) => "{$record->daily_salary_name}")
+                        ->getOptionLabelFromRecordUsing(fn(DailySalary $record) => "{$record->daily_salary_name}")
                         ->preload()
                         ->reactive()
                         ->afterStateUpdated(function (Get $get, Set $set, $state) {
@@ -164,14 +164,14 @@ class ClosingStoreResource extends Resource
                         ->inlineLabel()
                         ->relationship(
                             name: 'invoicePurchases',
-                            modifyQueryUsing: fn (Builder $query, $get) => $query
+                            modifyQueryUsing: fn(Builder $query, $get) => $query
                                 ->where('payment_type_id', '2')
                                 ->where('payment_status', '1')
-                                ->when($get('store_id'), fn ($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
+                                ->when($get('store_id'), fn($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
                                 ->whereDate('date', '>=', now()->subDays(10)) // add this line
-                                ->orderBy('date','desc')
+                                ->orderBy('date', 'desc')
                         )
-                        ->getOptionLabelFromRecordUsing(fn (InvoicePurchase $record) => "{$record->invoice_purchase_name}")
+                        ->getOptionLabelFromRecordUsing(fn(InvoicePurchase $record) => "{$record->invoice_purchase_name}")
                         ->preload()
                         ->reactive()
                         ->afterStateUpdated(function (Get $get, Set $set) {
@@ -201,7 +201,7 @@ class ClosingStoreResource extends Resource
                                         return $query;
                                     }
                                 )
-                                ->getOptionLabelFromRecordUsing(fn (AccountCashless $record) => $record->account_cashless_name),
+                                ->getOptionLabelFromRecordUsing(fn(AccountCashless $record) => $record->account_cashless_name),
 
                             CurrencyRepeaterInput::make('bruto_apl')
                                 ->placeholder('Bruto Total Omzet'),
@@ -263,9 +263,9 @@ class ClosingStoreResource extends Resource
                     Select::make('status')
                         ->required()
                         ->inlineLabel()
-                        ->hidden(fn ($operation) => $operation === 'create')
-                        ->disabled(fn () => Auth::user()->hasRole('staff'))
-                        ->required(fn () => Auth::user()->hasRole('admin'))
+                        ->hidden(fn($operation) => $operation === 'create')
+                        ->disabled(fn() => Auth::user()->hasRole('staff'))
+                        ->required(fn() => Auth::user()->hasRole('admin'))
                         ->preload()
                         ->options([
                             '1' => 'belum diperiksa',
@@ -273,7 +273,7 @@ class ClosingStoreResource extends Resource
                             '3' => 'diperbaiki',
                             '4' => 'periksa ulang',
                         ]),
-                    ]),
+                ]),
 
                 Grid::make(['default' => 1])->schema([
                     Notes::make('notes'),
@@ -314,7 +314,7 @@ class ClosingStoreResource extends Resource
                 ])->alignCenter(),
 
                 TextColumn::make('createdBy.name')
-                    ->hidden(fn () => !Auth::user()->hasRole('admin')),
+                    ->hidden(fn() => !Auth::user()->hasRole('admin')),
 
                 TextColumn::make('transferBy.name')
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -344,7 +344,7 @@ class ClosingStoreResource extends Resource
                         ->color('warning'),
                 ]),
             ])
-            ->defaultSort(fn (Builder $query) => $query->orderBy('date', 'desc')->orderBy('created_at', 'desc'));
+            ->defaultSort(fn(Builder $query) => $query->orderBy('date', 'desc')->orderBy('created_at', 'desc'));
     }
 
     public static function getRelations(): array
@@ -371,7 +371,7 @@ class ClosingStoreResource extends Resource
     {
         foreach ($state as $dailySalaryId) {
             $dailySalary = DailySalary::find($dailySalaryId);
-            if  ($dailySalary) {
+            if ($dailySalary) {
                 $dailySalary->status = 2;
                 $dailySalary->save();
             }
@@ -470,5 +470,4 @@ class ClosingStoreResource extends Resource
 
         return $cashFromYesterday ? $cashFromYesterday->cash_for_tomorrow : 0;
     }
-
 }

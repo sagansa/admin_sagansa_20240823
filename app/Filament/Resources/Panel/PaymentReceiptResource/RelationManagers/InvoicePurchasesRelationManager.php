@@ -19,64 +19,18 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Resources\RelationManagers\RelationManager;
 use App\Filament\Resources\Panel\PaymentReceiptResource;
 use App\Filament\Tables\InvoicePurchaseTable;
+use Illuminate\Database\Eloquent\Builder;
 
 class InvoicePurchasesRelationManager extends RelationManager
 {
     protected static string $relationship = 'invoicePurchases';
 
-    protected static ?string $recordTitleAttribute = 'image';
+    protected static ?string $recordTitleAttribute = 'supplier_id';
 
     public function form(Form $form): Form
     {
         return $form->schema([
-            Grid::make(['default' => 1])->schema([
-                ImageInput::make('image')
-
-                    ->directory('images/InvoicePurchase'),
-
-                Select::make('payment_type_id')
-                    ->required()
-                    ->relationship('paymentType', 'name')
-                    ->searchable()
-                    ->preload(),
-
-                StoreSelect::make('store_id')
-                    ->required(),
-
-                SupplierSelect::make('supplier_id'),
-
-                DateInput::make('date'),
-
-                TextInput::make('taxes')
-                    ->required()
-                    ->numeric()
-                    ->step(1),
-
-                TextInput::make('discounts')
-                    ->required()
-                    ->numeric()
-                    ->step(1),
-
-                TextInput::make('total_price')
-                    ->required()
-                    ->numeric()
-                    ->step(1),
-
-                RichEditor::make('notes')
-                    ->nullable()
-                    ->string()
-                    ->fileAttachmentsVisibility('public'),
-
-                Select::make('payment_status')
-                    ->required()
-                    ->searchable()
-                    ->preload(),
-
-                Select::make('order_status')
-                    ->required()
-                    ->searchable()
-                    ->preload(),
-            ]),
+            //
         ]);
     }
 
@@ -85,25 +39,26 @@ class InvoicePurchasesRelationManager extends RelationManager
         return $table
             ->columns(
                 InvoicePurchaseTable::schema()
-                )
+            )
             ->filters([])
             ->headerActions([
-                // Tables\Actions\CreateAction::make(),
 
-                Tables\Actions\AttachAction::make()->form(
-                    fn(Tables\Actions\AttachAction $action): array => [
-                        $action->getRecordSelect(),
-                    ]
-                ),
+                Tables\Actions\AttachAction::make()
+                    ->form(
+                        fn(Tables\Actions\AttachAction $action): array => [
+                            $action->getRecordSelect(fn($query) => $query->where('payment_status', 2))
+                                ->preload(),
+                        ]
+                    )
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\DeleteAction::make(),
                 Tables\Actions\DetachAction::make()
                     ->action(function ($record) {
-                            $record->pivot->delete();
-                            $record->update(['status' => 1]);
-                        }),
+                        $record->pivot->delete();
+                        $record->update(['status' => 1]);
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
