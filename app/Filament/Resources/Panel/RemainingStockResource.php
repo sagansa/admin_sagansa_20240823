@@ -8,26 +8,22 @@ use App\Filament\Columns\StatusColumn;
 use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\NominalInput;
-use App\Filament\Forms\StatusSelect;
 use App\Filament\Forms\StatusSelectInput;
 use App\Filament\Forms\StoreSelect;
-use Filament\Forms;
-use Filament\Tables;
-use Livewire\Component;
-use Filament\Forms\Form;
-use Filament\Tables\Table;
-use App\Models\RemainingStock;
-use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
-use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\Panel\RemainingStockResource\Pages;
 use App\Filament\Resources\Panel\RemainingStockResource\RelationManagers;
 use App\Models\Product;
+use App\Models\RemainingStock;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -74,9 +70,9 @@ class RemainingStockResource extends Resource
 
             Section::make('Stock Product')->schema([
                 Grid::make(['default' => 1])->schema([
-                    self::getProductsRepeater()
+                    self::getProductsRepeater(),
                 ]),
-            ])->hidden(fn ($operation) => $operation === 'edit' || $operation === 'view'),
+            ])->hidden(fn($operation) => $operation === 'edit' || $operation === 'view'),
 
         ]);
     }
@@ -98,7 +94,7 @@ class RemainingStockResource extends Resource
                 TextColumn::make('store.nickname'),
 
                 TextColumn::make('createdBy.name')
-                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
+                    ->hidden(fn() => !Auth::user()->hasRole('admin'))
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 StatusColumn::make('status'),
@@ -114,17 +110,17 @@ class RemainingStockResource extends Resource
                     ->extraAttributes(['class' => 'whitespace-pre-wrap']),
 
                 TextColumn::make('created_at')
-                    ->visible(fn ($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin'))
+                    ->visible(fn($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin')),
 
             ])
             ->filters([
-                SelectStoreFilter::make('store_id')
+                SelectStoreFilter::make('store_id'),
             ])
             ->actions([
                 ActionGroup::make([
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\ViewAction::make(),
-                ])
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -171,7 +167,7 @@ class RemainingStockResource extends Resource
         })->toArray();
 
         return Repeater::make('productRemainingStocks')
-            // ->label(__('crud.remainingStocks.products'))
+        // ->label(__('crud.remainingStocks.products'))
 
             ->hiddenLabel()
             ->default($products)
@@ -186,7 +182,7 @@ class RemainingStockResource extends Resource
                     ->label('Product')
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->required()
-                    ->options(Product::where('remaining', '1')->get()->pluck('name','id'))
+                    ->options(Product::where('remaining', '1')->get()->pluck('name', 'id'))
                     ->columnSpan([
                         'md' => 5,
                     ]),

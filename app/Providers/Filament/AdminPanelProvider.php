@@ -60,7 +60,7 @@ class AdminPanelProvider extends PanelProvider
             ->emailVerification()
             // ->profile()
             ->colors([
-                'primary' => Color::Red,
+                'primary' => Color::Sky,
             ])
             ->discoverClusters(in: app_path('Filament/Clusters'), for: 'App\\Filament\\Clusters')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
@@ -91,7 +91,7 @@ class AdminPanelProvider extends PanelProvider
             ->userMenuItems([
                 'profile' => MenuItem::make()
                     ->label(fn() => auth()->user()->name)
-                    ->url(fn (): string => EditProfilePage::getUrl())
+                    ->url(fn(): string => EditProfilePage::getUrl())
                     ->icon('heroicon-m-user-circle')
             ])
             ->plugins([
@@ -106,12 +106,12 @@ class AdminPanelProvider extends PanelProvider
                     // ->canAccess(fn () => auth()->user()->id === 1)
                     // ->shouldRegisterNavigation(false)
                     ->shouldShowDeleteAccountForm(false)
-                    // ->shouldShowSanctumTokens()
-                    // ->shouldShowBrowserSessionsForm()
-                    // ->shouldShowAvatarForm()
-                    // ->customProfileComponents([
-                    //     Employee::class,
-                    // ]),
+                // ->shouldShowSanctumTokens()
+                // ->shouldShowBrowserSessionsForm()
+                // ->shouldShowAvatarForm()
+                // ->customProfileComponents([
+                //     Employee::class,
+                // ]),
             ]);
     }
 }
