@@ -3,13 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use Filament\Facades\Filament;
 
-// Route::get('/', function () {
-//     return redirect('https://www.sagansa.id/admin');
-// });
-
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('https://www.sagansa.id/admin');
 });
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::middleware([
     'auth:sanctum',
