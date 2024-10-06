@@ -69,10 +69,10 @@ class InvoicePurchase extends Model
     public function getInvoicePurchaseNameAttribute()
     {
         $invoicePurchaseDetails = [
-            ($this->supplier->name ? : ''),
-            ($this->store->nickname ? : ''),
-            ($this->date ? : ''),
-            ('Rp ' . number_format($this->total_price) ? : ''),
+            ($this->supplier->name ?: ''),
+            ($this->store->nickname ?: ''),
+            ($this->date ?: ''),
+            ('Rp ' . number_format($this->total_price) ?: ''),
         ];
 
         return implode("\n", $invoicePurchaseDetails);

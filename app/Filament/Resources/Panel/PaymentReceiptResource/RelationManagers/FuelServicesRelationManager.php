@@ -7,6 +7,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Resources\RelationManagers\RelationManager;
 use App\Filament\Tables\FuelServiceTable;
+use Illuminate\Database\Eloquent\Model;
 
 class FuelServicesRelationManager extends RelationManager
 {
@@ -50,8 +51,13 @@ class FuelServicesRelationManager extends RelationManager
                                 $record->paymentReceipts()->detach(); // Menghapus hubungan di tabel pivot
                                 $record->update(['status' => 1]); // Mengubah status menjadi 1
                             }
-                    }),
+                        }),
                 ]),
             ]);
+    }
+
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
+    {
+        return $ownerRecord->payment_for === 1;
     }
 }

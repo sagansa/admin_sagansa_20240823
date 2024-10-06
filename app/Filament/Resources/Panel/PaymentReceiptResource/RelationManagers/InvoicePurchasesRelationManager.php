@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
 
+use App\Filament\Columns\CurrencyColumn;
+use App\Filament\Columns\ImageOpenUrlColumn;
+use App\Filament\Columns\SupplierColumn;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\StoreSelect;
@@ -19,13 +22,21 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Resources\RelationManagers\RelationManager;
 use App\Filament\Resources\Panel\PaymentReceiptResource;
 use App\Filament\Tables\InvoicePurchaseTable;
+use App\Models\InvoicePurchase;
+use Filament\Tables\Actions\AttachAction;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Columns\SelectColumn;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class InvoicePurchasesRelationManager extends RelationManager
 {
     protected static string $relationship = 'invoicePurchases';
 
-    protected static ?string $recordTitleAttribute = 'supplier_id';
+    protected static ?string $recordTitleAttribute = 'invoice_purchase_name';
 
     public function form(Form $form): Form
     {
@@ -42,14 +53,13 @@ class InvoicePurchasesRelationManager extends RelationManager
             )
             ->filters([])
             ->headerActions([
-
-                Tables\Actions\AttachAction::make()
-                    ->form(
-                        fn(Tables\Actions\AttachAction $action): array => [
-                            $action->getRecordSelect(fn($query) => $query->where('payment_status', 2))
-                                ->preload(),
-                        ]
-                    )
+                AttachAction::make()
+                    ->preloadRecordSelect()
+                    ->multiple()
+                    ->recordTitle(fn(InvoicePurchase $record): string => "{$record->invoice_purchase_name}")
+                    ->recordSelectOptionsQuery(fn(Builder $query) => $query
+                        ->where('payment_status', 1)
+                        ->where('payment_type_id', 1)),
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
@@ -57,15 +67,28 @@ class InvoicePurchasesRelationManager extends RelationManager
                 Tables\Actions\DetachAction::make()
                     ->action(function ($record) {
                         $record->pivot->delete();
-                        $record->update(['status' => 1]);
+                        $record->update(['payment_status' => 1]);
                     }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     // Tables\Actions\DeleteBulkAction::make(),
 
-                    Tables\Actions\DetachBulkAction::make(),
+                    // Tables\Actions\DetachBulkAction::make()
+                    //     ->action(function (Collection $records) {
+                    //         foreach ($records as $record) {
+                    //             if ($record->pivot) {
+                    //                 $record->pivot->delete();
+                    //             }
+                    //             $record->update(['payment_status' => 1]);
+                    //         }
+                    //     }),
                 ]),
             ]);
+    }
+
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
+    {
+        return $ownerRecord->payment_for === 3;
     }
 }

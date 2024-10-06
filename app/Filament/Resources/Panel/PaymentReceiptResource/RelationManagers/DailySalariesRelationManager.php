@@ -19,6 +19,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Resources\RelationManagers\RelationManager;
 use App\Filament\Resources\Panel\PaymentReceiptResource;
 use Filament\Actions\CreateAction;
+use Illuminate\Database\Eloquent\Model;
 
 class DailySalariesRelationManager extends RelationManager
 {
@@ -89,7 +90,7 @@ class DailySalariesRelationManager extends RelationManager
                 // )->multiple(),
 
                 // Tables\Actions\AttachAction::make()->preloadRecordSelect()->multiple(),
-                    // TextInput::make('amount')
+                // TextInput::make('amount')
 
                 // Tables\Actions\AttachAction::make()
                 //     ->recordSelect(
@@ -118,5 +119,10 @@ class DailySalariesRelationManager extends RelationManager
                         }),
                 ]),
             ]);
+    }
+
+    public static function canViewForRecord(Model $ownerRecord, string $pageClass): bool
+    {
+        return $ownerRecord->payment_for === 2;
     }
 }

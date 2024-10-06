@@ -78,10 +78,10 @@ class Supplier extends Model
 
     public function getSupplierColumnNameAttribute()
     {
-        $supplierName = $this->name ? : '';
-        $bankName = $this->bank->name ? : '';
-        $accountName = $this->bank_account_name ? : '';
-        $accountNo = $this->bank_account_no ? : '';
+        $supplierName = $this->name ?: '';
+        $bankName = $this->bank->name ?: '';
+        $accountName = $this->bank_account_name ?: '';
+        $accountNo = $this->bank_account_no ?: '';
 
         return implode(PHP_EOL, [
             $supplierName,
@@ -94,10 +94,10 @@ class Supplier extends Model
     public function getSupplierNameAttribute()
     {
         $supplierDetails = [
-            "Nama Supplier: " . ($this->name ? : 'tidak tersedia'),
+            "Nama: " . ($this->name ?: 'tidak tersedia'),
             "Bank: " . ($this->bank ? $this->bank->name : 'tidak tersedia'),
-            "Nama Rekening: " . ($this->bank_account_name ? : 'tidak tersedia'),
-            "No. Rekening: " . ($this->bank_account_no ? : 'tidak tersedia'),
+            "Nama Rek.: " . ($this->bank_account_name ?: 'tidak tersedia'),
+            "No. Rek.: " . ($this->bank_account_no ?: 'tidak tersedia'),
         ];
 
         return implode("\n", $supplierDetails);

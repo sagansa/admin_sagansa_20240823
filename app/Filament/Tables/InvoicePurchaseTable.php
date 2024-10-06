@@ -4,7 +4,6 @@ namespace App\Filament\Tables;
 
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
-use App\Filament\Columns\PaymentStatusColumn;
 use App\Filament\Columns\SupplierColumn;
 use App\Models\InvoicePurchase;
 use Filament\Tables\Columns\Summarizers\Sum;
@@ -30,9 +29,6 @@ class InvoicePurchaseTable
                 ->searchable(),
 
             SupplierColumn::make('Supplier'),
-
-            // TextColumn::make('user.name')
-            //     ->toggleable(isToggledHiddenByDefault: true),
 
             TextColumn::make('detailInvoices')
                 ->label('Detail Purchases')
@@ -91,7 +87,7 @@ class InvoicePurchaseTable
                 ),
 
             TextColumn::make('createdBy.name')
-                ->hidden(fn () => Auth::user()->hasRole('staff'))
+                ->hidden(fn() => Auth::user()->hasRole('staff'))
                 ->toggleable(isToggledHiddenByDefault: true),
         ];
     }

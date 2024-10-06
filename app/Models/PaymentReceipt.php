@@ -40,8 +40,8 @@ class PaymentReceipt extends Model
     public function getPaymentReceiptNameAttribute()
     {
         $paymentReceiptDetails = [
-            ($this->supplier->name ? : ''),
-            ($this->user->name ? : ''),
+            ($this->supplier->name ?: ''),
+            ($this->user->name ?: ''),
         ];
 
         return $paymentReceiptDetails;
