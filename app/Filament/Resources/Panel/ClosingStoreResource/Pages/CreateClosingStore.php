@@ -19,4 +19,25 @@ class CreateClosingStore extends CreateRecord
 
         return $data;
     }
+
+    protected function afterCreate(): void
+    {
+
+        $record = $this->getRecord();
+
+        foreach ($record->invoicePurchases as $invoicePurchase) {
+            $invoicePurchase->payment_status = 2;
+            $invoicePurchase->save();
+        }
+
+        foreach ($record->dailySalaries as $dailySalary) {
+            $dailySalary->payment_status = 2;
+            $dailySalary->save();
+        }
+
+        foreach ($record->fuelServices as $fuelService) {
+            $fuelService->payment_status = 2;
+            $fuelService->save();
+        }
+    }
 }

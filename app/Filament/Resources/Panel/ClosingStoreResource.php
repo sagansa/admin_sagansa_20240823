@@ -22,9 +22,7 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\Panel\ClosingStoreResource\Pages;
 use App\Filament\Resources\Panel\ClosingStoreResource\RelationManagers;
 use App\Models\DailySalary;
@@ -136,7 +134,7 @@ class ClosingStoreResource extends Resource
                         ->reactive()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
-                            self::updateFuelServiceStatus($get, $set);
+                            // self::updateFuelServiceStatus($get, $set);
                         }),
 
                     Select::make('dailySalaries')
@@ -155,7 +153,7 @@ class ClosingStoreResource extends Resource
                         ->preload()
                         ->reactive()
                         ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                            self::updateDailySalaryStatus($state, $set);
+                            // self::updateDailySalaryStatus($state, $set);
                             self::updateTotalOmzet($get, $set);
                         }),
 
@@ -176,7 +174,7 @@ class ClosingStoreResource extends Resource
                         ->reactive()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             self::updateTotalOmzet($get, $set);
-                            self::updateInvoicePurchaseStatus($get, $set);
+                            // self::updateInvoicePurchaseStatus($get, $set);
                         }),
 
                 ])
