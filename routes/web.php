@@ -1,12 +1,11 @@
 <?php
 
-use App\Http\Controllers\LandingPageController;
 use Illuminate\Support\Facades\Route;
 use Filament\Facades\Filament;
 
-// Route::get('/', function () {
-//     return redirect('https://www.sagansa.id/admin');
-// });
+Route::get('/', function () {
+    return redirect('https://www.sagansa.id/admin');
+});
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -21,7 +20,3 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
-
-
-// routes/web.php
-Route::get('/', [LandingPageController::class, 'index']);
