@@ -16,16 +16,17 @@ class ImageInput extends FileUpload
             ->openable()
             // ->maxSize(5120)
             ->optimize('webp')
-            ->imageCropAspectRatio('1:1')
-            ->imageResizeTargetWidth('1080')
-            ->imageResizeTargetHeight('1080')
+            ->imageResizeMode('cover')
+            // ->imageCropAspectRatio('1:1')
+            // ->imageResizeTargetWidth('1920')
+            // ->imageResizeTargetHeight('1080')
             ->image()
             ->imageEditor()
             ->disk('public')
             ->columnSpan([
                 'full'
             ])
-            ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1'])
+            // ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1'])
         ;
     }
 }
