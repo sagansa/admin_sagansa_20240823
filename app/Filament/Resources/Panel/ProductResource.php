@@ -6,6 +6,7 @@ use App\Filament\Clusters\Transaction\Settings;
 use App\Filament\Columns\ActiveColumn;
 use App\Filament\Forms\ActiveStatusSelect;
 use App\Filament\Forms\ImageInput;
+use App\Filament\Forms\Notes;
 use Filament\Tables;
 use App\Models\Product;
 use Filament\Forms\Form;
@@ -67,7 +68,7 @@ class ProductResource extends Resource
                         ->string()
                         ->autofocus()
                         ->live(onBlur: true)
-                        ->afterStateUpdated(fn (Set $set, ?string $state) => $set('slug', Str::slug($state))),
+                        ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state))),
 
                     Select::make('unit_id')
                         ->required()
@@ -113,10 +114,7 @@ class ProductResource extends Resource
                         ->rules(['date'])
                         ->nullable(),
 
-                    RichEditor::make('description')
-                        ->nullable()
-                        ->string()
-                        ->fileAttachmentsVisibility('public'),
+                    Notes::make('description'),
                 ]),
             ]),
         ]);
@@ -153,6 +151,10 @@ class ProductResource extends Resource
                     ->label('Material Group')
                     ->relationship('materialGroup', 'name'),
 
+                SelectFilter::make('online_category_id')
+                    ->label('Online Category')
+                    ->relationship('onlineCategory', 'name'),
+
                 SelectFilter::make('remaining')
                     ->options([
                         '1' => 'active',
@@ -172,7 +174,7 @@ class ProductResource extends Resource
                         '2' => 'tunai',
                         '3' => 'non',
                     ]),
-                ])
+            ])
             ->actions([
                 ActionGroup::make([
                     Tables\Actions\EditAction::make(),
