@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\HRD;
+use App\Filament\Filters\DateFilter;
 use App\Filament\Filters\SelectEmployeeFilter;
 use App\Filament\Forms\BaseSelect;
 use App\Filament\Forms\CurrencyInput;
@@ -107,21 +108,23 @@ class DailySalaryResource extends Resource
             ->filters([
                 SelectEmployeeFilter::make('created_by_id'),
 
-                SelectFilter::make('payment_type_id')
-                    ->label('Payment Type')
-                    ->preload()
-                    ->hidden(fn() => !Auth::user()->hasRole('admin'))
-                    ->relationship('paymentType', 'name', fn(Builder $query) => $query->where('status', '1')),
+                // SelectFilter::make('payment_type_id')
+                //     ->label('Payment Type')
+                //     ->preload()
+                //     ->hidden(fn() => !Auth::user()->hasRole('admin'))
+                //     ->relationship('paymentType', 'name', fn(Builder $query) => $query->where('status', '1')),
 
                 SelectFilter::make('status')
                     ->label('Status')
                     ->hidden(fn() => !Auth::user()->hasRole('admin'))
                     ->options([
-                        '1' => 'belum diperiksa',
+                        '1' => 'belum dibayar',
                         '2' => 'sudah dibayar',
                         '3' => 'siap dibayar',
                         '4' => 'perbaiki',
-                    ])
+                    ]),
+
+                DateFilter::make('date'),
 
             ], layout: FiltersLayout::AboveContent)
 
