@@ -1,0 +1,47 @@
+/* resources/css/landing-page.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Light Mode */
+body {
+    font-family: "Arial", sans-serif;
+    color: #1a202c; /* Warna teks utama - abu-abu gelap */
+    background-color: #f8fafc; /* Background terang untuk light mode */
+}
+
+.dark-mode {
+    background-color: #1a202c; /* Warna gelap untuk dark mode */
+    color: white; /* Teks putih di dark mode */
+}
+
+/* Pastikan tombol, link, dan elemen interaktif terlihat di kedua mode */
+.navbar a,
+.social-media a {
+    color: #4caf50; /* Warna teks hijau */
+}
+
+.navbar a:hover,
+.social-media a:hover {
+    color: #2c7a7b; /* Warna hijau yang lebih gelap saat hover */
+}
+
+h1,
+h2,
+h3 {
+    color: #2d3748; /* Warna abu-abu gelap untuk heading di light mode */
+}
+
+p,
+li {
+    color: #4a5568; /* Warna abu-abu sedikit lebih terang untuk teks paragraf */
+}
+
+/* Custom colors */
+.bg-cream {
+    background-color: #f5f5dc; /* Cream */
+}
+
+.text-cream {
+    color: #f5f5dc;
+}

@@ -9,6 +9,7 @@ use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\StoreSelect;
 use App\Filament\Forms\SupplierSelect;
+use App\Filament\Resources\Panel\InvoicePurchaseResource;
 use Filament\Forms;
 use Filament\Tables;
 use Filament\Forms\Form;
@@ -55,11 +56,14 @@ class InvoicePurchasesRelationManager extends RelationManager
             ->headerActions([
                 AttachAction::make()
                     ->preloadRecordSelect()
-                    ->multiple()
+                    // ->multiple()
                     ->recordTitle(fn(InvoicePurchase $record): string => "{$record->invoice_purchase_name}")
                     ->recordSelectOptionsQuery(fn(Builder $query) => $query
                         ->where('payment_status', 1)
-                        ->where('payment_type_id', 1)),
+                        ->where('payment_type_id', 1))
+                    ->after(function (?InvoicePurchase $record) { // Note the ? before InvoicePurchase
+                        $record->update(['payment_status' => 2]);
+                    })
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
