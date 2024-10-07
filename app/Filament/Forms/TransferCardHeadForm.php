@@ -21,25 +21,25 @@ class TransferCardHeadForm
             DateInput::make('date'),
 
             BaseSelect::make('received_by_id')
-                ->relationship('receivedBy', 'name', fn (Builder $query) => $query
-                ->whereHas('roles', fn (Builder $query) => $query
-                    ->where('name', 'staff') || $query
-                    ->where('name', 'supervisor')))
+                ->relationship('receivedBy', 'name', fn(Builder $query) => $query
+                    ->whereHas('roles', fn(Builder $query) => $query
+                        ->where('name', 'staff') || $query
+                        ->where('name', 'supervisor')))
                 ->searchable(),
 
             BaseSelect::make('from_store_id')
                 ->relationship(
                     name: 'storeFrom',
-                    modifyQueryUsing: fn (Builder $query) => $query->where('status', '1')->orderBy('name', 'asc'),
+                    titleAttribute: 'nickname',
+                    modifyQueryUsing: fn(Builder $query) => $query->where('status', '1')->orderBy('name', 'asc'),
                 )
-                ->getOptionLabelFromRecordUsing(fn (DetailInvoice $record) => "{$record->detail_invoice_name}")
                 ->searchable(),
 
             BaseSelect::make('to_store_id')
                 ->relationship(
                     name: 'storeTo',
                     titleAttribute: 'nickname',
-                    modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),
+                    modifyQueryUsing: fn(Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),
                 )
                 ->searchable(),
 
