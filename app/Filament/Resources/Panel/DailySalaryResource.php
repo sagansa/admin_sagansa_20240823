@@ -108,12 +108,6 @@ class DailySalaryResource extends Resource
             ->filters([
                 SelectEmployeeFilter::make('created_by_id'),
 
-                // SelectFilter::make('payment_type_id')
-                //     ->label('Payment Type')
-                //     ->preload()
-                //     ->hidden(fn() => !Auth::user()->hasRole('admin'))
-                //     ->relationship('paymentType', 'name', fn(Builder $query) => $query->where('status', '1')),
-
                 SelectFilter::make('status')
                     ->label('Status')
                     ->hidden(fn() => !Auth::user()->hasRole('admin'))
