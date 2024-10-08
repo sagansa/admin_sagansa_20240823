@@ -23,8 +23,11 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\DateTimePicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\Panel\ProductResource\Pages;
+use App\Models\MaterialGroup;
+use App\Models\OnlineCategory;
 use Filament\Forms\Set;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Str;
 
@@ -139,9 +142,13 @@ class ProductResource extends Resource
 
                 TextColumn::make('paymentType.name'),
 
-                TextColumn::make('materialGroup.name'),
+                SelectColumn::make('material_group_id')
+                    ->label('Material Group')
+                    ->options(MaterialGroup::query()->pluck('name', 'id')),
 
-                TextColumn::make('onlineCategory.name'),
+                SelectColumn::make('online_category_id')
+                    ->label('Online Category')
+                    ->options(OnlineCategory::query()->pluck('name', 'id')),
 
                 TextColumn::make('user.name'),
             ])

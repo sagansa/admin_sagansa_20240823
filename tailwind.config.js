@@ -10,12 +10,21 @@ export default {
         "./storage/framework/views/*.php",
         "./resources/views/**/*.blade.php",
         "<path-to-vendor>/awcodes/filament-table-repeater/resources/**/*.blade.php",
+
+        "./resources/**/*.blade.php",
+        "./resources/**/*.js",
+        "./resources/**/*.vue",
     ],
 
     theme: {
         extend: {
             fontFamily: {
                 sans: ["Figtree", ...defaultTheme.fontFamily.sans],
+            },
+            colors: {
+                cream: "#f5f5dc",
+                green: "#4caf50",
+                white: "#ffffff",
             },
         },
     },
