@@ -31,7 +31,7 @@ class TransferCardHeadForm
                 ->relationship(
                     name: 'storeFrom',
                     titleAttribute: 'nickname',
-                    modifyQueryUsing: fn(Builder $query) => $query->where('status', '1')->orderBy('name', 'asc'),
+                    modifyQueryUsing: fn(Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),
                 )
                 ->searchable(),
 
