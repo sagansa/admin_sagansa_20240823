@@ -11,6 +11,6 @@ class HomeController extends Controller
         // $contact = Contact::first();
         $products = Product::where('online_category_id', '<>', '4')->get();
         // return view('landing-page', compact('contact', 'products'));
-        return view('home', compact('products'));
+        return view('layouts/home', compact('products'));
     }
 }
