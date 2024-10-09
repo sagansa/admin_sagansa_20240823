@@ -156,11 +156,13 @@ class ProductResource extends Resource
 
                 SelectFilter::make('material_group_id')
                     ->multiple()
+                    ->preload()
                     ->label('Material Group')
                     ->relationship('materialGroup', 'name'),
 
                 SelectFilter::make('online_category_id')
                     ->multiple()
+                    ->preload()
                     ->label('Online Category')
                     ->relationship('onlineCategory', 'name'),
 
