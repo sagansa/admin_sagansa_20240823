@@ -138,8 +138,8 @@ class DailySalaryResource extends Resource
                         ->action(function (Collection $records) {
                             DailySalary::whereIn('id', $records->pluck('id'))->update(['status' => 3]);
                         })
-                        ->color('warning'),
-                    Tables\Actions\BulkAction::make('setStatusToThree')
+                        ->color('gray'),
+                    Tables\Actions\BulkAction::make('setStatusToOne')
                         ->label('Set Status to Belum Dibayar')
                         ->icon('heroicon-o-check')
                         ->requiresConfirmation()
