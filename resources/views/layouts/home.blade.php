@@ -13,10 +13,10 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    {{-- <link href="{{ asset('build/assets/app-BIPNn2sX.css') }}" rel="stylesheet"> --}}
+    <link href="{{ asset('build/assets/app-BIPNn2sX.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 
     {{-- <style>
         html {
