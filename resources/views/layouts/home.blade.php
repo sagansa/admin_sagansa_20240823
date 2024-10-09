@@ -18,7 +18,7 @@
     <!-- Scripts -->
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
 
-    {{-- <style>
+    <style>
         html {
             scroll-behavior: smooth;
         }
@@ -47,7 +47,7 @@
             padding-top: 6rem;
             /* Additional top padding to ensure content is visible */
         }
-    </style> --}}
+    </style>
 </head>
 
 <body class="text-gray-900 bg-white">
