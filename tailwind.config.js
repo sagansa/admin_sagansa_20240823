@@ -23,7 +23,7 @@ export default {
             },
             colors: {
                 cream: "#f5f5dc",
-                green: "#4caf50",
+                green: "#166534",
                 white: "#ffffff",
             },
         },

@@ -13,8 +13,41 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    <link href="{{ asset('build/assets/app-CYHKThtM.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('build/assets/app-CYHKThtM.css') }}" rel="stylesheet"> --}}
 
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Fixed Navbar */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            /* Ensures navbar stays above other content */
+            background-color: white;
+            /* Adjust the background color of the navbar */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Add some padding-top to the sections so they aren't hidden behind the navbar */
+        section {
+            padding-top: 5rem;
+            /* Adjust based on the height of your navbar */
+        }
+
+        /* Home Section Padding for Full-Screen Background Image */
+        #home {
+            padding-top: 6rem;
+            /* Additional top padding to ensure content is visible */
+        }
+    </style>
 
 
 </head>
@@ -24,20 +57,21 @@
     <nav class="fixed z-10 w-full p-4 shadow-md bg-cream">
         <div class="container flex items-center justify-between mx-auto">
             <!-- Logo on the left -->
-            <a href="#" class="text-lg font-bold text-green">Sagansa</a>
+            <a href="#" class="text-2xl font-bold text-green">SAGANSA</a>
 
             <!-- Centered navigation links -->
             <div class="justify-center flex-grow hidden space-x-6 lg:flex">
-                <a href="#home" class="text-green">Home</a>
-                <a href="#profil" class="text-green">Tentang Kami</a>
-                <a href="#products" class="text-green">Produk Kami</a>
-                <a href="#contact" class="text-green">Hubungi Kami</a>
+                <a href="#home" class="font-bold text-green">Home</a>
+                <a href="#profil" class="font-bold text-green">Tentang Kami</a>
+                <a href="#products" class="font-bold text-green">Produk Kami</a>
+                <a href="#contact" class="font-bold text-green">Hubungi Kami</a>
             </div>
 
             <!-- Login and Register on the right -->
             @auth
                 <div class="hidden space-x-4 lg:flex">
-                    <a href="https://www.sagansa.id/admin" class="flex items-center px-4 py-2 text-white rounded bg-green">
+                    <a href="https://www.sagansa.id/admin"
+                        class="flex items-center px-4 py-2 text-white rounded-lg bg-green">
                         <!-- SVG Cart Icon -->
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
@@ -50,9 +84,9 @@
                 </div>
             @else
                 <div class="hidden space-x-4 lg:flex">
-                    <a href="https://www.sagansa.id/admin/login" class="px-4 py-2 text-white rounded bg-green">Login</a>
+                    <a href="https://www.sagansa.id/admin/login" class="px-4 py-2 text-white rounded-lg bg-green">Login</a>
                     <a href="https://www.sagansa.id/admin/register"
-                        class="px-4 py-2 bg-white border-2 rounded text-green border-green">Register</a>
+                        class="px-4 py-2 bg-white border-2 rounded-lg text-green border-green">Register</a>
                 </div>
             @endauth
 
@@ -105,39 +139,44 @@
 
     <!-- Tentang Kami Section -->
     <section id="profil" class="min-h-screen bg-white py-36">
-        <div class="container mx-auto">
-            <h2 class="mb-12 text-4xl font-bold text-center text-green">Profil Usaha</h2>
-            <p>
-                PT Asa Pangan Bangsa (Sagansa) adalah perusahaan yang bergerak di bidang makanan, terutama sebagai
-                pemasok kacang mete dan minyak wijen. Kami memasok restoran, hotel, dan gerai makanan dengan bahan
-                berkualitas tinggi.
-            </p>
-        </div>
-        <div class="container py-12 mx-auto">
-            <h2 class="mb-12 text-4xl font-bold text-center text-green">Visi & Misi</h2>
-            <p><strong>Visi:</strong> Menjadi pemasok makanan premium yang terpercaya di Indonesia.</p>
-            <p><strong>Misi:</strong> Menyediakan bahan makanan berkualitas tinggi kepada pelanggan kami dengan layanan
-                yang unggul.</p>
+        <div class="container px-4 mx-auto lg:px-8">
+            <div class="container mx-auto">
+                <h2 class="mb-12 text-4xl font-bold text-center text-green">Profil Usaha</h2>
+                <p>
+                    PT Asa Pangan Bangsa (Sagansa) adalah perusahaan yang bergerak di bidang makanan, terutama sebagai
+                    pemasok kacang mete dan minyak wijen. Kami memasok restoran, hotel, dan gerai makanan dengan bahan
+                    berkualitas tinggi.
+                </p>
+            </div>
+            <div class="container py-12 mx-auto">
+                <h2 class="mb-12 text-4xl font-bold text-center text-green">Visi & Misi</h2>
+                <p><strong>Visi:</strong> Menjadi pemasok makanan premium yang terpercaya di Indonesia.</p>
+                <p><strong>Misi:</strong> Menyediakan bahan makanan berkualitas tinggi kepada pelanggan kami dengan
+                    layanan
+                    yang unggul.</p>
+            </div>
         </div>
     </section>
 
     <!-- Product Section -->
     <section id="products" class="min-h-screen py-24 bg-white">
-        <div class="container mx-auto">
-            <h2 class="mb-12 text-4xl font-bold text-center text-green">Our Products</h2>
+        <div class="container px-4 mx-auto lg:px-8">
+            <div class="container mx-auto">
+                <h2 class="mb-12 text-4xl font-bold text-center text-green">Our Products</h2>
 
-            <div class="grid grid-cols-2 gap-6 sm:grid-cols-4 lg:grid-cols-5">
-                @foreach ($products as $product)
-                    <div
-                        class="p-4 overflow-hidden transition-transform transform bg-white rounded-lg shadow-lg hover:scale-105">
-                        {{-- <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
+                <div class="grid grid-cols-2 gap-6 sm:grid-cols-4 lg:grid-cols-5">
+                    @foreach ($products as $product)
+                        <div
+                            class="p-4 overflow-hidden transition-transform transform bg-white rounded-lg shadow-lg hover:scale-105">
+                            {{-- <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
                             class="object-cover w-full h-40 mb-4 rounded-t-lg"> --}}
-                        <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-image.jpg') }}"
-                            alt="{{ $product->name }}" class="object-cover w-full h-32">
-                        <h3 class="text-lg font-bold text-green">{{ $product->name }}</h3>
-                        <p class="text-gray-600">{{ $product->description }}</p>
-                    </div>
-                @endforeach
+                            <img src="{{ $product->image ? asset('storage/' . $product->image) : asset('images/default-image.jpg') }}"
+                                alt="{{ $product->name }}" class="object-cover w-full h-32">
+                            <h3 class="text-lg font-bold text-green">{{ $product->name }}</h3>
+                            <p class="text-gray-600">{{ $product->description }}</p>
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
     </section>
@@ -146,81 +185,85 @@
 
     <!-- Kontak Section -->
     <section id="contact" class="py-16 bg-cream">
-        <div class="container grid grid-cols-1 gap-8 mx-auto sm:grid-cols-2 lg:grid-cols-4">
-            <!-- Sagansa and Home link -->
-            <div>
-                <a href="#home" class="text-green hover:underline">
-                    <h2 class="mb-4 text-2xl font-bold text-green">Sagansa</h2>
-                </a>
-            </div>
-
-            <!-- Media Sosial -->
-            <div>
-                <h3 class="mb-4 text-xl font-semibold text-green">Media Sosial</h3>
-
-                <div class="flex space-x-4">
-                    <a href="https://www.youtube.com/dityoenggar" target="_blank"
-                        class="text-gray-700 hover:text-green">
-                        <img src="svg/youtube.svg" alt="Youtube" class="h-8">
-                    </a>
-                    <a href="https://www.instagram.com/sabiowear" target="_blank"
-                        class="text-gray-700 hover:text-green">
-                        <img src="svg/instagram.svg" alt="Instagram" class="h-8">
-                    </a>
-                    <a href="https://www.facebook.com" target="_blank" class="text-gray-700 hover:text-green">
-                        <img src="svg/facebook.svg" alt="Facebook" class="h-8">
-                    </a>
-                    <a href="https://www.x.com" target="_blank" class="text-gray-700 hover:text-green">
-                        <img src="svg/twitter.svg" alt="Twitter" class="h-8">
+        <div class="container px-4 mx-auto lg:px-8">
+            <div class="container grid grid-cols-1 gap-8 mx-auto sm:grid-cols-2 lg:grid-cols-4">
+                <!-- Sagansa and Home link -->
+                <div>
+                    <a href="#home" class="text-green hover:underline">
+                        <h2 class="mb-4 text-2xl font-bold text-green">SAGANSA</h2>
                     </a>
                 </div>
 
-            </div>
+                <!-- Media Sosial -->
+                <div>
+                    <h3 class="mb-4 text-xl font-semibold text-green">Media Sosial</h3>
 
-            <!-- Kontak -->
-            <div>
-                <h3 class="mb-4 text-xl font-semibold text-green">Kontak</h3>
-                <ul class="space-y-2">
-                    <li class="flex items-center">
-                        <a href="https://wa.me/6285782004645" target="_blank"
-                            class="flex items-center text-gray-700 hover:text-green">
-                            <img src="svg/whatsapp.svg" alt="YouTube" class="h-8">
-                            <div class="mx-2">+62 8578 200 4645</div>
+                    <div class="flex space-x-4">
+                        <a href="https://www.youtube.com/dityoenggar" target="_blank"
+                            class="text-gray-700 hover:text-green">
+                            <img src="svg/youtube.svg" alt="Youtube" class="h-8">
                         </a>
-                    </li>
-                    <li class="flex items-center">
-                        <a href="mailto:info@sagansa.com" class="flex items-center text-gray-700 hover:text-green">
-                            <img src="svg/email.svg" alt="YouTube" class="h-8">
-                            <div class="mx-2">admin@sagansa.id</div>
+                        <a href="https://www.instagram.com/sabiowear" target="_blank"
+                            class="text-gray-700 hover:text-green">
+                            <img src="svg/instagram.svg" alt="Instagram" class="h-8">
                         </a>
-                    </li>
-                    <li class="flex items-center">
-                        <a href="#" class="flex items-center text-gray-700 hover:text-green">
-                            <img src="svg/address.svg" alt="YouTube" class="h-8">
-                            <div class="mx-2">Apartement Mediterania Garden Residence I tower B, Jakarta Barat</div>
+                        <a href="https://www.facebook.com" target="_blank" class="text-gray-700 hover:text-green">
+                            <img src="svg/facebook.svg" alt="Facebook" class="h-8">
                         </a>
-                    </li>
-                </ul>
-            </div>
+                        <a href="https://www.x.com" target="_blank" class="text-gray-700 hover:text-green">
+                            <img src="svg/twitter.svg" alt="Twitter" class="h-8">
+                        </a>
+                    </div>
 
-            <!-- Online Shop -->
-            <div>
-                <h3 class="mb-4 text-xl font-semibold text-green">Online Shop</h3>
-                <div class="flex space-x-4">
-                    <a href="https://www.tokopedia.com/daehwa-1" target="_blank"
-                        class="text-gray-700 hover:text-green">
-                        <img src="svg/tokopedia.svg" alt="Tokopedia" class="h-8">
-                    </a>
-                    <a href="https://shopee.co.id/sabiowear10" target="_blank"
-                        class="text-gray-700 hover:text-green">
-                        <img src="svg/shopee.svg" alt="Shopee" class="h-8">
-                    </a>
-                    <a href="https://www.bukalapak.com" target="_blank" class="text-gray-700 hover:text-green">
-                        <img src="svg/bukalapak.svg" alt="Bukalapak" class="h-8">
-                    </a>
-                    <a href="https://www.lazada.co.id" target="_blank" class="text-gray-700 hover:text-green">
-                        <img src="svg/lazada.svg" alt="Lazada" class="h-8">
-                    </a>
+                </div>
+
+                <!-- Kontak -->
+                <div>
+                    <h3 class="mb-4 text-xl font-semibold text-green">Kontak</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <a href="https://wa.me/6285782004645" target="_blank"
+                                class="flex items-center text-gray-700 hover:text-green">
+                                <img src="svg/whatsapp.svg" alt="Whatsapp" class="h-8">
+                                <div class="mx-2">+62 8578 200 4645</div>
+                            </a>
+                        </li>
+                        <li class="flex items-center">
+                            <a href="mailto:admin@sagansa.id"
+                                class="flex items-center text-gray-700 hover:text-green">
+                                <img src="svg/email.svg" alt="Email" class="h-8">
+                                <div class="mx-2">admin@sagansa.id</div>
+                            </a>
+                        </li>
+                        <li class="flex items-center">
+                            <a href="#" class="flex items-center text-gray-700 hover:text-green">
+                                <img src="svg/address.svg" alt="Address" class="h-8">
+                                <div class="mx-2">Apartement Mediterania Garden Residence I tower B, Jakarta Barat
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Online Shop -->
+                <div>
+                    <h3 class="mb-4 text-xl font-semibold text-green">Online Shop</h3>
+                    <div class="flex space-x-4">
+                        <a href="https://www.tokopedia.com/daehwa-1" target="_blank"
+                            class="text-gray-700 hover:text-green">
+                            <img src="svg/tokopedia.svg" alt="Tokopedia" class="h-8">
+                        </a>
+                        <a href="https://shopee.co.id/sabiowear10" target="_blank"
+                            class="text-gray-700 hover:text-green">
+                            <img src="svg/shopee.svg" alt="Shopee" class="h-8">
+                        </a>
+                        <a href="https://www.bukalapak.com" target="_blank" class="text-gray-700 hover:text-green">
+                            <img src="svg/bukalapak.svg" alt="Bukalapak" class="h-8">
+                        </a>
+                        <a href="https://www.lazada.co.id" target="_blank" class="text-gray-700 hover:text-green">
+                            <img src="svg/lazada.svg" alt="Lazada" class="h-8">
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
