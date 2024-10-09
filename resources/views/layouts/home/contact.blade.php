@@ -68,7 +68,7 @@
 
             <!-- Online Shop -->
             <div>
-                <h3 class="mb-4 text-xl font-semibold text-green">Official Online Shop</h3>
+                <h3 class="mb-4 text-xl font-semibold text-green">Official Store</h3>
                 <div class="flex space-x-4">
                     <a href="https://www.tokopedia.com/daehwa-1" target="_blank" class="text-gray-700 hover:text-green">
                         <img src="svg/Tokopedia_Mascot.png" alt="Tokopedia" class="h-8">

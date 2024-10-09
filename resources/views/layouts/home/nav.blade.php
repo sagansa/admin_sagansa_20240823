@@ -1,14 +1,18 @@
 <nav class="fixed z-10 w-full p-4 shadow-md bg-cream">
     <div class="container flex items-center justify-between mx-auto">
         <!-- Logo on the left -->
-        <a href="#" class="text-2xl font-bold text-green">SAGANSA</a>
+        <a href="#" class="text-2xl font-bold text-green">
+            {{-- <img src="{{ asset('images/logo-apb.png') }}" alt="Sagansa Logo" class="h-10"> --}}
+            SAGANSA</a>
 
         <!-- Centered navigation links -->
         <div class="justify-center flex-grow hidden space-x-6 lg:flex">
-            <a href="#home" class="font-bold text-green">Home</a>
-            <a href="#profil" class="font-bold text-green">Tentang Kami</a>
-            <a href="#products" class="font-bold text-green">Produk Kami</a>
+            {{-- <a href="#home" class="font-bold text-green">Home</a> --}}
+            <a href="#profil" class="font-bold text-green">Tentang kami</a>
+            <a href="#products" class="font-bold text-green">Produk</a>
             <a href="#contact" class="font-bold text-green">Hubungi Kami</a>
+            <a href="https://ev.sagansa.id" class="font-bold text-green">EV</a>
+            {{-- <a href="https://dityoenggar.my.id" class="font-bold text-green">About me</a> --}}
         </div>
 
         <!-- Login and Register on the right -->
@@ -48,10 +52,11 @@
 
     <!-- Mobile Navigation (Hidden by default) -->
     <div id="nav-content" class="hidden lg:hidden bg-cream">
-        <a href="#home" class="block px-4 py-2 text-green">Home</a>
+        {{-- <a href="#home" class="block px-4 py-2 text-green">Home</a> --}}
         <a href="#profil" class="block px-4 py-2 text-green">Tentang Kami</a>
         <a href="#products" class="block px-4 py-2 text-green">Produk Kami</a>
         <a href="#contact" class="block px-4 py-2 text-green">Hubungi Kami</a>
+        <a href="https://ev.sagansa.id" class="font-bold text-green">EV</a>
         @auth
             <a href="https://www.sagansa.id/admin" class="flex items-center px-4 py-2 text-white rounded-lg bg-green">
                 <!-- SVG Cart Icon -->
