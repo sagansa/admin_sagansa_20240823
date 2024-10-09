@@ -13,7 +13,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    <link href="{{ asset('css/app-CYHKThtM.css') }}" rel="stylesheet">
+    <link href="{{ asset('build/assets/app-CYHKThtM.css') }}" rel="stylesheet">
 
 
 
