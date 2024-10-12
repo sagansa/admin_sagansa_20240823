@@ -4757,7 +4757,7 @@ return [
         ],
     ],
     'transferCardStorages' => [
-        'itemTitle' => 'Transfer Card Storage',
+        'itemTitle' => 'Transfer Card Store',
         'collectionTitle' => 'Transfer Card Storages',
         'inputs' => [
             'date' => [
@@ -5076,6 +5076,187 @@ return [
                 'no_result_message' => '',
                 'search_message' => '',
                 'label' => '',
+            ],
+        ],
+    ],
+    'salesOrderReturs' => [
+        'itemTitle' => 'Sales Order Retur',
+        'collectionTitle' => 'Sales Order Returs',
+        'inputs' => [
+            'for' => [
+                'label' => 'For',
+                'placeholder' => 'For',
+            ],
+            'delivery_date' => [
+                'label' => 'Delivery date',
+                'placeholder' => 'Delivery date',
+            ],
+            'online_shop_provider_id' => [
+                'label' => 'Online shop provider',
+                'placeholder' => 'Online shop provider id',
+            ],
+            'delivery_service_id' => [
+                'label' => 'Delivery service',
+                'placeholder' => 'Delivery service id',
+            ],
+            'delivery_address_id' => [
+                'label' => 'Delivery address',
+                'placeholder' => 'Delivery address id',
+            ],
+            'transfer_to_account_id' => [
+                'label' => 'Transfer to account',
+                'placeholder' => 'Transfer to account id',
+            ],
+            'image_payment' => [
+                'label' => 'Image payment',
+                'placeholder' => 'Image payment',
+            ],
+            'payment_status' => [
+                'label' => 'Payment status',
+                'placeholder' => 'Payment status',
+            ],
+            'delivery_status' => [
+                'label' => 'Delivery status',
+                'placeholder' => 'Delivery status',
+            ],
+            'shipping_cost' => [
+                'label' => 'Shipping cost',
+                'placeholder' => 'Shipping cost',
+            ],
+            'store_id' => [
+                'label' => 'Store',
+                'placeholder' => 'Store id',
+            ],
+            'receipt_no' => [
+                'label' => 'Receipt no',
+                'placeholder' => 'Receipt no',
+            ],
+            'image_delivery' => [
+                'label' => 'Image delivery',
+                'placeholder' => 'Image delivery',
+            ],
+            'ordered_by_id' => [
+                'label' => 'Ordered by',
+                'placeholder' => 'Ordered by id',
+            ],
+            'assigned_by_id' => [
+                'label' => 'Assigned by',
+                'placeholder' => 'Assigned by id',
+            ],
+            'notes' => [
+                'label' => 'Notes',
+                'placeholder' => 'Notes',
+            ],
+            'total_price' => [
+                'label' => 'Total price',
+                'placeholder' => 'Total price',
+            ],
+        ],
+        'filament' => [
+            'for' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'delivery_date' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'online_shop_provider_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'delivery_service_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'delivery_address_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'transfer_to_account_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'image_payment' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'payment_status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'delivery_status' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+            ],
+            'shipping_cost' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'store_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'receipt_no' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'image_delivery' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'ordered_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'assigned_by_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'notes' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'total_price' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
             ],
         ],
     ],

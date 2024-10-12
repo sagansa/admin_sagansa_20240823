@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "e1c3a2c7-6a92-4242-b8ab-f33c8c869318",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\ClosingStoreResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\ClosingStoreResource;\nuse Filament\\Resources\\Components\\Tab;\n\nclass ListClosingStores extends ListRecords\n{\n    protected static string $resource = ClosingStoreResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n\n    public function getTabs(): array\n    {\n        return [\n            null => Tab::make('All'),\n            'belum diperiksa' => Tab::make()->query(fn ($query) => $query->where('status', '1')),\n            'valid' => Tab::make()->query(fn ($query) => $query->where('status', '2')),\n            'perbaiki' => Tab::make()->query(fn ($query) => $query->where('status', '3')),\n            'periksa ulang' => Tab::make()->query(fn ($query) => $query->where('status', '4')),\n        ];\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\ClosingStoreResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\ClosingStoreResource;\n\nclass ListClosingStores extends ListRecords\n{\n    protected static string $resource = ClosingStoreResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n}\n"
-        }
-    ]
-}

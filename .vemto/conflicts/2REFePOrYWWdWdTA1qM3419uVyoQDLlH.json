@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "1eab5824-25fa-4f35-9b7a-d2646596fafe",
-            "currentContent": "<?php\n\nnamespace Database\\Factories;\n\nuse App\\Models\\Unit;\nuse Illuminate\\Support\\Str;\nuse Illuminate\\Database\\Eloquent\\Factories\\Factory;\n\nclass UnitFactory extends Factory\n{\n    /**\n     * The name of the factory's corresponding model.\n     *\n     * @var string\n     */\n    protected $model = Unit::class;\n\n    /**\n     * Define the model's default state.\n     *\n     * @return array<string, mixed>\n     */\n    public function definition(): array\n    {\n        return [\n            'name' => fake()->name(),\n            'unit' => fake()->text(5),\n        ];\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace Database\\Factories;\n\nuse App\\Models\\Unit;\nuse Illuminate\\Support\\Str;\nuse Illuminate\\Database\\Eloquent\\Factories\\Factory;\n\nclass UnitFactory extends Factory\n{\n    /**\n     * The name of the factory's corresponding model.\n     *\n     * @var string\n     */\n    protected $model = Unit::class;\n\n    /**\n     * Define the model's default state.\n     *\n     * @return array<string, mixed>\n     */\n    public function definition(): array\n    {\n        return [\n            'name' => fake()->name(),\n            'unit' => fake()->text(255),\n        ];\n    }\n}\n"
-        }
-    ]
-}

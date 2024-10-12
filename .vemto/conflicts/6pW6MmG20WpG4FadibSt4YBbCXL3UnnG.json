@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "6cfed0cd-ad3b-46c7-a79a-c10f1e37b9de",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\HygieneResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\HygieneResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateHygiene extends CreateRecord\n{\n    protected static string $resource = HygieneResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n\n        $data['created_by_id'] = Auth::id();\n        $data['status'] = 1;\n\n        return $data;\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\HygieneResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\HygieneResource;\n\nclass CreateHygiene extends CreateRecord\n{\n    protected static string $resource = HygieneResource::class;\n}\n"
-        }
-    ]
-}

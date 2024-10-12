@@ -111,5 +111,6 @@ class DatabaseSeeder extends Seeder
         $this->call(EmployeeConsumptionSeeder::class);
         $this->call(StoreConsumptionSeeder::class);
         $this->call(RemainingStoreSeeder::class);
+        $this->call(SalesOrderReturSeeder::class);
     }
 }

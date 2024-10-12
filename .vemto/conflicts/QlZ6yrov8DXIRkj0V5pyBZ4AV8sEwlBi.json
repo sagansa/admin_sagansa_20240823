@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "becf23e2-c543-46ab-99ac-15873481075a",
-            "currentContent": "<?php\n\nnamespace Database\\Factories;\n\nuse App\\Models\\PaymentType;\nuse Illuminate\\Support\\Str;\nuse Illuminate\\Database\\Eloquent\\Factories\\Factory;\n\nclass PaymentTypeFactory extends Factory\n{\n    /**\n     * The name of the factory's corresponding model.\n     *\n     * @var string\n     */\n    protected $model = PaymentType::class;\n\n    /**\n     * Define the model's default state.\n     *\n     * @return array<string, mixed>\n     */\n    public function definition(): array\n    {\n        return [\n            'name' => fake()->name(),\n            'status' => fake()->numberBetween(1, 2),\n        ];\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace Database\\Factories;\n\nuse App\\Models\\PaymentType;\nuse Illuminate\\Support\\Str;\nuse Illuminate\\Database\\Eloquent\\Factories\\Factory;\n\nclass PaymentTypeFactory extends Factory\n{\n    /**\n     * The name of the factory's corresponding model.\n     *\n     * @var string\n     */\n    protected $model = PaymentType::class;\n\n    /**\n     * Define the model's default state.\n     *\n     * @return array<string, mixed>\n     */\n    public function definition(): array\n    {\n        return [\n            'name' => fake()->name(),\n            'status' => fake()->word(),\n        ];\n    }\n}\n"
-        }
-    ]
-}

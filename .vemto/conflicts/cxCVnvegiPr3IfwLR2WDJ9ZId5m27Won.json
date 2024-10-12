@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "d6853aab-398c-4fa4-82f0-67ad87b3d8ef",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\UtilityUsageResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\UtilityUsageResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateUtilityUsage extends CreateRecord\n{\n    protected static string $resource = UtilityUsageResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n\n        $data['status'] = 1;\n        $data['created_by_id'] = Auth::id();\n\n        return $data;\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\UtilityUsageResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\UtilityUsageResource;\n\nclass CreateUtilityUsage extends CreateRecord\n{\n    protected static string $resource = UtilityUsageResource::class;\n}\n"
-        }
-    ]
-}

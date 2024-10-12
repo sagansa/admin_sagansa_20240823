@@ -56,7 +56,7 @@
         <a href="#profil" class="block px-4 py-2 text-green">Tentang Kami</a>
         <a href="#products" class="block px-4 py-2 text-green">Produk Kami</a>
         <a href="#contact" class="block px-4 py-2 text-green">Hubungi Kami</a>
-        <a href="https://ev.sagansa.id" class="font-bold text-green">EV</a>
+        <a href="https://ev.sagansa.id" class="block px-4 py-2 font-bold text-green">EV</a>
         @auth
             <a href="https://www.sagansa.id/admin" class="flex items-center px-4 py-2 text-white rounded-lg bg-green">
                 <!-- SVG Cart Icon -->
@@ -69,9 +69,9 @@
                 <div class="mx-2">Shop</div>
             </a>
         @else
-            <a href="https://www.sagansa.id/admin/login" class="block px-4 py-2 text-white bg-green">Login</a>
+            <a href="https://www.sagansa.id/admin/login" class="block px-4 py-2 text-white rounded-t-lg bg-green">Login</a>
             <a href="https://www.sagansa.id/admin/register"
-                class="block px-4 py-2 bg-white border-2 text-green border-green">Register</a>
+                class="block px-4 py-2 bg-white border-2 rounded-b-lg text-green border-green">Register</a>
         @endauth
     </div>
 </nav>

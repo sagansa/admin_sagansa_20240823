@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "ff506aa4-e564-4c89-85f4-ead676036dd2",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\FuelServiceResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\FuelServiceResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateFuelService extends CreateRecord\n{\n    protected static string $resource = FuelServiceResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n\n        $data['created_by_id'] = Auth::id();\n        // $data['approved_by_id'] = Auth::id();\n        $data['status'] = '1';\n\n        return $data;\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\FuelServiceResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\FuelServiceResource;\n\nclass CreateFuelService extends CreateRecord\n{\n    protected static string $resource = FuelServiceResource::class;\n}\n"
-        }
-    ]
-}

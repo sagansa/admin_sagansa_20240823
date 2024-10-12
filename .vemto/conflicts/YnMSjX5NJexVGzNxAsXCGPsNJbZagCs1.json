@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "126e8518-13af-4e8f-9ed2-bcd8c6369232",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\EmployeeConsumptionResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\EmployeeConsumptionResource;\nuse Illuminate\\Support\\Facades\\Auth;\nuse App\\Models\\User;\nuse Filament\\Notifications\\Actions\\Action;\nuse Filament\\Notifications\\Notification;\n\nclass CreateEmployeeConsumption extends CreateRecord\n{\n    protected static string $resource = EmployeeConsumptionResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n        $data['for'] = 'employee_consumption';\n        $data['user_id'] = Auth::id();\n        $data['status'] = '1';\n\n        return $data;\n    }\n\n    protected function afterCreate(): void\n    {\n        $employeeConsumption = $this->record;\n\n        $user = Auth::user();\n\n        Notification::make()\n            ->title('New order')\n            ->icon('heroicon-o-shopping-bag')\n            // ->body(\"{$employeeConsumption->store?->nickname} - {$employeeConsumption->date}\")\n            ->body(\"{$employeeConsumption->date}\")\n            ->actions([\n                Action::make('View')\n                    ->url(EmployeeConsumptionResource::getUrl('view', ['record' => $employeeConsumption])),\n            ])\n            ->sendToDatabase($user);\n    }\n}\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\EmployeeConsumptionResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\EmployeeConsumptionResource;\n\nclass CreateEmployeeConsumption extends CreateRecord\n{\n    protected static string $resource = EmployeeConsumptionResource::class;\n}\n"
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "20c077fe-174a-4ee7-a3b2-fba56571e609",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\RemainingStorageResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\RemainingStorageResource;\nuse Filament\\Resources\\Components\\Tab;\n\nclass ListRemainingStorages extends ListRecords\n{\n    protected static string $resource = RemainingStorageResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n\n    public function getTabs(): array\n    {\n        return [\n            null => Tab::make('All'),\n            'belum diperiksa' => Tab::make()->query(fn ($query) => $query->where('status', '1')),\n            'valid' => Tab::make()->query(fn ($query) => $query->where('status', '2')),\n            'perbaiki' => Tab::make()->query(fn ($query) => $query->where('status', '3')),\n            'periksa ulang' => Tab::make()->query(fn ($query) => $query->where('status', '4')),\n        ];\n    }\n}\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\RemainingStorageResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\RemainingStorageResource;\n\nclass ListRemainingStorages extends ListRecords\n{\n    protected static string $resource = RemainingStorageResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n}\n"
+        }
+    ]
+}
