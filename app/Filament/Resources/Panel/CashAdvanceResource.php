@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\Panel;
 
-use App\Filament\Clusters\Advances;
 use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\StatusColumn;
@@ -13,8 +12,6 @@ use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StatusSelectLabel;
-use App\Filament\Forms\StoreSelect;
-use App\Filament\Forms\SupplierSelect;
 use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
@@ -25,11 +22,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\Panel\CashAdvanceResource\Pages;
-use App\Filament\Resources\Panel\CashAdvanceResource\RelationManagers;
-use App\Models\AdvancePurchase;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
@@ -77,6 +70,7 @@ class CashAdvanceResource extends Resource
                 ->schema([
                     static::getItemsRepeater()
                 ])
+                ->hidden(fn($operation) => $operation === 'create'),
         ]);
     }
 
@@ -146,8 +140,8 @@ class CashAdvanceResource extends Resource
                         ->label('User')
                         ->inlineLabel()
                         ->required()
-                        ->relationship('user', 'name', fn (Builder $query) => $query
-                            ->whereHas('roles', fn (Builder $query) => $query
+                        ->relationship('user', 'name', fn(Builder $query) => $query
+                            ->whereHas('roles', fn(Builder $query) => $query
                                 ->where('name', 'staff') || $query
                                 ->where('name', 'supervisor')))
                         ->searchable()
@@ -213,8 +207,8 @@ class CashAdvanceResource extends Resource
                             'md' => 3,
                         ]),
 
-                    ])->columns([
-                        'md' => 12,
+                ])->columns([
+                    'md' => 12,
                 ]),
 
                 Notes::make('notes'),
