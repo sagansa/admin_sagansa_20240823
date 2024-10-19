@@ -25,8 +25,7 @@ class InvoicePurchaseTable
             TextColumn::make('paymentType.name')
                 ->toggleable(isToggledHiddenByDefault: true),
 
-            TextColumn::make('store.nickname')
-                ->searchable(),
+            TextColumn::make('store.nickname'),
 
             SupplierColumn::make('Supplier'),
 
