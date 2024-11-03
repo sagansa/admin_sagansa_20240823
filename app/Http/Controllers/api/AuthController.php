@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -16,7 +17,7 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::with('company')->where('email', $request->email)->first();
         if (!$user || ! Hash::check($request->password, $user->password)) {
             return response()->json([
                 'success' => false,
@@ -27,14 +28,60 @@ class AuthController extends Controller
 
         $token = $user->createToken('API Token')->plainTextToken;
 
+        $userData = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'roles' => $user->roles->pluck('name'),
+            // 'permissions' => $user->getAllPermissions()->pluck('name'),
+            'company' => $user->company ? [
+                'id' => $user->company->id,
+                'name' => $user->company->name,
+                // tambahkan field company lain yang diperlukan
+            ] : null,
+        ];
+
         return response()->json([
             'success' => true,
             'data' => [
                 'access_token' => $token,
                 'token_type' => 'Bearer',
-                'user' => $user
+                'user' => $userData
             ],
             'message' => 'Login successful'
+        ]);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'success' => true,
+            'data' => null,
+            'message' => 'Logout successful'
+        ]);
+    }
+
+    public function me(Request $request)
+    {
+        $user = $request->user()->load('company');
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'roles' => $user->roles->pluck('name'),
+                'permissions' => $user->getAllPermissions()->pluck('name'),
+                'company' => $user->company ? [
+                    'id' => $user->company->id,
+                    'name' => $user->company->name,
+                    // tambahkan field company lain yang diperlukan
+                ] : null,
+            ],
+            'message' => 'User data retrieved successfully'
         ]);
     }
 }

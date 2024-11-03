@@ -2,9 +2,7 @@
 
 namespace App\Filament\Resources\Panel;
 
-use App\Filament\Clusters\Invoices;
 use App\Filament\Clusters\Purchases;
-use App\Filament\Columns\StatusColumn;
 use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\StoreSelect;
@@ -17,17 +15,12 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\Panel\RequestPurchaseResource\Pages;
 use App\Models\Product;
-use Awcodes\TableRepeater\Components\TableRepeater;
-use Awcodes\TableRepeater\Header;
-use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Get;
 use Filament\Tables\Actions\ActionGroup;
-// use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
 use Illuminate\Support\Facades\Auth;
 
 class RequestPurchaseResource extends Resource
@@ -115,7 +108,7 @@ class RequestPurchaseResource extends Resource
                     ->html() // Mengizinkan HTML dalam kolom
                     ->extraAttributes(['class' => 'whitespace-pre-wrap']),
 
-                TextColumn::make('user.name')->hidden(fn () => !Auth::user()->hasRole('admin')),
+                TextColumn::make('user.name')->hidden(fn() => !Auth::user()->hasRole('admin')),
 
                 // StatusColumn::make('status'),
             ])
@@ -200,7 +193,7 @@ class RequestPurchaseResource extends Resource
                         '6' => 'not used',
                     ])
                     ->default(1)
-                    ->disabled(fn () => !Auth::user()->hasRole('admin'))
+                    ->disabled(fn() => !Auth::user()->hasRole('admin'))
                     ->columnSpan(2),
 
             ])

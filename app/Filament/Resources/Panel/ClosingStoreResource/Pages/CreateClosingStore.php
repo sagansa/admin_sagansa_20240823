@@ -31,12 +31,12 @@ class CreateClosingStore extends CreateRecord
         }
 
         foreach ($record->dailySalaries as $dailySalary) {
-            $dailySalary->payment_status = 2;
+            $dailySalary->status = 2;
             $dailySalary->save();
         }
 
         foreach ($record->fuelServices as $fuelService) {
-            $fuelService->payment_status = 2;
+            $fuelService->status = 2;
             $fuelService->save();
         }
     }

@@ -55,11 +55,14 @@ class InvoicePurchasesRelationManager extends RelationManager
             ->headerActions([
                 AttachAction::make()
                     ->preloadRecordSelect()
-                    ->multiple()
+                    // ->multiple()
                     ->recordTitle(fn(InvoicePurchase $record): string => "{$record->invoice_purchase_name}")
                     ->recordSelectOptionsQuery(fn(Builder $query) => $query
                         ->where('payment_status', 1)
-                        ->where('payment_type_id', 1)),
+                        ->where('payment_type_id', 1))
+                    ->after(function (?InvoicePurchase $record) { // Note the ? before InvoicePurchase
+                        $record->update(['payment_status' => 2]);
+                    })
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
@@ -74,15 +77,15 @@ class InvoicePurchasesRelationManager extends RelationManager
                 Tables\Actions\BulkActionGroup::make([
                     // Tables\Actions\DeleteBulkAction::make(),
 
-                    // Tables\Actions\DetachBulkAction::make()
-                    //     ->action(function (Collection $records) {
-                    //         foreach ($records as $record) {
-                    //             if ($record->pivot) {
-                    //                 $record->pivot->delete();
-                    //             }
-                    //             $record->update(['payment_status' => 1]);
-                    //         }
-                    //     }),
+                    Tables\Actions\DetachBulkAction::make()
+                        ->action(function (Collection $records) {
+                            foreach ($records as $record) {
+                                if ($record->pivot) {
+                                    $record->pivot->delete();
+                                }
+                                $record->update(['payment_status' => 1]);
+                            }
+                        }),
                 ]),
             ]);
     }

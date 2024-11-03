@@ -57,7 +57,7 @@ class ContractEmployeeResource extends Resource
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
                     FileUpload::make('file')
-                        ->rules(['file'])
+                        ->rules(['file', 'mimes:pdf'])
                         ->nullable()
                         ->maxSize(1024),
 

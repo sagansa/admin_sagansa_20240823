@@ -20,4 +20,19 @@ class Presence extends Model
     {
         return $this->belongsTo(User::class, 'approved_by_id');
     }
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id');
+    }
+
+    public function shiftStore()
+    {
+        return $this->belongsTo(ShiftStore::class, 'shift_store_id');
+    }
+
+    public function storeOut()
+    {
+        return $this->belongsTo(Store::class, 'store_out_id');
+    }
 }

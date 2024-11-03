@@ -6,7 +6,6 @@ use App\Filament\Clusters\Store;
 use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Forms\BaseRepeaterSelect;
 use App\Filament\Forms\ImageInput;
-use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
@@ -61,12 +60,8 @@ class HygieneResource extends Resource
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
                     StoreSelect::make('store_id'),
-
-                    // Notes::make('notes'),
-
                 ]),
             ]),
-
             Section::make()->schema(
                 self::getItemsRepeater(),
             ),
@@ -75,27 +70,10 @@ class HygieneResource extends Resource
 
     public static function table(Table $table): Table
     {
-        $query = Hygiene::query();
-
-        if (Auth::user()->hasRole('staff')) {
-            $query->where('created_by_id', Auth::id());
-        }
-
         return $table
             ->poll('60s')
-            ->query($query)
-            ->columns([
-                TextColumn::make('store.nickname'),
-
-                TextColumn::make('created_at'),
-
-                TextColumn::make('createdBy.name')
-                    ->visible(fn ($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin')),
-
-                TextColumn::make('approvedBy.name'),
-
-
-            ])
+            ->query(self::getQuery())
+            ->columns(self::getColumns())
             ->filters([
                 SelectStoreFilter::make('store_id'),
             ])
@@ -104,7 +82,6 @@ class HygieneResource extends Resource
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\ViewAction::make(),
                 ])
-
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -112,6 +89,26 @@ class HygieneResource extends Resource
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
+    }
+
+    protected static function getQuery(): Builder
+    {
+        $query = Hygiene::query();
+        if (Auth::user()->hasRole('staff')) {
+            $query->where('created_by_id', Auth::id());
+        }
+        return $query;
+    }
+
+    protected static function getColumns(): array
+    {
+        return [
+            TextColumn::make('store.nickname'),
+            TextColumn::make('created_at'),
+            TextColumn::make('createdBy.name')
+                ->visible(fn($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin')),
+            TextColumn::make('approvedBy.name'),
+        ];
     }
 
     public static function getRelations(): array
@@ -133,12 +130,10 @@ class HygieneResource extends Resource
 
     public static function getItemsRepeater(): array
     {
-        $rooms = Room::orderBy('name', 'asc')->get()->map(function ($item) {
-            return [
-                'room_id' => $item->id,
-                'image' => $item->image,
-            ];
-        })->toArray();
+        $rooms = Room::orderBy('name', 'asc')->get()->map(fn($item) => [
+            'room_id' => $item->id,
+            'image' => $item->image,
+        ])->toArray();
 
         return [
             Repeater::make('hygieneOfRooms')
@@ -150,12 +145,11 @@ class HygieneResource extends Resource
                 ->schema([
                     BaseRepeaterSelect::make('room_id')
                         ->relationship('room', 'name'),
-
                     ImageInput::make('image')
                         ->multiple()
                         ->hiddenLabel()
                         ->directory('images/Hygiene'),
-            ])
+                ])
         ];
     }
 }

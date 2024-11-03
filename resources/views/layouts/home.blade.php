@@ -13,10 +13,10 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
     <!-- Scripts -->
-    <link href="{{ asset('build/assets/app-BIPNn2sX.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('build/assets/app-BIPNn2sX.css') }}" rel="stylesheet"> --}}
 
     <!-- Scripts -->
-    {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
         html {
@@ -47,6 +47,11 @@
             padding-top: 6rem;
             /* Additional top padding to ensure content is visible */
         }
+
+        .content-below-nav {
+            padding-top: 64px;
+            /* Sesuaikan dengan tinggi navbar Anda */
+        }
     </style>
 </head>
 
@@ -54,35 +59,38 @@
     <!-- Navbar -->
     @include('layouts.home.nav')
 
-    <!-- Home Section with Background Image -->
-    @include('layouts.home.home')
+    <div class="content-below-nav">
+        <!-- Home Section with Background Image -->
+        @include('layouts.home.home')
 
-    <!-- Tentang Kami Section -->
-    @include('layouts.home.about')
+        <!-- Tentang Kami Section -->
+        @include('layouts.home.about')
 
-    <!-- Product Section -->
+        <!-- Product Section -->
+        @include('layouts.home.product')
 
-    @include('layouts.home.product')
+        <!-- Artikel Blog Section -->
+        @include('layouts.home.blog')
 
-    <!-- Kontak Section -->
-    @include('layouts.home.contact')
-</body>
-
-<!-- Footer Section -->
-<footer class="py-4 text-white bg-green">
-    <div class="container mx-auto text-center">
-        <p>&copy; {{ date('Y') }} PT Asa Pangan Bangsa (Sagansa). All Rights Reserved.</p>
+        <!-- Kontak Section -->
+        @include('layouts.home.contact')
     </div>
-</footer>
 
-<!-- JS for toggling the mobile menu -->
-<script>
-    const navToggle = document.getElementById('nav-toggle');
-    const navContent = document.getElementById('nav-content');
+    <!-- Footer Section -->
+    <footer class="py-4 text-white bg-green">
+        <div class="container mx-auto text-center">
+            <p>&copy; {{ date('Y') }} PT Asa Pangan Bangsa (Sagansa). All Rights Reserved.</p>
+        </div>
+    </footer>
 
-    navToggle.addEventListener('click', () => {
-        navContent.classList.toggle('hidden');
-    });
-</script>
+    <!-- JS for toggling the mobile menu -->
+    <script>
+        const navToggle = document.getElementById('nav-toggle');
+        const navContent = document.getElementById('nav-content');
+
+        navToggle.addEventListener('click', () => {
+            navContent.classList.toggle('hidden');
+        });
+    </script>
 
 </html>

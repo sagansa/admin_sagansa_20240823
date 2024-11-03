@@ -1,5 +1,4 @@
-<section id="home" class="relative flex items-center justify-center min-h-screen bg-center bg-cover"
-    style="background-image: url('{{ asset('images/home-background.jpg') }}');">
+<section id="home" class="relative flex items-center justify-center min-h-screen bg-center bg-cover home-background">
     <!-- Optional overlay for darkening the background -->
     <div class="absolute inset-0 bg-black opacity-40"></div>
 
@@ -13,3 +12,9 @@
         </a>
     </div>
 </section>
+
+<style>
+    .home-background {
+        background-image: url('{{ asset('images/home-background.jpg') }}');
+    }
+</style>

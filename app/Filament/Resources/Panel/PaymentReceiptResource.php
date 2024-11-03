@@ -76,7 +76,7 @@ class PaymentReceiptResource extends Resource
                     Select::make('fuelServices')
                         ->visible(fn($get) => $get('payment_for') == '1')
                         ->required(fn($get) => $get('payment_for') == '1' && fn($operation) => $operation === 'create')
-                        ->hidden(fn($operation) => $operation === 'edit')
+                        ->hidden(fn($operation) => $operation === 'edit' || $operation === 'view')
                         ->multiple()
                         ->relationship(
                             name: 'fuelServices',
@@ -86,25 +86,23 @@ class PaymentReceiptResource extends Resource
                                 ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn(FuelService $record) => "{$record->fuel_service_name}")
-                        ->preload()
-                        ->reactive()
-                        ->afterStateUpdated(function ($state, $set) {
-                            $totalAmount = 0;
-                            foreach ($state as $fuelServiceId) {
-                                $fuelService = FuelService::find($fuelServiceId);
-                                if ($fuelService) {
-                                    // $fuelService->status = 2;
-                                    // $fuelService->save();
-                                    $totalAmount += $fuelService->amount;
-                                }
-                            }
-                            $set('total_amount', $totalAmount);
-                        }),
+                        ->preload(),
+                    // ->reactive()
+                    // ->afterStateUpdated(function ($state, $set) {
+                    //     $totalAmount = 0;
+                    //     foreach ($state as $fuelServiceId) {
+                    //         $fuelService = FuelService::find($fuelServiceId);
+                    //         if ($fuelService) {
+                    //             $totalAmount += $fuelService->amount;
+                    //         }
+                    //     }
+                    //     $set('total_amount', $totalAmount);
+                    // }),
 
                     Select::make('dailySalaries')
                         ->visible(fn($get) => $get('payment_for') == '2')
                         ->required(fn($get) => $get('payment_for') == '2' && fn($operation) => $operation === 'create')
-                        ->hidden(fn($operation) => $operation === 'edit')
+                        ->hidden(fn($operation) => $operation === 'edit' || $operation === 'view')
                         ->multiple()
                         ->relationship(
                             name: 'dailySalaries',
@@ -114,20 +112,20 @@ class PaymentReceiptResource extends Resource
                                 ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn(DailySalary $record) => "{$record->daily_salary_name}")
-                        ->preload()
-                        ->reactive()
-                        ->afterStateUpdated(function ($state, $set) {
-                            $totalAmount = 0;
-                            foreach ($state as $dailySalaryId) {
-                                $dailySalary = DailySalary::find($dailySalaryId);
-                                if ($dailySalary) {
-                                    // $dailySalary->status = 2;
-                                    // $dailySalary->save();
-                                    $totalAmount += $dailySalary->amount;
-                                }
-                            }
-                            $set('total_amount', $totalAmount);
-                        }),
+                        ->preload(),
+                    // ->reactive()
+                    // ->afterStateUpdated(function ($state, $set) {
+                    //     $totalAmount = 0;
+                    //     foreach ($state as $dailySalaryId) {
+                    //         $dailySalary = DailySalary::find($dailySalaryId);
+                    //         if ($dailySalary) {
+                    //             // $dailySalary->status = 2;
+                    //             // $dailySalary->save();
+                    //             $totalAmount += $dailySalary->amount;
+                    //         }
+                    //     }
+                    //     $set('total_amount', $totalAmount);
+                    // }),
 
                     Select::make('user_id')
                         ->label('Employee')
@@ -143,7 +141,7 @@ class PaymentReceiptResource extends Resource
                     Select::make('invoicePurchases')
                         ->visible(fn($get) => $get('payment_for') == '3')
                         ->required(fn($get) => $get('payment_for') == '3' && fn($operation) => $operation === 'create')
-                        ->hidden(fn($operation) => $operation === 'edit')
+                        ->hidden(fn($operation) => $operation === 'edit' || $operation === 'view')
                         ->multiple()
                         ->relationship(
                             name: 'invoicePurchases',
@@ -152,20 +150,37 @@ class PaymentReceiptResource extends Resource
                                 ->where('payment_status', '1')
                                 ->orderBy('date', 'desc')
                         )
+                        // ->relationship(
+                        //     name: 'invoicePurchases',
+                        //     modifyQueryUsing: fn(Builder $query) => $query
+                        //         ->where('payment_type_id', '1')
+                        //         ->where(function ($query) {
+                        //             $query->where('payment_status', '1')
+                        //                 ->orWhere(function ($subQuery) {
+                        //                     $subQuery->where('payment_status', '2')
+                        //                         ->whereExists(function ($existsQuery) {
+                        //                             $existsQuery->selectRaw(1)
+                        //                                 ->from('invoice_purchase_payment_receipt')
+                        //                                 ->whereColumn('invoice_purchase_payment_receipt.invoice_purchase_id', '=', 'invoice_purchases.id');
+                        //                         });
+                        //                 });
+                        //         })
+                        //         ->orderBy('date', 'desc')
+                        // )
                         ->getOptionLabelFromRecordUsing(fn(InvoicePurchase $record) => "{$record->invoice_purchase_name}")
                         ->preload()
-                        ->searchable()
-                        ->reactive()
-                        ->afterStateUpdated(function ($state, $set) {
-                            $totalAmount = 0;
-                            foreach ($state as $invoicePurchaseId) {
-                                $invoicePurchase = InvoicePurchase::find($invoicePurchaseId);
-                                if ($invoicePurchase) {
-                                    $totalAmount += $invoicePurchase->total_price;
-                                }
-                            }
-                            $set('total_amount', $totalAmount);
-                        }),
+                        ->searchable(),
+                    // ->reactive()
+                    // ->afterStateUpdated(function ($state, $set) {
+                    //     $totalAmount = 0;
+                    //     foreach ($state as $invoicePurchaseId) {
+                    //         $invoicePurchase = InvoicePurchase::find($invoicePurchaseId);
+                    //         if ($invoicePurchase) {
+                    //             $totalAmount += $invoicePurchase->total_price;
+                    //         }
+                    //     }
+                    //     $set('total_amount', $totalAmount);
+                    // }),
 
                     Select::make('supplier_id')
                         ->label(__('crud.suppliers.itemTitle'))
@@ -186,7 +201,7 @@ class PaymentReceiptResource extends Resource
 
                     CurrencyInput::make('transfer_amount'),
 
-                    CurrencyInput::make('total_amount')->readOnly(),
+                    // CurrencyInput::make('total_amount')->readOnly(),
 
                     ImageInput::make('image')
                         ->directory('images/PaymentReceipt'),
@@ -229,8 +244,6 @@ class PaymentReceiptResource extends Resource
 
                 TextColumn::make('created_at')
                     ->date(),
-
-                // CurrencyColumn::make('total_amount'),
 
                 CurrencyColumn::make('transfer_amount'),
 

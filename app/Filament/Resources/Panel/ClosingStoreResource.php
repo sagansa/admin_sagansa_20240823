@@ -158,13 +158,14 @@ class ClosingStoreResource extends Resource
                         }),
 
                     Select::make('invoicePurchases')
+                        // ->hidden(fn($operation) => $operation === 'edit' || $operation === 'view')
                         ->multiple()
                         ->inlineLabel()
                         ->relationship(
                             name: 'invoicePurchases',
                             modifyQueryUsing: fn(Builder $query, $get) => $query
                                 ->where('payment_type_id', '2')
-                                ->where('payment_status', '1')
+                                ->where('payment_status', '2')
                                 ->when($get('store_id'), fn($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
                                 ->whereDate('date', '>=', now()->subDays(10)) // add this line
                                 ->orderBy('date', 'desc')
@@ -182,33 +183,7 @@ class ClosingStoreResource extends Resource
 
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
-                    Repeater::make('cashlesses')
-                        ->relationship()
-                        ->schema([
-                            Select::make('account_cashless_id')
-                                ->required()
-                                ->hiddenLabel()
-                                ->preload()
-                                ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                                ->relationship(
-                                    name: 'accountCashless',
-                                    modifyQueryUsing: function (Builder $query, callable $get) {
-                                        $storeId = $get('../../store_id');
-                                        $query->where('store_id', $storeId);
-
-                                        return $query;
-                                    }
-                                )
-                                ->getOptionLabelFromRecordUsing(fn(AccountCashless $record) => $record->account_cashless_name),
-
-                            CurrencyRepeaterInput::make('bruto_apl')
-                                ->placeholder('Bruto Total Omzet'),
-
-                            ImageInput::make('image')
-                                ->hiddenLabel()
-                                ->directory('images/ClosingStore'),
-                        ])
-
+                    self::getItemsRepeater(),
                 ])
             ]),
 
@@ -365,38 +340,69 @@ class ClosingStoreResource extends Resource
         ];
     }
 
-    protected static function updateDailySalaryStatus($state, $set): void
+    public static function getItemsRepeater(): Repeater
     {
-        foreach ($state as $dailySalaryId) {
-            $dailySalary = DailySalary::find($dailySalaryId);
-            if ($dailySalary) {
-                $dailySalary->status = 2;
-                $dailySalary->save();
-            }
-        }
+
+        return Repeater::make('cashlesses')
+            ->relationship()
+            ->schema([
+                Select::make('account_cashless_id')
+                    ->required()
+                    ->hiddenLabel()
+                    ->preload()
+                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                    ->relationship(
+                        name: 'accountCashless',
+                        modifyQueryUsing: function (Builder $query, callable $get) {
+                            $storeId = $get('../../store_id');
+                            $query->where('store_id', $storeId);
+
+                            return $query;
+                        }
+                    )
+                    ->getOptionLabelFromRecordUsing(fn(AccountCashless $record) => $record->account_cashless_name),
+
+                CurrencyRepeaterInput::make('bruto_apl')
+                    ->placeholder('Bruto Total Omzet'),
+
+                ImageInput::make('image')
+                    ->hiddenLabel()
+                    ->directory('images/ClosingStore'),
+            ]);
     }
 
-    protected static function updateFuelServiceStatus($state, $set): void
-    {
-        foreach ($state as $fuelServiceId) {
-            $fuelService = FuelService::find($fuelServiceId);
-            if ($fuelService) {
-                $fuelService->status = 2;
-                $fuelService->save();
-            }
-        }
-    }
+    // protected static function updateDailySalaryStatus($state, $set): void
+    // {
+    //     foreach ($state as $dailySalaryId) {
+    //         $dailySalary = DailySalary::find($dailySalaryId);
+    //         if ($dailySalary) {
+    //             $dailySalary->status = 2;
+    //             $dailySalary->save();
+    //         }
+    //     }
+    // }
 
-    protected static function updateInvoicePurchaseStatus($state, $set): void
-    {
-        foreach ($state as $invoicePurchaseId) {
-            $invoicePurchase = InvoicePurchase::find($invoicePurchaseId);
-            if ($invoicePurchase) {
-                $invoicePurchase->payment_status = 2;
-                $invoicePurchase->save();
-            }
-        }
-    }
+    // protected static function updateFuelServiceStatus($state, $set): void
+    // {
+    //     foreach ($state as $fuelServiceId) {
+    //         $fuelService = FuelService::find($fuelServiceId);
+    //         if ($fuelService) {
+    //             $fuelService->status = 2;
+    //             $fuelService->save();
+    //         }
+    //     }
+    // }
+
+    // protected static function updateInvoicePurchaseStatus($state, $set): void
+    // {
+    //     foreach ($state as $invoicePurchaseId) {
+    //         $invoicePurchase = InvoicePurchase::find($invoicePurchaseId);
+    //         if ($invoicePurchase) {
+    //             $invoicePurchase->payment_status = 2;
+    //             $invoicePurchase->save();
+    //         }
+    //     }
+    // }
 
     protected static function updateTotalOmzet(Get $get, Set $set): void
     {

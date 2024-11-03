@@ -50,7 +50,6 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-document-chart-bar'),
             ])
             ->default()
-            // ->databaseNotifications()
             ->topNavigation()
             ->id('admin')
             ->path('admin')

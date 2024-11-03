@@ -2,37 +2,26 @@
 
 namespace App\Filament\Resources\Panel;
 
-use App\Filament\Bulks\ValidBulkAction;
 use App\Filament\Clusters\Purchases;
 use App\Filament\Columns\CurrencyColumn;
-use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Forms\BaseSelect;
-use App\Filament\Forms\BaseTextInput;
 use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\DecimalInput;
-use App\Filament\Forms\NominalInput;
-use Filament\Forms;
 use Filament\Tables;
-use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\UtilityBill;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\Panel\UtilityBillResource\Pages;
-use App\Filament\Resources\Panel\UtilityBillResource\RelationManagers;
 use App\Models\Utility;
 use Filament\Forms\Get;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
-use Illuminate\Database\Eloquent\Collection;
 
 class UtilityBillResource extends Resource
 {
@@ -71,9 +60,9 @@ class UtilityBillResource extends Resource
                         ->relationship('utility', 'name')
                         ->relationship(
                             name: 'utility',
-                            modifyQueryUsing: fn (Builder $query) => $query->where('status', '1'),
+                            modifyQueryUsing: fn(Builder $query) => $query->where('status', '1'),
                         )
-                        ->getOptionLabelFromRecordUsing(fn (Utility $record) => "{$record->utility_name}")
+                        ->getOptionLabelFromRecordUsing(fn(Utility $record) => "{$record->utility_name}")
                         ->searchable()
                         ->reactive()
                         ->preload(),
@@ -127,9 +116,9 @@ class UtilityBillResource extends Resource
                     ->relationship(
                         name: 'utility',
                         titleAttribute: 'utility_name',
-                        modifyQueryUsing: fn (Builder $query) => $query->where('status', '1')->orderBy('number', 'asc'),
+                        modifyQueryUsing: fn(Builder $query) => $query->where('status', '1')->orderBy('number', 'asc'),
                     )
-                    ->getOptionLabelFromRecordUsing(fn (Utility $record) => "{$record->utility_name}"),
+                    ->getOptionLabelFromRecordUsing(fn(Utility $record) => "{$record->utility_name}"),
             ])
             ->actions([
                 ActionGroup::make([

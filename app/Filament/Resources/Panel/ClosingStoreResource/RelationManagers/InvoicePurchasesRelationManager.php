@@ -34,17 +34,17 @@ class InvoicePurchasesRelationManager extends RelationManager
             ->headerActions([
                 // Tables\Actions\CreateAction::make(),
 
-                // Tables\Actions\AttachAction::make()->form(
-                //     fn(Tables\Actions\AttachAction $action): array => [
-                //         $action->getRecordSelect(),
-                //     ]
-                // ),
+                Tables\Actions\AttachAction::make()->form(
+                    fn(Tables\Actions\AttachAction $action): array => [
+                        $action->getRecordSelect(),
+                    ]
+                ),
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),
                 // Tables\Actions\DeleteAction::make(),
                 Tables\Actions\DetachAction::make()
-                ->action(function ($record) {
+                    ->action(function ($record) {
                         $record->pivot->delete();
                         $record->update(['payment_status' => 1]);
                     }),
