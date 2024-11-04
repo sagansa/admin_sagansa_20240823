@@ -350,7 +350,6 @@ class PresenceController extends Controller
 
         // Update presensi
         $presence->check_out = $now;
-        $presence->store_out_id = $nearbyStore->id;
         $presence->latitude_out = $request->latitude_out;
         $presence->longitude_out = $request->longitude_out;
         $presence->save();
