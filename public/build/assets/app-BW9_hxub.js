@@ -1,0 +1,1 @@
+document.querySelectorAll("nav a").forEach(t=>{t.addEventListener("click",function(e){e.preventDefault();const n=this.getAttribute("href").substring(1);document.getElementById(n).scrollIntoView({behavior:"smooth"})})});
