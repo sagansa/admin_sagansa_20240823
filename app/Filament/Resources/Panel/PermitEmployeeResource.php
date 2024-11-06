@@ -24,6 +24,7 @@ use App\Filament\Resources\Panel\PermitEmployeeResource\Pages;
 use App\Filament\Resources\Panel\PermitEmployeeResource\RelationManagers;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use Filament\Tables\Actions\ActionGroup;
 
 class PermitEmployeeResource extends Resource
 {
@@ -86,13 +87,13 @@ class PermitEmployeeResource extends Resource
                             ->required()
                             ->hiddenLabel()
                             ->prefix('Until Date')
-                            ->minDate(fn ($get) => $get('from_date'))
-                        ]),
+                            ->minDate(fn($get) => $get('from_date'))
+                    ]),
 
                     BaseSelect::make('status')
-                        ->required(fn () => Auth::user()->hasRole('admin'))
-                        ->hidden(fn ($operation) => $operation === 'create')
-                        ->disabled(fn () => Auth::user()->hasRole('staff'))
+                        ->required(fn() => Auth::user()->hasRole('admin'))
+                        ->hidden(fn($operation) => $operation === 'create')
+                        ->disabled(fn() => Auth::user()->hasRole('staff'))
                         // ->searchable()
                         ->placeholder('Status')
                         ->preload()
@@ -122,7 +123,7 @@ class PermitEmployeeResource extends Resource
             ->poll('60s')
             ->columns([
                 TextColumn::make('createdBy.name')
-                    ->hidden(fn () => !Auth::user()->hasRole('admin')),
+                    ->hidden(fn() => !Auth::user()->hasRole('admin')),
 
                 TextColumn::make('reason')
                     ->formatStateUsing(
@@ -135,9 +136,9 @@ class PermitEmployeeResource extends Resource
                         }
                     ),
 
-                TextColumn::make('from_date'),
+                TextColumn::make('from_date')->date(),
 
-                TextColumn::make('until_date'),
+                TextColumn::make('until_date')->date(),
 
                 TextColumn::make('status')
                     ->formatStateUsing(
@@ -160,27 +161,30 @@ class PermitEmployeeResource extends Resource
             ])
             ->filters([])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\BulkAction::make('approve')
-                        ->label('setujui')
+                        ->label('disetujui')
                         ->icon('heroicon-o-check')
-                        ->action(fn (Collection $records) => $records->each->update(['status' => '2']))
+                        ->action(fn(Collection $records) => $records->each->update(['status' => '2']))
                         ->deselectRecordsAfterCompletion()
                         ->requiresConfirmation(),
 
                     Tables\Actions\BulkAction::make('notApprove')
-                        ->label('Tidak dietujui')
+                        ->label('Tidak disetujui')
                         ->icon('heroicon-o-x-mark')
-                        ->action(fn (Collection $records) => $records->each->update(['status' => '3']))
+                        ->action(fn(Collection $records) => $records->each->update(['status' => '3']))
                         ->deselectRecordsAfterCompletion()
                         ->requiresConfirmation(),
-                        ]),
-                    ])
+                ]),
+            ])
 
             ->defaultSort('created_at', 'desc');
     }

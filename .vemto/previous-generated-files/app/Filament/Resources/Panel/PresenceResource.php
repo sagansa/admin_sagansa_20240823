@@ -14,9 +14,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\Panel\PresenceResource\Pages;
 use App\Filament\Resources\Panel\PresenceResource\RelationManagers;
@@ -29,7 +27,7 @@ class PresenceResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'HRD';
+    protected static ?string $navigationGroup = 'Admin';
 
     public static function getModelLabel(): string
     {
@@ -65,7 +63,16 @@ class PresenceResource extends Resource
                         ->preload()
                         ->native(false),
 
-                    DateTimePicker::make('datetime_in')
+                    TextInput::make('status')
+                        ->required()
+                        ->numeric()
+                        ->step(1),
+
+                    TextInput::make('image_in')
+                        ->nullable()
+                        ->string(),
+
+                    DateTimePicker::make('start_date_time')
                         ->rules(['date'])
                         ->required()
                         ->native(false),
@@ -80,7 +87,11 @@ class PresenceResource extends Resource
                         ->numeric()
                         ->step(1),
 
-                    DateTimePicker::make('datetime_out')
+                    TextInput::make('image_out')
+                        ->nullable()
+                        ->string(),
+
+                    DateTimePicker::make('end_date_time')
                         ->rules(['date'])
                         ->nullable()
                         ->native(false),
@@ -95,37 +106,16 @@ class PresenceResource extends Resource
                         ->numeric()
                         ->step(1),
 
-                    FileUpload::make('image_in')
-                        ->rules(['image'])
-                        ->nullable()
-                        ->maxSize(1024)
-                        ->image()
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
-
-                    FileUpload::make('image_out')
-                        ->rules(['image'])
-                        ->nullable()
-                        ->maxSize(1024)
-                        ->image()
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1']),
-
-                    Select::make('status')
-                        ->required()
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
-
                     Select::make('created_by_id')
                         ->nullable()
+                        ->relationship('createdBy', 'name')
                         ->searchable()
                         ->preload()
                         ->native(false),
 
                     Select::make('approved_by_id')
                         ->nullable()
-                        ->relationship('createdBy', 'name')
+                        ->relationship('approvedBy', 'name')
                         ->searchable()
                         ->preload()
                         ->native(false),
@@ -143,27 +133,27 @@ class PresenceResource extends Resource
 
                 TextColumn::make('shiftStore.name'),
 
-                TextColumn::make('datetime_in')->since(),
+                TextColumn::make('status'),
+
+                TextColumn::make('image_in'),
+
+                TextColumn::make('start_date_time')->since(),
 
                 TextColumn::make('latitude_in'),
 
                 TextColumn::make('longitude_in'),
 
-                TextColumn::make('datetime_out')->since(),
+                TextColumn::make('image_out'),
+
+                TextColumn::make('end_date_time')->since(),
 
                 TextColumn::make('latitude_out'),
 
                 TextColumn::make('longitude_out'),
 
-                ImageColumn::make('image_in')->visibility('public'),
-
-                ImageColumn::make('image_out')->visibility('public'),
-
-                TextColumn::make('status'),
-
-                TextColumn::make('created_by_id'),
-
                 TextColumn::make('createdBy.name'),
+
+                TextColumn::make('approvedBy.name'),
             ])
             ->filters([])
             ->actions([

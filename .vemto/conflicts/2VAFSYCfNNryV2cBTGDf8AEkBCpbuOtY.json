@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "5efd32be-86aa-4a31-8b1a-ef9dbe141a0d",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\VehicleResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\VehicleResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateVehicle extends CreateRecord\n{\n    protected static string $resource = VehicleResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n\n        $data['user_id'] = Auth::id();\n        $data['status'] = '1';\n\n        return $data;\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\VehicleResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\VehicleResource;\n\nclass CreateVehicle extends CreateRecord\n{\n    protected static string $resource = VehicleResource::class;\n}\n"
-        }
-    ]
-}

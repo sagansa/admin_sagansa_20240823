@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "f2121657-0ed0-4d18-8319-7662f7ec7274",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\TransferCardStorageResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\TransferCardStorageResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateTransferCardStorage extends CreateRecord\n{\n    protected static string $resource = TransferCardStorageResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n        $data['for'] = 'storage';\n        $data['sent_by_id'] = Auth::id();\n        $data['status'] = '1';\n\n        return $data;\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\TransferCardStorageResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\TransferCardStorageResource;\n\nclass CreateTransferCardStorage extends CreateRecord\n{\n    protected static string $resource = TransferCardStorageResource::class;\n}\n"
-        }
-    ]
-}

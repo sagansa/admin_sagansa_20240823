@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "ab7e0038-5608-402a-bf92-cb93ef2d64ac",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\RequestPurchaseResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\RequestPurchaseResource;\nuse App\\Models\\DetailRequest;\nuse App\\Models\\RequestPurchase;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateRequestPurchase extends CreateRecord\n{\n    protected static string $resource = RequestPurchaseResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n\n        $data['user_id'] = Auth::id();\n        $data['status'] = '1';\n\n        return $data;\n    }\n}\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\RequestPurchaseResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\RequestPurchaseResource;\n\nclass CreateRequestPurchase extends CreateRecord\n{\n    protected static string $resource = RequestPurchaseResource::class;\n}\n"
+        }
+    ]
+}

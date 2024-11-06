@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "d07c33e7-5b15-4ea0-a23b-2144e873fed3",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\RemainingStockResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\RemainingStockResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateRemainingStock extends CreateRecord\n{\n    protected static string $resource = RemainingStockResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n        $data['created_by_id'] = Auth::id();\n        $data['status'] = '1';\n\n        return $data;\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\RemainingStockResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\RemainingStockResource;\n\nclass CreateRemainingStock extends CreateRecord\n{\n    protected static string $resource = RemainingStockResource::class;\n}\n"
-        }
-    ]
-}

@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "97474bf1-f8ee-4614-b59b-08a15dd1cb28",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DailySalaryResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\DailySalaryResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateDailySalary extends CreateRecord\n{\n    protected static string $resource = DailySalaryResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n\n        $data['status'] = 1;\n        $data['created_by_id'] = Auth::id();\n\n        return $data;\n    }\n}\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DailySalaryResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\DailySalaryResource;\n\nclass CreateDailySalary extends CreateRecord\n{\n    protected static string $resource = DailySalaryResource::class;\n}\n"
+        }
+    ]
+}

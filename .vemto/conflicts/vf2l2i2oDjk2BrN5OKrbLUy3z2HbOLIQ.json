@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "e0b1dbf3-1bd1-47ea-b270-f8e4e47259ce",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\AdvancePurchaseResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\AdvancePurchaseResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateAdvancePurchase extends CreateRecord\n{\n    protected static string $resource = AdvancePurchaseResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n\n        $data['user_id'] = Auth::id();\n        $data['status'] = '1';\n\n        return $data;\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\AdvancePurchaseResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\AdvancePurchaseResource;\n\nclass CreateAdvancePurchase extends CreateRecord\n{\n    protected static string $resource = AdvancePurchaseResource::class;\n}\n"
-        }
-    ]
-}

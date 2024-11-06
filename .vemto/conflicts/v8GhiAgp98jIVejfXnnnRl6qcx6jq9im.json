@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "1c884b84-ab02-491c-bba0-3e4070bdda19",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\UtilityUsageResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\EditRecord;\nuse App\\Filament\\Resources\\Panel\\UtilityUsageResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass EditUtilityUsage extends EditRecord\n{\n    protected static string $resource = UtilityUsageResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\DeleteAction::make()];\n    }\n\n    protected function mutateFormDataBeforeSave(array $data): array\n    {\n        if (Auth::user()->hasRole('admin')) {\n            $data['approved_by_id'] = Auth::id();\n        }\n\n        return $data;\n    }\n}\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\UtilityUsageResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\EditRecord;\nuse App\\Filament\\Resources\\Panel\\UtilityUsageResource;\n\nclass EditUtilityUsage extends EditRecord\n{\n    protected static string $resource = UtilityUsageResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\DeleteAction::make()];\n    }\n}\n"
+        }
+    ]
+}

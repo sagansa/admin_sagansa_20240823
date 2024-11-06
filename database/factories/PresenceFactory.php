@@ -34,6 +34,8 @@ class PresenceFactory extends Factory
             'longitude_out' => fake()->randomNumber(2),
             'created_by_id' => \App\Models\User::factory(),
             'approved_by_id' => \App\Models\User::factory(),
+            'store_id' => \App\Models\Store::factory(),
+            'shift_store_id' => \App\Models\ShiftStore::factory(),
         ];
     }
 }

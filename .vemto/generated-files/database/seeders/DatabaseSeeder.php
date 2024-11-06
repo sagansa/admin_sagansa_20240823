@@ -112,5 +112,9 @@ class DatabaseSeeder extends Seeder
         $this->call(StoreConsumptionSeeder::class);
         $this->call(RemainingStoreSeeder::class);
         $this->call(SalesOrderReturSeeder::class);
+        $this->call(CompanySeeder::class);
+        $this->call(SalarySeeder::class);
+        $this->call(SalaryRateSeeder::class);
+        $this->call(SalaryRateDetailSeeder::class);
     }
 }

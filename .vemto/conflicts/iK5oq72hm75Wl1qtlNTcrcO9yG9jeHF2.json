@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "24721da5-306d-4c04-accf-509ae81e17e1",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\InvoicePurchaseResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Components\\Tab;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\InvoicePurchaseResource;\n\n\nclass ListInvoicePurchases extends ListRecords\n{\n    protected static string $resource = InvoicePurchaseResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n\n    public function getTabs(): array\n    {\n        return [\n            null => Tab::make('All'),\n            'belum dibayar' => Tab::make()->query(fn ($query) => $query->where('payment_status', '1')),\n            'sudah dibayar' => Tab::make()->query(fn ($query) => $query->where('payment_status', '2')),\n            'tidak valid' => Tab::make()->query(fn ($query) => $query->where('payment_status', '3')),\n\n        ];\n    }\n}\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\InvoicePurchaseResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\InvoicePurchaseResource;\n\nclass ListInvoicePurchases extends ListRecords\n{\n    protected static string $resource = InvoicePurchaseResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n}\n"
+        }
+    ]
+}

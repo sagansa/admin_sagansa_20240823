@@ -3190,16 +3190,14 @@ return [
         ],
     ],
     'presences' => [
-        'itemTitle' => 'Presence',
-        'collectionTitle' => 'Presences',
         'inputs' => [
             'store_id' => [
                 'label' => 'Store',
-                'placeholder' => 'Store',
+                'placeholder' => 'Store id',
             ],
             'shift_store_id' => [
                 'label' => 'Shift store',
-                'placeholder' => 'Shift store',
+                'placeholder' => 'Shift store id',
             ],
             'status' => [
                 'label' => 'Status',
@@ -3330,7 +3328,17 @@ return [
                 'search_message' => '',
                 'label' => '',
             ],
+            'start_date_time' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
+            'end_date_time' => [
+                'helper_text' => '',
+                'label' => '',
+            ],
         ],
+        'itemTitle' => 'Presence',
+        'collectionTitle' => 'Presences',
     ],
     'productConsumptions' => [
         'itemTitle' => 'Product Consumption',

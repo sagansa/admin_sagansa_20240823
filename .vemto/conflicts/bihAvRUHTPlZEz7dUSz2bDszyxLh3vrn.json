@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "1f6edd00-e3a4-4449-8143-3c55f0043e2a",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\PaymentReceiptResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\PaymentReceiptResource;\nuse Filament\\Resources\\Components\\Tab;\n\nclass ListPaymentReceipts extends ListRecords\n{\n    protected static string $resource = PaymentReceiptResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n\n    public function getTabs(): array\n    {\n        return [\n            'invoice' => Tab::make()->query(fn ($query) => $query->where('payment_for', '3')),\n            'fuel service' => Tab::make()->query(fn ($query) => $query->where('payment_for', '1')),\n            'daily salary' => Tab::make()->query(fn ($query) => $query->where('payment_for', '2')),\n        ];\n    }\n\n    protected function getDefaultTab(): ?string\n    {\n        return 'invoice';\n    }\n}\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\PaymentReceiptResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\PaymentReceiptResource;\n\nclass ListPaymentReceipts extends ListRecords\n{\n    protected static string $resource = PaymentReceiptResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n}\n"
+        }
+    ]
+}

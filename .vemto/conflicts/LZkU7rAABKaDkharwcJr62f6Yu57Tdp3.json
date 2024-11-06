@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "832e7abf-3bba-419e-ae54-95a61ec65627",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\ProductResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\ProductResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateProduct extends CreateRecord\n{\n    protected static string $resource = ProductResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n\n        $data['user_id'] = Auth::id();\n\n        return $data;\n    }\n}\n\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\ProductResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\ProductResource;\n\nclass CreateProduct extends CreateRecord\n{\n    protected static string $resource = ProductResource::class;\n}\n"
+        }
+    ]
+}

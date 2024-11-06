@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "499adf6e-b150-4d42-a051-fea021d1e3ea",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\SupplierResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\SupplierResource;\nuse Filament\\Resources\\Components\\Tab;\n\nclass ListSuppliers extends ListRecords\n{\n    protected static string $resource = SupplierResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n\n    public function getTabs(): array\n    {\n        return [\n            null => Tab::make('All'),\n            'belum diperiksa' => Tab::make()->query(fn ($query) => $query->where('status', '1')),\n            'valid' => Tab::make()->query(fn ($query) => $query->where('status', '2')),\n            'blacklist' => Tab::make()->query(fn ($query) => $query->where('status', '3')),\n\n        ];\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\SupplierResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\SupplierResource;\n\nclass ListSuppliers extends ListRecords\n{\n    protected static string $resource = SupplierResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n}\n"
-        }
-    ]
-}
