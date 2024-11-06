@@ -20,6 +20,7 @@ use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\Panel\PresenceResource\Pages;
 use App\Filament\Resources\Panel\PresenceResource\RelationManagers;
 use Filament\Tables\Actions\ActionGroup;
+use Illuminate\Support\Facades\Auth;
 
 class PresenceResource extends Resource
 {
@@ -124,7 +125,13 @@ class PresenceResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $presence = Presence::query();
+
+        if (!Auth::user()->hasRole('admin')) {
+            $presence->where('created_by_id', Auth::id());
+        }
         return $table
+            ->query($presence)
             ->poll('60s')
             ->columns([
                 TextColumn::make('createdBy.name'),
@@ -133,7 +140,25 @@ class PresenceResource extends Resource
 
                 TextColumn::make('shiftStore.name'),
 
-                TextColumn::make('status'),
+                TextColumn::make('status')
+                    ->formatStateUsing(
+                        fn(string $state): string => match ($state) {
+                            '1' => 'belum diperiksa',
+                            '2' => 'valid',
+                            '3' => 'tidak valid',
+
+                            default => $state,
+                        }
+                    )
+                    ->badge()
+                    ->color(
+                        fn(string $state): string => match ($state) {
+                            '1' => 'warning',
+                            '2' => 'success',
+                            '3' => 'danger',
+                            default => $state,
+                        }
+                    ),
 
                 TextColumn::make('check_in'),
 
