@@ -20,6 +20,7 @@ use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\Panel\PresenceResource\Pages;
 use App\Filament\Resources\Panel\PresenceResource\RelationManagers;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Facades\Auth;
 
 class PresenceResource extends Resource
@@ -70,54 +71,31 @@ class PresenceResource extends Resource
                         ->preload()
                         ->native(false),
 
-                    TextInput::make('status')
+                    Select::make('status')
                         ->required()
-                        ->numeric()
-                        ->step(1),
+                        ->options([
+                            '1' => 'belum diperiksa',
+                            '2' => 'valid',
+                            '3' => 'tidak valid',
+                        ]),
 
-                    DateTimePicker::make('start_date_time')
-                        ->rules(['date'])
+                    DateTimePicker::make('check_in')
                         ->required()
                         ->native(false),
 
-                    TextInput::make('latitude_in')
-                        ->required()
-                        ->numeric()
-                        ->step(1),
-
-                    TextInput::make('longitude_in')
-                        ->required()
-                        ->numeric()
-                        ->step(1),
-
-                    DateTimePicker::make('end_date_time')
-                        ->rules(['date'])
+                    DateTimePicker::make('check_out')
                         ->nullable()
                         ->native(false),
-
-                    TextInput::make('latitude_out')
-                        ->nullable()
-                        ->numeric()
-                        ->step(1),
-
-                    TextInput::make('longitude_out')
-                        ->nullable()
-                        ->numeric()
-                        ->step(1),
 
                     Select::make('created_by_id')
+                        ->label('For')
                         ->nullable()
                         ->relationship('createdBy', 'name')
                         ->searchable()
+                        ->disabled()
                         ->preload()
                         ->native(false),
 
-                    Select::make('approved_by_id')
-                        ->nullable()
-                        ->relationship('approvedBy', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->native(false),
                 ]),
             ]),
         ]);
@@ -134,9 +112,11 @@ class PresenceResource extends Resource
             ->query($presence)
             ->poll('60s')
             ->columns([
-                TextColumn::make('createdBy.name'),
+                TextColumn::make('createdBy.name')
+                    ->sortable(),
 
-                TextColumn::make('store.nickname'),
+                TextColumn::make('store.nickname')
+                    ->sortable(),
 
                 TextColumn::make('shiftStore.name'),
 
@@ -164,7 +144,12 @@ class PresenceResource extends Resource
 
                 TextColumn::make('check_out'),
             ])
-            ->filters([])
+            ->filters([
+                SelectFilter::make('created_by_id')
+                    ->label('Created By')
+                    ->searchable()
+                    ->relationship('createdBy', 'name'),
+            ])
             ->actions([
                 ActionGroup::make([
                     Tables\Actions\EditAction::make(),
