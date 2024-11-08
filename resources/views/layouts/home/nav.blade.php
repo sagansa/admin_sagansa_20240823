@@ -64,8 +64,8 @@
         <a href="#contact" class="block px-4 py-2 text-green">Hubungi Kami</a>
         <a href="https://ev.sagansa.id" class="block px-4 py-2 font-bold text-green">EV</a>
         @guest
-            <a href="{{ filament()->getLoginUrl() }}" class="block px-4 py-2 text-white rounded-t-lg bg-green">Login</a>
-            <a href="{{ filament()->getRegistrationUrl() }}"
+            <a href="https://www.sagansa.id/admin/login" class="block px-4 py-2 text-white rounded-t-lg bg-green">Login</a>
+            <a href="https://www.sagansa.id/admin/register"
                 class="block px-4 py-2 text-white rounded-b-lg bg-green">Register</a>
         @else
             <a href="{{ Filament::getUrl() }}" class="flex items-center px-4 py-2 text-white rounded-lg bg-green">
