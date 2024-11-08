@@ -16,16 +16,19 @@
             <a href="#products" class="font-bold text-green">Produk</a>
             <a href="#blog" class="font-bold text-green">Blog</a>
             <a href="#contact" class="font-bold text-green">Hubungi Kami</a>
-            <a href="https://ev.sagansa.id" class="font-bold text-green">EV</a>
+            <a href="https://ev.sagansa.id" class="font-bold text-green" target="_blank" rel="noopener noreferrer"
+                onclick="window.open(this.href, '_blank'); return false;">EV</a>
             {{-- <a href="https://dityoenggar.my.id" class="font-bold text-green">About me</a> --}}
         </div>
 
         <!-- Login and Register on the right -->
         @guest
             <div class="hidden space-x-4 lg:flex">
-                <a href="https://www.sagansa.id/admin/login" class="px-4 py-2 text-white rounded-lg bg-green">Login</a>
-                <a href="https://www.sagansa.id/admin/register"
-                    class="px-4 py-2 text-white rounded-lg bg-green">Register</a>
+                <a href="{{ Filament::getLoginUrl() }}" class="px-4 py-2 text-white rounded-lg bg-green" target="_blank"
+                    rel="noopener noreferrer" onclick="window.open(this.href, '_blank'); return false;">Login</a>
+                <a href="{{ Filament::getRegistrationUrl() }}"
+                    class="px-4 py-2 bg-white rounded-lg border-2 text-green border-green" target="_blank"
+                    rel="noopener noreferrer" onclick="window.open(this.href, '_blank'); return false;">Register</a>
             </div>
         @else
             <div class="hidden space-x-4 lg:flex">
@@ -62,11 +65,14 @@
         <a href="#products" class="block px-4 py-2 text-green">Produk Kami</a>
         <a href="#blog" class="block px-4 py-2 text-green">Blog</a>
         <a href="#contact" class="block px-4 py-2 text-green">Hubungi Kami</a>
-        <a href="https://ev.sagansa.id" class="block px-4 py-2 font-bold text-green">EV</a>
+        <a href="https://ev.sagansa.id" class="block px-4 py-2 font-bold text-green" target="_blank"
+            rel="noopener noreferrer" onclick="window.open(this.href, '_blank'); return false;">EV>EV</a>
         @guest
-            <a href="https://www.sagansa.id/admin/login" class="block px-4 py-2 text-white rounded-t-lg bg-green">Login</a>
-            <a href="https://www.sagansa.id/admin/register"
-                class="block px-4 py-2 text-white rounded-b-lg bg-green">Register</a>
+            <a href="{{ Filament::getLoginUrl() }}" class="block px-4 py-2 text-white rounded-t-lg bg-green" target="_blank"
+                rel="noopener noreferrer" onclick="window.open(this.href, '_blank'); return false;">Login</a>
+            <a href="{{ Filament::getRegistrationUrl() }}" class="block px-4 py-2 bg-white rounded-b-lg text-green"
+                target="_blank" rel="noopener noreferrer"
+                onclick="window.open(this.href, '_blank'); return false;">Register</a>
         @else
             <a href="{{ Filament::getUrl() }}" class="flex items-center px-4 py-2 text-white rounded-lg bg-green">
                 <!-- SVG Cart Icon -->

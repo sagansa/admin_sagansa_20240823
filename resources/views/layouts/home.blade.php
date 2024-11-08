@@ -75,8 +75,8 @@
         <!-- Product Section -->
         @include('layouts.home.product')
 
-        <!-- Artikel Blog Section -->
-        @include('layouts.home.blog')
+        {{-- <!-- Artikel Blog Section -->
+        @include('layouts.home.blog') --}}
 
         <!-- Kontak Section -->
         @include('layouts.home.contact')

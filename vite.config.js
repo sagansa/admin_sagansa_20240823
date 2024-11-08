@@ -12,8 +12,8 @@ export default defineConfig({
         outDir: "public/build",
         manifest: true,
         rollupOptions: {
-            output: {
-                manualChunks: undefined,
+            input: {
+                app: "/resources/js/app.js",
             },
         },
     },
