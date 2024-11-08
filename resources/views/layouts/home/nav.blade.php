@@ -2,15 +2,15 @@
     use Filament\Facades\Filament;
 @endphp
 
-<nav class="fixed z-10 w-full p-4 shadow-md bg-cream">
-    <div class="container flex items-center justify-between mx-auto">
+<nav class="fixed z-10 p-4 w-full shadow-md bg-cream">
+    <div class="container flex justify-between items-center mx-auto">
         <!-- Logo on the left -->
         <a href="#" class="text-2xl font-bold text-green">
             {{-- <img src="{{ asset('images/logo-apb.png') }}" alt="Sagansa Logo" class="h-10"> --}}
             SAGANSA</a>
 
         <!-- Centered navigation links -->
-        <div class="justify-center flex-grow hidden space-x-6 lg:flex">
+        <div class="hidden flex-grow justify-center space-x-6 lg:flex">
             {{-- <a href="#home" class="font-bold text-green">Home</a> --}}
             <a href="#profil" class="font-bold text-green">Tentang kami</a>
             <a href="#products" class="font-bold text-green">Produk</a>
@@ -23,9 +23,9 @@
         <!-- Login and Register on the right -->
         @guest
             <div class="hidden space-x-4 lg:flex">
-                <a href="{{ Filament::getLoginUrl() }}" class="px-4 py-2 text-white rounded-lg bg-green">Login</a>
-                <a href="{{ Filament::getRegistrationUrl() }}"
-                    class="px-4 py-2 bg-white border-2 rounded-lg text-green border-green">Register</a>
+                <a href="{{ route('filament.auth.login') }}" class="px-4 py-2 text-white rounded-lg bg-green">Login</a>
+                <a href="{{ route('filament.auth.register') }}"
+                    class="px-4 py-2 text-white rounded-lg bg-green">Register</a>
             </div>
         @else
             <div class="hidden space-x-4 lg:flex">
@@ -64,9 +64,9 @@
         <a href="#contact" class="block px-4 py-2 text-green">Hubungi Kami</a>
         <a href="https://ev.sagansa.id" class="block px-4 py-2 font-bold text-green">EV</a>
         @guest
-            <a href="{{ Filament::getLoginUrl() }}" class="block px-4 py-2 text-white rounded-t-lg bg-green">Login</a>
-            <a href="{{ Filament::getRegistrationUrl() }}"
-                class="block px-4 py-2 bg-white border-2 rounded-b-lg text-green border-green">Register</a>
+            <a href="{{ route('filament.auth.login') }}" class="block px-4 py-2 text-white rounded-t-lg bg-green">Login</a>
+            <a href="{{ route('filament.auth.register') }}"
+                class="block px-4 py-2 text-white rounded-b-lg bg-green">Register</a>
         @else
             <a href="{{ Filament::getUrl() }}" class="flex items-center px-4 py-2 text-white rounded-lg bg-green">
                 <!-- SVG Cart Icon -->

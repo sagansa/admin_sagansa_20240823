@@ -110,4 +110,12 @@ return [
     //         'view' => 'remaining-stock-products',
     //     ],
     // ],
+
+    'auth' => [
+        'guard' => env('FILAMENT_AUTH_GUARD', 'web'),
+        'pages' => [
+            'login' => \Filament\Pages\Auth\Login::class,
+            'register' => \Filament\Pages\Auth\Register::class,
+        ],
+    ],
 ];

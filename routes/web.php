@@ -40,3 +40,15 @@ Route::get(
         return redirect('https://www.sagansa.id/admin/register');
     }
 );
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('products', ProductController::class);
+});
+
+Route::get('/admin/login', function () {
+    return redirect()->route('filament.auth.login');
+})->name('login');
+
+Route::get('/admin/register', function () {
+    return redirect()->route('filament.auth.register');
+})->name('register');

@@ -114,4 +114,72 @@ class Product extends Model
     {
         return $this->name . ' - ' . $this->unit->unit;
     }
+
+    protected $casts = [
+        'has_variants' => 'boolean',
+        'status' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime'
+    ];
+
+    // Relasi ke kategori
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class, 'category_id');
+    }
+
+    // Relasi ke varian produk
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    // Relasi ke harga produk
+    public function prices()
+    {
+        return $this->hasMany(ProductPrice::class);
+    }
+
+    // Relasi langsung ke tipe varian melalui product_variants
+    public function variantTypes()
+    {
+        return $this->belongsToMany(VariantType::class, 'product_variants')
+            ->distinct();
+    }
+
+    // Scope untuk produk aktif
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
+
+    // Scope untuk produk dengan varian
+    public function scopeWithVariants($query)
+    {
+        return $query->where('has_variants', true);
+    }
+
+    // Scope untuk produk tanpa varian
+    public function scopeWithoutVariants($query)
+    {
+        return $query->where('has_variants', false);
+    }
+
+    // Method untuk mendapatkan harga dasar produk di store tertentu
+    public function getBasePriceForStore($storeId)
+    {
+        return $this->prices()
+            ->where('store_id', $storeId)
+            ->whereNull('product_variant_id')
+            ->value('price');
+    }
+
+    // Method untuk mendapatkan harga varian produk di store tertentu
+    public function getVariantPricesForStore($storeId)
+    {
+        return $this->prices()
+            ->where('store_id', $storeId)
+            ->whereNotNull('product_variant_id');
+    }
 }
