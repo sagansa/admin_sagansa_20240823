@@ -23,8 +23,8 @@
         <!-- Login and Register on the right -->
         @guest
             <div class="hidden space-x-4 lg:flex">
-                <a href="{{ filament()->getLoginUrl() }}" class="px-4 py-2 text-white rounded-lg bg-green">Login</a>
-                <a href="{{ filament()->getRegistrationUrl() }}"
+                <a href="https://www.sagansa.id/admin/login" class="px-4 py-2 text-white rounded-lg bg-green">Login</a>
+                <a href="https://www.sagansa.id/admin/register"
                     class="px-4 py-2 text-white rounded-lg bg-green">Register</a>
             </div>
         @else
