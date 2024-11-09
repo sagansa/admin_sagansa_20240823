@@ -32,7 +32,8 @@
             </div>
         @else
             <div class="hidden space-x-4 lg:flex">
-                <a href="{{ Filament::getUrl() }}" class="flex items-center px-4 py-2 text-white rounded-lg bg-green">
+                <a href="{{ Filament::getUrl() }}" class="flex items-center px-4 py-2 text-white rounded-lg bg-green"
+                    target="_blank" rel="noopener noreferrer" onclick="window.open(this.href, '_blank'); return false;">
                     <!-- SVG Cart Icon -->
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
@@ -74,7 +75,8 @@
                 target="_blank" rel="noopener noreferrer"
                 onclick="window.open(this.href, '_blank'); return false;">Register</a>
         @else
-            <a href="{{ Filament::getUrl() }}" class="flex items-center px-4 py-2 text-white rounded-lg bg-green">
+            <a href="{{ Filament::getUrl() }}" class="flex items-center px-4 py-2 text-white rounded-lg bg-green"
+                target="_blank" rel="noopener noreferrer" onclick="window.open(this.href, '_blank'); return false;">
                 <!-- SVG Cart Icon -->
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-6">
