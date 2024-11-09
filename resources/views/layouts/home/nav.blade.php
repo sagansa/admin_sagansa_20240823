@@ -5,9 +5,10 @@
 <nav class="fixed z-10 p-4 w-full shadow-md bg-cream">
     <div class="container flex justify-between items-center mx-auto">
         <!-- Logo on the left -->
-        <a href="#" class="text-2xl font-bold text-green">
-            {{-- <img src="{{ asset('images/logo-apb.png') }}" alt="Sagansa Logo" class="h-10"> --}}
-            SAGANSA</a>
+        <a href="home" class="flex items-center text-xl font-bold text-green">
+            <img src="{{ asset('images/logo.png') }}" alt="Sagansa EV Logo" class="mr-2 h-8">
+            SAGANSA
+        </a>
 
         <!-- Centered navigation links -->
         <div class="hidden flex-grow justify-center space-x-6 lg:flex">
