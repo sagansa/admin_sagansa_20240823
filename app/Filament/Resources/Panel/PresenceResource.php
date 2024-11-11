@@ -23,6 +23,7 @@ use App\Filament\Resources\Panel\PresenceResource\RelationManagers;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\ImageHelper;
 
 class PresenceResource extends Resource
 {
@@ -116,11 +117,11 @@ class PresenceResource extends Resource
 
                 ImageOpenUrlColumn::make('image_in')
                     ->visibility('public')
-                    ->url(fn($record) => asset('storage/' . $record->image_in)),
+                    ->url(fn($record) => ImageHelper::getImageUrl($record->image_in)),
 
                 ImageOpenUrlColumn::make('image_out')
                     ->visibility('public')
-                    ->url(fn($record) => asset('storage/' . $record->image_out)),
+                    ->url(fn($record) => ImageHelper::getImageUrl($record->image_out)),
 
                 TextColumn::make('createdBy.name')
                     ->sortable(),
