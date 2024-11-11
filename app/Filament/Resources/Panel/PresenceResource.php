@@ -116,11 +116,25 @@ class PresenceResource extends Resource
 
                 ImageOpenUrlColumn::make('image_in')
                     ->visibility('public')
-                    ->url(fn($record) => asset('storage/' . $record->image_in)),
+                    ->url(function ($record) {
+                        $apiUrl = 'https://api.sagansa.id';  // URL API
+                        return str_replace(
+                            config('app.url'),
+                            $apiUrl,
+                            asset('storage/' . $record->image_in)
+                        );
+                    }),
 
                 ImageOpenUrlColumn::make('image_out')
                     ->visibility('public')
-                    ->url(fn($record) => asset('storage/' . $record->image_out)),
+                    ->url(function ($record) {
+                        $apiUrl = 'https://api.sagansa.id';  // URL API
+                        return str_replace(
+                            config('app.url'),
+                            $apiUrl,
+                            asset('storage/' . $record->image_out)
+                        );
+                    }),
 
                 TextColumn::make('createdBy.name')
                     ->sortable(),
