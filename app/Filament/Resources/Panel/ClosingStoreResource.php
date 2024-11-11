@@ -167,7 +167,7 @@ class ClosingStoreResource extends Resource
                                 ->where('payment_type_id', '2')
                                 ->where('payment_status', '2')
                                 ->when($get('store_id'), fn($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
-                                ->whereDate('date', '>=', now()->subDays(10)) // add this line
+                                ->whereDate('date', '>=', now()->subDays(30)) // add this line
                                 ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn(InvoicePurchase $record) => "{$record->invoice_purchase_name}")
