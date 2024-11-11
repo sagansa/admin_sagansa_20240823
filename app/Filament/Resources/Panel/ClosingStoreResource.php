@@ -165,7 +165,7 @@ class ClosingStoreResource extends Resource
                             name: 'invoicePurchases',
                             modifyQueryUsing: fn(Builder $query, $get) => $query
                                 ->where('payment_type_id', '2')
-                                ->where('payment_status', '2')
+                                ->where('payment_status', '1')
                                 ->when($get('store_id'), fn($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
                                 ->whereDate('date', '>=', now()->subDays(30)) // add this line
                                 ->orderBy('date', 'desc')
