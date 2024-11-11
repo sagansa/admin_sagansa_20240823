@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\HRD;
+use App\Filament\Columns\ImageOpenUrlColumn;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
@@ -112,6 +113,15 @@ class PresenceResource extends Resource
             ->query($presence)
             ->poll('60s')
             ->columns([
+
+                ImageOpenUrlColumn::make('image_in')
+                    ->visibility('public')
+                    ->url(fn($record) => asset('storage/' . $record->image_in)),
+
+                ImageOpenUrlColumn::make('image_out')
+                    ->visibility('public')
+                    ->url(fn($record) => asset('storage/' . $record->image_out)),
+
                 TextColumn::make('createdBy.name')
                     ->sortable(),
 
