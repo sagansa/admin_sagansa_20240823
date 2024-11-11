@@ -24,6 +24,7 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\ImageHelper;
+use Filament\Tables\Columns\ImageColumn;
 
 class PresenceResource extends Resource
 {
@@ -116,6 +117,11 @@ class PresenceResource extends Resource
             ->columns([
 
                 ImageOpenUrlColumn::make('image_in')
+                    ->visibility('public')
+                    ->url(fn($record) => ImageHelper::getImageUrl($record->image_in)),
+
+                ImageColumn::make('image_in')
+                    ->openUrlInNewTab()
                     ->visibility('public')
                     ->url(fn($record) => ImageHelper::getImageUrl($record->image_in)),
 
