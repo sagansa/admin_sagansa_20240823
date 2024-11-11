@@ -116,9 +116,9 @@ class PresenceResource extends Resource
             ->poll('60s')
             ->columns([
 
-                ImageOpenUrlColumn::make('image_in')
-                    ->visibility('public')
-                    ->url(fn($record) => ImageHelper::getImageUrl($record->image_in)),
+                // ImageOpenUrlColumn::make('image_in')
+                //     ->visibility('public')
+                //     ->url(fn($record) => ImageHelper::getImageUrl($record->image_in)),
 
                 ImageColumn::make('image_in')
                     ->openUrlInNewTab()
