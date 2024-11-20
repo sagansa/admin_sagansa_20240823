@@ -123,6 +123,7 @@ class PresenceResource extends Resource
                 ImageColumn::make('image_in')
                     ->openUrlInNewTab()
                     ->visibility('public')
+                    ->state(fn($record) => ImageHelper::getImageUrl($record->image_in))
                     ->url(fn($record) => ImageHelper::getImageUrl($record->image_in)),
 
                 ImageOpenUrlColumn::make('image_out')
