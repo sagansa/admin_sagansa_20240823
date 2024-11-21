@@ -5268,4 +5268,71 @@ return [
             ],
         ],
     ],
+    'stockMonitorings' => [
+        'itemTitle' => 'Stock Monitoring',
+        'collectionTitle' => 'Stock Monitorings',
+        'inputs' => [
+            'name' => [
+                'label' => 'Name',
+                'placeholder' => 'Name',
+            ],
+            'quantity_low' => [
+                'label' => 'Quantity low',
+                'placeholder' => 'Quantity low',
+            ],
+            'category' => [
+                'label' => 'Category',
+                'placeholder' => 'Category',
+            ],
+            'unit_id' => [
+                'label' => 'Unit',
+                'placeholder' => 'Unit id',
+            ],
+        ],
+        'filament' => [
+            'name' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'quantity_low' => [
+                'helper_text' => '',
+                'label' => '',
+                'description' => '',
+            ],
+            'category' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+            'unit_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
+    'stockMonitoringDetails' => [
+        'itemTitle' => 'Stock Monitoring Detail',
+        'collectionTitle' => 'Stock Monitoring Details',
+        'inputs' => [
+            'product_id' => [
+                'label' => 'Product id',
+                'placeholder' => 'Product id',
+            ],
+        ],
+        'filament' => [
+            'product_id' => [
+                'helper_text' => '',
+                'loading_message' => '',
+                'no_result_message' => '',
+                'search_message' => '',
+                'label' => '',
+            ],
+        ],
+    ],
 ];

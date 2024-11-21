@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "e02b4ae2-e0f7-4ccf-872a-945a05dcad2f",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\OnlineCategoryResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\OnlineCategoryResource;\n\nclass CreateOnlineCategory extends CreateRecord\n{\n    protected static string $resource = OnlineCategoryResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n        $data['status'] = \"1\";\n\n        return $data;\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\OnlineCategoryResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\OnlineCategoryResource;\n\nclass CreateOnlineCategory extends CreateRecord\n{\n    protected static string $resource = OnlineCategoryResource::class;\n}\n"
-        }
-    ]
-}

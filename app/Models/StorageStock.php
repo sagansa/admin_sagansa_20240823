@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class StorageStock extends Model
 {
@@ -12,28 +11,14 @@ class StorageStock extends Model
 
     protected $guarded = [];
 
-    public function store()
-    {
-        return $this->belongsTo(Store::class);
-    }
-
-    public function createdBy()
-    {
-        return $this->belongsTo(User::class, 'created_by_id');
-    }
-
-    public function approvedBy()
-    {
-        return $this->belongsTo(User::class, 'approved_by_id');
-    }
-
     public function products()
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Product::class, 'product_storage_stock')
+            ->withPivot('quantity');
     }
 
-    public function productStorageStocks(): HasMany
+    public function stockMonitoringDetails()
     {
-        return $this->hasMany(ProductStorageStock::class);
+        return $this->hasMany(StockMonitoringDetail::class);
     }
 }

@@ -14,6 +14,15 @@ class Product extends Model
 
     protected $guarded = [];
 
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -86,7 +95,8 @@ class Product extends Model
 
     public function storageStocks()
     {
-        return $this->belongsToMany(StorageStock::class);
+        return $this->belongsToMany(StorageStock::class, 'product_storage_stock')
+            ->withPivot('quantity');
     }
 
     public function detailStockCards()
@@ -97,6 +107,21 @@ class Product extends Model
     public function detailTransferCards()
     {
         return $this->hasMany(DetailTransferCard::class);
+    }
+
+    public function stockMonitoringDetails()
+    {
+        return $this->hasMany(StockMonitoringDetail::class);
+    }
+
+    public function latestStockCard()
+    {
+        return $this->hasOne(DetailStockCard::class)
+            ->select('detail_stock_cards.*', 'stock_cards.date')
+            ->join('stock_cards', 'detail_stock_cards.stock_card_id', '=', 'stock_cards.id')
+            ->orderByDesc('stock_cards.date')
+            ->orderByDesc('detail_stock_cards.created_at')
+            ->withoutGlobalScopes();
     }
 
     public static function boot()
@@ -113,73 +138,5 @@ class Product extends Model
     public function getProductNameAttribute()
     {
         return $this->name . ' - ' . $this->unit->unit;
-    }
-
-    protected $casts = [
-        'has_variants' => 'boolean',
-        'status' => 'integer',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
-        'deleted_at' => 'datetime'
-    ];
-
-    // Relasi ke kategori
-    public function category()
-    {
-        return $this->belongsTo(ProductCategory::class, 'category_id');
-    }
-
-    // Relasi ke varian produk
-    public function variants()
-    {
-        return $this->hasMany(ProductVariant::class);
-    }
-
-    // Relasi ke harga produk
-    public function prices()
-    {
-        return $this->hasMany(ProductPrice::class);
-    }
-
-    // Relasi langsung ke tipe varian melalui product_variants
-    public function variantTypes()
-    {
-        return $this->belongsToMany(VariantType::class, 'product_variants')
-            ->distinct();
-    }
-
-    // Scope untuk produk aktif
-    public function scopeActive($query)
-    {
-        return $query->where('status', 1);
-    }
-
-    // Scope untuk produk dengan varian
-    public function scopeWithVariants($query)
-    {
-        return $query->where('has_variants', true);
-    }
-
-    // Scope untuk produk tanpa varian
-    public function scopeWithoutVariants($query)
-    {
-        return $query->where('has_variants', false);
-    }
-
-    // Method untuk mendapatkan harga dasar produk di store tertentu
-    public function getBasePriceForStore($storeId)
-    {
-        return $this->prices()
-            ->where('store_id', $storeId)
-            ->whereNull('product_variant_id')
-            ->value('price');
-    }
-
-    // Method untuk mendapatkan harga varian produk di store tertentu
-    public function getVariantPricesForStore($storeId)
-    {
-        return $this->prices()
-            ->where('store_id', $storeId)
-            ->whereNotNull('product_variant_id');
     }
 }

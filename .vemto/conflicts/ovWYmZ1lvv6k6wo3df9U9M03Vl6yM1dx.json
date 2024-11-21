@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "5ae7fc6e-443f-4337-a7b2-5d6d27bbce87",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DeliveryAddressResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\DeliveryAddressResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateDeliveryAddress extends CreateRecord\n{\n    protected static string $resource = DeliveryAddressResource::class;\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DeliveryAddressResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\DeliveryAddressResource;\n\nclass CreateDeliveryAddress extends CreateRecord\n{\n    protected static string $resource = DeliveryAddressResource::class;\n}\n"
-        }
-    ]
-}

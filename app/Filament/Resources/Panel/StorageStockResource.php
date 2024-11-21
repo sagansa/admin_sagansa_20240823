@@ -41,7 +41,7 @@ class StorageStockResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-     protected static ?string $cluster = Stock::class;
+    protected static ?string $cluster = Stock::class;
 
     protected static ?string $navigationGroup = 'Stock';
 
@@ -79,7 +79,7 @@ class StorageStockResource extends Resource
                 Grid::make(['default' => 1])->schema([
                     self::getProductsRepeater()
                 ]),
-            ])->hidden(fn ($operation) => $operation === 'edit' || $operation === 'view'),
+            ])->hidden(fn($operation) => $operation === 'edit' || $operation === 'view'),
         ]);
     }
 
@@ -101,7 +101,7 @@ class StorageStockResource extends Resource
 
 
                 TextColumn::make('createdBy.name')
-                    ->hidden(fn () => !Auth::user()->hasRole('admin'))
+                    ->hidden(fn() => !Auth::user()->hasRole('admin'))
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 StatusColumn::make('status'),
@@ -117,7 +117,7 @@ class StorageStockResource extends Resource
                     ->extraAttributes(['class' => 'whitespace-pre-wrap']),
 
                 TextColumn::make('created_at')
-                    ->visible(fn ($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin'))
+                    ->visible(fn($record) => auth()->user()->hasRole('admin') || auth()->user()->hasRole('super_admin'))
             ])
             ->filters([
                 SelectStoreFilter::make('store_id')
@@ -151,15 +151,15 @@ class StorageStockResource extends Resource
     {
         return [
             'index' => Pages\ListStorageStocks::route('/'),
-            'create' => Pages\CreateStorageStock::route('/create'),
-            'view' => Pages\ViewStorageStock::route('/{record}'),
-            'edit' => Pages\EditStorageStock::route('/{record}/edit'),
+            // 'create' => Pages\CreateStorageStock::route('/create'),
+            // 'view' => Pages\ViewStorageStock::route('/{record}'),
+            // 'edit' => Pages\EditStorageStock::route('/{record}/edit'),
         ];
     }
 
     public static function getProductsRepeater(): Repeater
     {
-        $products = Product::where('request', '1')->orderBy('name','asc')->get()->map(function ($item) {
+        $products = Product::where('request', '1')->orderBy('name', 'asc')->get()->map(function ($item) {
             return [
                 'product_id' => $item->id,
                 'quantity' => $item->quantity,
@@ -182,7 +182,7 @@ class StorageStockResource extends Resource
                     ->label('Product')
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                     ->required()
-                    ->options(Product::where('request', '1')->orderBy('name', 'asc')->get()->pluck('name','id'))
+                    ->options(Product::where('request', '1')->orderBy('name', 'asc')->get()->pluck('name', 'id'))
                     ->columnSpan([
                         'md' => 5,
                     ]),

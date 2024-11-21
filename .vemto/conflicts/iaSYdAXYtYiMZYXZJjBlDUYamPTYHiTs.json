@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "2d66aa80-fcf4-4842-8c3f-f7a693b42806",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\EmployeeResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\EmployeeResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateEmployee extends CreateRecord\n{\n    protected static string $resource = EmployeeResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n\n        $data['user_id'] = Auth::id();\n        $data['is_banned'] = 0;\n        $data['is_wfa'] = 0;\n        $data['employee_status_id'] = 1;\n\n        return $data;\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\EmployeeResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\EmployeeResource;\n\nclass CreateEmployee extends CreateRecord\n{\n    protected static string $resource = EmployeeResource::class;\n}\n"
-        }
-    ]
-}

@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "451f243c-48e6-4a5e-ac67-19011bec7a24",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DeliveryAddressResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\EditRecord;\nuse App\\Filament\\Resources\\Panel\\DeliveryAddressResource;\nuse Filament\\Infolists\\Components\\TextEntry;\nuse Filament\\Infolists\\Infolist;\n\nclass EditDeliveryAddress extends EditRecord\n{\n    protected static string $resource = DeliveryAddressResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\DeleteAction::make()];\n    }\n\n\n}\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DeliveryAddressResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\EditRecord;\nuse App\\Filament\\Resources\\Panel\\DeliveryAddressResource;\n\nclass EditDeliveryAddress extends EditRecord\n{\n    protected static string $resource = DeliveryAddressResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\DeleteAction::make()];\n    }\n}\n"
+        }
+    ]
+}

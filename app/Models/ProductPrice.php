@@ -32,11 +32,6 @@ class ProductPrice extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function variant()
-    {
-        return $this->belongsTo(ProductVariant::class, 'product_variant_id');
-    }
-
     public function store()
     {
         return $this->belongsTo(Store::class);

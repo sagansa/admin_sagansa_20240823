@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "d7428850-6a47-44b5-b54e-6e6b74350f48",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\StorageStockResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\StorageStockResource;\nuse Illuminate\\Support\\Facades\\Auth;\n\nclass CreateStorageStock extends CreateRecord\n{\n    protected static string $resource = StorageStockResource::class;\n\n    protected function mutateFormDataBeforeCreate(array $data): array\n    {\n        $data['created_by_id'] = Auth::id();\n        $data['status'] = '1';\n\n        return $data;\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\StorageStockResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\StorageStockResource;\n\nclass CreateStorageStock extends CreateRecord\n{\n    protected static string $resource = StorageStockResource::class;\n}\n"
-        }
-    ]
-}

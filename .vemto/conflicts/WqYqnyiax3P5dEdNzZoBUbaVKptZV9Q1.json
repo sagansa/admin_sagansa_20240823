@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "b70e4a2c-f087-44f3-b909-521357a0992f",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\PaymentReceiptResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\PaymentReceiptResource;\nuse App\\Models\\DailySalary;\nuse App\\Models\\InvoicePurchase;\nuse App\\Models\\PaymentReceipt;\n\nclass CreatePaymentReceipt extends CreateRecord\n{\n    protected static string $resource = PaymentReceiptResource::class;\n\n    protected function afterCreate(): void\n    {\n        $record = $this->getRecord();\n        if ($record->payment_for == 3) {\n            foreach ($record->invoicePurchases as $invoicePurchase) {\n                $invoicePurchase->payment_status = 2;\n                $invoicePurchase->save();\n            }\n        } elseif ($record->payment_for == 2) {\n            foreach ($record->dailySalaries as $dailySalary) {\n                $dailySalary->status = 2;\n                $dailySalary->save();\n            }\n        } elseif ($record->payment_for == 1) {\n            foreach ($record->fuelServices as $fuelService) {\n                $fuelService->status = 2;\n                $fuelService->save();\n            }\n        }\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\PaymentReceiptResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\CreateRecord;\nuse App\\Filament\\Resources\\Panel\\PaymentReceiptResource;\n\nclass CreatePaymentReceipt extends CreateRecord\n{\n    protected static string $resource = PaymentReceiptResource::class;\n}\n"
-        }
-    ]
-}

@@ -1,9 +1,0 @@
-{
-    "conflicts": [
-        {
-            "id": "c6788eaf-b853-48dc-a5c2-d792afaf0ef9",
-            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DetailRequestResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\DetailRequestResource;\nuse Filament\\Resources\\Components\\Tab;\n\nclass ListDetailRequests extends ListRecords\n{\n    protected static string $resource = DetailRequestResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n\n    public function getTabs(): array\n    {\n        return [\n            null => Tab::make('All'),\n            'process' => Tab::make()->query(fn ($query) => $query->where('status', '1')),\n            'done' => Tab::make()->query(fn ($query) => $query->where('status', '2')),\n            'reject' => Tab::make()->query(fn ($query) => $query->where('status', '3')),\n            'approved' => Tab::make()->query(fn ($query) => $query->where('status', '4')),\n            'not valid' => Tab::make()->query(fn ($query) => $query->where('status', '5')),\n            'not used' => Tab::make()->query(fn ($query) => $query->where('status', '6')),\n\n        ];\n    }\n}\n",
-            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\DetailRequestResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\DetailRequestResource;\n\nclass ListDetailRequests extends ListRecords\n{\n    protected static string $resource = DetailRequestResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n}\n"
-        }
-    ]
-}

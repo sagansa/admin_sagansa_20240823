@@ -79,6 +79,13 @@ class FuelServiceTable
 
             PaymentStatusColumn::make('status'),
 
+            TextColumn::make('paymentReceipt')
+                ->hidden(fn() => !Auth::user()->hasRole('admin'))
+                ->formatStateUsing(function ($record) {
+                    return $record->paymentReceipts->first()?->created_at?->format('d/m/Y H:i');
+                })
+                ->toggleable(isToggledHiddenByDefault: false),
+
         ];
     }
 }

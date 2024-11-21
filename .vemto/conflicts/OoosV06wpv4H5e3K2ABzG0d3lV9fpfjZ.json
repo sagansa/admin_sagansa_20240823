@@ -1,0 +1,9 @@
+{
+    "conflicts": [
+        {
+            "id": "8c3fb5b5-c3db-4092-b81a-6649d352b87a",
+            "currentContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\UtilityResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\UtilityResource;\nuse Filament\\Resources\\Components\\Tab;\n\nclass ListUtilities extends ListRecords\n{\n    protected static string $resource = UtilityResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n\n    public function getTabs(): array\n    {\n        return [\n            null => Tab::make('All'),\n            'active' => Tab::make()->query(fn ($query) => $query->where('status', '1')),\n            'inactive' => Tab::make()->query(fn ($query) => $query->where('status', '2')),\n        ];\n    }\n}\n",
+            "newContent": "<?php\n\nnamespace App\\Filament\\Resources\\Panel\\UtilityResource\\Pages;\n\nuse Filament\\Actions;\nuse Filament\\Resources\\Pages\\ListRecords;\nuse App\\Filament\\Resources\\Panel\\UtilityResource;\n\nclass ListUtilities extends ListRecords\n{\n    protected static string $resource = UtilityResource::class;\n\n    protected function getHeaderActions(): array\n    {\n        return [Actions\\CreateAction::make()];\n    }\n}\n"
+        }
+    ]
+}

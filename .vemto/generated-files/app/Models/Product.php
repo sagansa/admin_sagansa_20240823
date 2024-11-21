@@ -14,6 +14,15 @@ class Product extends Model
 
     protected $guarded = [];
 
+    protected function casts(): array
+    {
+        return [
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -97,6 +106,11 @@ class Product extends Model
     public function detailTransferCards()
     {
         return $this->hasMany(DetailTransferCard::class);
+    }
+
+    public function stockMonitoringDetails()
+    {
+        return $this->hasMany(StockMonitoringDetail::class);
     }
 
     public static function boot()
