@@ -77,7 +77,8 @@ class ProductStockWidget extends BaseWidget
                     })->join('<br>');
                 })
                 ->html()
-                ->searchable(),
+                ->searchable()
+                ->toggleable(isToggledHiddenByDefault: true),
 
             TextColumn::make('stockMonitoringDetails.product.latestStockCard.quantity')
                 ->label('Quantity')
@@ -93,7 +94,8 @@ class ProductStockWidget extends BaseWidget
                         return "ID {$detail->product->id}: " . number_format($totalQuantity, 0, ',', '.');
                     })->join('<br>');
                 })
-                ->html(),
+                ->html()
+                ->toggleable(isToggledHiddenByDefault: true),
 
             TextColumn::make('total_stock')
                 ->label('Total Stock')
@@ -101,7 +103,20 @@ class ProductStockWidget extends BaseWidget
                 ->alignRight()
                 ->formatStateUsing(function ($state, $record) {
                     $color = $state < $record->quantity_low ? 'text-danger-500' : 'text-success-500';
-                    return '<span class="' . $color . '">' . number_format($state, 0, ',', '.') . '</span>';
+
+                    // Ambil unit dari product pertama dalam monitoring
+                    $firstDetail = $record->stockMonitoringDetails->first();
+                    $unit = '';
+                    if ($firstDetail && $firstDetail->product && $firstDetail->product->unit) {
+                        $unit = $firstDetail->product->unit->nickname;
+                    }
+
+                    return sprintf(
+                        '<span class="%s">%s %s</span>',
+                        $color,
+                        number_format($state, 0, ',', '.'),
+                        $unit
+                    );
                 })
                 ->html(),
 
@@ -109,7 +124,20 @@ class ProductStockWidget extends BaseWidget
                 ->label('Quantity Low')
                 ->sortable()
                 ->alignRight()
-                ->formatStateUsing(fn($state) => number_format($state, 0, ',', '.')),
+                ->formatStateUsing(function ($state, $record) {
+                    // Ambil unit dari product pertama dalam monitoring
+                    $firstDetail = $record->stockMonitoringDetails->first();
+                    $unit = '';
+                    if ($firstDetail && $firstDetail->product && $firstDetail->product->unit) {
+                        $unit = $firstDetail->product->unit->nickname;
+                    }
+
+                    return sprintf(
+                        '%s %s',
+                        number_format($state, 0, ',', '.'),
+                        $unit
+                    );
+                }),
 
             TextColumn::make('status_stock')
                 ->label('Status')
@@ -145,7 +173,8 @@ class ProductStockWidget extends BaseWidget
                         return "ID {$detail->product->id}: {$detail->coefficient}";
                     })->join('<br>');
                 })
-                ->html(),
+                ->html()
+                ->toggleable(isToggledHiddenByDefault: true),
 
             TextColumn::make('stockMonitoringDetails.product.unit.unit')
                 ->label('Unit')
@@ -154,7 +183,8 @@ class ProductStockWidget extends BaseWidget
                         return "ID {$detail->product->id}: {$detail->product->unit->unit}";
                     })->join('<br>');
                 })
-                ->html(),
+                ->html()
+                ->toggleable(isToggledHiddenByDefault: true),
         ];
     }
 

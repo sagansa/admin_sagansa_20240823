@@ -70,14 +70,9 @@ class StockOverviewWidget extends BaseWidget
             ->count();
 
         // Query jumlah produk yang low stock
-        $lowStockProducts = DB::table('stock_monitoring_details as smd')
-            ->join('stock_monitorings as sm', 'smd.stock_monitoring_id', '=', 'sm.id')
-            ->join('products as p', 'smd.product_id', '=', 'p.id')
-            ->where('p.request', '1')
-            ->select('p.id')
-            ->groupBy('p.id')
-            ->havingRaw('
-                SUM(
+        $lowStockProducts = DB::table('stock_monitorings as sm')
+            ->whereRaw('(
+                SELECT COALESCE(SUM(
                     (
                         SELECT COALESCE(SUM(dsc.quantity), 0)
                         FROM detail_stock_cards dsc
@@ -90,8 +85,10 @@ class StockOverviewWidget extends BaseWidget
                             WHERE dsc2.product_id = smd.product_id
                         )
                     ) * smd.coefficient
-                ) < MIN(sm.quantity_low)
-            ')
+                ), 0)
+                FROM stock_monitoring_details smd
+                WHERE sm.id = smd.stock_monitoring_id
+            ) < sm.quantity_low')
             ->count();
 
         return [
