@@ -15,7 +15,7 @@ class StockOverviewWidget extends BaseWidget
 
     public static function canView(): bool
     {
-        return Auth::user()->hasAnyRole(['super-admin', 'admin']);
+        return Auth::user()->hasAnyRole(['super_admin', 'admin']);
     }
 
     protected function getStats(): array
