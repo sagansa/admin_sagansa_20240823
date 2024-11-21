@@ -8,14 +8,24 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ProductStockWidget extends BaseWidget
 {
     protected static ?int $sort = 2;
     protected int | string | array $columnSpan = 'full';
 
+    public static function canView(): bool
+    {
+        return Auth::user()->hasAnyRole(['super_admin', 'admin']);
+    }
+
     public function getTableQuery(): Builder
     {
+        if (!static::canView()) {
+            return StockMonitoring::query()->whereRaw('1 = 0');
+        }
+
         return StockMonitoring::query()
             ->with(['stockMonitoringDetails.product' => function ($query) {
                 $query->with(['latestStockCard' => function ($query) {
@@ -50,6 +60,10 @@ class ProductStockWidget extends BaseWidget
 
     protected function getTableColumns(): array
     {
+        if (!static::canView()) {
+            return [];
+        }
+
         return [
             TextColumn::make('name')
                 ->label('Name')
@@ -146,6 +160,10 @@ class ProductStockWidget extends BaseWidget
 
     protected function getTableFilters(): array
     {
+        if (!static::canView()) {
+            return [];
+        }
+
         return [
             // Tambahkan filter jika diperlukan
         ];
