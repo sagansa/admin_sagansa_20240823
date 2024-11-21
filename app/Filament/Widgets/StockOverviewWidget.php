@@ -7,13 +7,23 @@ use App\Models\StockMonitoring;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class StockOverviewWidget extends BaseWidget
 {
     protected static ?int $sort = 1;
 
+    public static function canView(): bool
+    {
+        return Auth::user()->hasAnyRole(['super-admin', 'admin']);
+    }
+
     protected function getStats(): array
     {
+        if (!static::canView()) {
+            return [];
+        }
+
         $stats = $this->calculateStats();
 
         return [
