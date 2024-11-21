@@ -148,7 +148,7 @@ class StockMonitoringResource extends Resource
                     ->preload()
                     ->native(false),
 
-                TextInput::make('coefisien')
+                TextInput::make('coefficient')
                     ->required()
                     ->numeric()
                     ->step(1),
