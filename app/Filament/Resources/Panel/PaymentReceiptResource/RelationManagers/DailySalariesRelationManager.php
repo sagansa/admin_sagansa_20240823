@@ -43,10 +43,6 @@ class DailySalariesRelationManager extends RelationManager
                 DateInput::make('date'),
 
                 TextInput::make('amount')
-                    ->summarize(Sum::make()
-                        ->prefix('Rp ')
-                        ->label('')
-                        ->numeric(thousandsSeparator: '.'))
                     ->required()
                     ->numeric()
                     ->step(1),

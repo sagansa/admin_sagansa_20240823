@@ -4,6 +4,7 @@ namespace App\Filament\Tables;
 
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\PaymentStatusColumn;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\TextColumn;
 
 class DailySalaryTable
@@ -21,7 +22,11 @@ class DailySalaryTable
 
             TextColumn::make('date'),
 
-            CurrencyColumn::make('amount'),
+            CurrencyColumn::make('amount')
+                ->summarize(Sum::make()
+                    ->prefix('Rp ')
+                    ->label('')
+                    ->numeric(thousandsSeparator: '.')),
 
             PaymentStatusColumn::make('status'),
 

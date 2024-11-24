@@ -317,7 +317,7 @@ class PaymentReceiptResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationGroup::make('Contacts', [
+            RelationGroup::make('', [
                 RelationManagers\FuelServicesRelationManager::class,
                 RelationManagers\DailySalariesRelationManager::class,
                 RelationManagers\InvoicePurchasesRelationManager::class,
