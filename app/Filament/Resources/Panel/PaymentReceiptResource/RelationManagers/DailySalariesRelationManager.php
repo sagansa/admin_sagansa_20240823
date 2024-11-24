@@ -18,9 +18,12 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\RelationManagers\RelationManager;
 use App\Filament\Resources\Panel\PaymentReceiptResource;
+use App\Models\DailySalary;
 use Filament\Actions\CreateAction;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+use Filament\Tables\Actions\AttachAction;
 
 class DailySalariesRelationManager extends RelationManager
 {
@@ -81,22 +84,16 @@ class DailySalariesRelationManager extends RelationManager
 
             ->filters([])
             ->headerActions([
-                // Tables\Actions\CreateAction::make(),
-
-                // Tables\Actions\AttachAction::make()->form(
-                //     fn(Tables\Actions\AttachAction $action): array => [
-                //         $action->getRecordSelect()->preload(),
-                //         // TextInput::make('name')
-                //     ]
-                // )->multiple(),
-
-                // Tables\Actions\AttachAction::make()->preloadRecordSelect()->multiple(),
-                // TextInput::make('amount')
-
-                // Tables\Actions\AttachAction::make()
-                //     ->recordSelect(
-                //         fn (Select $select) => $select->placeholder('Select a post'),
-                //     )
+                Tables\Actions\AttachAction::make()
+                    ->preloadRecordSelect()
+                    ->multiple()
+                    ->recordSelectSearchColumns(['createdBy.name', 'date', 'amount'])
+                    ->using(function (Builder $query) {
+                        DailySalary::forPaymentType(1)->apply($query);
+                    })
+                    ->recordTitle(function ($record) {
+                        return "{$record->paymentType->name} | {$record->createdBy->name} | {$record->date} | Rp " . number_format($record->amount, 0, ',', '.');
+                    }),
             ])
             ->actions([
                 // Tables\Actions\EditAction::make(),

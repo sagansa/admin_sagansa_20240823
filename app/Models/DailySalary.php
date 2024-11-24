@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -52,5 +53,12 @@ class DailySalary extends Model
             ' | ' . $this->date .
             ' | ' . $this->store->nickname .
             ' | Rp ' . number_format($this->amount, 0, ',', '.');
+    }
+
+    public function scopeForPaymentType(Builder $query, $paymentTypeId)
+    {
+        return $query->where('payment_type_id', $paymentTypeId)
+            ->whereNull('payment_receipt_id')
+            ->orderBy('date', 'asc');
     }
 }
