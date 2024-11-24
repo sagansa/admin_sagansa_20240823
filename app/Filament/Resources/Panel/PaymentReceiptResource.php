@@ -236,7 +236,8 @@ class PaymentReceiptResource extends Resource
                 SupplierColumn::make('Supplier')
                     ->visible(fn($livewire) => $livewire->activeTab !== 'daily salary'),
 
-                SupplierColumn::make('Employee')
+                TextColumn::make('user.name')
+                    ->label('Employee')
                     ->visible(fn($livewire) => $livewire->activeTab === 'daily salary'),
 
                 TextColumn::make('created_at')
