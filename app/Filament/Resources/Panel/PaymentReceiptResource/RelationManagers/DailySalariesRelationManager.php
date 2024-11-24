@@ -19,6 +19,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Resources\RelationManagers\RelationManager;
 use App\Filament\Resources\Panel\PaymentReceiptResource;
 use Filament\Actions\CreateAction;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Database\Eloquent\Model;
 
 class DailySalariesRelationManager extends RelationManager
@@ -42,6 +43,10 @@ class DailySalariesRelationManager extends RelationManager
                 DateInput::make('date'),
 
                 TextInput::make('amount')
+                    ->summarize(Sum::make()
+                        ->prefix('Rp ')
+                        ->label('')
+                        ->numeric(thousandsSeparator: '.'))
                     ->required()
                     ->numeric()
                     ->step(1),

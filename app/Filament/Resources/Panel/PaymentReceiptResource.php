@@ -29,6 +29,7 @@ use Filament\Resources\RelationManagers\RelationGroup;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class PaymentReceiptResource extends Resource
 {
@@ -220,15 +221,7 @@ class PaymentReceiptResource extends Resource
 
     public static function table(Table $table): Table
     {
-        $paymentReceipt = PaymentReceipt::query();
-
-        if (Auth::user()->hasRole('staff') || Auth::user()->hasRole('supervisor')) {
-            $paymentReceipt->where('payment_for', '<>', 2);
-        }
-
         return $table
-            ->query($paymentReceipt)
-            ->poll('60s')
             ->columns([
                 ImageOpenUrlColumn::make('image')
                     ->label('Payment')
@@ -240,13 +233,70 @@ class PaymentReceiptResource extends Resource
                     ->visibility('public')
                     ->url(fn($record) => asset('storage/' . $record->image_adjust)),
 
-                SupplierColumn::make('Supplier'),
+                SupplierColumn::make('Supplier')
+                    ->visible(fn($livewire) => $livewire->activeTab !== 'daily salary'),
 
                 TextColumn::make('created_at')
                     ->date(),
 
                 CurrencyColumn::make('transfer_amount'),
 
+                // Kolom untuk Invoice (payment_for = 3)
+                TextColumn::make('invoicePurchases.date')
+                    ->label('Date')
+                    ->visible(fn($livewire) => $livewire->activeTab === 'invoice'),
+                // ->formatStateUsing(function ($state, $record) {
+                //     return $record->invoices->pluck('invoice_number')->join(', ');
+                // }),
+
+                // Kolom untuk Fuel Service (payment_for = 1)
+                TextColumn::make('fuelServices.vehicle.no_register')
+                    ->label('Fuel Service Invoice')
+                    ->visible(fn($livewire) => $livewire->activeTab === 'fuel service'),
+                // ->formatStateUsing(function ($state, $record) {
+                //     return $record->invoicePurchases->pluck('invoice_number')->join(', ');
+                // }),
+
+                // Kolom untuk Daily Salary (payment_for = 2)
+                TextColumn::make('dailySalaries.date')
+                    ->label('Salary Date')
+                    ->visible(fn($livewire) => $livewire->activeTab === 'daily salary')
+                    ->formatStateUsing(function ($state, $record) {
+                        return $record->dailySalaries->pluck('date')
+                            ->map(fn($date) => Carbon::parse($date)->format('d/m/Y'))
+                            ->join(', ');
+                    }),
+
+                // Kolom detail yang lebih lengkap per tab
+                TextColumn::make('payment_details')
+                    ->label(function ($livewire) {
+                        return match ($livewire->activeTab) {
+                            'invoice' => 'Invoice Details',
+                            'fuel service' => 'Fuel Service Details',
+                            'daily salary' => 'Salary Details',
+                            default => 'Details'
+                        };
+                    })
+                    ->formatStateUsing(function ($state, $record, $livewire) {
+                        return match ($livewire->activeTab) {
+                            'invoice' => $record->invoices->map(function ($invoice) {
+                                return "Invoice: {$invoice->invoice_number}<br>" .
+                                    "Amount: " . number_format($invoice->total_amount, 0, ',', '.');
+                            })->join('<br><br>'),
+
+                            'fuel service' => $record->invoicePurchases->map(function ($invoice) {
+                                return "Invoice: {$invoice->invoice_number}<br>" .
+                                    "Amount: " . number_format($invoice->total_amount, 0, ',', '.');
+                            })->join('<br><br>'),
+
+                            'daily salary' => $record->dailySalaries->map(function ($salary) {
+                                return "Date: " . Carbon::parse($salary->date)->format('d/m/Y') . "<br>" .
+                                    "Amount: " . number_format($salary->amount, 0, ',', '.');
+                            })->join('<br><br>'),
+
+                            default => 'Details'
+                        };
+                    }),
             ])
 
             ->filters([])
