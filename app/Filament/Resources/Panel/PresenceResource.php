@@ -161,6 +161,29 @@ class PresenceResource extends Resource
                 TextColumn::make('check_in'),
 
                 TextColumn::make('check_out'),
+
+                TextColumn::make('late_hours')
+                    ->label('Keterlambatan (Jam)')
+                    ->getStateUsing(fn($record) => $record->calculateLateHours()),
+
+                TextColumn::make('check_out_penalty')
+                    ->label('Pinalty Pulang (Jam)')
+                    ->getStateUsing(fn($record) => $record->calculateCheckOutPenalty()),
+
+                TextColumn::make('total_penalty')
+                    ->label('Total Pinalty (Jam)')
+                    ->getStateUsing(fn($record) => $record->calculateTotalPenalty()),
+
+                TextColumn::make('effective_working_time')
+                    ->label('Effective Working Time (Jam)')
+                    ->getStateUsing(fn($record) => $record->calculateEffectiveWorkingTime()),
+
+                TextColumn::make('createdBy.employees.salary_rate_per_hour')
+                    ->label('Salary Rate per Hour'),
+
+                TextColumn::make('daily_salary')
+                    ->label('Daily Salary')
+                    ->getStateUsing(fn($record) => 'Rp ' . number_format($record->calculateDailySalary(), 0, ',', '.')),
             ])
             ->filters([
                 SelectFilter::make('created_by_id')

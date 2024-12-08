@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 
 class Employee extends Model
 {
@@ -58,5 +59,56 @@ class Employee extends Model
     public function postalCode()
     {
         return $this->belongsTo(PostalCode::class);
+    }
+
+    public function calculateYearsOfService()
+    {
+        $joinDate = Carbon::parse($this->join_date);
+        $currentDate = Carbon::now();
+
+        return floor($joinDate->diffInYears($currentDate));
+    }
+
+    public function getSalaryRatePerHour()
+    {
+        $yearsOfService = $this->calculateYearsOfService();
+        $currentYear = Carbon::now()->year;
+
+        $salaryRate = SalaryRate::whereYear('effective_date', $currentYear)
+            ->orderBy('effective_date', 'desc')
+            ->first();
+
+        if (!$salaryRate) {
+            return 0;
+        }
+
+        $salaryRateDetail = SalaryRateDetail::where('salary_rate_id', $salaryRate->id)
+            ->where('years_of_service', '<=', $yearsOfService)
+            ->orderBy('years_of_service', 'desc')
+            ->first();
+
+        if (!$salaryRateDetail) {
+            return 0;
+        }
+
+        return $salaryRateDetail->rate_per_hour;
+    }
+
+    public function calculateAge()
+    {
+        $birthDate = Carbon::parse($this->birth_date);
+        $currentDate = Carbon::now();
+
+        return $birthDate->diffInYears($currentDate);
+    }
+
+    public function salaryRates()
+    {
+        return $this->hasMany(SalaryRate::class);
+    }
+
+    public function salaryRateDetails()
+    {
+        return $this->hasMany(SalaryRateDetail::class);
     }
 }

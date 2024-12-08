@@ -128,7 +128,7 @@ class EmployeeResource extends Resource
                                     $longitude = $record->longitude;
 
                                     if ($latitude && $longitude) {
-                                            $set('location', ['lat' => $latitude, 'lng' => $longitude]);
+                                        $set('location', ['lat' => $latitude, 'lng' => $longitude]);
                                     }
                                 }
                             })
@@ -137,18 +137,19 @@ class EmployeeResource extends Resource
                                 $set('longitude', $state['lng']);
                             })
                             // tiles url (refer to https://www.spatialbias.com/2018/02/qgis-3.0-xyz-tile-layers/)
-                            ->tilesUrl('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-                        ),
+                            ->tilesUrl(
+                                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+                            ),
 
                         TextInput::make('latitude')->readOnly()
                             // ->hiddenLabel()
                             ->inlineLabel(),
-                            // ->placeholder('Latitude'),
+                        // ->placeholder('Latitude'),
 
                         TextInput::make('longitude')->readOnly()
                             // ->hiddenLabel()
                             ->inlineLabel(),
-                            // ->placeholder('Longitude'),
+                        // ->placeholder('Longitude'),
 
                         BaseTextInput::make('address'),
 
@@ -247,9 +248,9 @@ class EmployeeResource extends Resource
 
                         DatePicker::make('acceptance_date')
                             ->rules(['date'])
-                            ->hidden(fn ($operation) => $operation === 'create')
-                            ->disabled(fn () => Auth::user()->hasRole('staff'))
-                            ->visible(fn ($record) => Auth::user()->hasRole('admin') || Auth::user()->hasRole('super_admin'))
+                            ->hidden(fn($operation) => $operation === 'create')
+                            ->disabled(fn() => Auth::user()->hasRole('staff'))
+                            ->visible(fn($record) => Auth::user()->hasRole('admin') || Auth::user()->hasRole('super_admin'))
                             ->nullable(),
 
                         BaseSelect::make('bank_id')
@@ -288,10 +289,8 @@ class EmployeeResource extends Resource
                             ->directory('images/Employee'),
                     ]),
 
-                ]),
-            ])->columns('full');
-
-
+            ]),
+        ])->columns('full');
     }
 
     public static function table(Table $table): Table
@@ -300,95 +299,112 @@ class EmployeeResource extends Resource
             ->poll('60s')
             ->columns([
 
-                ImageColumn::make('image_identity_id')->label('KTP')->visibility('public'),
+                // ImageColumn::make('image_identity_id')->label('KTP')->visibility('public'),
 
-                ImageColumn::make('image_selfie')->label('Selfie')->visibility('public'),
+                // ImageColumn::make('image_selfie')->label('Selfie')->visibility('public'),
 
-                TextColumn::make('identity_no')->label('NIK')->copyable(),
+                // TextColumn::make('identity_no')->label('NIK')->copyable(),
 
                 TextColumn::make('nickname')->searchable(),
 
-                TextColumn::make('no_telp')->searchable(),
+                // TextColumn::make('no_telp')->searchable(),
 
-                TextColumn::make('birth_place')->sortable(),
+                // TextColumn::make('birth_place')->sortable(),
 
-                TextColumn::make('birth_date')->sortable(),
+                // TextColumn::make('birth_date')->sortable(),
 
-                TextColumn::make('fathers_name')->label('Father\'s Name'),
+                // TextColumn::make('fathers_name')->label('Father\'s Name'),
 
-                TextColumn::make('mothers_name')->label('Mother\'s Name'),
+                // TextColumn::make('mothers_name')->label('Mother\'s Name'),
 
-                TextColumn::make('parents_no_telp'),
+                // TextColumn::make('parents_no_telp'),
 
-                TextColumn::make('siblings_name')->label('Sibling\'s Name'),
+                // TextColumn::make('siblings_name')->label('Sibling\'s Name'),
 
-                TextColumn::make('siblings_no_telp'),
+                // TextColumn::make('siblings_no_telp'),
 
-                ToggleColumn::make('bpjs')->label('BPJS'),
+                // ToggleColumn::make('bpjs')->label('BPJS'),
 
-                TextColumn::make('bank_account_no'),
+                // TextColumn::make('bank_account_no'),
 
-                TextColumn::make('acceptance_date')->since(),
+                // TextColumn::make('acceptance_date')->since(),
 
-                TextColumn::make('bank.name'),
+                // TextColumn::make('bank.name'),
 
-                TextColumn::make('employeeStatus.name'),
+                // TextColumn::make('employeeStatus.name'),
 
-                TextColumn::make('gender')
-                    ->formatStateUsing(
-                        fn(string $state): string => match ($state) {
-                            '1' => 'laki-laki',
-                            '2' => 'perempuan',
+                // TextColumn::make('gender')
+                //     ->formatStateUsing(
+                //         fn(string $state): string => match ($state) {
+                //             '1' => 'laki-laki',
+                //             '2' => 'perempuan',
+                //         }
+                //     ),
 
-                        }
-                    ),
+                // TextColumn::make('religion')
+                //     ->formatStateUsing(
+                //         fn(string $state): string => match ($state) {
+                //             '1' => 'islam',
+                //             '2' => 'kristen',
+                //             '3' => 'katholik',
+                //             '4' => 'hindu',
+                //             '5' => 'budha',
+                //             '6' => 'kong hu chu',
+                //         }
+                //     ),
 
-                TextColumn::make('religion')
-                    ->formatStateUsing(
-                        fn(string $state): string => match ($state) {
-                            '1' => 'islam',
-                            '2' => 'kristen',
-                            '3' => 'katholik',
-                            '4' => 'hindu',
-                            '5' => 'budha',
-                            '6' => 'kong hu chu',
+                // TextColumn::make('driving_license')
+                //     ->formatStateUsing(
+                //         fn(string $state): string => match ($state) {
+                //             '1' => 'A',
+                //             '2' => 'C',
+                //             '3' => 'A dan C'
+                //         }
+                //     ),
 
-                        }
-                    ),
+                // TextColumn::make('marital_status')
+                //     ->formatStateUsing(
+                //         fn(string $state): string => match ($state) {
+                //             '1' => 'belum menikah',
+                //             '2' => 'menikah',
+                //             '3' => 'duda/janda'
+                //         }
+                //     ),
 
-                TextColumn::make('driving_license')
-                    ->formatStateUsing(
-                        fn(string $state): string => match ($state) {
-                            '1' => 'A',
-                            '2' => 'C',
-                            '3' => 'A dan C'
+                // TextColumn::make('level_of_education')
+                //     ->formatStateUsing(
+                //         fn(string $state): string => match ($state) {
+                //             '1' => 'tidak sekolah',
+                //             '2' => 'SD',
+                //             '3' => 'SMP',
+                //             '4' => 'SMA',
+                //             '5' => 'D1',
+                //             '6' => 'D3',
+                //             '7' => 'D4/S1'
+                //         }
+                //     ),
 
-                        }
-                    ),
+                TextColumn::make('join_date')
+                    ->label('Tanggal Bergabung')
+                    ->since(),
 
-                TextColumn::make('marital_status')
-                    ->formatStateUsing(
-                        fn(string $state): string => match ($state) {
-                            '1' => 'belum menikah',
-                            '2' => 'menikah',
-                            '3' => 'duda/janda'
+                TextColumn::make('birth_date')
+                    ->label('Tanggal Lahir')
+                    ->since(),
 
-                        }
-                    ),
+                // TextColumn::make('years_of_service')
+                //     ->label('Masa Kerja (Tahun)')
+                //     ->numeric(decimalPlaces: 2)
+                //     ->getStateUsing(fn($record) => $record->calculateYearsOfService()),
 
-                TextColumn::make('level_of_education')
-                    ->formatStateUsing(
-                        fn(string $state): string => match ($state) {
-                            '1' => 'tidak sekolah',
-                            '2' => 'SD',
-                            '3' => 'SMP',
-                            '4' => 'SMA',
-                            '5' => 'D1',
-                            '6' => 'D3',
-                            '7' => 'D4/S1'
+                // TextColumn::make('age')
+                //     ->label('Umur (Tahun)')
+                //     ->numeric(decimalPlaces: 2)
+                //     ->getStateUsing(fn($record) => $record->calculateAge()),
 
-                        }
-                    ),
+                TextColumn::make('salary_rate_per_hour')
+                    ->label('Salary Rate per Hour')
+                    ->getStateUsing(fn($record) => 'Rp ' . number_format($record->getSalaryRatePerHour(), 0, ',', '.')),
             ])
             ->filters([])
             ->actions([
