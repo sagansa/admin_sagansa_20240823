@@ -13,7 +13,7 @@ class StockCardForm
     {
         return [
             Section::make()->schema([
-                DateInput::make('date')->columnSpan(1),
+                DateInput::make('date')->maxDate(now())->columnSpan(1),
 
                 StoreSelect::make('store_id')->columnSpan(1),
             ])->columns(2),
