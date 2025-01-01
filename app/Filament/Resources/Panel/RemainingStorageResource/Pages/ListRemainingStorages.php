@@ -22,7 +22,7 @@ class ListRemainingStorages extends ListRecords
     protected function isWithinAllowedHours(): bool
     {
         $currentHour = Carbon::now()->hour; // Pastikan timezone Anda sudah disesuaikan
-        return $currentHour >= 21 && $currentHour <= 8; // Jam 08:00 - 18:00
+        return $currentHour >= 20 || $currentHour < 8; // Jam 08:00 - 18:00
     }
 
     public function getTabs(): array
