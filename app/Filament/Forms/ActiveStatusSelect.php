@@ -12,8 +12,8 @@ class ActiveStatusSelect extends Select
         parent::setUp();
 
         $this
-            ->required(fn () => Auth::user()->hasRole('admin'))
-            ->hidden(fn ($operation) => $operation === 'create')
+            // ->required(fn () => Auth::user()->hasRole('admin'))
+            // ->hidden(fn ($operation) => $operation === 'create')
             ->disabled(fn () => Auth::user()->hasRole('staff'))
             ->inlineLabel()
             ->preload()

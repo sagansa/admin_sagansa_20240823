@@ -59,6 +59,7 @@ class AdminPanelProvider extends PanelProvider
             ->PasswordReset()
             ->registration()
             ->emailVerification()
+            ->maxContentWidth('full')
             // ->profile()
             ->colors([
                 'primary' => Color::Sky,

@@ -113,10 +113,6 @@ class ProductResource extends Resource
                         ->relationship('onlineCategory', 'name')
                         ->preload(),
 
-                    DateTimePicker::make('deleted_at')
-                        ->rules(['date'])
-                        ->nullable(),
-
                     Notes::make('description'),
                 ]),
             ]),
