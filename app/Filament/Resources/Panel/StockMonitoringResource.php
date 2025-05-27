@@ -152,7 +152,8 @@ class StockMonitoringResource extends Resource
                     ->required()
                     ->numeric()
                     ->minValue(0)
-                    ->currencyMask(thousandSeparator: '.', decimalSeparator: ',', precision: 2),
+                    ->currencyMask(thousandSeparator: '.', decimalSeparator: ',', precision: 2)
+                    ->step(0.01),
             ]);
     }
 }
