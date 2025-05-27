@@ -151,7 +151,8 @@ class StockMonitoringResource extends Resource
                 TextInput::make('coefficient')
                     ->required()
                     ->numeric()
-                    ->step(1),
+                    ->minValue(0)
+                    ->currencyMask(thousandSeparator: '.', decimalSeparator: ',', precision: 2),
             ]);
     }
 }
