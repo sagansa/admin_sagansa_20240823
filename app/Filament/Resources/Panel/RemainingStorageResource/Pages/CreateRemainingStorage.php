@@ -16,6 +16,9 @@ class CreateRemainingStorage extends CreateRecord
         $data['for'] = 'remaining_storage';
         $data['user_id'] = Auth::id();
         $data['status'] = '1';
+        if (now()->format('H') < 22) {
+            abort(403, 'Laporan hanya bisa dibuat setelah jam 22.00.');
+        }
 
         return $data;
     }
