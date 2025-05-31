@@ -68,7 +68,7 @@
         <a href="#blog" class="block px-4 py-2 text-green">Blog</a>
         <a href="#contact" class="block px-4 py-2 text-green">Hubungi Kami</a>
         <a href="https://ev.sagansa.id" class="block px-4 py-2 font-bold text-green" target="_blank"
-            rel="noopener noreferrer" onclick="window.open(this.href, '_blank'); return false;">EV>EV</a>
+            rel="noopener noreferrer" onclick="window.open(this.href, '_blank'); return false;">EV</a>
         @guest
             <a href="{{ Filament::getLoginUrl() }}" class="block px-4 py-2 text-white rounded-t-lg bg-green" target="_blank"
                 rel="noopener noreferrer" onclick="window.open(this.href, '_blank'); return false;">Login</a>
