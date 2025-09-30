@@ -19,10 +19,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\DateTimePicker;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\Panel\ProductResource\Pages;
+use App\Filament\Resources\Panel\ProductResource\RelationManagers;
 use App\Models\MaterialGroup;
 use App\Models\OnlineCategory;
 use Filament\Forms\Set;
@@ -199,10 +198,12 @@ class ProductResource extends Resource
             ->defaultSort('name', 'asc');
     }
 
-    public static function getRelations(): array
-    {
-        return [];
-    }
+    // public static function getRelations(): array
+    // {
+    //     return [
+    //         RelationManagers\ImagesRelationManager::class,
+    //     ];
+    // }
 
     public static function getPages(): array
     {

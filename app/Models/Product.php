@@ -124,6 +124,11 @@ class Product extends Model
             ->withoutGlobalScopes();
     }
 
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('order');
+    }
+
     public static function boot()
     {
         parent::boot();

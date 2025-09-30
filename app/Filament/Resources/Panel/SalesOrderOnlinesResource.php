@@ -8,6 +8,7 @@ use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\DeliveryStatusColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Filters\SelectStoreFilter;
+use App\Filament\Filters\DateFilter;
 use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Pages;
 use App\Models\DeliveryAddress;
 use Filament\Forms\Components\Group;
@@ -32,8 +33,9 @@ use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Widgets\SalesOrderOnl
 use App\Models\SalesOrderOnline;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Collection;
-use Filament\Tables\Columns\ImageColumn;
+use JeffersonGoncalves\Filament\QrCodeField\Forms\Components\QrCodeInput;
 
 class SalesOrderOnlinesResource extends Resource
 {
@@ -102,12 +104,23 @@ class SalesOrderOnlinesResource extends Resource
                     ->label('Delivery')
                     ->url(fn($record) => asset('storage/' . $record->image_delivery)),
 
+                TextColumn::make('receipt_no')
+                    ->label('Receipt No')
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Receipt number copied')
+                    ->copyMessageDuration(1500)
+                    ->toggleable(isToggledHiddenByDefault: false),
+
                 TextColumn::make('store.nickname')
-                    ->disabled(fn() => Auth::user()->hasRole('staff') || Auth::user()->hasRole('storage-staff')),
+                    ->disabled(fn() => Auth::user()->hasRole('staff') || Auth::user()->hasRole('storage-staff'))
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('delivery_date')
                     ->label('Date')
                     ->sortable()
+                    ->searchable()
                     ->disabled(fn() => Auth::user()->hasRole('staff') || Auth::user()->hasRole('storage-staff')),
 
                 TextColumn::make('onlineShopProvider.name')
@@ -115,12 +128,18 @@ class SalesOrderOnlinesResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('deliveryService.name')
-                    ->label('Service'),
+                    ->label('Service')
+                    ->searchable()
+                    ->toggleable(),
 
                 DeliveryAddressColumn::make('deliveryAddress'),
 
                 TextColumn::make('receipt_no')
+                    ->label('Receipt No')
                     ->searchable()
+                    ->copyable()
+                    ->copyMessage('Receipt number copied')
+                    ->copyMessageDuration(1500)
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('detailSalesOrders')
@@ -144,7 +163,11 @@ class SalesOrderOnlinesResource extends Resource
                     ->label('Processed By')
                     ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('received_by'),
+                // TextColumn::make('received_by')
+                //     ->label('Received By')
+                //     ->copyable()
+                //     ->copyMessage('Receiver name copied')
+                //     ->copyMessageDuration(1500),
 
                 CurrencyColumn::make('total_price')
                     ->label('Total Price')
@@ -158,8 +181,23 @@ class SalesOrderOnlinesResource extends Resource
             ])
             ->filters([
                 SelectStoreFilter::make('store_id'),
-                // DateFilter::make('delivery_date'),
-
+                DateFilter::make('delivery_date'),
+                SelectFilter::make('online_shop_provider_id')
+                    ->label('Online Shop Provider')
+                    ->relationship('onlineShopProvider', 'name'),
+                SelectFilter::make('delivery_service_id')
+                    ->label('Delivery Service')
+                    ->relationship('deliveryService', 'name'),
+                Tables\Filters\SelectFilter::make('delivery_status')
+                    ->label('Delivery Status')
+                    ->options([
+                        '1' => 'belum dikirim',
+                        '2' => 'valid',
+                        '3' => 'sudah dikirim',
+                        '4' => 'siap dikirim',
+                        '5' => 'perbaiki',
+                        '6' => 'dikembalikan',
+                    ]),
             ])
             ->actions([
                 ActionGroup::make([
@@ -196,7 +234,9 @@ class SalesOrderOnlinesResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('delivery_date', 'desc');
+            ->defaultSort('created_at', 'desc')
+            ->emptyStateHeading('No online sales orders')
+            ->emptyStateDescription('Try adjusting filters or create a new order if you have permissions.');
     }
 
     public static function getRelations(): array
@@ -229,42 +269,46 @@ class SalesOrderOnlinesResource extends Resource
         return [
             ImageInput::make('image_payment')
                 ->label('From Online Shop')
-
+                ->helperText('Upload a clear screenshot or invoice from the online shop.')
                 ->directory('images/Online/Payment')
                 ->disabled(fn() => auth()->user()->hasRole('storage-staff')),
 
-            Select::make('delivery_address_id')
-                ->label('Delivery Address')
-                ->hidden(fn($operation) => $operation === 'create')
-                ->required(fn() => Auth::user()->hasRole('storage-staff'))
-                ->nullable(fn() => Auth::user()->hasRole('admin'))
-                ->relationship(
-                    name: 'deliveryAddress',
-                    modifyQueryUsing: fn(Builder $query) => $query->where('for', 3)
-                    // $query->whereRaw('delivery_addresses.for = ?', [3])
-                    // ->whereRaw('delivery_addresses.user_id = ?', [auth()->id()])
-                )
-                ->getOptionLabelFromRecordUsing(fn(DeliveryAddress $record) => "{$record->delivery_address_name}")
-
-                ->searchable()
-                ->preload()
-                ->editOptionForm(
-                    DeliveryAddressForm::schema()
-                )
-                ->createOptionForm(
-                    DeliveryAddressForm::schema()
-                ),
+            // Select::make('delivery_address_id')
+            //     ->label('Delivery Address')
+            //     ->hidden(fn($operation) => $operation === 'create')
+            //     ->required(fn() => Auth::user()->hasRole('storage-staff'))
+            //     ->nullable(fn() => Auth::user()->hasRole('admin'))
+            //     ->relationship(
+            //         name: 'deliveryAddress',
+            //         modifyQueryUsing: fn(Builder $query) => $query->where('for', 3)
+            //         // $query->whereRaw('delivery_addresses.for = ?', [3])
+            //         // ->whereRaw('delivery_addresses.user_id = ?', [auth()->id()])
+            //     )
+            //     ->getOptionLabelFromRecordUsing(fn(DeliveryAddress $record) => "{$record->delivery_address_name}")
+            //     ->placeholder('Search or create delivery address')
+            //     ->searchable()
+            //     ->preload()
+            //     ->editOptionForm(
+            //         DeliveryAddressForm::schema()
+            //     )
+            //     ->createOptionForm(
+            //         DeliveryAddressForm::schema()
+            //     ),
 
             StoreSelect::make('store_id')
+                ->placeholder('Select store')
+                ->default('150')
                 ->disabled(fn() => auth()->user()->hasRole('storage-staff')),
 
             DateInput::make('delivery_date')
+                // ->helperText('Use the planned delivery date.')
                 ->disabled(fn() => auth()->user()->hasRole('storage-staff')),
 
             Select::make('online_shop_provider_id')
                 ->required()
                 ->inlineLabel()
                 ->relationship('onlineShopProvider', 'name')
+                ->placeholder('Select provider')
                 ->searchable()
                 ->preload()
                 ->disabled(fn() => auth()->user()->hasRole('storage-staff')),
@@ -273,16 +317,19 @@ class SalesOrderOnlinesResource extends Resource
                 ->required()
                 ->inlineLabel()
                 ->relationship('deliveryService', 'name')
+                ->placeholder('Select delivery service (e.g., JNE, SiCepat)')
                 ->searchable()
-                ->preload()
-                ->disabled(fn() => auth()->user()->hasRole('storage-staff')),
+                ->hidden(fn($operation) => $operation === 'create')
+                ->preload(),
+                // ->disabled(fn() => auth()->user()->hasRole('storage-staff')),
 
-            TextInput::make('receipt_no')
+
+            QrCodeInput::make('receipt_no')
                 ->inlineLabel()
-                ->nullable()
+                ->required()
                 ->label('Receipt No'),
-            // ->hidden(fn ($operation) => $operation === 'create')
-            // ->required(fn (SalesOrderOnline $record) => $record->delivery_status == 3),
+                // ->placeholder('e.g. 0001-ABC-2025')
+                // ->helperText('Optional. Fill after shipment if available.'),
 
             Select::make('delivery_status')
                 ->required()
@@ -299,11 +346,14 @@ class SalesOrderOnlinesResource extends Resource
 
             TextInput::make('received_by')
                 ->inlineLabel()
+                ->placeholder('Receiver name')
                 ->hidden(fn($operation) => $operation === 'create')
                 ->disabled(fn() => Auth::user()->hasRole('admin')),
 
             ImageInput::make('image_delivery')
                 ->label('Delivered')
+                ->hidden(fn($operation) => $operation === 'create')
+                // ->helperText('Upload delivery proof (resi/parcel photo).')
                 ->directory('images/Online/Delivery'),
         ];
     }
