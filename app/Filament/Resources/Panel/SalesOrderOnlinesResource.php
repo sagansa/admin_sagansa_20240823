@@ -368,8 +368,10 @@ class SalesOrderOnlinesResource extends Resource
 
             // Hidden storage field that actually dehydrates to the model
             TextInput::make('receipt_no')
-                ->hidden()
+                // ->hidden()
                 ->dehydrated()
+                ->inlineLabel()
+                ->readOnly()
                 ->required()
                 ->afterStateHydrated(function ($state, Set $set, Get $get) {
                     // Prefill the visible input from stored value based on current type
