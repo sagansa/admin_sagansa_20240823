@@ -326,64 +326,98 @@ class SalesOrderOnlinesResource extends Resource
                 ->preload(),
                 // ->disabled(fn() => auth()->user()->hasRole('storage-staff')),
 
+            // Radio::make('qr_code_type')
+            //     ->label('Receipt Input Type')
+            //     ->inline()
+            //     // no default, so both inputs remain hidden until selected
+            //     ->reactive()
+            //     ->dehydrated(false)
+            //     ->options([
+            //         'qr_code' => 'QR Code',
+            //         'manual' => 'Manual',
+            //     ])
+            //     ->afterStateUpdated(function (Get $get, Set $set, ?string $state) {
+            //         // Clear the opposite field when switching type
+            //         if ($state === 'qr_code') {
+            //             $set('receipt_manual', null);
+            //         }
+            //         if ($state === 'manual') {
+            //             $set('receipt_qr_code', null);
+            //         }
+            //     }),
+
+            // QrCodeInput::make('receipt_qr_code')
+            //     ->label('Receipt No (QR)')
+            //     ->hidden(fn(Get $get) => $get('qr_code_type') !== 'qr_code')
+            //     ->required(fn(Get $get) => $get('qr_code_type') === 'qr_code')
+            //     ->dehydrated(false)
+            //     ->afterStateUpdated(function ($state, Set $set) {
+            //         $set('receipt_no', $state);
+            //     })
+            //     ->inlineLabel(),
+
+            // TextInput::make('receipt_manual')
+            //     ->label('Receipt No (Manual)')
+            //     ->hidden(fn(Get $get) => $get('qr_code_type') !== 'manual')
+            //     ->required(fn(Get $get) => $get('qr_code_type') === 'manual')
+            //     ->dehydrated(false)
+            //     ->afterStateUpdated(function ($state, Set $set) {
+            //         $set('receipt_no', $state);
+            //     })
+            //     ->inlineLabel(),
+
+            // // Hidden storage field that actually dehydrates to the model
+            // TextInput::make('receipt_no')
+            //     ->visible(false)
+            //     ->dehydrated()
+            //     ->inlineLabel()
+            //     ->readOnly()
+            //     ->required()
+            //     ->afterStateHydrated(function ($state, Set $set, Get $get) {
+            //         // Prefill the visible input from stored value based on current type
+            //         if ($state) {
+            //             if ($get('qr_code_type') === 'qr_code') {
+            //                 $set('receipt_qr_code', $state);
+            //             }
+            //             if ($get('qr_code_type') === 'manual') {
+            //                 $set('receipt_manual', $state);
+            //             }
+            //         }
+            //     }),
+
             Radio::make('qr_code_type')
                 ->label('Receipt Input Type')
                 ->inline()
-                // no default, so both inputs remain hidden until selected
                 ->reactive()
-                ->dehydrated(false)
+                ->dehydrated(false) // tidak disimpan ke DB
                 ->options([
                     'qr_code' => 'QR Code',
-                    'manual' => 'Manual',
+                    'manual'  => 'Manual',
                 ])
                 ->afterStateUpdated(function (Get $get, Set $set, ?string $state) {
-                    // Clear the opposite field when switching type
-                    if ($state === 'qr_code') {
-                        $set('receipt_manual', null);
-                    }
-                    if ($state === 'manual') {
-                        $set('receipt_qr_code', null);
-                    }
+                    // kosongkan receipt_no saat ganti mode agar tidak bawa nilai lama
+                    $set('receipt_no', null);
                 }),
 
+            // Scan QR menulis langsung ke kolom 'receipt_no'
             QrCodeInput::make('receipt_qr_code')
                 ->label('Receipt No (QR)')
-                ->hidden(fn(Get $get) => $get('qr_code_type') !== 'qr_code')
-                ->required(fn(Get $get) => $get('qr_code_type') === 'qr_code')
-                ->dehydrated(false)
-                ->afterStateUpdated(function ($state, Set $set) {
-                    $set('receipt_no', $state);
-                })
+                ->hidden(fn (Get $get) => $get('qr_code_type') !== 'qr_code')
+                ->required(fn (Get $get) => $get('qr_code_type') === 'qr_code')
+                ->statePath('receipt_no') // <— kunci: tulis ke state 'receipt_no' (kolom model)
+                ->dehydrated(fn (Get $get) => $get('qr_code_type') === 'qr_code')
                 ->inlineLabel(),
 
+            // Input manual juga menulis ke state 'receipt_no'
             TextInput::make('receipt_manual')
                 ->label('Receipt No (Manual)')
-                ->hidden(fn(Get $get) => $get('qr_code_type') !== 'manual')
-                ->required(fn(Get $get) => $get('qr_code_type') === 'manual')
-                ->dehydrated(false)
-                ->afterStateUpdated(function ($state, Set $set) {
-                    $set('receipt_no', $state);
-                })
+                ->hidden(fn (Get $get) => $get('qr_code_type') !== 'manual')
+                ->required(fn (Get $get) => $get('qr_code_type') === 'manual')
+                ->statePath('receipt_no') // <— sama
+                ->dehydrated(fn (Get $get) => $get('qr_code_type') === 'manual')
                 ->inlineLabel(),
 
-            // Hidden storage field that actually dehydrates to the model
-            TextInput::make('receipt_no')
-                // ->hidden()
-                ->dehydrated()
-                ->inlineLabel()
-                ->readOnly()
-                ->required()
-                ->afterStateHydrated(function ($state, Set $set, Get $get) {
-                    // Prefill the visible input from stored value based on current type
-                    if ($state) {
-                        if ($get('qr_code_type') === 'qr_code') {
-                            $set('receipt_qr_code', $state);
-                        }
-                        if ($get('qr_code_type') === 'manual') {
-                            $set('receipt_manual', $state);
-                        }
-                    }
-                }),
+            // Tidak perlu field 'receipt_no' yang hidden lagi.
 
             Select::make('delivery_status')
                 ->required()
