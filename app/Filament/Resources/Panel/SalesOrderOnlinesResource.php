@@ -388,6 +388,7 @@ class SalesOrderOnlinesResource extends Resource
             Radio::make('qr_code_type')
                 ->label('Receipt Input Type')
                 ->inline()
+                ->hidden(fn (Get $get) => filled($get('receipt_no')))
                 ->reactive()
                 ->dehydrated(false) // tidak disimpan ke DB
                 ->options([
@@ -406,16 +407,40 @@ class SalesOrderOnlinesResource extends Resource
                 ->required(fn (Get $get) => $get('qr_code_type') === 'qr_code')
                 ->statePath('receipt_no') // <— kunci: tulis ke state 'receipt_no' (kolom model)
                 ->dehydrated(fn (Get $get) => $get('qr_code_type') === 'qr_code')
+                ->unique(
+                    table: SalesOrderOnline::class,
+                    column: 'receipt_no',
+                    ignoreRecord: true,
+                )
                 ->inlineLabel(),
 
             // Input manual juga menulis ke state 'receipt_no'
             TextInput::make('receipt_manual')
                 ->label('Receipt No (Manual)')
-                ->hidden(fn (Get $get) => $get('qr_code_type') !== 'manual')
+                ->hidden(fn (Get $get) => $get('qr_code_type') !== 'manual' || blank($get('qr_code_type')))
+                // ->visible(fn (Get $get) => filled($get('receipt_no')) || fn ($operation) => $operation === 'create')
                 ->required(fn (Get $get) => $get('qr_code_type') === 'manual')
                 ->statePath('receipt_no') // <— sama
                 ->dehydrated(fn (Get $get) => $get('qr_code_type') === 'manual')
+                ->unique(
+                    table: SalesOrderOnline::class,
+                    column: 'receipt_no',
+                    ignoreRecord: true,
+                )
                 ->inlineLabel(),
+
+            TextInput::make('receipt_no')
+                ->hidden(fn ($operation) => $operation === 'create')
+                ->visible(fn (Get $get, $operation) => filled($get('receipt_no')))
+                ->dehydrated(fn (Get $get) => filled($get('receipt_no'))) // hanya simpan jika ada isinya
+                ->inlineLabel()
+                ->disabled(fn() => auth()->user()->hasRole('storage-staff'))
+                ->unique(
+                    table: SalesOrderOnline::class,
+                    column: 'receipt_no',
+                    ignoreRecord: true,
+                )
+                ->required(),
 
             // Tidak perlu field 'receipt_no' yang hidden lagi.
 
