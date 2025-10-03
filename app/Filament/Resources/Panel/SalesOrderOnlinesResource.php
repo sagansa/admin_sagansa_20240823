@@ -36,7 +36,9 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Collection;
 use JeffersonGoncalves\Filament\QrCodeField\Forms\Components\QrCodeInput;
 
@@ -183,6 +185,31 @@ class SalesOrderOnlinesResource extends Resource
                         ->prefix('Rp ')),
             ])
             ->filters([
+                Filter::make('receipt')
+                    ->label('Scan QR Resi')
+                    ->form([
+                        QrCodeInput::make('receipt_no')
+                            ->label('Scan QR untuk Resi')
+                            ->inlineLabel()
+                            ->placeholder('Scan atau tempel nomor resi untuk memfilter data')
+                            ->columnSpanFull(),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            filled($data['receipt_no'] ?? null),
+                            fn (Builder $query, string $receiptNo): Builder => $query->where('receipt_no', $receiptNo),
+                        );
+                    })
+                    ->indicateUsing(function (array $state): ?string {
+                        $value = $state['receipt_no'] ?? null;
+
+                        if (blank($value)) {
+                            return null;
+                        }
+
+                        return "Resi: {$value}";
+                    })
+                    ->columnSpanFull(),
                 SelectStoreFilter::make('store_id'),
                 DateFilter::make('delivery_date'),
                 SelectFilter::make('online_shop_provider_id')
@@ -191,7 +218,7 @@ class SalesOrderOnlinesResource extends Resource
                 SelectFilter::make('delivery_service_id')
                     ->label('Delivery Service')
                     ->relationship('deliveryService', 'name'),
-                Tables\Filters\SelectFilter::make('delivery_status')
+                SelectFilter::make('delivery_status')
                     ->label('Delivery Status')
                     ->options([
                         '1' => 'belum dikirim',
@@ -201,6 +228,23 @@ class SalesOrderOnlinesResource extends Resource
                         '5' => 'perbaiki',
                         '6' => 'dikembalikan',
                     ]),
+            ])
+            ->filtersLayout(FiltersLayout::AboveContent)
+            ->filtersFormColumns(2)
+            ->filtersFormSchema(fn (array $filters): array => [
+                $filters['receipt']->columnSpanFull(),
+                Section::make('Filter Lainnya')
+                    ->schema([
+                        $filters['store_id'],
+                        $filters['delivery_date'],
+                        $filters['online_shop_provider_id'],
+                        $filters['delivery_service_id'],
+                        $filters['delivery_status'],
+                    ])
+                    ->columns(2)
+                    ->collapsible()
+                    ->collapsed()
+                    ->columnSpanFull(),
             ])
             ->actions([
                 ActionGroup::make([
@@ -234,7 +278,7 @@ class SalesOrderOnlinesResource extends Resource
                                 SalesOrderOnline::where('id', $record->id)->update(['delivery_status' => $data['delivery_status']]);
                             });
                         }),
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc')
@@ -322,73 +366,12 @@ class SalesOrderOnlinesResource extends Resource
                 ->relationship('deliveryService', 'name')
                 ->placeholder('Select delivery service (e.g., JNE, SiCepat)')
                 ->searchable()
-                ->hidden(fn($operation) => $operation === 'create')
                 ->preload(),
-                // ->disabled(fn() => auth()->user()->hasRole('storage-staff')),
-
-            // Radio::make('qr_code_type')
-            //     ->label('Receipt Input Type')
-            //     ->inline()
-            //     // no default, so both inputs remain hidden until selected
-            //     ->reactive()
-            //     ->dehydrated(false)
-            //     ->options([
-            //         'qr_code' => 'QR Code',
-            //         'manual' => 'Manual',
-            //     ])
-            //     ->afterStateUpdated(function (Get $get, Set $set, ?string $state) {
-            //         // Clear the opposite field when switching type
-            //         if ($state === 'qr_code') {
-            //             $set('receipt_manual', null);
-            //         }
-            //         if ($state === 'manual') {
-            //             $set('receipt_qr_code', null);
-            //         }
-            //     }),
-
-            // QrCodeInput::make('receipt_qr_code')
-            //     ->label('Receipt No (QR)')
-            //     ->hidden(fn(Get $get) => $get('qr_code_type') !== 'qr_code')
-            //     ->required(fn(Get $get) => $get('qr_code_type') === 'qr_code')
-            //     ->dehydrated(false)
-            //     ->afterStateUpdated(function ($state, Set $set) {
-            //         $set('receipt_no', $state);
-            //     })
-            //     ->inlineLabel(),
-
-            // TextInput::make('receipt_manual')
-            //     ->label('Receipt No (Manual)')
-            //     ->hidden(fn(Get $get) => $get('qr_code_type') !== 'manual')
-            //     ->required(fn(Get $get) => $get('qr_code_type') === 'manual')
-            //     ->dehydrated(false)
-            //     ->afterStateUpdated(function ($state, Set $set) {
-            //         $set('receipt_no', $state);
-            //     })
-            //     ->inlineLabel(),
-
-            // // Hidden storage field that actually dehydrates to the model
-            // TextInput::make('receipt_no')
-            //     ->visible(false)
-            //     ->dehydrated()
-            //     ->inlineLabel()
-            //     ->readOnly()
-            //     ->required()
-            //     ->afterStateHydrated(function ($state, Set $set, Get $get) {
-            //         // Prefill the visible input from stored value based on current type
-            //         if ($state) {
-            //             if ($get('qr_code_type') === 'qr_code') {
-            //                 $set('receipt_qr_code', $state);
-            //             }
-            //             if ($get('qr_code_type') === 'manual') {
-            //                 $set('receipt_manual', $state);
-            //             }
-            //         }
-            //     }),
 
             Radio::make('qr_code_type')
                 ->label('Receipt Input Type')
                 ->inline()
-                ->hidden(fn (Get $get) => filled($get('receipt_no')))
+                ->hidden(fn (Get $get) => filled($get('receipt_no')) && fn ($operation) => $operation !== 'create')
                 ->reactive()
                 ->dehydrated(false) // tidak disimpan ke DB
                 ->options([
