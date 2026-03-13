@@ -24,6 +24,8 @@ use App\Filament\Tables\ValidAction;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\ViewAction;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -76,8 +78,8 @@ class RemainingStorageResource extends Resource
             $actions = [
                 ActionGroup::make([
                     DeleteAction::make(),
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    EditAction::make(),
+                    ViewAction::make(),
                 ])
             ];
         }

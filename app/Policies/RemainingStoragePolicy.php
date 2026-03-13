@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\RemainingStorage;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Support\Facades\Auth;
 
 class RemainingStoragePolicy
 {
@@ -47,6 +48,9 @@ class RemainingStoragePolicy
      */
     public function delete(User $user, RemainingStorage $remainingStorage): bool
     {
+        if (Auth::user()->hasRole('admin')) {
+            return true;
+        }
         return $user->can('delete_panel::remaining::storage');
     }
 
@@ -55,6 +59,9 @@ class RemainingStoragePolicy
      */
     public function deleteAny(User $user): bool
     {
+        if (Auth::user()->hasRole('admin')) {
+            return true;
+        }
         return $user->can('delete_any_panel::remaining::storage');
     }
 
