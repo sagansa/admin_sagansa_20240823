@@ -54,21 +54,6 @@ class SalesOrderOnlinesResource extends Resource
 
     protected static ?string $cluster = Sales::class;
 
-    // public static function getModelLabel(): string
-    // {
-    //     return __('crud.salesOrderOnlines.itemTitle');
-    // }
-
-    // public static function getPluralModelLabel(): string
-    // {
-    //     return __('crud.salesOrderOnlines.collectionTitle');
-    // }
-
-    // public static function getNavigationLabel(): string
-    // {
-    //     return __('crud.salesOrderOnlines.collectionTitle');
-    // }
-
     public static function form(Form $form): Form
     {
         return $form->schema([

@@ -22,14 +22,14 @@ use App\Filament\Resources\Panel\RemainingStorageResource\RelationManagers;
 use App\Filament\Tables\StockCardTable;
 use App\Filament\Tables\ValidAction;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class RemainingStorageResource extends Resource
 {
     protected static ?string $model = RemainingStorage::class;
-
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
@@ -69,6 +69,43 @@ class RemainingStorageResource extends Resource
 
         $query->where('for', 'remaining_storage');
 
+        $actions = ValidAction::getAction(self::$model)['actions'];
+        
+        // Add delete action for admin users
+        if (Auth::user()->hasRole('admin')) {
+            $actions = [
+                ActionGroup::make([
+                    DeleteAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ViewAction::make(),
+                ])
+            ];
+        }
+
+        $bulkActions = ValidAction::getAction(self::$model)['bulkActions'];
+        $modelClass = self::$model;
+        
+        // Add bulk delete action for admin users
+        if (Auth::user()->hasRole('admin')) {
+            $bulkActions = [
+                Tables\Actions\BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    ValidBulkAction::make('setStatusToValid')
+                        ->label('Set Status to Valid')
+                        ->action(function (Collection $records) use ($modelClass) {
+                            $modelClass::whereIn('id', $records->pluck('id'))->update(['status' => 2]);
+                        })
+                        ->color('success'),
+                    ValidBulkAction::make('setStatusToPerbaiki')
+                        ->label('Set Status to Perbaiki')
+                        ->action(function (Collection $records) use ($modelClass) {
+                            $modelClass::whereIn('id', $records->pluck('id'))->update(['status' => 3]);
+                        })
+                        ->color('danger'),
+                ]),
+            ];
+        }
+
         return $table
             ->poll('60s')
             ->query($query)
@@ -76,8 +113,8 @@ class RemainingStorageResource extends Resource
                 StockCardTable::schema(RemainingStorage::class)
             )
             ->filters([SelectStoreFilter::make('store_id')])
-            ->actions(ValidAction::getAction(self::$model)['actions'])
-            ->bulkActions(ValidAction::getAction(self::$model)['bulkActions'])
+            ->actions($actions)
+            ->bulkActions($bulkActions)
             ->defaultSort('date', 'desc');
     }
 

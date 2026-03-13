@@ -15,6 +15,8 @@ use Filament\Tables\Table;
 use App\Models\PaymentReceipt;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
@@ -28,8 +30,8 @@ use Filament\Forms\Components\Radio;
 use Filament\Resources\RelationManagers\RelationGroup;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\HtmlString;
 
 class PaymentReceiptResource extends Resource
 {
@@ -72,7 +74,11 @@ class PaymentReceiptResource extends Resource
                             '3' => 'invoice',
                         ])
                         ->inline()
-                        ->reactive(),
+                        ->reactive()
+                        ->afterStateUpdated(function (callable $set) {
+                            $set('total_amount', 0);
+                            $set('transfer_amount', 0);
+                        }),
 
                     Select::make('fuelServices')
                         ->visible(fn($get) => $get('payment_for') == '1')
@@ -87,18 +93,23 @@ class PaymentReceiptResource extends Resource
                                 ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn(FuelService $record) => "{$record->fuel_service_name}")
-                        ->preload(),
-                    // ->reactive()
-                    // ->afterStateUpdated(function ($state, $set) {
-                    //     $totalAmount = 0;
-                    //     foreach ($state as $fuelServiceId) {
-                    //         $fuelService = FuelService::find($fuelServiceId);
-                    //         if ($fuelService) {
-                    //             $totalAmount += $fuelService->amount;
-                    //         }
-                    //     }
-                    //     $set('total_amount', $totalAmount);
-                    // }),
+                        ->preload()
+                        ->reactive()
+                        ->afterStateUpdated(function (?array $state, callable $set, callable $get) {
+                            if (empty($state)) {
+                                $set('total_amount', 0);
+                                $set('transfer_amount', 0);
+
+                                return;
+                            }
+
+                            $totalAmount = FuelService::whereIn('id', $state)->sum('amount');
+                            $set('total_amount', $totalAmount);
+
+                            if (! ($get('transfer_amount') ?? 0)) {
+                                $set('transfer_amount', $totalAmount);
+                            }
+                        }),
 
                     Select::make('dailySalaries')
                         ->visible(fn($get) => $get('payment_for') == '2')
@@ -113,20 +124,23 @@ class PaymentReceiptResource extends Resource
                                 ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn(DailySalary $record) => "{$record->daily_salary_name}")
-                        ->preload(),
-                    // ->reactive()
-                    // ->afterStateUpdated(function ($state, $set) {
-                    //     $totalAmount = 0;
-                    //     foreach ($state as $dailySalaryId) {
-                    //         $dailySalary = DailySalary::find($dailySalaryId);
-                    //         if ($dailySalary) {
-                    //             // $dailySalary->status = 2;
-                    //             // $dailySalary->save();
-                    //             $totalAmount += $dailySalary->amount;
-                    //         }
-                    //     }
-                    //     $set('total_amount', $totalAmount);
-                    // }),
+                        ->preload()
+                        ->reactive()
+                        ->afterStateUpdated(function (?array $state, callable $set, callable $get) {
+                            if (empty($state)) {
+                                $set('total_amount', 0);
+                                $set('transfer_amount', 0);
+
+                                return;
+                            }
+
+                            $totalAmount = DailySalary::whereIn('id', $state)->sum('amount');
+                            $set('total_amount', $totalAmount);
+
+                            if (! ($get('transfer_amount') ?? 0)) {
+                                $set('transfer_amount', $totalAmount);
+                            }
+                        }),
 
                     Select::make('user_id')
                         ->label('Employee')
@@ -170,18 +184,31 @@ class PaymentReceiptResource extends Resource
                         // )
                         ->getOptionLabelFromRecordUsing(fn(InvoicePurchase $record) => "{$record->invoice_purchase_name}")
                         ->preload()
-                        ->searchable(),
-                    // ->reactive()
-                    // ->afterStateUpdated(function ($state, $set) {
-                    //     $totalAmount = 0;
-                    //     foreach ($state as $invoicePurchaseId) {
-                    //         $invoicePurchase = InvoicePurchase::find($invoicePurchaseId);
-                    //         if ($invoicePurchase) {
-                    //             $totalAmount += $invoicePurchase->total_price;
-                    //         }
-                    //     }
-                    //     $set('total_amount', $totalAmount);
-                    // }),
+                        ->searchable()
+                        ->reactive()
+                        ->afterStateUpdated(function (?array $state, callable $set, callable $get) {
+                            $invoiceIds = $state ?? [];
+
+                            if (empty($invoiceIds)) {
+                                $set('total_amount', 0);
+                                $set('transfer_amount', 0);
+                                $set('supplier_id', null);
+
+                                return;
+                            }
+
+                            $totalAmount = InvoicePurchase::whereIn('id', $invoiceIds)->sum('total_price');
+                            $set('total_amount', $totalAmount);
+
+                            $invoices = InvoicePurchase::with('supplier')->whereIn('id', $invoiceIds)->get();
+                            if ($invoices->isNotEmpty() && $invoices->pluck('supplier_id')->unique()->count() === 1) {
+                                $set('supplier_id', $invoices->first()->supplier_id);
+                            }
+
+                            if (! ($get('transfer_amount') ?? 0)) {
+                                $set('transfer_amount', $totalAmount);
+                            }
+                        }),
 
                     Select::make('supplier_id')
                         ->label(__('crud.suppliers.itemTitle'))
@@ -193,16 +220,104 @@ class PaymentReceiptResource extends Resource
                         )
                         ->getOptionLabelFromRecordUsing(fn(Supplier $record) => "{$record->supplier_name}")
                         ->searchable()
-                        ->preload(),
+                        ->preload()
+                        ->reactive(),
+
+                    Placeholder::make('supplier_bank_information')
+                        ->label('Rekening Tujuan')
+                        ->visible(fn(callable $get) => filled($get('supplier_id')))
+                        ->content(function (callable $get) {
+                            $supplierId = $get('supplier_id');
+
+                            if (! $supplierId) {
+                                return new HtmlString('-');
+                            }
+
+                            $supplier = Supplier::with('bank')->find($supplierId);
+
+                            if (! $supplier) {
+                                return new HtmlString('-');
+                            }
+
+                            $bankName = $supplier->bank?->name ? 'Bank: ' . $supplier->bank->name : null;
+
+                            $lines = collect([
+                                $supplier->name,
+                                $bankName,
+                                $supplier->bank_account_name ? 'Nama Rekening: ' . $supplier->bank_account_name : null,
+                                $supplier->bank_account_no ? 'No. Rekening: ' . $supplier->bank_account_no : null,
+                            ])->filter()->map(fn($line) => e($line));
+
+                            return new HtmlString($lines->implode('<br>'));
+                        })
+                        ->columnSpanFull(),
+
+                    Placeholder::make('invoice_details_preview')
+                        ->label('Detail Invoice')
+                        ->visible(fn(callable $get) => $get('payment_for') == '3' && filled($get('invoicePurchases')))
+                        ->content(function (callable $get) {
+                            $invoiceIds = $get('invoicePurchases');
+
+                            if (! $invoiceIds) {
+                                return new HtmlString('-');
+                            }
+
+                            $invoices = InvoicePurchase::with([
+                                'detailInvoices.detailRequest.product.unit',
+                                'store',
+                            ])->whereIn('id', $invoiceIds)->get();
+
+                            if ($invoices->isEmpty()) {
+                                return new HtmlString('-');
+                            }
+
+                            $content = $invoices->map(function (InvoicePurchase $invoice) {
+                                $details = $invoice->detailInvoices->map(function ($detail) {
+                                    $detailRequest = $detail->detailRequest;
+                                    $product = $detailRequest?->product;
+                                    $unit = $product?->unit?->unit;
+                                    $quantity = $detail->quantity_product ?? null;
+                                    $notes = $detailRequest?->notes;
+
+                                    $parts = collect([
+                                        $product?->name,
+                                        $quantity && $unit ? $quantity . ' ' . $unit : ($quantity ?? null),
+                                        $notes,
+                                    ])->filter();
+
+                                    return $parts->isNotEmpty()
+                                        ? $parts->implode(' - ')
+                                        : null;
+                                })->filter()->values();
+
+                                $detailHtml = $details->isNotEmpty()
+                                    ? '<ul style="margin: 0; padding-left: 18px;">' . $details->map(fn($line) => '<li>' . e($line) . '</li>')->implode('') . '</ul>'
+                                    : '<em>Tidak ada rincian produk.</em>';
+
+                                return '<div>'
+                                    . '<strong>Tanggal:</strong> ' . Carbon::parse($invoice->date)->format('d/m/Y') . '<br>'
+                                    . '<strong>Toko:</strong> ' . e($invoice->store?->nickname ?? '-') . '<br>'
+                                    . '<strong>Total:</strong> Rp ' . number_format($invoice->total_price, 0, ',', '.')
+                                    . '<div style="margin-top: 6px;">' . $detailHtml . '</div>'
+                                    . '</div>';
+                            })->implode('<hr style="margin: 12px 0;">');
+
+                            return new HtmlString($content);
+                        })
+                        ->columnSpanFull(),
                 ]),
             ]),
 
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
 
-                    CurrencyInput::make('transfer_amount'),
+                    Hidden::make('total_amount')->default(0),
 
-                    // CurrencyInput::make('total_amount')->readOnly(),
+                    Placeholder::make('total_amount_display')
+                        ->label('Total Pembayaran')
+                        ->content(fn(callable $get) => 'Rp ' . number_format($get('total_amount') ?? 0, 0, ',', '.')),
+
+                    CurrencyInput::make('transfer_amount'),
 
                     ImageInput::make('image')
                         ->directory('images/PaymentReceipt'),
