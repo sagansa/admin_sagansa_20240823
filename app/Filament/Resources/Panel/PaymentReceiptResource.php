@@ -88,6 +88,7 @@ class PaymentReceiptResource extends Resource
                         ->relationship(
                             name: 'fuelServices',
                             modifyQueryUsing: fn(Builder $query) => $query
+                                ->with(['vehicle', 'createdBy'])
                                 ->where('payment_type_id', '1')
                                 ->where('status', '1')
                                 ->orderBy('date', 'desc')
@@ -119,11 +120,13 @@ class PaymentReceiptResource extends Resource
                         ->relationship(
                             name: 'dailySalaries',
                             modifyQueryUsing: fn(Builder $query) => $query
+                                ->with(['createdBy', 'store'])
                                 ->where('payment_type_id', '1')
                                 ->where('status', '3')
                                 ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn(DailySalary $record) => "{$record->daily_salary_name}")
+                        ->searchable(['date', 'amount'])
                         ->preload()
                         ->reactive()
                         ->afterStateUpdated(function (?array $state, callable $set, callable $get) {
@@ -161,6 +164,7 @@ class PaymentReceiptResource extends Resource
                         ->relationship(
                             name: 'invoicePurchases',
                             modifyQueryUsing: fn(Builder $query) => $query
+                                ->with(['supplier', 'store'])
                                 ->where('payment_type_id', '1')
                                 ->where('payment_status', '1')
                                 ->orderBy('date', 'desc')
@@ -184,7 +188,7 @@ class PaymentReceiptResource extends Resource
                         // )
                         ->getOptionLabelFromRecordUsing(fn(InvoicePurchase $record) => "{$record->invoice_purchase_name}")
                         ->preload()
-                        ->searchable()
+                        ->searchable(['date', 'total_price'])
                         ->reactive()
                         ->afterStateUpdated(function (?array $state, callable $set, callable $get) {
                             $invoiceIds = $state ?? [];
@@ -277,11 +281,20 @@ class PaymentReceiptResource extends Resource
                                     $product = $detailRequest?->product;
                                     $unit = $product?->unit?->unit;
                                     $quantity = $detail->quantity_product ?? null;
+                                    $subtotal = $detail->subtotal_invoice ?? null;
+                                    
+                                    $unitPriceStr = null;
+                                    if ($quantity && $subtotal) {
+                                        $unitPrice = $subtotal / $quantity;
+                                        $unitPriceStr = '@ Rp ' . number_format($unitPrice, 0, ',', '.');
+                                    }
+
                                     $notes = $detailRequest?->notes;
 
                                     $parts = collect([
                                         $product?->name,
                                         $quantity && $unit ? $quantity . ' ' . $unit : ($quantity ?? null),
+                                        $unitPriceStr,
                                         $notes,
                                     ])->filter();
 
