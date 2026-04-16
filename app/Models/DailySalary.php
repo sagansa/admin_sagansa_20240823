@@ -29,12 +29,12 @@ class DailySalary extends Model
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by_id', 'uuid');
+        return $this->belongsTo(User::class, 'created_by_id');
     }
 
     public function approvedBy()
     {
-        return $this->belongsTo(User::class, 'approved_by_id', 'uuid');
+        return $this->belongsTo(User::class, 'approved_by_id');
     }
 
     public function closingStores()
@@ -49,7 +49,20 @@ class DailySalary extends Model
 
     public function getDailySalaryNameAttribute()
     {
-        return ($this->createdBy?->name ?? 'Unknown') .
+        $creatorName = 'Unknown';
+        if ($this->relationLoaded('createdBy') && $this->createdBy) {
+            $creatorName = $this->createdBy->name;
+        } elseif ($this->created_by_id) {
+            if (!is_numeric($this->created_by_id)) {
+                $user = \App\Models\User::withTrashed()->where('uuid', $this->created_by_id)->first();
+                if ($user) $creatorName = $user->name;
+            } else {
+                $user = \App\Models\User::withTrashed()->find($this->created_by_id);
+                if ($user) $creatorName = $user->name;
+            }
+        }
+
+        return $creatorName .
             ' | ' . $this->date .
             ' | ' . ($this->store?->nickname ?? 'Unknown') .
             ' | Rp ' . number_format($this->amount, 0, ',', '.');

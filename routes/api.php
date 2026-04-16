@@ -12,5 +12,14 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/debug-salary', function () {
-    return response()->json(\App\Models\User::take(1)->get());
+    $salaries = \App\Models\DailySalary::where('payment_type_id', '1')
+        ->where('status', '3')
+        ->get();
+    
+    $users = $salaries->pluck('created_by_id')->unique();
+    return response()->json([
+        'total_salaries' => $salaries->count(),
+        'unique_creators' => $users,
+        'sutaryo_guess' => \App\Models\User::where('name', 'like', '%sutaryo%')->first(),
+    ]);
 });

@@ -58,12 +58,12 @@ class InvoicePurchase extends Model
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by_id', 'uuid');
+        return $this->belongsTo(User::class, 'created_by_id');
     }
 
     public function approvedBy()
     {
-        return $this->belongsTo(User::class, 'approved_by_id', 'uuid');
+        return $this->belongsTo(User::class, 'approved_by_id');
     }
 
     public function getInvoicePurchaseNameAttribute()

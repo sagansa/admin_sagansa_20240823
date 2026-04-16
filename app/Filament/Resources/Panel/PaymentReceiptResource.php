@@ -88,7 +88,10 @@ class PaymentReceiptResource extends Resource
                         ->relationship(
                             name: 'fuelServices',
                             modifyQueryUsing: fn(Builder $query) => $query
-                                ->with(['vehicle', 'createdBy'])
+                                ->with([
+                                    'vehicle',
+                                    'createdBy' => fn($q) => $q->withTrashed()
+                                ])
                                 ->where('payment_type_id', '1')
                                 ->where('status', '1')
                                 ->orderBy('date', 'desc')
@@ -133,13 +136,22 @@ class PaymentReceiptResource extends Resource
                         ->relationship(
                             name: 'dailySalaries',
                             modifyQueryUsing: fn(Builder $query, callable $get) => $query
-                                ->with(['createdBy', 'store'])
+                                ->with([
+                                    'createdBy' => fn($q) => $q->withTrashed(),
+                                    'store'
+                                ])
                                 ->where('payment_type_id', '1')
                                 ->where('status', '3')
                                 ->when($get('user_id'), function ($q, $uid) {
-                                    $user = \App\Models\User::find($uid);
-                                    $targetId = ($user && $user->uuid) ? $user->uuid : $uid;
-                                    $q->where('created_by_id', $targetId);
+                                    $targetIds = [$uid];
+                                    try {
+                                        $user = \App\Models\User::find($uid);
+                                        if ($user && array_key_exists('uuid', $user->getAttributes()) && $user->uuid) {
+                                            $targetIds[] = $user->uuid;
+                                        }
+                                    } catch (\Exception $e) { }
+
+                                    $q->whereIn('created_by_id', $targetIds);
                                 })
                                 ->orderBy('date', 'desc')
                         )
@@ -168,7 +180,10 @@ class PaymentReceiptResource extends Resource
                         ->relationship(
                             name: 'invoicePurchases',
                             modifyQueryUsing: fn(Builder $query) => $query
-                                ->with(['supplier', 'store'])
+                                ->with([
+                                    'supplier',
+                                    'store'
+                                ])
                                 ->where('payment_type_id', '1')
                                 ->where('payment_status', '1')
                                 ->orderBy('date', 'desc')
