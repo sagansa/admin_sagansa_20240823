@@ -106,10 +106,23 @@ class PaymentReceiptResource extends Resource
 
                             $totalAmount = FuelService::whereIn('id', $state)->sum('amount');
                             $set('total_amount', $totalAmount);
+                            $set('transfer_amount', $totalAmount);
+                        }),
 
-                            if (! ($get('transfer_amount') ?? 0)) {
-                                $set('transfer_amount', $totalAmount);
-                            }
+                    Select::make('user_id')
+                        ->label('Employee')
+                        ->visible(fn($get) => $get('payment_for') == '2')
+                        ->required(fn($get) => $get('payment_for') == '2')
+                        ->relationship('user', 'name', fn(Builder $query) => $query
+                            ->whereHas('roles', fn(Builder $q) => $q->whereIn('name', ['staff', 'supervisor']))
+                            ->orderBy('name', 'asc'))
+                        ->searchable()
+                        ->preload()
+                        ->reactive()
+                        ->afterStateUpdated(function (callable $set) {
+                            $set('dailySalaries', []);
+                            $set('total_amount', 0);
+                            $set('transfer_amount', 0);
                         }),
 
                     Select::make('dailySalaries')
@@ -119,14 +132,19 @@ class PaymentReceiptResource extends Resource
                         ->multiple()
                         ->relationship(
                             name: 'dailySalaries',
-                            modifyQueryUsing: fn(Builder $query) => $query
+                            modifyQueryUsing: fn(Builder $query, callable $get) => $query
                                 ->with(['createdBy', 'store'])
                                 ->where('payment_type_id', '1')
                                 ->where('status', '3')
+                                ->when($get('user_id'), function ($q, $uid) {
+                                    $user = \App\Models\User::find($uid);
+                                    $targetId = ($user && $user->uuid) ? $user->uuid : $uid;
+                                    $q->where('created_by_id', $targetId);
+                                })
                                 ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn(DailySalary $record) => "{$record->daily_salary_name}")
-                        ->searchable(['date', 'amount'])
+                        ->searchable()
                         ->preload()
                         ->reactive()
                         ->afterStateUpdated(function (?array $state, callable $set, callable $get) {
@@ -139,22 +157,8 @@ class PaymentReceiptResource extends Resource
 
                             $totalAmount = DailySalary::whereIn('id', $state)->sum('amount');
                             $set('total_amount', $totalAmount);
-
-                            if (! ($get('transfer_amount') ?? 0)) {
-                                $set('transfer_amount', $totalAmount);
-                            }
+                            $set('transfer_amount', $totalAmount);
                         }),
-
-                    Select::make('user_id')
-                        ->label('Employee')
-                        ->visible(fn($get) => $get('payment_for') == '2')
-                        ->required(fn($get) => $get('payment_for') == '2')
-                        ->relationship('user', 'name', fn(Builder $query) => $query
-                            ->whereHas('roles', fn(Builder $query) => $query
-                                ->where('name', 'staff') || $query
-                                ->where('name', 'supervisor'))->orderBy('name', 'asc'))
-                        ->searchable()
-                        ->preload(),
 
                     Select::make('invoicePurchases')
                         ->visible(fn($get) => $get('payment_for') == '3')
@@ -188,7 +192,7 @@ class PaymentReceiptResource extends Resource
                         // )
                         ->getOptionLabelFromRecordUsing(fn(InvoicePurchase $record) => "{$record->invoice_purchase_name}")
                         ->preload()
-                        ->searchable(['date', 'total_price'])
+                        ->searchable()
                         ->reactive()
                         ->afterStateUpdated(function (?array $state, callable $set, callable $get) {
                             $invoiceIds = $state ?? [];
@@ -209,9 +213,7 @@ class PaymentReceiptResource extends Resource
                                 $set('supplier_id', $invoices->first()->supplier_id);
                             }
 
-                            if (! ($get('transfer_amount') ?? 0)) {
-                                $set('transfer_amount', $totalAmount);
-                            }
+                            $set('transfer_amount', $totalAmount);
                         }),
 
                     Select::make('supplier_id')

@@ -10,3 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::get('/debug-salary', function () {
+    return response()->json(\App\Models\User::take(1)->get());
+});

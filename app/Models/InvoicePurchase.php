@@ -58,19 +58,19 @@ class InvoicePurchase extends Model
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by_id');
+        return $this->belongsTo(User::class, 'created_by_id', 'uuid');
     }
 
     public function approvedBy()
     {
-        return $this->belongsTo(User::class, 'approved_by_id');
+        return $this->belongsTo(User::class, 'approved_by_id', 'uuid');
     }
 
     public function getInvoicePurchaseNameAttribute()
     {
         $invoicePurchaseDetails = [
-            ($this->supplier->name ?: ''),
-            ($this->store->nickname ?: ''),
+            ($this->supplier?->name ?: ''),
+            ($this->store?->nickname ?: ''),
             ($this->date ?: ''),
             ('Rp ' . number_format($this->total_price) ?: ''),
         ];

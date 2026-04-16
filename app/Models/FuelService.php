@@ -38,12 +38,12 @@ class FuelService extends Model
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by_id');
+        return $this->belongsTo(User::class, 'created_by_id', 'uuid');
     }
 
     public function approvedBy()
     {
-        return $this->belongsTo(User::class, 'approved_by_id');
+        return $this->belongsTo(User::class, 'approved_by_id', 'uuid');
     }
 
     public function getFuelServiceNameAttribute()
@@ -54,9 +54,9 @@ class FuelService extends Model
         //     ' | ' . $this->createdBy->name;
 
         $fuelServiceDetails = [
-            ($this->vehicle->no_register ? : ''),
+            ($this->vehicle?->no_register ? : ''),
             ($this->date ? : ''),
-            ($this->createdBy->name ? : ''),
+            ($this->createdBy?->name ? : ''),
             ('Rp ' . number_format($this->amount) ? : ''),
         ];
 

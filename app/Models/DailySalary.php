@@ -29,12 +29,12 @@ class DailySalary extends Model
 
     public function createdBy()
     {
-        return $this->belongsTo(User::class, 'created_by_id');
+        return $this->belongsTo(User::class, 'created_by_id', 'uuid');
     }
 
     public function approvedBy()
     {
-        return $this->belongsTo(User::class, 'approved_by_id');
+        return $this->belongsTo(User::class, 'approved_by_id', 'uuid');
     }
 
     public function closingStores()
@@ -49,9 +49,9 @@ class DailySalary extends Model
 
     public function getDailySalaryNameAttribute()
     {
-        return $this->createdBy->name .
+        return ($this->createdBy?->name ?? 'Unknown') .
             ' | ' . $this->date .
-            ' | ' . $this->store->nickname .
+            ' | ' . ($this->store?->nickname ?? 'Unknown') .
             ' | Rp ' . number_format($this->amount, 0, ',', '.');
     }
 
