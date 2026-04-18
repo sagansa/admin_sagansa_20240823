@@ -29,4 +29,25 @@ class CreateSalesOrderDirects extends CreateRecord
 
         return $data;
     }
+
+    protected function afterCreate(): void
+    {
+        $order = $this->record;
+        
+        try {
+            // 1. Kirim Notifikasi ke Admin
+            \Illuminate\Support\Facades\Mail::to('asapanganbangsa@gmail.com')
+                ->send(new \App\Mail\NewSalesOrderDirectMail($order));
+            
+            // 2. Kirim Tanda Terima ke Customer
+            $customerEmail = $order->orderedBy?->email;
+            if ($customerEmail) {
+                \Illuminate\Support\Facades\Mail::to($customerEmail)
+                    ->send(new \App\Mail\SalesOrderDirectCustomerMail($order));
+            }
+            
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to send Sales Order Direct email: ' . $e->getMessage());
+        }
+    }
 }

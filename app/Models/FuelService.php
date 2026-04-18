@@ -61,13 +61,16 @@ class FuelService extends Model
             }
         }
 
+        $typeStr = $this->fuel_service == 1 ? 'Fuel' : ($this->fuel_service == 2 ? 'Service' : '');
+
         $fuelServiceDetails = [
             ($this->vehicle?->no_register ? : ''),
+            ($typeStr ? : ''),
             ($this->date ? : ''),
             ($creatorName ? : ''),
             ('Rp ' . number_format($this->amount) ? : ''),
         ];
 
-        return implode("\n", $fuelServiceDetails);
+        return implode(" | ", array_filter($fuelServiceDetails));
     }
 }
