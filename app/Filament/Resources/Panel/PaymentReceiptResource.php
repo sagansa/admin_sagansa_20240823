@@ -87,29 +87,43 @@ class PaymentReceiptResource extends Resource
                         ->multiple()
                         ->relationship(
                             name: 'fuelServices',
-                            modifyQueryUsing: fn(Builder $query) => $query
+                            modifyQueryUsing: fn(Builder $query, callable $get) => $query
                                 ->with([
                                     'vehicle',
                                     'createdBy' => fn($q) => $q->withTrashed()
                                 ])
                                 ->where('payment_type_id', '1')
                                 ->where('status', '1')
+                                ->when(
+                                    filled($get('supplier_id')),
+                                    fn(Builder $query) => $query->where('supplier_id', $get('supplier_id'))
+                                )
                                 ->orderBy('date', 'desc')
                         )
                         ->getOptionLabelFromRecordUsing(fn(FuelService $record) => "{$record->fuel_service_name}")
                         ->preload()
                         ->reactive()
-                        ->afterStateUpdated(function (?array $state, callable $set, callable $get) {
-                            if (empty($state)) {
+                        ->afterStateUpdated(function (?array $state, callable $set) {
+                            $fuelServiceIds = $state ?? [];
+
+                            if (empty($fuelServiceIds)) {
                                 $set('total_amount', 0);
                                 $set('transfer_amount', 0);
+                                $set('supplier_id', null);
 
                                 return;
                             }
 
-                            $totalAmount = FuelService::whereIn('id', $state)->sum('amount');
+                            $fuelServices = FuelService::query()
+                                ->whereIn('id', $fuelServiceIds)
+                                ->get(['id', 'amount', 'supplier_id']);
+
+                            $totalAmount = $fuelServices->sum('amount');
+                            $supplierIds = $fuelServices->pluck('supplier_id')->filter()->unique();
+
                             $set('total_amount', $totalAmount);
                             $set('transfer_amount', $totalAmount);
+                            $set('supplier_id', $supplierIds->count() === 1 ? $supplierIds->first() : null);
                         }),
 
                     Select::make('user_id')
@@ -235,9 +249,25 @@ class PaymentReceiptResource extends Resource
                         ->label(__('crud.suppliers.itemTitle'))
                         ->visible(fn($get) => $get('payment_for') == '3' || $get('payment_for') == '1')
                         ->required(fn($get) => $get('payment_for') == '3' || $get('payment_for') == '1')
+                        ->disabled(fn($get) => $get('payment_for') == '1' && filled($get('fuelServices')))
+                        ->dehydrated()
                         ->relationship(
                             name: 'supplier',
-                            modifyQueryUsing: fn(Builder $query) => $query->where('status', '<>', '3')->orderBy('name', 'asc'),
+                            modifyQueryUsing: fn(Builder $query, callable $get) => $query
+                                ->where('status', '<>', '3')
+                                ->when(
+                                    $get('payment_for') == '1' && filled($get('fuelServices')),
+                                    fn(Builder $query) => $query->whereIn(
+                                        'id',
+                                        FuelService::query()
+                                            ->whereIn('id', $get('fuelServices'))
+                                            ->pluck('supplier_id')
+                                            ->filter()
+                                            ->unique()
+                                            ->all()
+                                    )
+                                )
+                                ->orderBy('name', 'asc'),
                         )
                         ->getOptionLabelFromRecordUsing(fn(Supplier $record) => "{$record->supplier_name}")
                         ->searchable()

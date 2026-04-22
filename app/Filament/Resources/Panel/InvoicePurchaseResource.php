@@ -115,6 +115,30 @@ class InvoicePurchaseResource extends Resource
                 ActionGroup::make([
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\ViewAction::make(),
+                    Tables\Actions\Action::make('updateInvoiceStatus')
+                        ->label('Ubah Status')
+                        ->icon('heroicon-o-pencil-square')
+                        ->visible(fn () => Auth::user()->hasRole('admin'))
+                        ->fillForm(fn (InvoicePurchase $record): array => [
+                            'payment_status' => (string) $record->payment_status,
+                            'order_status' => (string) $record->order_status,
+                        ])
+                        ->form([
+                            Select::make('payment_status')
+                                ->label('Payment Status')
+                                ->required()
+                                ->options(static::getPaymentStatusOptions()),
+                            Select::make('order_status')
+                                ->label('Order Status')
+                                ->required()
+                                ->options(static::getOrderStatusOptions()),
+                        ])
+                        ->action(function (InvoicePurchase $record, array $data): void {
+                            $record->update([
+                                'payment_status' => $data['payment_status'],
+                                'order_status' => $data['order_status'],
+                            ]);
+                        }),
                 ])
             ])
             ->bulkActions([
@@ -123,6 +147,7 @@ class InvoicePurchaseResource extends Resource
                     Tables\Actions\BulkAction::make('setPaymentStatusToOne')
                         ->label('Set Payment Status to Belum Dibayar')
                         ->icon('heroicon-o-check')
+                        ->visible(fn () => Auth::user()->hasRole('admin'))
                         ->requiresConfirmation()
                         ->action(function (Collection $records) {
                             InvoicePurchase::whereIn('id', $records->pluck('id'))->update(['payment_status' => 1]);
@@ -131,6 +156,7 @@ class InvoicePurchaseResource extends Resource
                     Tables\Actions\BulkAction::make('setOrderStatusToOne')
                         ->label('Set Order Status to Belum Diterima')
                         ->icon('heroicon-o-check')
+                        ->visible(fn () => Auth::user()->hasRole('admin'))
                         ->requiresConfirmation()
                         ->action(function (Collection $records) {
                             InvoicePurchase::whereIn('id', $records->pluck('id'))->update(['order_status' => 1]);
@@ -193,11 +219,7 @@ class InvoicePurchaseResource extends Resource
                 ->hidden(fn ($operation) => $operation === 'create')
                 ->preload()
                 ->inlineLabel()
-                ->options([
-                    '1' => 'belum dibayar',
-                    '2' => 'sudah dibayar',
-                    '3' => 'tidak valid',
-                ])
+                ->options(static::getPaymentStatusOptions())
                 ,
 
             Select::make('order_status')
@@ -205,11 +227,7 @@ class InvoicePurchaseResource extends Resource
                 ->hidden(fn ($operation) => $operation === 'create')
                 ->preload()
                 ->inlineLabel()
-                ->options([
-                    '1' => 'belum diterima',
-                    '2' => 'sudah diterima',
-                    '3' => 'dikembalikan',
-                ])
+                ->options(static::getOrderStatusOptions())
                 ,
         ];
     }
@@ -309,6 +327,24 @@ class InvoicePurchaseResource extends Resource
                 ->readOnly(),
 
             Notes::make('notes'),
+        ];
+    }
+
+    protected static function getPaymentStatusOptions(): array
+    {
+        return [
+            '1' => 'belum dibayar',
+            '2' => 'sudah dibayar',
+            '3' => 'tidak valid',
+        ];
+    }
+
+    protected static function getOrderStatusOptions(): array
+    {
+        return [
+            '1' => 'belum diterima',
+            '2' => 'sudah diterima',
+            '3' => 'dikembalikan',
         ];
     }
 
