@@ -13,7 +13,6 @@ class BaseSelect extends Select
 
         $this
             ->required()
-            ->inlineLabel()
-            ->preload();
+            ->inlineLabel();
     }
 }

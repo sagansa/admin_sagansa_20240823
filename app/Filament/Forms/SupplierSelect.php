@@ -18,7 +18,6 @@ class SupplierSelect extends Select
                     modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '3')->orderBy('name', 'asc'),
                 )
                 ->getOptionLabelFromRecordUsing(fn (Supplier $record) => "{$record->supplier_name}")
-                ->searchable()
-                ->preload();
+                ->searchable();
     }
 }

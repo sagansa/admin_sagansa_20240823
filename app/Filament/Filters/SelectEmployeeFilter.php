@@ -16,10 +16,9 @@ class SelectEmployeeFilter extends SelectFilter
             ->label('User')
             ->searchable()
             ->preload()
-            ->hidden(fn () => !Auth::user()->hasRole('admin'))
-            ->relationship('createdBy', 'name', fn (Builder $query) => $query
-                ->whereHas('roles', fn (Builder $query) => $query
-                    ->where('name', 'staff') || $query
-                    ->where('name', 'supervisor')));
+            ->hidden(fn() => !Auth::user()->hasRole('admin'))
+            ->relationship('createdBy', 'name', fn(Builder $query) => $query
+                ->whereHas('roles', fn(Builder $query) => $query
+                    ->whereIn('name', ['staff', 'supervisor', 'former-employee'])));
     }
 }
