@@ -13,11 +13,12 @@ class SupplierSelect extends Select
         parent::setUp();
 
         $this->required()
-                ->relationship(
-                    name: 'supplier',
-                    modifyQueryUsing: fn (Builder $query) => $query->where('status','<>', '3')->orderBy('name', 'asc'),
-                )
-                ->getOptionLabelFromRecordUsing(fn (Supplier $record) => "{$record->supplier_name}")
-                ->searchable();
+            ->relationship(
+                name: 'supplier',
+                modifyQueryUsing: fn(Builder $query) => $query->where('status', '<>', '3')->orderBy('name', 'asc'),
+            )
+            ->getOptionLabelFromRecordUsing(fn(Supplier $record) => "{$record->supplier_name}")
+            ->searchable()
+            ->preload(1000);
     }
 }
