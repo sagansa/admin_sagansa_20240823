@@ -38,8 +38,8 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
-            // Ganti baris di bawah ini:
+            // Gunakan path asli yang benar di bawah ini:
+            'root' => '/home/u856469756/domains/sagansa.id/admin/storage/app/public',
             'url' => 'https://sagansa.id/storage',
             'visibility' => 'public',
             'throw' => false,
