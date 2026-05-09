@@ -401,14 +401,11 @@ class PaymentReceiptResource extends Resource
             ->columns([
                 ImageOpenUrlColumn::make('image')
                     ->label('Payment')
-                    ->disk('public') // <--- TAMBAHKAN INI
-                    ->visibility('public')
+                    ->disk('public') // Paksa gunakan disk public
                     ->url(fn($record) => $record->image ? \Illuminate\Support\Facades\Storage::disk('public')->url($record->image) : null),
-
                 ImageOpenUrlColumn::make('image_adjust')
                     ->label('Adjust')
-                    ->disk('public') // <--- TAMBAHKAN INI
-                    ->visibility('public')
+                    ->disk('public') // Paksa gunakan disk public
                     ->url(fn($record) => $record->image_adjust ? \Illuminate\Support\Facades\Storage::disk('public')->url($record->image_adjust) : null),
 
                 SupplierColumn::make('Supplier')
