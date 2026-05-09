@@ -163,7 +163,8 @@ class PaymentReceiptResource extends Resource
                                         if ($user && array_key_exists('uuid', $user->getAttributes()) && $user->uuid) {
                                             $targetIds[] = $user->uuid;
                                         }
-                                    } catch (\Exception $e) { }
+                                    } catch (\Exception $e) {
+                                    }
 
                                     $q->whereIn('created_by_id', $targetIds);
                                 })
@@ -280,13 +281,13 @@ class PaymentReceiptResource extends Resource
                         ->content(function (callable $get) {
                             $supplierId = $get('supplier_id');
 
-                            if (! $supplierId) {
+                            if (!$supplierId) {
                                 return new HtmlString('-');
                             }
 
                             $supplier = Supplier::with('bank')->find($supplierId);
 
-                            if (! $supplier) {
+                            if (!$supplier) {
                                 return new HtmlString('-');
                             }
 
@@ -309,7 +310,7 @@ class PaymentReceiptResource extends Resource
                         ->content(function (callable $get) {
                             $invoiceIds = $get('invoicePurchases');
 
-                            if (! $invoiceIds) {
+                            if (!$invoiceIds) {
                                 return new HtmlString('-');
                             }
 
@@ -329,7 +330,7 @@ class PaymentReceiptResource extends Resource
                                     $unit = $product?->unit?->unit;
                                     $quantity = $detail->quantity_product ?? null;
                                     $subtotal = $detail->subtotal_invoice ?? null;
-                                    
+
                                     $unitPriceStr = null;
                                     if ($quantity && $subtotal) {
                                         $unitPrice = $subtotal / $quantity;
@@ -401,12 +402,13 @@ class PaymentReceiptResource extends Resource
                 ImageOpenUrlColumn::make('image')
                     ->label('Payment')
                     ->visibility('public')
-                    ->url(fn($record) => asset('storage/' . $record->image)),
-
+                    // Ganti asset() dengan Storage::url()
+                    ->url(fn($record) => $record->image ? \Illuminate\Support\Facades\Storage::disk('public')->url($record->image) : null),
                 ImageOpenUrlColumn::make('image_adjust')
                     ->label('Adjust')
                     ->visibility('public')
-                    ->url(fn($record) => asset('storage/' . $record->image_adjust)),
+                    // Ganti asset() dengan Storage::url()
+                    ->url(fn($record) => $record->image_adjust ? \Illuminate\Support\Facades\Storage::disk('public')->url($record->image_adjust) : null),
 
                 SupplierColumn::make('Supplier')
                     ->visible(fn($livewire) => $livewire->activeTab !== 'daily salary'),
@@ -459,19 +461,19 @@ class PaymentReceiptResource extends Resource
                     ->formatStateUsing(function ($state, $record, $livewire) {
                         return match ($livewire->activeTab) {
                             'invoice' => $record->invoices->map(function ($invoice) {
-                                return "Invoice: {$invoice->invoice_number}<br>" .
+                                    return "Invoice: {$invoice->invoice_number}<br>" .
                                     "Amount: " . number_format($invoice->total_amount, 0, ',', '.');
-                            })->join('<br><br>'),
+                                })->join('<br><br>'),
 
                             'fuel service' => $record->invoicePurchases->map(function ($invoice) {
-                                return "Invoice: {$invoice->invoice_number}<br>" .
+                                    return "Invoice: {$invoice->invoice_number}<br>" .
                                     "Amount: " . number_format($invoice->total_amount, 0, ',', '.');
-                            })->join('<br><br>'),
+                                })->join('<br><br>'),
 
                             'daily salary' => $record->dailySalaries->map(function ($salary) {
-                                return "Date: " . Carbon::parse($salary->date)->format('d/m/Y') . "<br>" .
+                                    return "Date: " . Carbon::parse($salary->date)->format('d/m/Y') . "<br>" .
                                     "Amount: " . number_format($salary->amount, 0, ',', '.');
-                            })->join('<br><br>'),
+                                })->join('<br><br>'),
 
                             default => 'Details'
                         };
