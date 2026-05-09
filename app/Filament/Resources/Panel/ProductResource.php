@@ -29,6 +29,7 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Str;
+use Filament\Tables\Columns\TextInputColumn;
 
 class ProductResource extends Resource
 {
@@ -112,6 +113,13 @@ class ProductResource extends Resource
                         ->relationship('onlineCategory', 'name')
                         ->preload(),
 
+                    TextInput::make('online_price')
+                        ->label('Online Price')
+                        ->numeric()
+                        ->step(1)
+                        ->prefix('Rp')
+                        ->visible(fn () => auth()->user()->hasRole(['super_admin', 'admin'])),
+
                     Notes::make('description'),
                 ]),
             ]),
@@ -144,6 +152,13 @@ class ProductResource extends Resource
                 SelectColumn::make('online_category_id')
                     ->label('Online Category')
                     ->options(OnlineCategory::query()->pluck('name', 'id')),
+
+                TextInputColumn::make('online_price')
+                    ->label('Online Price')
+                    ->type('number')
+                    ->alignEnd()
+                    ->sortable()
+                    ->visible(fn () => auth()->user()->hasRole(['super_admin', 'admin'])),
 
                 TextColumn::make('user.name'),
             ])
