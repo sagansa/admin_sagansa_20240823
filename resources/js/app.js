@@ -1,12 +1,13 @@
 // import "./bootstrap";
 
-// Example: Smooth scroll for navigation links
-document.querySelectorAll("nav a").forEach((anchor) => {
+// Smooth scroll for navigation anchor links (e.g., #profil, #products)
+document.querySelectorAll('nav a[href^="#"]').forEach((anchor) => {
     anchor.addEventListener("click", function (e) {
-        e.preventDefault();
         const targetId = this.getAttribute("href").substring(1);
-        document
-            .getElementById(targetId)
-            .scrollIntoView({ behavior: "smooth" });
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+            e.preventDefault();
+            targetElement.scrollIntoView({ behavior: "smooth" });
+        }
     });
 });
