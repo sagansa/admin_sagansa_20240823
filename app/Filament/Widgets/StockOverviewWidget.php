@@ -15,10 +15,7 @@ class StockOverviewWidget extends BaseWidget
 
     public static function canView(): bool
     {
-        // TODO: Temporarily disabled - heavy nested subqueries cause 30s+ timeout
-        // which crashes the dashboard and causes logout loops
-        return false;
-        // return Auth::user()->hasAnyRole(['super_admin', 'admin']);
+        return Auth::user()->hasAnyRole(['super_admin', 'admin']);
     }
 
     protected function getStats(): array

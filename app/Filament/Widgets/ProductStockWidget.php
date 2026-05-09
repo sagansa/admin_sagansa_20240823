@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\Auth;
 class ProductStockWidget extends BaseWidget
 {
     protected static ?int $sort = 2;
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     public static function canView(): bool
     {
         // TODO: optimize query - current subquery causes 30s+ timeout
-        return false;
-        // return Auth::user()->hasAnyRole(['super_admin', 'admin']);
+        // return false;
+        return Auth::user()->hasAnyRole(['super_admin', 'admin']);
     }
 
     public function getTableQuery(): Builder
@@ -29,13 +29,17 @@ class ProductStockWidget extends BaseWidget
         }
 
         return StockMonitoring::query()
-            ->with(['stockMonitoringDetails.product' => function ($query) {
-                $query->with(['latestStockCard' => function ($query) {
-                    $query->select('detail_stock_cards.*', 'stock_cards.date')
-                        ->join('stock_cards', 'detail_stock_cards.stock_card_id', '=', 'stock_cards.id')
-                        ->latest('stock_cards.date');
-                }]);
-            }])
+            ->with([
+                'stockMonitoringDetails.product' => function ($query) {
+                    $query->with([
+                        'latestStockCard' => function ($query) {
+                            $query->select('detail_stock_cards.*', 'stock_cards.date')
+                                ->join('stock_cards', 'detail_stock_cards.stock_card_id', '=', 'stock_cards.id')
+                                ->latest('stock_cards.date');
+                        }
+                    ]);
+                }
+            ])
             ->select([
                 'stock_monitorings.*',
                 DB::raw('(
@@ -160,7 +164,8 @@ class ProductStockWidget extends BaseWidget
                         ->filter()
                         ->max();
 
-                    if (!$latestDate) return '-';
+                    if (!$latestDate)
+                        return '-';
 
                     return $latestDate instanceof \Carbon\Carbon
                         ? $latestDate->format('d/m/Y')
