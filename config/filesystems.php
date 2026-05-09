@@ -39,10 +39,12 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('FILESYSTEM_PUBLIC_URL', env('APP_URL').'/storage'),
+            // Ganti baris di bawah ini:
+            'url' => 'https://sagansa.id/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
+
 
         's3' => [
             'driver' => 's3',
