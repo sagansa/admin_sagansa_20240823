@@ -3,7 +3,7 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build && cp public/build/manifest.json public/build/manifest.json.backup",
+        "build": "vite build && cp public/build/.vite/manifest.json public/build/manifest.json && cp public/build/manifest.json public/build/manifest.json.backup",
         "build:prod": "vite build && git add public/build && git commit -m 'Update built assets'"
     },
     "devDependencies": {
