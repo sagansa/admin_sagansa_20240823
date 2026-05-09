@@ -38,9 +38,9 @@ return [
 
         'public' => [
             'driver' => 'local',
-            // Gunakan path asli yang benar di bawah ini:
-            'root' => '/home/u856469756/domains/sagansa.id/admin/storage/app/public',
-            'url' => 'https://sagansa.id/storage',
+            // Ambil dari .env jika ada, jika tidak ada pakai default storage_path
+            'root' => env('FILESYSTEM_PUBLIC_ROOT', storage_path('app/public')),
+            'url' => env('FILESYSTEM_PUBLIC_URL', 'https://sagansa.id/storage'),
             'visibility' => 'public',
             'throw' => false,
         ],
