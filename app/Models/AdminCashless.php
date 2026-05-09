@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AdminCashless extends Model
 {
+
+    protected $connection = 'mysql';
     use HasFactory;
 
     protected $guarded = [];

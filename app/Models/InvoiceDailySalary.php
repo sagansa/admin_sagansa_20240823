@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class InvoiceDailySalary extends Model
 {
 
+    protected $connection = 'mysql';
+
 }

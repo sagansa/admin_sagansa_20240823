@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Supplier extends Model
 {
+
+    protected $connection = 'mysql';
     use HasFactory;
 
     protected $fillable = [

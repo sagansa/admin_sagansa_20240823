@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RemainingStorage extends Model
 {
+
+    protected $connection = 'mysql';
     use HasFactory;
 
     protected $table = 'stock_cards';

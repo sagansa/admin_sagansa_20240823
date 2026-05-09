@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PaymentReceipt extends Model
 {
+
+    protected $connection = 'mysql';
     use HasFactory;
 
     protected $guarded = [];

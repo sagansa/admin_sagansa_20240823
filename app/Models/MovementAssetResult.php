@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MovementAssetResult extends Model
 {
+
+    protected $connection = 'mysql';
     use HasFactory;
 
     protected $guarded = [];

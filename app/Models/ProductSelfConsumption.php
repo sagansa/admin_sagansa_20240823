@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ProductSelfConsumption extends Pivot
 {
+
+    protected $connection = 'mysql';
     public $timestamps = false;
 
     public function selfConsumption(): BelongsTo

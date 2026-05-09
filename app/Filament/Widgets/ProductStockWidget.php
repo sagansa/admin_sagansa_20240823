@@ -17,7 +17,9 @@ class ProductStockWidget extends BaseWidget
 
     public static function canView(): bool
     {
-        return Auth::user()->hasAnyRole(['super_admin', 'admin']);
+        // TODO: optimize query - current subquery causes 30s+ timeout
+        return false;
+        // return Auth::user()->hasAnyRole(['super_admin', 'admin']);
     }
 
     public function getTableQuery(): Builder

@@ -13,6 +13,10 @@ use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Sanctum\Sanctum;
+use App\Models\PersonalAccessToken;
+use App\Models\User;
+use App\Observers\UserObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        User::observe(UserObserver::class);
+        
+        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
+
         if ($this->app->isLocal()) {
             $slowQueryThreshold = (int) env('DB_SLOW_QUERY_LOG_MS', 1000);
 

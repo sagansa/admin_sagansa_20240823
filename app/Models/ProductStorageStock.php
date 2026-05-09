@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class ProductStorageStock extends Pivot
 {
+
+    protected $connection = 'mysql';
     public $timestamps = false;
 
     public function storageStock(): BelongsTo

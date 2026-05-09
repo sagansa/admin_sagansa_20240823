@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 
 class ProductCategory extends Model
 {
+
+    protected $connection = 'mysql';
     use HasFactory, SoftDeletes;
 
     protected $fillable = [

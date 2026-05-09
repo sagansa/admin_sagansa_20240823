@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class SalaryRateDetail extends Model
 {
+
+    protected $connection = 'mysql';
     protected $fillable = [
         'salary_rate_id',
         'years_of_service',

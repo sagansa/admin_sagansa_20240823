@@ -8,6 +8,8 @@ use Carbon\Carbon;
 
 class Employee extends Model
 {
+
+    protected $connection = 'mysql';
     use HasFactory;
 
     protected $guarded = [];

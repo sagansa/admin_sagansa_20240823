@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class TransferCardStorage extends Model
 {
+
+    protected $connection = 'mysql';
     use HasFactory;
 
     protected $table = 'transfer_cards';

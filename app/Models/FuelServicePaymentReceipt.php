@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class FuelServicePaymentReceipt extends Pivot
 {
+
+    protected $connection = 'mysql';
     public $timestamps = false;
 
     public function fuelService(): BelongsTo

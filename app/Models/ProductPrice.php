@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProductPrice extends Model
 {
+
+    protected $connection = 'mysql';
     use HasFactory, SoftDeletes;
 
     protected $fillable = [

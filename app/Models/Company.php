@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Company extends Model
 {
+
+    protected $connection = 'mysql';
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];

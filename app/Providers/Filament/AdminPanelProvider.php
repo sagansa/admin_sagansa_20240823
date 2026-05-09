@@ -72,7 +72,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                ProductStockWidget::class,
+                // ProductStockWidget::class, // TODO: optimize query - causes 30s+ timeout
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
             ])

@@ -18,6 +18,8 @@ use Carbon\Carbon;
 
 class User extends Authenticatable implements FilamentUser
 {
+    protected $connection = 'mysql_auth';
+
     use HasRoles;
     use HasFactory;
     use Notifiable;
@@ -687,5 +689,13 @@ class User extends Authenticatable implements FilamentUser
     public function employee()
     {
         return $this->hasOne(Employee::class);
+    }
+
+    /**
+     * Override notifications to use the mysql connection (sagansa database).
+     */
+    public function notifications()
+    {
+        return $this->morphMany(DatabaseNotification::class, 'notifiable')->latest();
     }
 }

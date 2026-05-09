@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class StoreConsumption extends Model
 {
+
+    protected $connection = 'mysql';
     use HasFactory;
 
     protected $table = 'stock_cards';
