@@ -31,15 +31,16 @@ Route::view('/contact', 'contact')->name('contact');
 Route::get(
     '/login',
     function () {
-        return redirect('https://www.sagansa.id/admin/login');
+        return redirect()->route('filament.admin.auth.login');
     }
-);
+)->name('login');
+
 Route::get(
     '/register',
     function () {
-        return redirect('https://www.sagansa.id/admin/register');
+        return redirect()->route('filament.admin.auth.registration');
     }
-);
+)->name('register');
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('products', ProductController::class);

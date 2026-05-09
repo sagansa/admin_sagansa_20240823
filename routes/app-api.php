@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
+// use App\Http\Controllers\Api\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +16,9 @@ use App\Http\Controllers\Api\AuthController;
 Route::name('api.')
     ->prefix('api')
     ->group(function () {
-        Route::post('/login', [AuthController::class, 'login'])->name(
-            'api.login'
-        );
+//        Route::post('/login', [AuthController::class, 'login'])->name(
+//            'api.login'
+//        );
 
         Route::middleware('auth:sanctum')->group(function () {});
     });
