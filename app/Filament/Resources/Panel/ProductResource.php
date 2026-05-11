@@ -14,6 +14,7 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -123,6 +124,49 @@ class ProductResource extends Resource
                     Notes::make('description'),
                 ]),
             ]),
+
+            Section::make('Price Tiers')
+                ->description('Manage quantity-based pricing for this product')
+                ->schema([
+                    Repeater::make('priceTiers')
+                        ->relationship('priceTiers')
+                        ->schema([
+                            Grid::make(4)
+                                ->schema([
+                                    TextInput::make('min_quantity')
+                                        ->label('Min Qty')
+                                        ->numeric()
+                                        ->required()
+                                        ->minValue(1)
+                                        ->default(1),
+                                    
+                                    TextInput::make('max_quantity')
+                                        ->label('Max Qty')
+                                        ->numeric()
+                                        ->minValue(1)
+                                        ->nullable()
+                                        ->placeholder('Tak terhingga')
+                                        ->helperText('Kosongkan untuk jumlah tak terhingga'),
+
+                                    TextInput::make('price')
+                                        ->label('Price')
+                                        ->numeric()
+                                        ->required()
+                                        ->prefix('Rp')
+                                        ->helperText('Semakin besar kuantitas, harga seharusnya semakin murah'),
+
+                                    TextInput::make('label')
+                                        ->label('Label')
+                                        ->string()
+                                        ->nullable()
+                                        ->placeholder('e.g. Grosir A'),
+                                ]),
+                        ])
+                        ->defaultItems(0)
+                        ->addActionLabel('Add Price Tier')
+                        ->columns(1),
+                ])
+                ->collapsible(),
         ]);
     }
 
