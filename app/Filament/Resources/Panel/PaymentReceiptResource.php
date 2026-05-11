@@ -339,6 +339,17 @@ class PaymentReceiptResource extends Resource
 
                                     $notes = $detailRequest?->notes;
 
+                                    $history = $product ? $product->getLatestPrices(5) : collect();
+                                    $historyHtml = '';
+                                    if ($history->isNotEmpty()) {
+                                        $historyItems = $history->map(function ($h) {
+                                            return 'Rp ' . number_format($h['price'], 0, ',', '.') . ' (' . Carbon::parse($h['date'])->format('d/m/y') . ')';
+                                        })->join(', ');
+                                        $historyHtml = '<div style="font-size: 0.75rem; color: #6b7280; margin-top: 2px;">' .
+                                            '<strong>5 Transaksi Terakhir:</strong> ' . $historyItems .
+                                            '</div>';
+                                    }
+
                                     $parts = collect([
                                         $product?->name,
                                         $quantity && $unit ? $quantity . ' ' . $unit : ($quantity ?? null),
@@ -346,13 +357,11 @@ class PaymentReceiptResource extends Resource
                                         $notes,
                                     ])->filter();
 
-                                    return $parts->isNotEmpty()
-                                        ? $parts->implode(' - ')
-                                        : null;
+                                    return ($parts->isNotEmpty() ? $parts->implode(' - ') : '') . $historyHtml;
                                 })->filter()->values();
 
                                 $detailHtml = $details->isNotEmpty()
-                                    ? '<ul style="margin: 0; padding-left: 18px;">' . $details->map(fn($line) => '<li>' . e($line) . '</li>')->implode('') . '</ul>'
+                                    ? '<ul style="margin: 0; padding-left: 18px;">' . $details->map(fn($line) => '<li>' . $line . '</li>')->implode('') . '</ul>'
                                     : '<em>Tidak ada rincian produk.</em>';
 
                                 return '<div>'

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use App\Models\DetailInvoice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -176,5 +177,29 @@ class Product extends Model
     public function getProductNameAttribute()
     {
         return $this->name . ' - ' . $this->unit->unit;
+    }
+
+    public function getLatestPrices($limit = 5)
+    {
+        return DetailInvoice::query()
+            ->join('detail_requests', 'detail_invoices.detail_request_id', '=', 'detail_requests.id')
+            ->join('invoice_purchases', 'detail_invoices.invoice_purchase_id', '=', 'invoice_purchases.id')
+            ->where('detail_requests.product_id', $this->id)
+            ->where('detail_invoices.quantity_product', '>', 0)
+            ->where('detail_invoices.subtotal_invoice', '>', 0)
+            ->orderByDesc('invoice_purchases.date')
+            ->orderByDesc('detail_invoices.created_at')
+            ->limit($limit)
+            ->get([
+                'detail_invoices.subtotal_invoice',
+                'detail_invoices.quantity_product',
+                'invoice_purchases.date'
+            ])
+            ->map(function ($detail) {
+                return [
+                    'price' => (float)$detail->subtotal_invoice / (float)$detail->quantity_product,
+                    'date' => $detail->date,
+                ];
+            });
     }
 }
