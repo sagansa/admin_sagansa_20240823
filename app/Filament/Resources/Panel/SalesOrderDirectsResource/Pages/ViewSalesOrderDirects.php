@@ -10,15 +10,4 @@ use Filament\Resources\Pages\ViewRecord;
 class ViewSalesOrderDirects extends ViewRecord
 {
     protected static string $resource = SalesOrderDirectsResource::class;
-
-    public function infolist(Infolist $infolist): Infolist
-    {
-        return $infolist
-            ->schema([
-                Section::make()
-                    ->schema([
-
-                    ])
-            ]);
-    }
 }

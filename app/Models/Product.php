@@ -15,6 +15,18 @@ class Product extends Model
     use SoftDeletes;
 
     protected $guarded = [];
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        $path = $this->attributes['image'] ?? null;
+
+        if (!$path) {
+            return 'https://placehold.co/600x400?text=No+Image';
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($path);
+    }
 
     protected function casts(): array
     {

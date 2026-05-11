@@ -30,6 +30,14 @@ use App\Filament\Forms\SalesProductForm;
 use App\Filament\Forms\StoreSelect;
 use App\Filament\Resources\Panel\SalesOrderDirectsResource\Widgets\SalesOrderDirectsStat;
 use App\Models\DeliveryAddress;
+use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\Section as InfoSection;
+use Filament\Infolists\Components\Grid as InfoGrid;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Support\Enums\FontWeight;
+use Filament\Infolists\Components\IconEntry;
 use App\Models\TransferToAccount;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Database\Eloquent\Builder;
@@ -202,6 +210,109 @@ class SalesOrderDirectsResource extends Resource
     //         SalesOrderDirectsStat::class,
     //     ];
     // }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                InfoSection::make('Order Information')
+                    ->schema([
+                        InfoGrid::make(3)
+                            ->schema([
+                                TextEntry::make('orderedBy.name')
+                                    ->label('Ordered By')
+                                    ->weight(FontWeight::Bold),
+                                TextEntry::make('store.nickname')
+                                    ->label('Store'),
+                                TextEntry::make('delivery_date')
+                                    ->label('Delivery Date')
+                                    ->date(),
+                                TextEntry::make('deliveryService.name')
+                                    ->label('Delivery Service'),
+                                TextEntry::make('deliveryAddress.delivery_address_name')
+                                    ->label('Delivery Address'),
+                                TextEntry::make('receipt_no')
+                                    ->label('Receipt No'),
+                            ]),
+                    ]),
+
+                InfoSection::make('Status & Payment')
+                    ->schema([
+                        InfoGrid::make(3)
+                            ->schema([
+                                TextEntry::make('payment_status')
+                                    ->label('Payment Status')
+                                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                                        '1' => 'Belum diperiksa',
+                                        '2' => 'Valid',
+                                        default => 'Unknown',
+                                    })
+                                    ->badge()
+                                    ->color(fn (string $state): string => match ($state) {
+                                        '1' => 'warning',
+                                        '2' => 'success',
+                                        default => 'gray',
+                                    }),
+                                TextEntry::make('delivery_status')
+                                    ->label('Delivery Status')
+                                    ->formatStateUsing(fn (int $state): string => match ($state) {
+                                        1 => 'Belum dikirim',
+                                        3 => 'Sudah dikirim',
+                                        4 => 'Siap dikirim',
+                                        5 => 'Perbaiki',
+                                        6 => 'Dikembalikan',
+                                        default => 'Unknown',
+                                    })
+                                    ->badge()
+                                    ->color(fn (int $state): string => match ($state) {
+                                        1 => 'warning',
+                                        3 => 'success',
+                                        4 => 'info',
+                                        5 => 'danger',
+                                        6 => 'secondary',
+                                        default => 'gray',
+                                    }),
+                                TextEntry::make('total_price')
+                                    ->label('Total Price')
+                                    ->money('IDR')
+                                    ->weight(FontWeight::Bold),
+                            ]),
+                    ]),
+
+                InfoSection::make('Order Details')
+                    ->schema([
+                        RepeatableEntry::make('detailSalesOrders')
+                            ->schema([
+                                TextEntry::make('product.name')
+                                    ->label('Product'),
+                                TextEntry::make('quantity')
+                                    ->label('Quantity')
+                                    ->formatStateUsing(fn ($state, $record) => "{$state} {$record->product->unit->unit}"),
+                                TextEntry::make('unit_price')
+                                    ->label('Unit Price')
+                                    ->money('IDR'),
+                                TextEntry::make('total_price')
+                                    ->label('Total Price')
+                                    ->state(fn ($record): float => $record->quantity * $record->unit_price)
+                                    ->money('IDR'),
+                            ])
+                            ->columns(4),
+                    ]),
+
+                InfoSection::make('Images')
+                    ->schema([
+                        InfoGrid::make(2)
+                            ->schema([
+                                ImageEntry::make('image_payment')
+                                    ->label('Payment Proof')
+                                    ->disk('public'),
+                                ImageEntry::make('image_delivery')
+                                    ->label('Delivery Proof')
+                                    ->disk('public'),
+                            ]),
+                    ]),
+            ]);
+    }
 
     public static function getPages(): array
     {
