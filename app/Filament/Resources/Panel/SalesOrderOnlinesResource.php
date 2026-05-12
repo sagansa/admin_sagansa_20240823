@@ -145,6 +145,17 @@ class SalesOrderOnlinesResource extends Resource
                 DeliveryStatusColumn::make('delivery_status')
                     ->label('Status'),
 
+                TextColumn::make('payment_method')
+                    ->label('Payment Method')
+                    ->badge()
+                    ->color('info')
+                    ->toggleable(),
+
+                TextColumn::make('admin_fee')
+                    ->label('Admin Fee')
+                    ->money('IDR')
+                    ->toggleable(),
+
                 TextColumn::make('orderedBy.name')
                     ->label('Input By')
                     ->toggleable(isToggledHiddenByDefault: true),

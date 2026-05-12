@@ -143,6 +143,17 @@ class SalesOrderDirectsResource extends Resource
                     ->hidden(fn () => Auth::user()->hasRole('storage-staff')),
 
                 DeliveryStatusColumn::make('delivery_status'),
+                
+                TextColumn::make('payment_method')
+                    ->label('Payment Method')
+                    ->badge()
+                    ->color('info')
+                    ->toggleable(),
+
+                TextColumn::make('admin_fee')
+                    ->label('Admin Fee')
+                    ->money('IDR')
+                    ->toggleable(),
 
                 TextColumn::make('shipping_cost')
                     ->label('Shipping Cost')
@@ -246,13 +257,15 @@ class SalesOrderDirectsResource extends Resource
                                     ->label('Payment Status')
                                     ->formatStateUsing(fn (string $state): string => match ($state) {
                                         '1' => 'Belum diperiksa',
-                                        '2' => 'Valid',
+                                        '2' => 'Valid / Sudah Dibayar',
+                                        '4' => 'Menunggu Pembayaran',
                                         default => 'Unknown',
                                     })
                                     ->badge()
                                     ->color(fn (string $state): string => match ($state) {
                                         '1' => 'warning',
                                         '2' => 'success',
+                                        '4' => 'info',
                                         default => 'gray',
                                     }),
                                 TextEntry::make('delivery_status')
@@ -274,6 +287,13 @@ class SalesOrderDirectsResource extends Resource
                                         6 => 'secondary',
                                         default => 'gray',
                                     }),
+                                TextEntry::make('payment_method')
+                                    ->label('Payment Method')
+                                    ->badge()
+                                    ->color('info'),
+                                TextEntry::make('admin_fee')
+                                    ->label('Admin Fee')
+                                    ->money('IDR'),
                                 TextEntry::make('total_price')
                                     ->label('Total Price')
                                     ->money('IDR')
