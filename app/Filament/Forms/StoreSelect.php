@@ -16,8 +16,9 @@ class StoreSelect extends Select
             ->relationship(
                 name: 'store',
                 titleAttribute: 'nickname',
-                modifyQueryUsing: fn (Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),)
-            ->searchable()
+                modifyQueryUsing: fn(Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),
+            )
+            // ->searchable()
             ->reactive();
     }
 }

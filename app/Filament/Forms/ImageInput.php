@@ -11,21 +11,19 @@ class ImageInput extends FileUpload
         parent::setUp();
 
         $this->rules(['image'])
-            // ->hiddenLabel()
             ->nullable()
             ->openable()
-            // ->maxSize(5120)
-            ->optimize(false)
-            ->imageResizeMode('cover')
-            // ->imageCropAspectRatio('1:1')
-            // ->imageResizeTargetWidth('1920')
-            // ->imageResizeTargetHeight('1080')
+            ->downloadable()
             ->image()
             ->imageEditor(false)
             ->disk('public')
-            ->columnSpan([
-                'full'
+            ->optimize(false)
+            ->columnSpan(['full'])
+            ->extraAttributes([
+                'crossorigin' => 'anonymous',
             ])
+            // Disable fetching file information that might trigger CORS
+            ->shouldFetchFileInformation(false)
             ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1'])
         ;
     }

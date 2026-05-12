@@ -370,8 +370,8 @@ class SalesOrderDirectsResource extends Resource
                         ->downloadable()
                         ->imageEditor(false)
                         ->optimize(false)
-                        ->hidden(fn (?SalesOrderDirect $record) =>
-                            Auth::user()->hasRole('admin') ||
+                        ->visible(fn (?SalesOrderDirect $record) => 
+                            Auth::user()->hasRole('admin') || 
                             Auth::user()->hasRole('storage-staff') ||
                             ($record && Auth::user()->hasRole('customer') && $record->payment_status == 2)
                         )
