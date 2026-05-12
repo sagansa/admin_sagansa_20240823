@@ -341,31 +341,46 @@ class SalesOrderDirectsResource extends Resource
         }
 
         return [
-            ImageInput::make('image_payment')
-                ->label('Payment')
-                ->disk('public')
-                ->openable()
-                ->downloadable()
-                ->imageEditor(false)
-                ->optimize(false)
-                ->disabled(fn (SalesOrderDirect $salesOrderDirect) =>
-                    Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2
-                    || Auth::user()->hasRole('admin')
-                    || Auth::user()->hasRole('storage-staff')
-                )
-                ->required()
-                ->directory('images/Direct/Payment'),
+            Group::make()
+                ->schema([
+                    ImageInput::make('image_payment')
+                        ->label('Payment')
+                        ->disk('public')
+                        ->openable()
+                        ->downloadable()
+                        ->imageEditor(false)
+                        ->optimize(false)
+                        ->hidden(fn () => Auth::user()->hasRole('admin'))
+                        ->disabled(fn (SalesOrderDirect $salesOrderDirect) =>
+                            Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2
+                            || Auth::user()->hasRole('storage-staff')
+                        )
+                        ->required()
+                        ->directory('images/Direct/Payment'),
 
-            ImageInput::make('image_delivery')
-                ->disk('public')
-                ->openable()
-                ->downloadable()
-                ->imageEditor(false)
-                ->optimize(false)
-                ->hidden(fn () => Auth::user()->hasRole('customer'))
-                ->disabled(fn () => Auth::user()->hasRole('admin'))
-                ->label('Delivered')
-                ->directory('images/Direct/Delivery'),
+                    Placeholder::make('image_payment_preview')
+                        ->label('Payment')
+                        ->visible(fn () => Auth::user()->hasRole('admin'))
+                        ->content(fn ($record) => $record && $record->image_payment ? new HtmlString('<a href="'.asset('storage/'.$record->image_payment).'" target="_blank"><img src="'.asset('storage/'.$record->image_payment).'" style="max-width: 100%; height: auto; border-radius: 0.5rem; border: 1px solid #e5e7eb;" /></a>') : '-'),
+                ]),
+
+            Group::make()
+                ->schema([
+                    ImageInput::make('image_delivery')
+                        ->disk('public')
+                        ->openable()
+                        ->downloadable()
+                        ->imageEditor(false)
+                        ->optimize(false)
+                        ->hidden(fn () => Auth::user()->hasRole('customer') || Auth::user()->hasRole('admin'))
+                        ->label('Delivered')
+                        ->directory('images/Direct/Delivery'),
+
+                    Placeholder::make('image_delivery_preview')
+                        ->label('Delivered')
+                        ->visible(fn () => Auth::user()->hasRole('admin'))
+                        ->content(fn ($record) => $record && $record->image_delivery ? new HtmlString('<a href="'.asset('storage/'.$record->image_delivery).'" target="_blank"><img src="'.asset('storage/'.$record->image_delivery).'" style="max-width: 100%; height: auto; border-radius: 0.5rem; border: 1px solid #e5e7eb;" /></a>') : '-'),
+                ]),
 
             StoreSelect::make('store_id')
                 ->required(fn () => Auth::user()->hasRole('admin'))
