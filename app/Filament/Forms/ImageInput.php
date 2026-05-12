@@ -18,7 +18,6 @@ class ImageInput extends FileUpload
             ->imageEditor(false)
             ->disk('public')
             ->optimize(false)
-            ->columnSpan(['full'])
             ->extraAttributes([
                 'crossorigin' => 'anonymous',
             ]);
