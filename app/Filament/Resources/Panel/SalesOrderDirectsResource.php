@@ -361,7 +361,11 @@ class SalesOrderDirectsResource extends Resource
                     Placeholder::make('image_payment_preview')
                         ->label('Payment')
                         ->visible(fn () => Auth::user()->hasRole('admin'))
-                        ->content(fn ($record) => $record && $record->image_payment ? new HtmlString('<a href="'.asset('storage/'.$record->image_payment).'" target="_blank"><img src="'.asset('storage/'.$record->image_payment).'" style="max-width: 100%; height: auto; border-radius: 0.5rem; border: 1px solid #e5e7eb;" /></a>') : '-'),
+                        ->content(function ($record) {
+                            if (!$record || !$record->image_payment) return '-';
+                            $url = \Illuminate\Support\Facades\Storage::disk('public')->url($record->image_payment);
+                            return new HtmlString("<a href='{$url}' target='_blank'><img src='{$url}' style='max-width: 100%; height: auto; border-radius: 0.5rem; border: 1px solid #e5e7eb;' /></a>");
+                        }),
                 ]),
 
             Group::make()
@@ -379,7 +383,11 @@ class SalesOrderDirectsResource extends Resource
                     Placeholder::make('image_delivery_preview')
                         ->label('Delivered')
                         ->visible(fn () => Auth::user()->hasRole('admin'))
-                        ->content(fn ($record) => $record && $record->image_delivery ? new HtmlString('<a href="'.asset('storage/'.$record->image_delivery).'" target="_blank"><img src="'.asset('storage/'.$record->image_delivery).'" style="max-width: 100%; height: auto; border-radius: 0.5rem; border: 1px solid #e5e7eb;" /></a>') : '-'),
+                        ->content(function ($record) {
+                            if (!$record || !$record->image_delivery) return '-';
+                            $url = \Illuminate\Support\Facades\Storage::disk('public')->url($record->image_delivery);
+                            return new HtmlString("<a href='{$url}' target='_blank'><img src='{$url}' style='max-width: 100%; height: auto; border-radius: 0.5rem; border: 1px solid #e5e7eb;' /></a>");
+                        }),
                 ]),
 
             StoreSelect::make('store_id')
