@@ -129,7 +129,9 @@ class SalesOrderDirectsResource extends Resource
                     ->html()
                     ->formatStateUsing(function (SalesOrderDirect $record) {
                         return implode('<br>', $record->detailSalesOrders->map(function ($item) {
-                            return "{$item->product->name} ({$item->quantity} {$item->product->unit->unit})";
+                            $productName = $item->product?->name ?? 'Unknown Product';
+                            $unit = $item->product?->unit?->unit ?? '';
+                            return "{$productName} ({$item->quantity} {$unit})";
                         })->toArray());
                     })
                     ->extraAttributes(['class' => 'whitespace-pre-wrap']),
@@ -287,7 +289,7 @@ class SalesOrderDirectsResource extends Resource
                                     ->label('Product'),
                                 TextEntry::make('quantity')
                                     ->label('Quantity')
-                                    ->formatStateUsing(fn ($state, $record) => "{$state} {$record->product->unit->unit}"),
+                                    ->formatStateUsing(fn ($state, $record) => "{$state} " . ($record->product?->unit?->unit ?? '')),
                                 TextEntry::make('unit_price')
                                     ->label('Unit Price')
                                     ->money('IDR'),
@@ -461,7 +463,7 @@ class SalesOrderDirectsResource extends Resource
 
             Placeholder::make('delivery_address')
                 ->hidden(fn ($operation) => $operation === 'create' || Auth::user()->hasRole('customer'))
-                ->content(fn (SalesOrderDirect $record): string => $record->deliveryAddress->delivery_address_name),
+                ->content(fn (SalesOrderDirect $record): ?string => $record->deliveryAddress?->delivery_address_name ?? '-'),
 
 
         ];
