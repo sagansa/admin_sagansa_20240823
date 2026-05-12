@@ -350,17 +350,21 @@ class SalesOrderDirectsResource extends Resource
                         ->downloadable()
                         ->imageEditor(false)
                         ->optimize(false)
-                        ->hidden(fn () => Auth::user()->hasRole('admin'))
-                        ->disabled(fn (SalesOrderDirect $salesOrderDirect) =>
-                            Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2
-                            || Auth::user()->hasRole('storage-staff')
+                        ->hidden(fn (?SalesOrderDirect $record) =>
+                            Auth::user()->hasRole('admin') ||
+                            Auth::user()->hasRole('storage-staff') ||
+                            ($record && Auth::user()->hasRole('customer') && $record->payment_status == 2)
                         )
                         ->required()
                         ->directory('images/Direct/Payment'),
 
                     Placeholder::make('image_payment_preview')
                         ->label('Payment')
-                        ->visible(fn () => Auth::user()->hasRole('admin'))
+                        ->visible(fn (?SalesOrderDirect $record) =>
+                            Auth::user()->hasRole('admin') ||
+                            Auth::user()->hasRole('storage-staff') ||
+                            ($record && Auth::user()->hasRole('customer') && $record->payment_status == 2)
+                        )
                         ->content(function ($record) {
                             if (!$record || !$record->image_payment) return '-';
                             $url = \Illuminate\Support\Facades\Storage::disk('public')->url($record->image_payment);
@@ -376,13 +380,18 @@ class SalesOrderDirectsResource extends Resource
                         ->downloadable()
                         ->imageEditor(false)
                         ->optimize(false)
-                        ->hidden(fn () => Auth::user()->hasRole('customer') || Auth::user()->hasRole('admin'))
+                        ->hidden(fn (?SalesOrderDirect $record) =>
+                            Auth::user()->hasRole('customer') ||
+                            Auth::user()->hasRole('admin')
+                        )
                         ->label('Delivered')
                         ->directory('images/Direct/Delivery'),
 
                     Placeholder::make('image_delivery_preview')
                         ->label('Delivered')
-                        ->visible(fn () => Auth::user()->hasRole('admin'))
+                        ->visible(fn (?SalesOrderDirect $record) =>
+                            Auth::user()->hasRole('admin') && !Auth::user()->hasRole('customer')
+                        )
                         ->content(function ($record) {
                             if (!$record || !$record->image_delivery) return '-';
                             $url = \Illuminate\Support\Facades\Storage::disk('public')->url($record->image_delivery);
