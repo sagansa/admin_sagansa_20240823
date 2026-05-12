@@ -21,10 +21,6 @@ class ImageInput extends FileUpload
             ->columnSpan(['full'])
             ->extraAttributes([
                 'crossorigin' => 'anonymous',
-            ])
-            // Disable fetching file information that might trigger CORS
-            ->shouldFetchFileInformation(false)
-            ->imageEditorAspectRatios([null, '16:9', '4:3', '1:1'])
-        ;
+            ]);
     }
 }
