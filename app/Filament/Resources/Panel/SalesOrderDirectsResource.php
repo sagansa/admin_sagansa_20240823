@@ -343,6 +343,11 @@ class SalesOrderDirectsResource extends Resource
         return [
             ImageInput::make('image_payment')
                 ->label('Payment')
+                ->disk('public')
+                ->openable()
+                ->downloadable()
+                ->imageEditor(false)
+                ->optimize(false)
                 ->disabled(fn (SalesOrderDirect $salesOrderDirect) =>
                     Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2
                     || Auth::user()->hasRole('admin')
@@ -352,6 +357,11 @@ class SalesOrderDirectsResource extends Resource
                 ->directory('images/Direct/Payment'),
 
             ImageInput::make('image_delivery')
+                ->disk('public')
+                ->openable()
+                ->downloadable()
+                ->imageEditor(false)
+                ->optimize(false)
                 ->hidden(fn () => Auth::user()->hasRole('customer'))
                 ->disabled(fn () => Auth::user()->hasRole('admin'))
                 ->label('Delivered')

@@ -15,13 +15,13 @@ class ImageInput extends FileUpload
             ->nullable()
             ->openable()
             // ->maxSize(5120)
-            ->optimize('webp')
+            ->optimize(false)
             ->imageResizeMode('cover')
             // ->imageCropAspectRatio('1:1')
             // ->imageResizeTargetWidth('1920')
             // ->imageResizeTargetHeight('1080')
             ->image()
-            ->imageEditor()
+            ->imageEditor(false)
             ->disk('public')
             ->columnSpan([
                 'full'
