@@ -13,6 +13,7 @@ class BaseRepeaterSelect extends Select
         $this->hiddenLabel()
             ->disableOptionsWhenSelectedInSiblingRepeaterItems()
             ->required()
-            ->disabled();
+            ->disabled()
+            ->dehydrated();
     }
 }
