@@ -597,6 +597,14 @@ class SalesOrderDirectsResource extends Resource
                 ->hidden(fn ($operation) => $operation === 'create' || Auth::user()->hasRole('customer'))
                 ->content(fn (SalesOrderDirect $record): ?string => $record->deliveryAddress?->delivery_address_name ?? '-'),
 
+            Select::make('ordered_by_id')
+                ->label('Ordered By (Customer)')
+                ->relationship('orderedBy', 'name')
+                ->searchable()
+                ->preload()
+                ->visible(fn () => Auth::user()->hasRole('super_admin'))
+                ->required()
+                ->default(fn () => Auth::id()),
 
         ];
     }
