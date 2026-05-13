@@ -13,13 +13,13 @@ use App\Filament\Forms\Notes;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\VehicleTax;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
@@ -27,19 +27,19 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\VehicleTaxResource\Pages;
 use App\Filament\Resources\Panel\VehicleTaxResource\RelationManagers;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 
 class VehicleTaxResource extends Resource
 {
     protected static ?string $model = VehicleTax::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?string $cluster = Asset::class;
 
-    protected static ?string $navigationGroup = 'Vehicle';
+    protected static string|\UnitEnum|null $navigationGroup = 'Vehicle';
 
     public static function getModelLabel(): string
     {
@@ -56,7 +56,7 @@ class VehicleTaxResource extends Resource
         return __('crud.vehicleTaxes.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()->schema([
@@ -97,13 +97,13 @@ class VehicleTaxResource extends Resource
             ->filters([])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('id', 'desc');

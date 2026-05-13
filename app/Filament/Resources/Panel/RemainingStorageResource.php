@@ -11,21 +11,21 @@ use App\Filament\Forms\StockCardForm;
 use App\Filament\Forms\StockRepeaterForm;
 use App\Filament\Forms\StoreSelect;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\RemainingStorage;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\Panel\RemainingStorageResource\Pages;
 use App\Filament\Resources\Panel\RemainingStorageResource\RelationManagers;
 use App\Filament\Tables\StockCardTable;
 use App\Filament\Tables\ValidAction;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\ViewAction;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -37,7 +37,7 @@ class RemainingStorageResource extends Resource
 
     protected static ?string $cluster = Stock::class;
 
-    protected static ?string $navigationGroup = 'Stock';
+    protected static string|\UnitEnum|null $navigationGroup = 'Stock';
 
     public static function getModelLabel(): string
     {
@@ -54,7 +54,7 @@ class RemainingStorageResource extends Resource
         return __('crud.remainingStorages.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema(
             StockCardForm::getStockCardStorage(),
@@ -90,7 +90,7 @@ class RemainingStorageResource extends Resource
         // Add bulk delete action for admin users
         if (Auth::user()->hasRole('admin')) {
             $bulkActions = [
-                Tables\Actions\BulkActionGroup::make([
+                \Filament\Actions\BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     ValidBulkAction::make('setStatusToValid')
                         ->label('Set Status to Valid')

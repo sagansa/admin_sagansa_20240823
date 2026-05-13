@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\Stock;
 use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Forms\StockCardForm;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\RemainingStore;
 use Filament\Resources\Resource;
@@ -19,13 +19,13 @@ class RemainingStoreResource extends Resource
 {
     protected static ?string $model = RemainingStore::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?string $cluster = Stock::class;
 
-    protected static ?string $navigationGroup = 'Stock';
+    protected static string|\UnitEnum|null $navigationGroup = 'Stock';
 
     public static function getModelLabel(): string
     {
@@ -42,7 +42,7 @@ class RemainingStoreResource extends Resource
         return __('crud.remainingStores.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema(
             StockCardForm::getStockCardRemaining(),

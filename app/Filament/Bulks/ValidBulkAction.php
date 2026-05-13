@@ -2,7 +2,7 @@
 
 namespace App\Filament\Bulks;
 
-use Filament\Tables\Actions\BulkAction;
+use Filament\Actions\BulkAction;
 
 class ValidBulkAction extends BulkAction
 {

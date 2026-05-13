@@ -9,13 +9,13 @@ use App\Filament\Forms\Notes;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\PermitEmployee;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DatePicker;
@@ -24,17 +24,17 @@ use App\Filament\Resources\Panel\PermitEmployeeResource\Pages;
 use App\Filament\Resources\Panel\PermitEmployeeResource\RelationManagers;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 
 class PermitEmployeeResource extends Resource
 {
     protected static ?string $model = PermitEmployee::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Salaries';
+    protected static string|\UnitEnum|null $navigationGroup = 'Salaries';
 
     protected static ?string $pluralLabel = 'Permits';
 
@@ -55,7 +55,7 @@ class PermitEmployeeResource extends Resource
         return __('crud.permitEmployees.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()->schema([
@@ -162,22 +162,22 @@ class PermitEmployeeResource extends Resource
             ->filters([])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
 
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make('approve')
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
+                    \Filament\Actions\BulkAction::make('approve')
                         ->label('disetujui')
                         ->icon('heroicon-o-check')
                         ->action(fn(Collection $records) => $records->each->update(['status' => '2']))
                         ->deselectRecordsAfterCompletion()
                         ->requiresConfirmation(),
 
-                    Tables\Actions\BulkAction::make('notApprove')
+                    \Filament\Actions\BulkAction::make('notApprove')
                         ->label('Tidak disetujui')
                         ->icon('heroicon-o-x-mark')
                         ->action(fn(Collection $records) => $records->each->update(['status' => '3']))

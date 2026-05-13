@@ -6,11 +6,11 @@ use Filament\Clusters\Cluster;
 
 class Store extends Cluster
 {
-    // protected static ?string $navigationGroup = 'Asset';
+    // protected static string|\UnitEnum|null $navigationGroup = 'Asset';
 
     protected static ?string $navigationLabel = 'Store';
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-storefront';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-building-storefront';
 
     protected static ?int $navigationSort = 2;
 

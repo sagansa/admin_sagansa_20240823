@@ -5,12 +5,12 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\Sales;
 use App\Filament\Forms\DeliveryAddressForm;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\DeliveryAddress;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\Panel\DeliveryAddressResource\Pages;
 use App\Filament\Resources\Panel\DeliveryAddressResource\RelationManagers;
@@ -18,9 +18,9 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
-use Humaidem\FilamentMapPicker\Fields\OSMMap;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,7 +30,7 @@ class DeliveryAddressResource extends Resource
 
     protected static ?int $navigationSort = 4;
 
-    protected static ?string $navigationGroup = 'Sales';
+    protected static string|\UnitEnum|null $navigationGroup = 'Sales';
 
     protected static ?string $pluralLabel = 'Delivery Address';
 
@@ -51,13 +51,13 @@ class DeliveryAddressResource extends Resource
         return __('crud.deliveryAddresses.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()->schema([
                 Grid::make(['default' => 2])
                     ->schema([
-                        OSMMap::make('location')
+                        TextInput::make('location')
                             ->label('Location')
                             ->showMarker()
                             ->draggable()
@@ -240,13 +240,13 @@ class DeliveryAddressResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');

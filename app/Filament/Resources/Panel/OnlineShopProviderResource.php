@@ -7,28 +7,28 @@ use App\Filament\Forms\BaseTextInput;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use App\Models\OnlineShopProvider;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\OnlineShopProviderResource\Pages;
 use App\Filament\Resources\Panel\OnlineShopProviderResource\RelationManagers;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 
 class OnlineShopProviderResource extends Resource
 {
     protected static ?string $model = OnlineShopProvider::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Setting';
+    protected static string|\UnitEnum|null $navigationGroup = 'Setting';
 
     protected static ?string $cluster = Settings::class;
 
@@ -49,7 +49,7 @@ class OnlineShopProviderResource extends Resource
         return __('crud.onlineShopProviders.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()->schema([
@@ -68,13 +68,13 @@ class OnlineShopProviderResource extends Resource
             ->filters([])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('id', 'desc');

@@ -6,7 +6,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms;
 use Filament\Infolists\Components\TextEntry;
-use Humaidem\FilamentMapPicker\Fields\OSMMap;
+
 
 class AddressForm
 {
@@ -104,7 +104,7 @@ class AddressForm
                         ->pluck('postal_code', 'id');
                 }),
 
-            OSMMap::make('location')
+            TextInput::make('location')
                 // ->label('Location')
                 ->hiddenLabel()
                 // ->placeholder('Postal Code')

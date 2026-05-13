@@ -4,7 +4,7 @@ namespace App\Filament\Resources\Panel\SalesOrderDirectsResource\Pages;
 
 use App\Filament\Resources\Panel\SalesOrderDirectsResource;
 use Filament\Actions;
-use Filament\Resources\Components\Tab;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Resources\Pages\ListRecords;
 
 class ListSalesOrderDirects extends ListRecords

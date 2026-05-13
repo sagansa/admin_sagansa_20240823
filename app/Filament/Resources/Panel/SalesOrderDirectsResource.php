@@ -16,11 +16,11 @@ use App\Filament\Forms\DeliveryAddressForm;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Resources\Panel\SalesOrderDirectsResource\Pages;
 use App\Models\SalesOrderDirect;
-use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -30,11 +30,10 @@ use App\Filament\Forms\SalesProductForm;
 use App\Filament\Forms\StoreSelect;
 use App\Filament\Resources\Panel\SalesOrderDirectsResource\Widgets\SalesOrderDirectsStat;
 use App\Models\DeliveryAddress;
-use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
-use Filament\Infolists\Components\Section as InfoSection;
-use Filament\Infolists\Components\Grid as InfoGrid;
+use Filament\Schemas\Components\Section as InfoSection;
+use Filament\Schemas\Components\Grid as InfoGrid;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Support\Enums\FontWeight;
 use Filament\Infolists\Components\IconEntry;
@@ -42,15 +41,15 @@ use App\Models\TransferToAccount;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Placeholder;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Illuminate\Support\HtmlString;
 
 class SalesOrderDirectsResource extends Resource
 {
     protected static ?string $model = SalesOrderDirect::class;
 
-    protected static ?string $navigationGroup = 'Sales';
+    protected static string|\UnitEnum|null $navigationGroup = 'Sales';
 
     protected static ?string $pluralLabel = 'Order';
 
@@ -58,7 +57,7 @@ class SalesOrderDirectsResource extends Resource
 
     protected static ?string $cluster = Sales::class;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
 
@@ -191,8 +190,8 @@ class SalesOrderDirectsResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                     Action::make('Update Payment Status To Valid')
                         ->visible(fn ($record) => Auth::user()->hasRole('admin') && $record->payment_status != 2)
                         ->icon('heroicon-o-pencil-square')
@@ -203,8 +202,8 @@ class SalesOrderDirectsResource extends Resource
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('delivery_date', 'desc');;
@@ -224,7 +223,7 @@ class SalesOrderDirectsResource extends Resource
     //     ];
     // }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $infolist): Schema
     {
         return $infolist
             ->schema([
@@ -369,7 +368,7 @@ class SalesOrderDirectsResource extends Resource
                         ->openable()
                         ->downloadable()
                         ->imageEditor(false)
-                        ->optimize(false)
+                        
                         ->visible(fn (?SalesOrderDirect $record) => 
                             $record === null || // Always visible during Create
                             Auth::user()->hasRole('admin') || 
@@ -400,7 +399,7 @@ class SalesOrderDirectsResource extends Resource
                         ->openable()
                         ->downloadable()
                         ->imageEditor(false)
-                        ->optimize(false)
+                        
                         ->hidden(fn (?SalesOrderDirect $record) =>
                             Auth::user()->hasRole('customer') ||
                             Auth::user()->hasRole('admin')

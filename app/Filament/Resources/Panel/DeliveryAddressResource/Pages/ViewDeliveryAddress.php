@@ -6,12 +6,12 @@ use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use App\Filament\Resources\Panel\DeliveryAddressResource;
 use App\Models\DeliveryAddress;
-use Filament\Infolists\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Infolists\Components\Group;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\Split;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
+use Filament\Schemas\Schema;
 
 class ViewDeliveryAddress extends ViewRecord
 {
@@ -22,7 +22,7 @@ class ViewDeliveryAddress extends ViewRecord
         return [Actions\EditAction::make()];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $infolist): Schema
     {
         return $infolist
             ->schema([

@@ -10,9 +10,9 @@ use App\Filament\Forms\SupplierSelect;
 use App\Filament\Tables\AdvancePurchaseTable;
 use App\Models\AdvancePurchase;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -28,7 +28,7 @@ class AdvancePurchasesRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'image';
 
-    public function form(Form $form): Form
+    public function form(Schema $form): Schema
     {
         return $form->schema([
             Grid::make(['default' => 1])->schema([
@@ -73,14 +73,14 @@ class AdvancePurchasesRelationManager extends RelationManager
             ->columns(AdvancePurchaseTable::schema())
             //
             ->filters([])
-            // ->headerActions([Tables\Actions\CreateAction::make()])
+            // ->headerActions([\Filament\Actions\CreateAction::make()])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                \Filament\Actions\ViewAction::make(),
+                \Filament\Actions\DeleteAction::make(),
             ]);
             // ->bulkActions([
-            //     Tables\Actions\BulkActionGroup::make([
-            //         Tables\Actions\DeleteBulkAction::make(),
+            //     \Filament\Actions\BulkActionGroup::make([
+            //         \Filament\Actions\DeleteBulkAction::make(),
             //     ]),
             // ]);
     }

@@ -15,31 +15,32 @@ use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
 use App\Models\Vehicle;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\VehicleResource\Pages;
 use App\Filament\Resources\Panel\VehicleResource\RelationManagers;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Illuminate\Support\Facades\Auth;
+use Filament\Schemas\Components\Group;
 
 class VehicleResource extends Resource
 {
     protected static ?string $model = Vehicle::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?string $cluster = Asset::class;
 
-    protected static ?string $navigationGroup = 'Vehicle';
+    protected static string|\UnitEnum|null $navigationGroup = 'Vehicle';
 
     public static function getModelLabel(): string
     {
@@ -56,32 +57,59 @@ class VehicleResource extends Resource
         return __('crud.vehicles.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
-        return $form->schema([
-            Section::make()->schema([
-                Grid::make(['default' => 1])->schema([
+        return $form
+            ->columns(['default' => 1, 'lg' => 3])
+            ->schema([
+                Group::make([
+                    Section::make('Informasi Kendaraan')
+                        ->icon('heroicon-o-truck')
+                        ->description('Detail spesifikasi dan registrasi kendaraan')
+                        ->schema([
+                            Grid::make(2)->schema([
+                                BaseTextInput::make('no_register')
+                                    ->label('Nomor Polisi / Register')
+                                    ->required(),
+                                    
+                                BaseSelect::make('type')
+                                    ->label('Tipe Kendaraan')
+                                    ->options([
+                                        '1' => 'Motor',
+                                        '2' => 'Mobil',
+                                        '3' => 'Truk',
+                                    ])
+                                    ->required(),
+                            ]),
 
-                    ImageInput::make('image')
-                        ->directory('images/Vehicle'),
+                            StoreSelect::make('store_id')
+                                ->label('Lokasi (Store)'),
 
-                    BaseSelect::make('type')
-                        ->options([
-                            '1' => 'motor',
-                            '2' => 'mobil',
-                            '3' => 'truk',
+                            Notes::make('notes')
+                                ->label('Catatan'),
                         ]),
+                ])->columnSpan(['lg' => 2]),
 
-                    BaseTextInput::make('no_register'),
+                Group::make([
+                    Section::make('Media')
+                        ->icon('heroicon-o-photo')
+                        ->schema([
+                            ImageInput::make('image')
+                                ->label('Foto Kendaraan')
+                                ->directory('images/Vehicle'),
+                        ])
+                        ->collapsible(),
 
-                    StoreSelect::make('store_id'),
-
-                    ActiveStatusSelect::make('status'),
-
-                    Notes::make('notes'),
-                ]),
-            ]),
-        ]);
+                    Section::make('Status')
+                        ->icon('heroicon-o-check-circle')
+                        ->schema([
+                            ActiveStatusSelect::make('status')
+                                ->label('Status Operasional')
+                                ->default('1'),
+                        ])
+                        ->collapsible(),
+                ])->columnSpan(['lg' => 1]),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -100,13 +128,13 @@ class VehicleResource extends Resource
             ->filters([])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('id', 'desc');

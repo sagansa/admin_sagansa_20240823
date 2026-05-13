@@ -4,9 +4,9 @@ namespace App\Filament\Resources\Panel\StockMonitoringResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,7 +19,7 @@ class StockMonitoringDetailsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'created_at';
 
-    public function form(Form $form): Form
+    public function form(Schema $form): Schema
     {
         return $form->schema([
             Grid::make(['default' => 1])->schema([
@@ -38,14 +38,14 @@ class StockMonitoringDetailsRelationManager extends RelationManager
         return $table
             ->columns([TextColumn::make('product.name')])
             ->filters([])
-            ->headerActions([Tables\Actions\CreateAction::make()])
+            ->headerActions([\Filament\Actions\CreateAction::make()])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                \Filament\Actions\EditAction::make(),
+                \Filament\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

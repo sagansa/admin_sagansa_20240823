@@ -4,7 +4,7 @@ namespace App\Filament\Tables;
 
 use App\Filament\Bulks\ValidBulkAction;
 use Filament\Notifications\Notification;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -15,13 +15,13 @@ class ValidAction
         return [
             'actions' => [
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ],
             'bulkActions' => [
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make()
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make()
                     ->action(function () {
                         Notification::make()
                             ->title('Now, now, don\'t be cheeky, leave some records for others to play with!')

@@ -14,13 +14,13 @@ use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\ClosingStore;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\ClosingStoreResource\Pages;
@@ -33,7 +33,7 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AccountCashless;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Columns\ColumnGroup;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -41,11 +41,11 @@ class ClosingStoreResource extends Resource
 {
     protected static ?string $model = ClosingStore::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Closing';
+    protected static string|\UnitEnum|null $navigationGroup = 'Closing';
 
     protected static ?string $pluralLabel = 'Store';
 
@@ -66,7 +66,7 @@ class ClosingStoreResource extends Resource
         return __('crud.closingStores.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()->schema([
@@ -300,14 +300,14 @@ class ClosingStoreResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make('setStatusToDiperbaiki')
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
+                    \Filament\Actions\BulkAction::make('setStatusToDiperbaiki')
                         ->label('Set Status to Diperbaiki')
                         ->icon('heroicon-o-check')
                         ->requiresConfirmation()

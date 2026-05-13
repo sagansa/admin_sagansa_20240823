@@ -5,14 +5,14 @@ namespace App\Filament\Resources\Panel\SalesOrderOnlinesResource\Pages;
 use App\Filament\Entries\DeliveryStatusEntry;
 use App\Filament\Resources\Panel\SalesOrderOnlinesResource;
 use Filament\Actions;
-use Filament\Infolists\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
-use Filament\Infolists\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Infolists\Components\Split;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Infolist;
+use Filament\Schemas\Schema;
 use Filament\Resources\Pages\ViewRecord;
 use Icetalker\FilamentTableRepeatableEntry\Infolists\Components\TableRepeatableEntry;
 
@@ -20,7 +20,7 @@ class ViewSalesOrderOnlines extends ViewRecord
 {
     protected static string $resource = SalesOrderOnlinesResource::class;
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $infolist): Schema
     {
         return $infolist
             ->schema([

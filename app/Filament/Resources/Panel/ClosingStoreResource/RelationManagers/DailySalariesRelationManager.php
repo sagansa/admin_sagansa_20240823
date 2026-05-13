@@ -4,9 +4,9 @@ namespace App\Filament\Resources\Panel\ClosingStoreResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -32,16 +32,16 @@ class DailySalariesRelationManager extends RelationManager
             ->headerActions([
             ])
             ->actions([
-                Tables\Actions\DetachAction::make()
+                \Filament\Actions\DetachAction::make()
                     ->action(function ($record) {
                         $record->pivot->delete();
                         $record->update(['status' => 1]);
                     }),
             ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
+                // \Filament\Actions\BulkActionGroup::make([
 
-                //     Tables\Actions\DetachBulkAction::make()
+                //     \Filament\Actions\DetachBulkAction::make()
                 //         ->action(function ($records) {
                 //                 foreach ($records as $record) {
                 //                     $record->paymentReceipts()->detach();

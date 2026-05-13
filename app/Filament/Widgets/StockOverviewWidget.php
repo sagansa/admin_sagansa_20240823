@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class StockOverviewWidget extends BaseWidget
 {
     protected static ?int $sort = 1;
+    protected ?string $pollingInterval = '60s';
 
     public static function canView(): bool
     {
@@ -46,49 +47,35 @@ class StockOverviewWidget extends BaseWidget
 
     protected function calculateStats(): array
     {
-        // Query total stock (yang sudah ada sebelumnya)
+        // optimized query: Get latest stock quantity for each product first
+        $latestStockSubquery = DB::table('detail_stock_cards as dsc')
+            ->join('stock_cards as sc', 'dsc.stock_card_id', '=', 'sc.id')
+            ->join(DB::raw('(SELECT dsc2.product_id, MAX(sc2.date) as max_date FROM detail_stock_cards dsc2 JOIN stock_cards sc2 ON dsc2.stock_card_id = sc2.id GROUP BY dsc2.product_id) as latest'), function($join) {
+                $join->on('dsc.product_id', '=', 'latest.product_id')
+                     ->on('sc.date', '=', 'latest.max_date');
+            })
+            ->select('dsc.product_id', DB::raw('SUM(dsc.quantity) as current_quantity'))
+            ->groupBy('dsc.product_id');
+
+        // Total Stock
         $totalStock = DB::table('stock_monitoring_details as smd')
-            ->select(DB::raw('COALESCE(SUM(
-                (
-                    SELECT SUM(dsc.quantity)
-                    FROM detail_stock_cards dsc
-                    JOIN stock_cards sc ON dsc.stock_card_id = sc.id
-                    WHERE dsc.product_id = smd.product_id
-                    AND sc.date = (
-                        SELECT MAX(sc2.date)
-                        FROM stock_cards sc2
-                        JOIN detail_stock_cards dsc2 ON sc2.id = dsc2.stock_card_id
-                        WHERE dsc2.product_id = smd.product_id
-                    )
-                ) * smd.coefficient
-            ), 0) as total'))
-            ->value('total');
+            ->joinSub($latestStockSubquery, 'ls', 'smd.product_id', '=', 'ls.product_id')
+            ->select(DB::raw('SUM(ls.current_quantity * smd.coefficient) as total'))
+            ->value('total') ?? 0;
 
-        // Query total produk
-        $totalProducts = DB::table('stock_monitorings')
-            // ->where('request', '1')
-            ->count();
+        // Total Products (Active monitorings)
+        $totalProducts = DB::table('stock_monitorings')->count();
 
-        // Query jumlah produk yang low stock
+        // Low Stock Products
         $lowStockProducts = DB::table('stock_monitorings as sm')
-            ->whereRaw('(
-                SELECT COALESCE(SUM(
-                    (
-                        SELECT COALESCE(SUM(dsc.quantity), 0)
-                        FROM detail_stock_cards dsc
-                        JOIN stock_cards sc ON dsc.stock_card_id = sc.id
-                        WHERE dsc.product_id = smd.product_id
-                        AND sc.date = (
-                            SELECT MAX(sc2.date)
-                            FROM stock_cards sc2
-                            JOIN detail_stock_cards dsc2 ON sc2.id = dsc2.stock_card_id
-                            WHERE dsc2.product_id = smd.product_id
-                        )
-                    ) * smd.coefficient
-                ), 0)
+            ->join(DB::raw('(
+                SELECT smd.stock_monitoring_id, SUM(ls.current_quantity * smd.coefficient) as current_total
                 FROM stock_monitoring_details smd
-                WHERE sm.id = smd.stock_monitoring_id
-            ) < sm.quantity_low')
+                JOIN (' . $latestStockSubquery->toSql() . ') ls ON smd.product_id = ls.product_id
+                GROUP BY smd.stock_monitoring_id
+            ) as monitoring_stock'), 'sm.id', '=', 'monitoring_stock.stock_monitoring_id')
+            ->mergeBindings($latestStockSubquery) // Important for toSql()
+            ->whereRaw('monitoring_stock.current_total < sm.quantity_low')
             ->count();
 
         return [

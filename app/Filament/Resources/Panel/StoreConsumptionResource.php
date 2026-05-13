@@ -13,13 +13,13 @@ use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\StoreConsumption;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DatePicker;
@@ -27,7 +27,7 @@ use App\Filament\Resources\Panel\StoreConsumptionResource\Pages;
 use App\Filament\Resources\Panel\StoreConsumptionResource\RelationManagers;
 use App\Filament\Tables\StockCardTable;
 use App\Filament\Tables\ValidAction;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,13 +35,13 @@ class StoreConsumptionResource extends Resource
 {
     protected static ?string $model = StoreConsumption::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?string $cluster = Stock::class;
 
-    protected static ?string $navigationGroup = 'Consumption';
+    protected static string|\UnitEnum|null $navigationGroup = 'Consumption';
 
     public static function getModelLabel(): string
     {
@@ -58,7 +58,7 @@ class StoreConsumptionResource extends Resource
         return __('crud.storeConsumptions.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema(
             StockCardForm::getStockCardStorage(),

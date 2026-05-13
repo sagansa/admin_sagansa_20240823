@@ -11,11 +11,11 @@ use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Filters\DateFilter;
 use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Pages;
 use App\Models\DeliveryAddress;
-use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -34,8 +34,8 @@ use App\Models\SalesOrderOnline;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\BulkAction;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkAction;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
@@ -46,7 +46,7 @@ class SalesOrderOnlinesResource extends Resource
 {
     protected static ?string $model = SalesOrderOnline::class;
 
-    protected static ?string $navigationGroup = 'Sales';
+    protected static string|\UnitEnum|null $navigationGroup = 'Sales';
 
     protected static ?int $navigationSort = 3;
 
@@ -54,7 +54,7 @@ class SalesOrderOnlinesResource extends Resource
 
     protected static ?string $cluster = Sales::class;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
 
@@ -244,15 +244,15 @@ class SalesOrderOnlinesResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make()
+                    \Filament\Actions\EditAction::make()
                         ->visible(fn(SalesOrderOnline $record) => !in_array($record->delivery_status, [2])),
-                    Tables\Actions\ViewAction::make()
+                    \Filament\Actions\ViewAction::make()
                         ->visible(fn(SalesOrderOnline $record) => in_array($record->delivery_status, [2])),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                     BulkAction::make('Change Delivery Status')
                         ->icon('heroicon-m-check')
                         ->requiresConfirmation()
@@ -274,7 +274,7 @@ class SalesOrderOnlinesResource extends Resource
                                 SalesOrderOnline::where('id', $record->id)->update(['delivery_status' => $data['delivery_status']]);
                             });
                         }),
-                    // Tables\Actions\DeleteBulkAction::make(),
+                    // \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc')

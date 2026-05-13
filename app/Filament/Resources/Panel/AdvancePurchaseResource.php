@@ -12,14 +12,14 @@ use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
 use App\Filament\Forms\SupplierSelect;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Tables\Table;
 use App\Models\AdvancePurchase;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\AdvancePurchaseResource\Pages;
@@ -28,8 +28,8 @@ use App\Models\CashAdvance;
 use Filament\Forms\Components\Repeater;
 use App\Models\Product;
 use App\Models\Supplier;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -38,13 +38,13 @@ class AdvancePurchaseResource extends Resource
 {
     protected static ?string $model = AdvancePurchase::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-s-shopping-cart';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-s-shopping-cart';
 
     protected static ?int $navigationSort = 2;
 
     protected static ?string $cluster = Purchases::class;
 
-    protected static ?string $navigationGroup = 'Advances';
+    protected static string|\UnitEnum|null $navigationGroup = 'Advances';
 
     public static function getModelLabel(): string
     {
@@ -61,7 +61,7 @@ class AdvancePurchaseResource extends Resource
         return __('crud.advancePurchases.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()
@@ -93,12 +93,12 @@ class AdvancePurchaseResource extends Resource
             ->filters([])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
+                \Filament\Actions\BulkActionGroup::make([
                     DeleteBulkAction::make(),
                     ValidBulkAction::make('setStatusToValid')
                         ->action(function (Collection $records) {

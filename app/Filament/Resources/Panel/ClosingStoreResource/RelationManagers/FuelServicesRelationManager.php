@@ -6,9 +6,9 @@ use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\SupplierSelect;
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -23,7 +23,7 @@ class FuelServicesRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'date';
 
-    public function form(Form $form): Form
+    public function form(Schema $form): Schema
     {
         return $form->schema([
             Grid::make(['default' => 1])->schema([
@@ -107,28 +107,28 @@ class FuelServicesRelationManager extends RelationManager
             )
             ->filters([])
             ->headerActions([
-                // Tables\Actions\CreateAction::make(),
+                // \Filament\Actions\CreateAction::make(),
 
-                // Tables\Actions\AttachAction::make()->form(
-                //     fn(Tables\Actions\AttachAction $action): array => [
+                // \Filament\Actions\AttachAction::make()->form(
+                //     fn(\Filament\Actions\AttachAction $action): array => [
                 //         $action->getRecordSelect(),
                 //     ]
                 // ),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
-                Tables\Actions\DetachAction::make()
+                // \Filament\Actions\EditAction::make(),
+                // \Filament\Actions\DeleteAction::make(),
+                \Filament\Actions\DetachAction::make()
                     ->action(function ($record) {
                         $record->pivot->delete();
                         $record->update(['status' => 1]);
                     }),
             ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
+                // \Filament\Actions\BulkActionGroup::make([
+                    // \Filament\Actions\DeleteBulkAction::make(),
 
-                    // Tables\Actions\DetachBulkAction::make()
+                    // \Filament\Actions\DetachBulkAction::make()
                     //     ->action(function ($records) {
                     //             foreach ($records as $record) {
                     //                 $record->paymentReceipts()->detach();

@@ -9,31 +9,31 @@ use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\DecimalInput;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\UtilityBill;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\UtilityBillResource\Pages;
 use App\Models\Utility;
 use Filament\Forms\Get;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 
 class UtilityBillResource extends Resource
 {
     protected static ?string $model = UtilityBill::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?string $cluster = Purchases::class;
 
-    // protected static ?string $navigationGroup = 'Purchase';
+    // protected static string|\UnitEnum|null $navigationGroup = 'Purchase';
 
     public static function getModelLabel(): string
     {
@@ -50,7 +50,7 @@ class UtilityBillResource extends Resource
         return __('crud.utilityBills.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()->schema([
@@ -122,13 +122,13 @@ class UtilityBillResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('date', 'desc');

@@ -9,13 +9,14 @@ use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use Filament\Tables;
 use App\Models\Product;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Group;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
@@ -26,7 +27,7 @@ use App\Filament\Resources\Panel\ProductResource\RelationManagers;
 use App\Models\MaterialGroup;
 use App\Models\OnlineCategory;
 use Filament\Forms\Set;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Str;
@@ -36,13 +37,13 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?string $cluster = Settings::class;
 
-    protected static ?string $navigationGroup = 'Product';
+    protected static string|\UnitEnum|null $navigationGroup = 'Product';
 
     public static function getModelLabel(): string
     {
@@ -59,155 +60,162 @@ class ProductResource extends Resource
         return __('crud.products.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
-        return $form->schema([
-            Grid::make(3)
-                ->schema([
-                    // Main content column
-                    Grid::make(1)
+        return $form
+            ->columns(['default' => 1, 'lg' => 3])
+            ->schema([
+                // Main content column
+                Group::make([
+                    Section::make('Informasi Dasar')
+                        ->icon('heroicon-o-information-circle')
                         ->schema([
-                            Section::make('Informasi Dasar')
+                            TextInput::make('name')
+                                ->required()
+                                ->string()
+                                ->autofocus()
+                                ->live(onBlur: true)
+                                ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state))),
+
+                            Grid::make(2)
                                 ->schema([
-                                    TextInput::make('name')
+                                    TextInput::make('slug')
                                         ->required()
                                         ->string()
-                                        ->autofocus()
-                                        ->live(onBlur: true)
-                                        ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state))),
+                                        ->unique(Product::class, 'slug', ignoreRecord: true),
 
-                                    Grid::make(2)
-                                        ->schema([
-                                            TextInput::make('slug')
-                                                ->required()
-                                                ->string()
-                                                ->unique(Product::class, 'slug', ignoreRecord: true),
+                                    Select::make('unit_id')
+                                        ->required()
+                                        ->relationship('unit', 'unit')
+                                        ->preload()
+                                        ->searchable(),
+                                ]),
 
-                                            Select::make('unit_id')
-                                                ->required()
-                                                ->relationship('unit', 'unit')
-                                                ->preload(),
-                                        ]),
-
-                                    Notes::make('description'),
-                                ])
-                                ->collapsible(),
-
-                            Section::make('Harga & Grosir')
-                                ->description('Kelola harga online dan tier harga grosir')
-                                ->schema([
-                                    TextInput::make('online_price')
-                                        ->label('Harga Online Standar')
-                                        ->numeric()
-                                        ->step(1)
-                                        ->prefix('Rp')
-                                        ->helperText('Harga ini akan digunakan jika jumlah pembelian tidak masuk ke dalam tier grosir apa pun.')
-                                        ->visible(fn () => auth()->user()->hasRole(['super_admin', 'admin'])),
-
-                                    Repeater::make('priceTiers')
-                                        ->label('Tier Harga Grosir')
-                                        ->relationship('priceTiers')
-                                        ->schema([
-                                            Grid::make(4)
-                                                ->schema([
-                                                    TextInput::make('min_quantity')
-                                                        ->label('Min Qty')
-                                                        ->numeric()
-                                                        ->required()
-                                                        ->minValue(1)
-                                                        ->default(1),
-                                                    
-                                                    TextInput::make('max_quantity')
-                                                        ->label('Max Qty')
-                                                        ->numeric()
-                                                        ->minValue(1)
-                                                        ->nullable()
-                                                        ->placeholder('Tak terhingga')
-                                                        ->helperText('Kosongkan untuk ∞'),
-
-                                                    TextInput::make('price')
-                                                        ->label('Harga Tier')
-                                                        ->numeric()
-                                                        ->required()
-                                                        ->prefix('Rp'),
-
-                                                    TextInput::make('label')
-                                                        ->label('Label (Opsional)')
-                                                        ->string()
-                                                        ->nullable()
-                                                        ->placeholder('Contoh: Grosir A'),
-                                                ]),
-                                        ])
-                                        ->defaultItems(0)
-                                        ->addActionLabel('Tambah Tier Harga')
-                                        ->collapsible()
-                                        ->itemLabel(fn (array $state): ?string => $state['label'] ?? null),
-                                ])
-                                ->collapsible(),
+                            Notes::make('description'),
                         ])
-                        ->columnSpan(2),
+                        ->collapsible(),
+
+                    Section::make('Harga & Grosir')
+                        ->icon('heroicon-o-currency-dollar')
+                        ->description('Kelola harga online dan tier harga grosir')
+                        ->schema([
+                            TextInput::make('online_price')
+                                ->label('Harga Online Standar')
+                                ->numeric()
+                                ->step(1)
+                                ->prefix('Rp')
+                                ->helperText('Harga ini akan digunakan jika jumlah pembelian tidak masuk ke dalam tier grosir apa pun.')
+                                ->visible(fn() => auth()->user()->hasRole(['super_admin', 'admin'])),
+
+                            Repeater::make('priceTiers')
+                                ->label('Tier Harga Grosir')
+                                ->relationship('priceTiers')
+                                ->schema([
+                                    Grid::make(['default' => 1, 'sm' => 2, 'xl' => 4])
+                                        ->schema([
+                                            TextInput::make('min_quantity')
+                                                ->label('Min Qty')
+                                                ->numeric()
+                                                ->required()
+                                                ->minValue(1)
+                                                ->default(1),
+
+                                            TextInput::make('max_quantity')
+                                                ->label('Max Qty')
+                                                ->numeric()
+                                                ->minValue(1)
+                                                ->nullable()
+                                                ->placeholder('∞')
+                                                ->helperText('Kosongkan untuk tak terhingga'),
+
+                                            TextInput::make('price')
+                                                ->label('Harga Tier')
+                                                ->numeric()
+                                                ->required()
+                                                ->prefix('Rp'),
+
+                                            TextInput::make('label')
+                                                ->label('Label')
+                                                ->string()
+                                                ->nullable()
+                                                ->placeholder('Contoh: Grosir A'),
+                                        ]),
+                                ])
+                                ->defaultItems(0)
+                                ->addActionLabel('Tambah Tier Harga')
+                                ->collapsible()
+                                ->itemLabel(fn(array $state): ?string => isset($state['min_quantity']) ? "Tier: Min {$state['min_quantity']}" : null),
+                        ])
+                        ->collapsible(),
+                ])
+                ->columnSpan(['lg' => 2]),
 
                     // Sidebar column
-                    Grid::make(1)
-                        ->schema([
-                            Section::make('Media Produk')
-                                ->schema([
-                                    ImageInput::make('image')
-                                        ->label('Foto Utama')
-                                        ->directory('images/Product')
-                                        ->image(),
-                                ])
-                                ->collapsible(),
+                    Group::make([
+                        Section::make('Media Produk')
+                            ->icon('heroicon-o-photo')
+                            ->schema([
+                                ImageInput::make('image')
+                                    ->label('Foto Utama')
+                                    ->directory('images/Product')
+                                    ->image(),
+                            ])
+                            ->collapsible(),
 
-                            Section::make('Status & Visibilitas')
-                                ->schema([
-                                    ActiveStatusSelect::make('request')
-                                        ->label('Status Request')
-                                        ->default('2'),
+                        Section::make('Status & Visibilitas')
+                            ->icon('heroicon-o-check-circle')
+                            ->schema([
+                                ActiveStatusSelect::make('request')
+                                    ->label('Status Request')
+                                    ->default('2'),
 
-                                    ActiveStatusSelect::make('remaining')
-                                        ->label('Status Stok')
-                                        ->default('2'),
-                                ])
-                                ->collapsible(),
+                                ActiveStatusSelect::make('remaining')
+                                    ->label('Status Stok')
+                                    ->default('2'),
+                            ])
+                            ->collapsible(),
 
-                            Section::make('Pengelompokan')
-                                ->schema([
-                                    Select::make('online_category_id')
-                                        ->required()
-                                        ->relationship('onlineCategory', 'name')
-                                        ->preload(),
+                        Section::make('Pengelompokan')
+                            ->icon('heroicon-o-tag')
+                            ->schema([
+                                Select::make('online_category_id')
+                                    ->required()
+                                    ->relationship('onlineCategory', 'name')
+                                    ->preload()
+                                    ->searchable(),
 
-                                    Select::make('material_group_id')
-                                        ->required()
-                                        ->relationship('materialGroup', 'name')
-                                        ->preload(),
+                                Select::make('material_group_id')
+                                    ->required()
+                                    ->relationship('materialGroup', 'name')
+                                    ->preload()
+                                    ->searchable(),
 
-                                    Select::make('payment_type_id')
-                                        ->required()
-                                        ->relationship('paymentType', 'name')
-                                        ->preload(),
-                                ])
-                                ->collapsible(),
+                                Select::make('payment_type_id')
+                                    ->required()
+                                    ->relationship('paymentType', 'name')
+                                    ->preload()
+                                    ->searchable(),
+                            ])
+                            ->collapsible(),
 
-                            Section::make('Identifikasi')
-                                ->schema([
-                                    TextInput::make('sku')
-                                        ->label('SKU')
-                                        ->nullable()
-                                        ->string(),
+                        Section::make('Identifikasi')
+                            ->icon('heroicon-o-qr-code')
+                            ->schema([
+                                TextInput::make('sku')
+                                    ->label('SKU')
+                                    ->nullable()
+                                    ->string(),
 
-                                    TextInput::make('barcode')
-                                        ->label('Barcode')
-                                        ->nullable()
-                                        ->string(),
-                                ])
-                                ->collapsible()
-                                ->collapsed(),
-                        ])
-                        ->columnSpan(1),
-                ]),
-        ]);
+                                TextInput::make('barcode')
+                                    ->label('Barcode')
+                                    ->nullable()
+                                    ->string(),
+                            ])
+                            ->collapsible()
+                            ->collapsed(),
+                    ])
+                        ->columnSpan(['lg' => 1]),
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -242,7 +250,7 @@ class ProductResource extends Resource
                     ->type('number')
                     ->alignEnd()
                     ->sortable()
-                    ->visible(fn () => auth()->user()->hasRole(['super_admin', 'admin'])),
+                    ->visible(fn() => auth()->user()->hasRole(['super_admin', 'admin'])),
 
                 TextColumn::make('user.name'),
             ])
@@ -282,16 +290,16 @@ class ProductResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    // Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    // \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
 
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
+                    \Filament\Actions\ForceDeleteBulkAction::make(),
+                    \Filament\Actions\RestoreBulkAction::make(),
                 ]),
             ])
             ->defaultSort('name', 'asc');

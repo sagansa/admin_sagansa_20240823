@@ -13,13 +13,13 @@ use App\Filament\Forms\Notes;
 use App\Filament\Forms\PaymentStatusSelectInput;
 use App\Filament\Forms\SupplierSelect;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\FuelService;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\FuelServiceResource\Pages;
@@ -28,7 +28,7 @@ use App\Models\PaymentType;
 use App\Models\Supplier;
 use App\Models\Vehicle;
 use Filament\Forms\Components\Radio;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,13 +36,13 @@ class FuelServiceResource extends Resource
 {
     protected static ?string $model = FuelService::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 2;
 
     protected static ?string $cluster = Purchases::class;
 
-    // protected static ?string $navigationGroup = 'Purchase';
+    // protected static string|\UnitEnum|null $navigationGroup = 'Purchase';
 
     public static function getModelLabel(): string
     {
@@ -59,7 +59,7 @@ class FuelServiceResource extends Resource
         return __('crud.fuelServices.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()->schema([
@@ -162,13 +162,13 @@ class FuelServiceResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');

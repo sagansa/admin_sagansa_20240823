@@ -23,18 +23,18 @@ class FuelServicesRelationManager extends RelationManager
             )
             ->filters([])
             ->headerActions([
-                // Tables\Actions\CreateAction::make(),
+                // \Filament\Actions\CreateAction::make(),
 
-                // Tables\Actions\AttachAction::make()->form(
-                //     fn(Tables\Actions\AttachAction $action): array => [
+                // \Filament\Actions\AttachAction::make()->form(
+                //     fn(\Filament\Actions\AttachAction $action): array => [
                 //         $action->getRecordSelect(),
                 //     ]
                 // ),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
-                Tables\Actions\DetachAction::make()
+                // \Filament\Actions\EditAction::make(),
+                // \Filament\Actions\DeleteAction::make(),
+                \Filament\Actions\DetachAction::make()
                     // ->label('Detach')
                     ->action(function ($record) {
                         $record->pivot->delete(); // Hapus hubungan pada tabel pivot
@@ -42,10 +42,10 @@ class FuelServicesRelationManager extends RelationManager
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    // \Filament\Actions\DeleteBulkAction::make(),
 
-                    Tables\Actions\DetachBulkAction::make()
+                    \Filament\Actions\DetachBulkAction::make()
                         ->action(function ($records) {
                             foreach ($records as $record) {
                                 $record->paymentReceipts()->detach(); // Menghapus hubungan di tabel pivot

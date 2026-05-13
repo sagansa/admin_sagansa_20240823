@@ -12,24 +12,24 @@ use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
 use App\Filament\Forms\SupplierSelect;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\InvoicePurchase;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\InvoicePurchaseResource\Pages;
 use App\Filament\Tables\InvoicePurchaseTable;
 use App\Models\DetailRequest;
 use App\Models\Supplier;
-use Filament\Forms\Components\Group;
+use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -40,7 +40,7 @@ class InvoicePurchaseResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
-    protected static ?string $navigationGroup = 'Invoice';
+    protected static string|\UnitEnum|null $navigationGroup = 'Invoice';
 
     protected static ?string $pluralLabel = 'Invoices';
 
@@ -61,7 +61,7 @@ class InvoicePurchaseResource extends Resource
         return __('crud.invoicePurchases.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
 
@@ -113,9 +113,9 @@ class InvoicePurchaseResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
-                    Tables\Actions\Action::make('updateInvoiceStatus')
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
+                    \Filament\Actions\Action::make('updateInvoiceStatus')
                         ->label('Ubah Status')
                         ->icon('heroicon-o-pencil-square')
                         ->visible(fn () => Auth::user()->hasRole('admin'))
@@ -142,9 +142,9 @@ class InvoicePurchaseResource extends Resource
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make('setPaymentStatusToOne')
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
+                    \Filament\Actions\BulkAction::make('setPaymentStatusToOne')
                         ->label('Set Payment Status to Belum Dibayar')
                         ->icon('heroicon-o-check')
                         ->visible(fn () => Auth::user()->hasRole('admin'))
@@ -153,7 +153,7 @@ class InvoicePurchaseResource extends Resource
                             InvoicePurchase::whereIn('id', $records->pluck('id'))->update(['payment_status' => 1]);
                         })
                         ->color('warning'),
-                    Tables\Actions\BulkAction::make('setOrderStatusToOne')
+                    \Filament\Actions\BulkAction::make('setOrderStatusToOne')
                         ->label('Set Order Status to Belum Diterima')
                         ->icon('heroicon-o-check')
                         ->visible(fn () => Auth::user()->hasRole('admin'))

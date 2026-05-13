@@ -8,9 +8,9 @@ use App\Filament\Forms\StatusInput;
 use App\Filament\Forms\StoreSelect;
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -23,7 +23,7 @@ use Filament\Actions\CreateAction;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use Filament\Tables\Actions\AttachAction;
+use Filament\Actions\AttachAction;
 
 class DailySalariesRelationManager extends RelationManager
 {
@@ -31,7 +31,7 @@ class DailySalariesRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'date';
 
-    public function form(Form $form): Form
+    public function form(Schema $form): Schema
     {
         return $form->schema([
             Grid::make(['default' => 1])->schema([
@@ -84,7 +84,7 @@ class DailySalariesRelationManager extends RelationManager
 
             ->filters([])
             ->headerActions([
-                Tables\Actions\AttachAction::make()
+                \Filament\Actions\AttachAction::make()
                     ->preloadRecordSelect()
                     ->multiple()
                     ->recordSelectSearchColumns(['createdBy.name', 'date', 'amount'])
@@ -96,19 +96,19 @@ class DailySalariesRelationManager extends RelationManager
                     }),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
-                Tables\Actions\DetachAction::make()
+                // \Filament\Actions\EditAction::make(),
+                // \Filament\Actions\DeleteAction::make(),
+                \Filament\Actions\DetachAction::make()
                     ->action(function ($record) {
                         $record->pivot->delete();
                         $record->update(['status' => 3]);
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    // \Filament\Actions\DeleteBulkAction::make(),
 
-                    Tables\Actions\DetachBulkAction::make()
+                    \Filament\Actions\DetachBulkAction::make()
                         ->action(function ($records) {
                             foreach ($records as $record) {
                                 $record->paymentReceipts()->detach();

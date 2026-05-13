@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Panel\SalesOrderEmployeesResource\Pages;
 use App\Filament\Resources\Panel\SalesOrderEmployeesResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Resources\Components\Tab;
+use Filament\Schemas\Components\Tabs\Tab;
 
 class ListSalesOrderEmployees extends ListRecords
 {

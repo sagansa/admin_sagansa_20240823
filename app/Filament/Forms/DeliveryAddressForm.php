@@ -6,7 +6,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms;
 use Filament\Infolists\Components\TextEntry;
-use Humaidem\FilamentMapPicker\Fields\OSMMap;
+
 
 class DeliveryAddressForm
 {
@@ -14,7 +14,7 @@ class DeliveryAddressForm
     {
         return [
 
-            OSMMap::make('location')
+            TextInput::make('location')
                 ->label('Location')
                 ->showMarker()
                 ->draggable()

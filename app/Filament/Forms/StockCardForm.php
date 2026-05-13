@@ -5,7 +5,7 @@ namespace App\Filament\Forms;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\StockRepeaterForm;
 use App\Filament\Forms\StoreSelect;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 
 class StockCardForm
 {

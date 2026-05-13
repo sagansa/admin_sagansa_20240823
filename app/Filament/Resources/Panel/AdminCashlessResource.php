@@ -7,31 +7,29 @@ use App\Filament\Clusters\Transaction\Settings;
 use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\AdminCashless;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\AdminCashlessResource\Pages;
-use App\Filament\Resources\Panel\AdminCashlessResource\RelationManagers;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 
 class AdminCashlessResource extends Resource
 {
     protected static ?string $model = AdminCashless::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?string $cluster = Settings::class;
 
-    protected static ?string $navigationGroup = 'Cashless';
+    protected static string|\UnitEnum|null $navigationGroup = 'Cashless';
 
     public static function getModelLabel(): string
     {
@@ -48,7 +46,7 @@ class AdminCashlessResource extends Resource
         return __('crud.adminCashlesses.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()->schema([
@@ -100,13 +98,13 @@ class AdminCashlessResource extends Resource
             ->filters([])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('id', 'desc');

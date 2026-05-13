@@ -3,7 +3,7 @@
 namespace App\Filament\Forms;
 
 use App\Models\Product;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Builder;

@@ -10,15 +10,15 @@ use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\PaymentReceipt;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\Panel\PaymentReceiptResource\Pages;
 use App\Filament\Resources\Panel\PaymentReceiptResource\RelationManagers;
@@ -28,7 +28,7 @@ use App\Models\InvoicePurchase;
 use App\Models\Supplier;
 use Filament\Forms\Components\Radio;
 use Filament\Resources\RelationManagers\RelationGroup;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
 use Illuminate\Support\HtmlString;
@@ -37,13 +37,13 @@ class PaymentReceiptResource extends Resource
 {
     protected static ?string $model = PaymentReceipt::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?string $cluster = Purchases::class;
 
-    // protected static ?string $navigationGroup = 'Purchase';
+    // protected static string|\UnitEnum|null $navigationGroup = 'Purchase';
 
     public static function getModelLabel(): string
     {
@@ -60,7 +60,7 @@ class PaymentReceiptResource extends Resource
         return __('crud.paymentReceipts.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()->schema([
@@ -490,13 +490,13 @@ class PaymentReceiptResource extends Resource
             ->filters([])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');

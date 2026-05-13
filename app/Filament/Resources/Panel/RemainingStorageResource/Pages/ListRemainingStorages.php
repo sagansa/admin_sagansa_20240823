@@ -6,7 +6,7 @@ use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\Panel\RemainingStorageResource;
 use Carbon\Carbon;
-use Filament\Resources\Components\Tab;
+use Filament\Schemas\Components\Tabs\Tab;
 
 class ListRemainingStorages extends ListRecords
 {

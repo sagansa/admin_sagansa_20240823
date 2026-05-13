@@ -3,8 +3,8 @@
 namespace App\Filament\Resources\Panel\SalesOrderDirectsResource\Pages;
 
 use App\Filament\Resources\Panel\SalesOrderDirectsResource;
-use Filament\Infolists\Components\Section;
-use Filament\Infolists\Infolist;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewSalesOrderDirects extends ViewRecord

@@ -8,7 +8,7 @@ use App\Filament\Filters\SelectPaymentTypeFilter;
 use App\Filament\Filters\SelectStoreFilter;
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\DetailRequest;
 use Filament\Resources\Resource;
@@ -16,10 +16,10 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\Panel\DetailRequestResource\Pages;
 use App\Filament\Resources\Panel\DetailRequestResource\RelationManagers;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,11 +27,11 @@ class DetailRequestResource extends Resource
 {
     protected static ?string $model = DetailRequest::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $navigationGroup = 'Invoice';
+    protected static string|\UnitEnum|null $navigationGroup = 'Invoice';
 
     protected static ?string $cluster = Purchases::class;
 
@@ -52,7 +52,7 @@ class DetailRequestResource extends Resource
         return __('crud.detailRequests.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()->schema([
@@ -141,8 +141,8 @@ class DetailRequestResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    // Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    // \Filament\Actions\ViewAction::make(),
                     Action::make('Update Payment Type To Cash')
                         ->icon('heroicon-o-pencil-square')
                         ->action(function ($record) {
@@ -152,9 +152,9 @@ class DetailRequestResource extends Resource
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make('setStatusToDone')
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
+                    \Filament\Actions\BulkAction::make('setStatusToDone')
                         ->label('Set Status to Done')
                         ->icon('heroicon-o-check')
                         ->requiresConfirmation()
@@ -162,7 +162,7 @@ class DetailRequestResource extends Resource
                             DetailRequest::whereIn('id', $records->pluck('id'))->update(['status' => 2]);
                         })
                         ->color('success'),
-                    Tables\Actions\BulkAction::make('setStatusToReject')
+                    \Filament\Actions\BulkAction::make('setStatusToReject')
                         ->label('Set Status to Reject')
                         ->icon('heroicon-o-check')
                         ->requiresConfirmation()
@@ -170,7 +170,7 @@ class DetailRequestResource extends Resource
                             DetailRequest::whereIn('id', $records->pluck('id'))->update(['status' => 3]);
                         })
                         ->color('danger'),
-                    Tables\Actions\BulkAction::make('setStatusToNot Valid')
+                    \Filament\Actions\BulkAction::make('setStatusToNot Valid')
                         ->label('Set Status to Not Valid')
                         ->icon('heroicon-o-check')
                         ->requiresConfirmation()
@@ -178,7 +178,7 @@ class DetailRequestResource extends Resource
                             DetailRequest::whereIn('id', $records->pluck('id'))->update(['status' => 5]);
                         })
                         ->color('warning'),
-                    Tables\Actions\BulkAction::make('setStatusToNotUsed')
+                    \Filament\Actions\BulkAction::make('setStatusToNotUsed')
                         ->label('Set Status to Not Used')
                         ->icon('heroicon-o-check')
                         ->requiresConfirmation()

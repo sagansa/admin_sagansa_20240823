@@ -4,7 +4,7 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Stock;
 use App\Filament\Forms\TransferCardForm;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use App\Models\TransferCardStore;
@@ -17,13 +17,13 @@ class TransferCardStoreResource extends Resource
 {
     protected static ?string $model = TransferCardStore::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?string $cluster = Stock::class;
 
-    protected static ?string $navigationGroup = 'Transfer';
+    protected static string|\UnitEnum|null $navigationGroup = 'Transfer';
 
     public static function getModelLabel(): string
     {
@@ -40,7 +40,7 @@ class TransferCardStoreResource extends Resource
         return __('crud.transferCardStores.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema(
             TransferCardForm::getTransferCardStore(),

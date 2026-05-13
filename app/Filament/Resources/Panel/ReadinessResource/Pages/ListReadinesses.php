@@ -5,7 +5,7 @@ namespace App\Filament\Resources\Panel\ReadinessResource\Pages;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\Panel\ReadinessResource;
-use Filament\Resources\Components\Tab;
+use Filament\Schemas\Components\Tabs\Tab;
 
 class ListReadinesses extends ListRecords
 {

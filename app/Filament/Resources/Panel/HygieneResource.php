@@ -11,12 +11,12 @@ use Filament\Forms;
 use Filament\Tables;
 use Livewire\Component;
 use App\Models\Hygiene;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\RichEditor;
@@ -24,18 +24,18 @@ use App\Filament\Resources\Panel\HygieneResource\Pages;
 use App\Filament\Resources\Panel\HygieneResource\RelationManagers;
 use App\Models\Room;
 use Filament\Forms\Components\Repeater;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Illuminate\Support\Facades\Auth;
 
 class HygieneResource extends Resource
 {
     protected static ?string $model = Hygiene::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
-    protected static ?string $navigationGroup = 'Hygiene';
+    protected static string|\UnitEnum|null $navigationGroup = 'Hygiene';
 
     protected static ?string $cluster = Store::class;
 
@@ -54,7 +54,7 @@ class HygieneResource extends Resource
         return __('crud.hygienes.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()->schema([
@@ -79,13 +79,13 @@ class HygieneResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');

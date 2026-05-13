@@ -13,21 +13,21 @@ use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StatusSelectLabel;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\CashAdvance;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use App\Filament\Resources\Panel\CashAdvanceResource\Pages;
-use Filament\Forms\Components\Group;
+use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Filament\Tables\Filters\SelectFilter;
@@ -37,13 +37,13 @@ class CashAdvanceResource extends Resource
 {
     protected static ?string $model = CashAdvance::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-banknotes';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-banknotes';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?string $cluster = Purchases::class;
 
-    protected static ?string $navigationGroup = 'Advances';
+    protected static string|\UnitEnum|null $navigationGroup = 'Advances';
 
     public static function getModelLabel(): string
     {
@@ -60,7 +60,7 @@ class CashAdvanceResource extends Resource
         return __('crud.cashAdvances.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()
@@ -108,14 +108,14 @@ class CashAdvanceResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make('setStatusToSudahDiperiksa')
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
+                    \Filament\Actions\BulkAction::make('setStatusToSudahDiperiksa')
                         ->label('Set Status to Sudah Diperiksa')
                         ->icon('heroicon-o-check')
                         ->requiresConfirmation()

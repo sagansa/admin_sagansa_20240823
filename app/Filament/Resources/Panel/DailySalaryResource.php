@@ -11,18 +11,18 @@ use App\Filament\Forms\DateInput;
 use App\Filament\Forms\PaymentStatusSelectInput;
 use App\Filament\Forms\StoreSelect;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\DailySalary;
 use Filament\Resources\Resource;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\DailySalaryResource\Pages;
 use App\Filament\Tables\DailySalaryTable;
 use App\Models\PaymentType;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,13 +33,13 @@ class DailySalaryResource extends Resource
 {
     protected static ?string $model = DailySalary::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?string $cluster = HRD::class;
 
-    protected static ?string $navigationGroup = 'Salaries';
+    protected static string|\UnitEnum|null $navigationGroup = 'Salaries';
 
     protected static ?string $pluralLabel = 'Daily Salaries';
 
@@ -58,7 +58,7 @@ class DailySalaryResource extends Resource
         return __('crud.dailySalaries.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Section::make()->schema([
@@ -124,14 +124,14 @@ class DailySalaryResource extends Resource
 
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make()->visible(fn($record) => auth()->user()->can('update', $record)),
-                    Tables\Actions\ViewAction::make()->visible(fn($record) => auth()->user()->can('view', $record)),
+                    \Filament\Actions\EditAction::make()->visible(fn($record) => auth()->user()->can('update', $record)),
+                    \Filament\Actions\ViewAction::make()->visible(fn($record) => auth()->user()->can('view', $record)),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make('setStatusToThree')
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
+                    \Filament\Actions\BulkAction::make('setStatusToThree')
                         ->label('Set Status to Siap Dibayar')
                         ->icon('heroicon-o-check')
                         ->requiresConfirmation()
@@ -139,7 +139,7 @@ class DailySalaryResource extends Resource
                             DailySalary::whereIn('id', $records->pluck('id'))->update(['status' => 3]);
                         })
                         ->color('gray'),
-                    Tables\Actions\BulkAction::make('setStatusToOne')
+                    \Filament\Actions\BulkAction::make('setStatusToOne')
                         ->label('Set Status to Belum Dibayar')
                         ->icon('heroicon-o-check')
                         ->requiresConfirmation()

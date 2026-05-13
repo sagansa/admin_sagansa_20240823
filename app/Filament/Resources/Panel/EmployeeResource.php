@@ -8,7 +8,7 @@ use App\Filament\Forms\BaseTextInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use App\Models\Employee;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
@@ -18,27 +18,27 @@ use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\Panel\EmployeeResource\Pages;
-use Filament\Forms\Components\Tabs;
-use Filament\Forms\Components\Tabs\Tab;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
-use Filament\Tables\Actions\ActionGroup;
+use Filament\Actions\ActionGroup;
 use Filament\Tables\Columns\ToggleColumn;
-use Humaidem\FilamentMapPicker\Fields\OSMMap;
+
 use Illuminate\Support\Facades\Auth;
 
 class EmployeeResource extends Resource
 {
     protected static ?string $model = Employee::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?string $cluster = HRD::class;
 
-    protected static ?string $navigationGroup = 'Personal Data';
+    protected static string|\UnitEnum|null $navigationGroup = 'Personal Data';
 
     public static function getModelLabel(): string
     {
@@ -55,7 +55,7 @@ class EmployeeResource extends Resource
         return __('crud.employees.collectionTitle');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form->schema([
             Tabs::make('Tabs')->tabs([
@@ -114,7 +114,7 @@ class EmployeeResource extends Resource
 
                         BaseTextInput::make('siblings_no_telp'),
 
-                        OSMMap::make('location')
+                        TextInput::make('location')
                             ->showMarker()
                             ->draggable()
                             ->extraControl([
@@ -409,13 +409,13 @@ class EmployeeResource extends Resource
             ->filters([])
             ->actions([
                 ActionGroup::make([
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ViewAction::make(),
+                    \Filament\Actions\EditAction::make(),
+                    \Filament\Actions\ViewAction::make(),
                 ])
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('id', 'desc');

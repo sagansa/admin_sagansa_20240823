@@ -4,7 +4,7 @@ namespace App\Filament\Forms;
 
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Group;
+use Filament\Schemas\Components\Group;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Illuminate\Support\Facades\Storage;
@@ -28,7 +28,7 @@ class ImageWithQrCodeInput extends Group
                 ->rules(['image'])
                 ->nullable()
                 ->openable()
-                ->optimize('webp')
+
                 ->imageResizeMode('cover')
                 ->image()
                 ->imageEditor()

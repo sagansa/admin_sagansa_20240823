@@ -11,9 +11,9 @@ use App\Filament\Forms\StoreSelect;
 use App\Filament\Forms\SupplierSelect;
 use Filament\Forms;
 use Filament\Tables;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -23,8 +23,8 @@ use Filament\Resources\RelationManagers\RelationManager;
 use App\Filament\Resources\Panel\PaymentReceiptResource;
 use App\Filament\Tables\InvoicePurchaseTable;
 use App\Models\InvoicePurchase;
-use Filament\Tables\Actions\AttachAction;
-use Filament\Tables\Actions\CreateAction;
+use Filament\Actions\AttachAction;
+use Filament\Actions\CreateAction;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Database\Eloquent\Builder;
@@ -38,7 +38,7 @@ class InvoicePurchasesRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'invoice_purchase_name';
 
-    public function form(Form $form): Form
+    public function form(Schema $form): Schema
     {
         return $form->schema([
             //
@@ -65,19 +65,19 @@ class InvoicePurchasesRelationManager extends RelationManager
                     })
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
-                Tables\Actions\DetachAction::make()
+                // \Filament\Actions\EditAction::make(),
+                // \Filament\Actions\DeleteAction::make(),
+                \Filament\Actions\DetachAction::make()
                     ->action(function ($record) {
                         $record->pivot->delete();
                         $record->update(['payment_status' => 1]);
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    // \Filament\Actions\DeleteBulkAction::make(),
 
-                    Tables\Actions\DetachBulkAction::make()
+                    \Filament\Actions\DetachBulkAction::make()
                         ->action(function (Collection $records) {
                             foreach ($records as $record) {
                                 if ($record->pivot) {

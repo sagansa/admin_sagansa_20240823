@@ -21,10 +21,9 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
-use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use Filament\Pages\Auth\Register;
 use App\Filament\Widgets\ProductStockWidget;
+use App\Filament\Widgets\StockOverviewWidget;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -72,9 +71,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                // ProductStockWidget::class, // TODO: optimize query - causes 30s+ timeout
-                // Widgets\AccountWidget::class,
-                // Widgets\FilamentInfoWidget::class,
+                ProductStockWidget::class,
+                StockOverviewWidget::class,
+                Widgets\AccountWidget::class,
             ])
             ->databaseNotifications()
             ->middleware([
@@ -91,30 +90,8 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->userMenuItems([
-                'profile' => MenuItem::make()
-                    ->label(fn() => auth()->user()->name)
-                    ->url(fn(): string => EditProfilePage::getUrl())
-                    ->icon('heroicon-m-user-circle')
-            ])
             ->plugins([
                 FilamentShieldPlugin::make('super_admin'),
-                FilamentEditProfilePlugin::make()
-                    // ->slug('my-profile')
-                    ->setTitle('My Profile')
-                    ->setNavigationLabel('My Profile')
-                    // ->setNavigationGroup('Group Profile')
-                    ->setIcon('heroicon-o-user')
-                    // ->setSort(10)
-                    // ->canAccess(fn () => auth()->user()->id === 1)
-                    // ->shouldRegisterNavigation(false)
-                    ->shouldShowDeleteAccountForm(false)
-                // ->shouldShowSanctumTokens()
-                // ->shouldShowBrowserSessionsForm()
-                // ->shouldShowAvatarForm()
-                // ->customProfileComponents([
-                //     Employee::class,
-                // ]),
             ]);
     }
 }

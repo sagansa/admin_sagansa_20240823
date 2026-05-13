@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\Panel\RemainingStockResource\RelationManagers;
 
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Filament\Forms\Components\Grid;
+use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -17,7 +17,7 @@ class ProductsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public function form(Form $form): Form
+    public function form(Schema $form): Schema
     {
         return $form->schema([
             Grid::make(['default' => 1])->schema([
@@ -56,10 +56,10 @@ class ProductsRelationManager extends RelationManager
             ])
             ->filters([])
             ->headerActions([
-                // Tables\Actions\CreateAction::make(),
+                // \Filament\Actions\CreateAction::make(),
 
-                // Tables\Actions\AttachAction::make()->form(
-                //     fn(Tables\Actions\AttachAction $action): array => [
+                // \Filament\Actions\AttachAction::make()->form(
+                //     fn(\Filament\Actions\AttachAction $action): array => [
                 //         $action->getRecordSelect(),
 
                 //         TextInput::make('quantity')
@@ -71,15 +71,15 @@ class ProductsRelationManager extends RelationManager
                 // ),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
-                // Tables\Actions\DetachAction::make(),
+                // \Filament\Actions\EditAction::make(),
+                // \Filament\Actions\DeleteAction::make(),
+                // \Filament\Actions\DetachAction::make(),
             ])
             ->bulkActions([
-                // Tables\Actions\BulkActionGroup::make([
-                //     Tables\Actions\DeleteBulkAction::make(),
+                // \Filament\Actions\BulkActionGroup::make([
+                //     \Filament\Actions\DeleteBulkAction::make(),
 
-                //     Tables\Actions\DetachBulkAction::make(),
+                //     \Filament\Actions\DetachBulkAction::make(),
                 // ]),
             ])
             ->defaultSort('name', 'asc');

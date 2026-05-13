@@ -7,7 +7,7 @@ use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\BaseSelect;
 use App\Models\DetailInvoice;
 use Illuminate\Database\Eloquent\Builder;
-use Filament\Forms\Components\Group;
+use Filament\Schemas\Components\Group;
 
 class TransferCardHeadForm
 {
