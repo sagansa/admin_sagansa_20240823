@@ -12,10 +12,10 @@ class PaymentStatusColumn extends TextColumn
 
         $this->formatStateUsing(
             fn(string $state): string => match ($state) {
-                '1' => 'belum dibayar',
-                '2' => 'sudah dibayar',
-                '3' => 'siap dibayar',
-                '4' => 'periksa ulang',
+                '1' => 'Belum Diperiksa',
+                '2' => 'Valid / Sudah Dibayar',
+                '3' => 'Tidak Valid',
+                '4' => 'Menunggu Pembayaran',
                 default => $state,
             }
         );
@@ -25,9 +25,9 @@ class PaymentStatusColumn extends TextColumn
                 fn(string $state): string => match ($state) {
                     '1' => 'warning',
                     '2' => 'success',
-                    '3' => 'gray',
-                    '4' => 'danger',
-                    default => $state,
+                    '3' => 'danger',
+                    '4' => 'info',
+                    default => 'gray',
                 }
              );
     }

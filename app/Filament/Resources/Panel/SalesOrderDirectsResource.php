@@ -7,6 +7,7 @@ use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\DeliveryStatusColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
+use App\Filament\Columns\PaymentStatusColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Filters\SelectStoreFilter;
 use Filament\Tables\Filters\SelectFilter;
@@ -138,7 +139,7 @@ class SalesOrderDirectsResource extends Resource
                 TextColumn::make('transferToAccount.transfer_account_name')
                     ->hidden(fn () => Auth::user()->hasRole('storage-staff')),
 
-                StatusColumn::make('payment_status')
+                PaymentStatusColumn::make('payment_status')
                     ->hidden(fn () => Auth::user()->hasRole('storage-staff')),
 
                 DeliveryStatusColumn::make('delivery_status'),
@@ -146,8 +147,39 @@ class SalesOrderDirectsResource extends Resource
                 TextColumn::make('payment_method')
                     ->label('Payment Method')
                     ->badge()
-                    ->color('info')
+                    ->color(fn (string $state): string => match (true) {
+                        str_contains($state, 'midtrans') => 'success',
+                        str_contains($state, 'manual') => 'info',
+                        default => 'gray',
+                    })
                     ->toggleable(),
+
+                TextColumn::make('midtrans_status')
+                    ->label('Midtrans Status')
+                    ->badge()
+                    ->color(fn (?string $state): string => match ($state) {
+                        'settlement'  => 'success',
+                        'capture'     => 'success',
+                        'pending'     => 'warning',
+                        'deny'        => 'danger',
+                        'cancel'      => 'danger',
+                        'expire'      => 'gray',
+                        default       => 'gray',
+                    })
+                    ->placeholder('-')
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('status')
+                    ->label('Order Status')
+                    ->badge()
+                    ->color(fn (?string $state): string => match ($state) {
+                        'paid'      => 'success',
+                        'pending'   => 'warning',
+                        'cancelled' => 'danger',
+                        default     => 'gray',
+                    })
+                    ->placeholder('-')
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('admin_fee')
                     ->label('Admin Fee')
@@ -289,7 +321,32 @@ class SalesOrderDirectsResource extends Resource
                                 TextEntry::make('payment_method')
                                     ->label('Payment Method')
                                     ->badge()
-                                    ->color('info'),
+                                    ->color(fn (?string $state): string => match (true) {
+                                        str_contains($state ?? '', 'midtrans') => 'success',
+                                        str_contains($state ?? '', 'manual')   => 'info',
+                                        default => 'gray',
+                                    }),
+                                TextEntry::make('midtrans_status')
+                                    ->label('Midtrans Status')
+                                    ->badge()
+                                    ->placeholder('-')
+                                    ->color(fn (?string $state): string => match ($state) {
+                                        'settlement', 'capture' => 'success',
+                                        'pending'               => 'warning',
+                                        'deny', 'cancel'        => 'danger',
+                                        'expire'                => 'gray',
+                                        default                 => 'gray',
+                                    }),
+                                TextEntry::make('status')
+                                    ->label('Order Status')
+                                    ->badge()
+                                    ->placeholder('-')
+                                    ->color(fn (?string $state): string => match ($state) {
+                                        'paid'      => 'success',
+                                        'pending'   => 'warning',
+                                        'cancelled' => 'danger',
+                                        default     => 'gray',
+                                    }),
                                 TextEntry::make('admin_fee')
                                     ->label('Admin Fee')
                                     ->money('IDR'),
@@ -489,8 +546,9 @@ class SalesOrderDirectsResource extends Resource
                 ->reactive()
                 ->inlineLabel()
                 ->options([
-                    '1' => 'belum diperiksa',
-                    '2' => 'valid',
+                    '1' => 'Belum diperiksa',
+                    '2' => 'Valid / Sudah Dibayar',
+                    '4' => 'Menunggu Pembayaran (Midtrans)',
                 ]),
 
             Select::make('delivery_status')

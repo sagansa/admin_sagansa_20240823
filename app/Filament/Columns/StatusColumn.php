@@ -27,7 +27,7 @@ class StatusColumn extends TextColumn
                     '2' => 'success',
                     '3' => 'gray',
                     '4' => 'danger',
-                    default => $state,
+                    default => 'gray',
                 }
              );
     }

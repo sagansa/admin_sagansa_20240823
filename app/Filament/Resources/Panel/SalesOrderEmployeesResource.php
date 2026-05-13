@@ -6,6 +6,7 @@ use App\Filament\Clusters\Sales;
 use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
+use App\Filament\Columns\PaymentStatusColumn;
 use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\BottomTotalPriceForm;
 use App\Filament\Forms\DateInput;
@@ -112,7 +113,7 @@ class SalesOrderEmployeesResource extends Resource
                         ->label('')
                         ->prefix('Rp ')),
 
-                StatusColumn::make('payment_status')
+                PaymentStatusColumn::make('payment_status')
                     ->label('Payment Status'),
 
                 TextColumn::make('orderedBy.name')
@@ -203,10 +204,10 @@ class SalesOrderEmployeesResource extends Resource
                 ->required()
                 ->inlineLabel()
                 ->options([
-                    '1' => 'belum diperiksa',
-                    '2' => 'valid',
-                    '3' => 'perbaiki',
-                    '4' => 'periksa ulang',
+                    '1' => 'Belum Diperiksa',
+                    '2' => 'Valid / Sudah Dibayar',
+                    '3' => 'Tidak Valid',
+                    '4' => 'Menunggu Pembayaran',
                 ])
                 ->visible(fn ($record) => auth()->user()->hasRole('admin')),
         ];
