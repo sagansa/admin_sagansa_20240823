@@ -162,6 +162,7 @@ class SalesOrderReturResource extends Resource
             ])
             ->filters([
                 SelectStoreFilter::make('store_id'),
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 ActionGroup::make([
@@ -169,11 +170,22 @@ class SalesOrderReturResource extends Resource
                         ->visible(fn(SalesOrderRetur $record) => !in_array($record->delivery_status, [2]))->slideOver(),
                     \Filament\Actions\ViewAction::make()
                         ->visible(fn(SalesOrderRetur $record) => in_array($record->delivery_status, [2])),
+                    Tables\Actions\DeleteAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\RestoreAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\ForceDeleteAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
                 ])
             ])
             ->bulkActions([
                 \Filament\Actions\BulkActionGroup::make([
-                    \Filament\Actions\DeleteBulkAction::make(),
+                    \Filament\Actions\DeleteBulkAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\RestoreBulkAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
                 ]),
             ])
             ->defaultSort('delivery_date', 'desc');

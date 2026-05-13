@@ -32,8 +32,6 @@ use App\Filament\Forms\StoreSelect;
 use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Widgets\SalesOrderOnlinesStat;
 use App\Models\SalesOrderOnline;
 use Filament\Forms\Components\Radio;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkAction;
 use Filament\Tables\Enums\FiltersLayout;
@@ -224,6 +222,7 @@ class SalesOrderOnlinesResource extends Resource
                         '5' => 'perbaiki',
                         '6' => 'dikembalikan',
                     ]),
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->filtersLayout(FiltersLayout::AboveContent)
             ->filtersFormColumns(2)
@@ -248,11 +247,22 @@ class SalesOrderOnlinesResource extends Resource
                         ->visible(fn(SalesOrderOnline $record) => !in_array($record->delivery_status, [2])),
                     \Filament\Actions\ViewAction::make()
                         ->visible(fn(SalesOrderOnline $record) => in_array($record->delivery_status, [2])),
+                    Tables\Actions\DeleteAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\RestoreAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\ForceDeleteAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
                 ])
             ])
             ->bulkActions([
                 \Filament\Actions\BulkActionGroup::make([
-                    \Filament\Actions\DeleteBulkAction::make(),
+                    \Filament\Actions\DeleteBulkAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\RestoreBulkAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
                     BulkAction::make('Change Delivery Status')
                         ->icon('heroicon-m-check')
                         ->requiresConfirmation()
@@ -367,14 +377,14 @@ class SalesOrderOnlinesResource extends Resource
             Radio::make('qr_code_type')
                 ->label('Receipt Input Type')
                 ->inline()
-                ->hidden(fn (Get $get) => filled($get('receipt_no')) && fn ($operation) => $operation !== 'create')
+                ->hidden(fn ($get) => filled($get('receipt_no')) && fn ($operation) => $operation !== 'create')
                 ->reactive()
                 ->dehydrated(false) // tidak disimpan ke DB
                 ->options([
                     'qr_code' => 'QR Code',
                     'manual'  => 'Manual',
                 ])
-                ->afterStateUpdated(function (Get $get, Set $set, ?string $state) {
+                ->afterStateUpdated(function ($get, $set, ?string $state) {
                     // kosongkan receipt_no saat ganti mode agar tidak bawa nilai lama
                     $set('receipt_no', null);
                 }),
@@ -382,10 +392,10 @@ class SalesOrderOnlinesResource extends Resource
             // Scan QR menulis langsung ke kolom 'receipt_no'
             QrCodeInput::make('receipt_qr_code')
                 ->label('Receipt No (QR)')
-                ->hidden(fn (Get $get) => $get('qr_code_type') !== 'qr_code')
-                ->required(fn (Get $get) => $get('qr_code_type') === 'qr_code')
+                ->hidden(fn ($get) => $get('qr_code_type') !== 'qr_code')
+                ->required(fn ($get) => $get('qr_code_type') === 'qr_code')
                 ->statePath('receipt_no') // <— kunci: tulis ke state 'receipt_no' (kolom model)
-                ->dehydrated(fn (Get $get) => $get('qr_code_type') === 'qr_code')
+                ->dehydrated(fn ($get) => $get('qr_code_type') === 'qr_code')
                 ->unique(
                     table: SalesOrderOnline::class,
                     column: 'receipt_no',
@@ -396,11 +406,11 @@ class SalesOrderOnlinesResource extends Resource
             // Input manual juga menulis ke state 'receipt_no'
             TextInput::make('receipt_manual')
                 ->label('Receipt No (Manual)')
-                ->hidden(fn (Get $get) => $get('qr_code_type') !== 'manual' || blank($get('qr_code_type')))
+                ->hidden(fn ($get) => $get('qr_code_type') !== 'manual' || blank($get('qr_code_type')))
                 // ->visible(fn (Get $get) => filled($get('receipt_no')) || fn ($operation) => $operation === 'create')
-                ->required(fn (Get $get) => $get('qr_code_type') === 'manual')
+                ->required(fn ($get) => $get('qr_code_type') === 'manual')
                 ->statePath('receipt_no') // <— sama
-                ->dehydrated(fn (Get $get) => $get('qr_code_type') === 'manual')
+                ->dehydrated(fn ($get) => $get('qr_code_type') === 'manual')
                 ->unique(
                     table: SalesOrderOnline::class,
                     column: 'receipt_no',
@@ -410,8 +420,8 @@ class SalesOrderOnlinesResource extends Resource
 
             TextInput::make('receipt_no')
                 ->hidden(fn ($operation) => $operation === 'create')
-                ->visible(fn (Get $get, $operation) => filled($get('receipt_no')))
-                ->dehydrated(fn (Get $get) => filled($get('receipt_no'))) // hanya simpan jika ada isinya
+                ->visible(fn ($get, $operation) => filled($get('receipt_no')))
+                ->dehydrated(fn ($get) => filled($get('receipt_no'))) // hanya simpan jika ada isinya
                 ->inlineLabel()
                 ->disabled(fn() => auth()->user()->hasRole('storage-staff'))
                 ->unique(

@@ -121,17 +121,28 @@ class SalesOrderEmployeesResource extends Resource
                     ->visible(fn ($record) => auth()->user()->hasRole('admin')),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 ActionGroup::make([
                     \Filament\Actions\EditAction::make(),
                     \Filament\Actions\ViewAction::make(),
+                    Tables\Actions\DeleteAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\RestoreAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\ForceDeleteAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
                 ])
             ])
             ->bulkActions([
                 \Filament\Actions\BulkActionGroup::make([
-                    \Filament\Actions\DeleteBulkAction::make(),
+                    \Filament\Actions\DeleteBulkAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\RestoreBulkAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
                 ]),
             ])
             ->defaultSort('delivery_date', 'desc');

@@ -217,25 +217,37 @@ class SalesOrderDirectsResource extends Resource
             ->filters([
                 SelectStoreFilter::make('store_id'),
                 // DateFilter::make('delivery_date'),
-                SelectFilter::make('transfer_to_account_id')
+                SelectFilter::make('transfer_to_account_id'),
                     // ->relationship('transferToAccount', 'transfer_account_name'),
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 ActionGroup::make([
                     \Filament\Actions\EditAction::make(),
                     \Filament\Actions\ViewAction::make(),
                     Action::make('Update Payment Status To Valid')
-                        ->visible(fn ($record) => Auth::user()->hasRole('admin') && $record->payment_status != 2)
+                        ->visible(fn ($record) => Auth::user()->hasRole('admin') && $record->payment_status != 2 && $record->deleted_at === null)
                         ->icon('heroicon-o-pencil-square')
                         ->action(function ($record) {
                             $record->update(['payment_status' => 2]);
                         })
                         ->requiresConfirmation(),
+                    Tables\Actions\DeleteAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\RestoreAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\ForceDeleteAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
                 ])
             ])
             ->bulkActions([
                 \Filament\Actions\BulkActionGroup::make([
-                    \Filament\Actions\DeleteBulkAction::make(),
+                    \Filament\Actions\DeleteBulkAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\RestoreBulkAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                        ->visible(fn () => Auth::user()->hasRole('admin')),
                 ]),
             ])
             ->defaultSort('delivery_date', 'desc');;
