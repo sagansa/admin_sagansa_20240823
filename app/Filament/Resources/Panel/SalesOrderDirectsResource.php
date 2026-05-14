@@ -495,13 +495,13 @@ class SalesOrderDirectsResource extends Resource
 
             DateInput::make('delivery_date')
                 ->label('Delivery Date')
-                ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2 || Auth::user()->hasRole('storage-staff')),
+                ->disabled(fn (?SalesOrderDirect $record) => Auth::user()->hasRole('customer') && $record?->payment_status == 2 || Auth::user()->hasRole('storage-staff')),
 
             Select::make('delivery_service_id')
                 ->required()
                 ->inlineLabel()
                 ->label('Delivery Service')
-                ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2 || Auth::user()->hasRole('storage-staff'))
+                ->disabled(fn (?SalesOrderDirect $record) => Auth::user()->hasRole('customer') && $record?->payment_status == 2 || Auth::user()->hasRole('storage-staff'))
                 ->relationship('deliveryService', 'name')
                 ->searchable()
                 ->preload(),
@@ -509,7 +509,7 @@ class SalesOrderDirectsResource extends Resource
             Select::make('delivery_address_id')
                 ->label('Delivery Address')
                 ->inlineLabel()
-                ->required(fn (SalesOrderDirect $salesOrderDirect) => $salesOrderDirect->delivery_service_id != 33)
+                ->required(fn (?SalesOrderDirect $record) => $record?->delivery_service_id != 33)
                 ->relationship(
                     name: 'deliveryAddress',
                     modifyQueryUsing: function (Builder $query) {
@@ -524,9 +524,9 @@ class SalesOrderDirectsResource extends Resource
                 )
                 ->getOptionLabelFromRecordUsing(fn (DeliveryAddress $record) => "{$record->delivery_address_name}")
                 ->searchable()
-                ->hidden(fn (SalesOrderDirect $salesOrderDirect) => !Auth::user()->hasRole('customer') || $salesOrderDirect->delivery_service_id == 33)
-                ->disabled(fn (SalesOrderDirect $salesOrderDirect) =>
-                    Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 2)
+                ->hidden(fn (?SalesOrderDirect $record) => !Auth::user()->hasRole('customer') || $record?->delivery_service_id == 33)
+                ->disabled(fn (?SalesOrderDirect $record) =>
+                    Auth::user()->hasRole('customer') && $record?->payment_status == 2)
                 ->preload()
                 ->createOptionForm(
                     DeliveryAddressForm::schema()
@@ -537,7 +537,7 @@ class SalesOrderDirectsResource extends Resource
                 ->inlineLabel()
                 ->label('Transfer To Account')
                 ->hidden(fn () => Auth::user()->hasRole('storage-staff'))
-                ->disabled(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('customer') && $salesOrderDirect->payment_status == 1)
+                ->disabled(fn (?SalesOrderDirect $record) => Auth::user()->hasRole('customer') && $record?->payment_status == 1)
                 ->relationship('transferToAccount', 'name')
                 ->options(TransferToAccount::where('status', 1)
                     ->get()
@@ -548,8 +548,8 @@ class SalesOrderDirectsResource extends Resource
             TextInput::make('receipt_no')
                 ->disabled(fn () => Auth::user()->hasRole('customer') || Auth::user()->hasRole('admin'))
                 ->inlineLabel()
-                ->hidden(fn ($operation) => $operation === 'create' && fn(SalesOrderDirect $salesOrderDirect) => $salesOrderDirect->deliveryStatus == 3)
-                ->required(fn (SalesOrderDirect $salesOrderDirect) => Auth::user()->hasRole('storage-staff') && $salesOrderDirect->delivery_status == 3),
+                ->hidden(fn ($operation, ?SalesOrderDirect $record) => $operation === 'create' && $record?->delivery_status == 3)
+                ->required(fn (?SalesOrderDirect $record) => Auth::user()->hasRole('storage-staff') && $record?->delivery_status == 3),
 
             Select::make('payment_status')
                 ->required(fn () => Auth::user()->hasRole('admin'))
