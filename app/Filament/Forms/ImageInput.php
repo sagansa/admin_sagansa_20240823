@@ -14,7 +14,8 @@ class ImageInput extends FileUpload
             ->nullable()
             ->openable()
             ->downloadable()
-            ->disk('public')
-            ->fetchFileInformation(false);
+            ->image()
+            ->imageEditor(false)
+            ->disk('public');
     }
 }

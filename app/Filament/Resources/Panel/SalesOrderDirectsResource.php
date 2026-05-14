@@ -99,14 +99,22 @@ class SalesOrderDirectsResource extends Resource
             ->query($query)
             ->columns([
 
-                ImageOpenUrlColumn::make('image_payment')
+                TextColumn::make('image_payment')
                     ->label('Payment')
-                    ->url(fn($record) => 'https://sagansa.id/storage/' . $record->image_payment)
+                    ->formatStateUsing(fn ($state) => $state ? 'Lihat' : '-')
+                    ->icon(fn ($state) => $state ? 'heroicon-o-photo' : null)
+                    ->color('info')
+                    ->url(fn($record) => $record->image_payment ? 'https://sagansa.id/storage/' . $record->image_payment : null)
+                    ->openUrlInNewTab()
                     ->visible(fn () => Auth::user()->hasRole('admin') || Auth::user()->hasRole('customer')),
 
-                ImageOpenUrlColumn::make('image_delivery')
+                TextColumn::make('image_delivery')
                     ->label('delivery')
-                    ->url(fn($record) => 'https://sagansa.id/storage/' . $record->image_delivery),
+                    ->formatStateUsing(fn ($state) => $state ? 'Lihat' : '-')
+                    ->icon(fn ($state) => $state ? 'heroicon-o-photo' : null)
+                    ->color('info')
+                    ->url(fn($record) => $record->image_delivery ? 'https://sagansa.id/storage/' . $record->image_delivery : null)
+                    ->openUrlInNewTab(),
 
                 TextColumn::make('orderedBy.name')
                     ->searchable()

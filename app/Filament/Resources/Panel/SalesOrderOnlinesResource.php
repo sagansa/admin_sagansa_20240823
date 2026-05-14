@@ -85,14 +85,22 @@ class SalesOrderOnlinesResource extends Resource
             ->poll('60s')
             ->query(SalesOrderOnline::query()->where('for', 3))
             ->columns([
-                ImageOpenUrlColumn::make('image_payment')
+                TextColumn::make('image_payment')
                     ->disabled(fn() => Auth::user()->hasRole('staff') || Auth::user()->hasRole('storage-staff'))
                     ->label('Payment')
-                    ->url(fn($record) => 'https://sagansa.id/storage/' . $record->image_payment),
+                    ->formatStateUsing(fn ($state) => $state ? 'Lihat' : '-')
+                    ->icon(fn ($state) => $state ? 'heroicon-o-photo' : null)
+                    ->color('info')
+                    ->url(fn($record) => $record->image_payment ? 'https://sagansa.id/storage/' . $record->image_payment : null)
+                    ->openUrlInNewTab(),
 
-                ImageOpenUrlColumn::make('image_delivery')
+                TextColumn::make('image_delivery')
                     ->label('Delivery')
-                    ->url(fn($record) => 'https://sagansa.id/storage/' . $record->image_delivery),
+                    ->formatStateUsing(fn ($state) => $state ? 'Lihat' : '-')
+                    ->icon(fn ($state) => $state ? 'heroicon-o-photo' : null)
+                    ->color('info')
+                    ->url(fn($record) => $record->image_delivery ? 'https://sagansa.id/storage/' . $record->image_delivery : null)
+                    ->openUrlInNewTab(),
 
                 TextColumn::make('receipt_no')
                     ->label('Receipt No')
