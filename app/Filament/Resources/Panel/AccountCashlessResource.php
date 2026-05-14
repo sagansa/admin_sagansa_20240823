@@ -17,6 +17,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\AccountCashlessResource\Pages;
 use Filament\Actions\ActionGroup;
+use Filament\Forms\Form;
 use Filament\Tables\Filters\SelectFilter;
 
 class AccountCashlessResource extends Resource
@@ -48,7 +49,7 @@ class AccountCashlessResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return $schema->components([
+        return $schema->schema([
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
                     Select::make('cashless_provider_id')

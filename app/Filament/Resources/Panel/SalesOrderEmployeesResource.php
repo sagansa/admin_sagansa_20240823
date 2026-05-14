@@ -7,7 +7,6 @@ use App\Filament\Columns\CurrencyColumn;
 use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\PaymentStatusColumn;
-use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\BottomTotalPriceForm;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\DeliveryAddressForm;
@@ -15,12 +14,9 @@ use App\Filament\Forms\SalesProductForm;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\StoreSelect;
 use App\Filament\Resources\Panel\SalesOrderEmployeesResource\Pages;
-use App\Filament\Resources\Panel\SalesOrderEmployeesResource\Widgets\SalesOrderEmployeesStat;
 use App\Models\DeliveryAddress;
-use App\Models\Store;
 use App\Models\TransferToAccount;
 use App\Models\SalesOrderEmployee;
-use Filament\Forms\Components\DatePicker;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
@@ -127,11 +123,11 @@ class SalesOrderEmployeesResource extends Resource
                 ActionGroup::make([
                     \Filament\Actions\EditAction::make(),
                     \Filament\Actions\ViewAction::make(),
-                    Tables\Actions\DeleteAction::make()
+                    \Filament\Actions\DeleteAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
-                    Tables\Actions\RestoreAction::make()
+                    \Filament\Actions\RestoreAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
-                    Tables\Actions\ForceDeleteAction::make()
+                    \Filament\Actions\ForceDeleteAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
                 ])
             ])
@@ -139,9 +135,9 @@ class SalesOrderEmployeesResource extends Resource
                 \Filament\Actions\BulkActionGroup::make([
                     \Filament\Actions\DeleteBulkAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
-                    Tables\Actions\RestoreBulkAction::make()
+                    \Filament\Actions\RestoreBulkAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
-                    Tables\Actions\ForceDeleteBulkAction::make()
+                    \Filament\Actions\ForceDeleteBulkAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
                 ]),
             ])
