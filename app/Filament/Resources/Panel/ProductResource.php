@@ -26,7 +26,7 @@ use App\Filament\Resources\Panel\ProductResource\Pages;
 use App\Filament\Resources\Panel\ProductResource\RelationManagers;
 use App\Models\MaterialGroup;
 use App\Models\OnlineCategory;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Actions\ActionGroup;
 use Filament\Tables\Columns\SelectColumn;
 use Filament\Tables\Filters\SelectFilter;

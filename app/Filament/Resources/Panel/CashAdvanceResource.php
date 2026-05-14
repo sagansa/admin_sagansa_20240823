@@ -12,7 +12,6 @@ use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StatusSelectLabel;
-use Filament\Tables;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\CashAdvance;
@@ -25,8 +24,8 @@ use Filament\Tables\Columns\ImageColumn;
 use App\Filament\Resources\Panel\CashAdvanceResource\Pages;
 use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
@@ -143,14 +142,14 @@ class CashAdvanceResource extends Resource
                         ->relationship('user', 'name', fn(Builder $query) => $query
                             ->whereHas('roles', fn(Builder $query) => $query
                                 ->where('name', 'staff') || $query
-                                ->where('name', 'supervisor')))
+                                    ->where('name', 'supervisor')))
                         ->searchable()
                         ->preload()
                         ->columnSpan([
                             'md' => 4,
                         ])
                         ->reactive()
-                        ->afterStateUpdated(function ($state, callable $set) {
+                        ->afterStateUpdated(function ($state, Set $set) {
                             if ($state) {
                                 $set('before', CashAdvanceResource::getRemainBefore($state));
                             }
@@ -208,8 +207,8 @@ class CashAdvanceResource extends Resource
                         ]),
 
                 ])->columns([
-                    'md' => 12,
-                ]),
+                            'md' => 12,
+                        ]),
 
                 Notes::make('notes'),
 

@@ -6,7 +6,6 @@ use App\Filament\Clusters\Purchases;
 use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\StoreSelect;
-use Filament\Tables;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\RequestPurchase;
@@ -19,9 +18,9 @@ use App\Filament\Resources\Panel\RequestPurchaseResource\Pages;
 use App\Models\Product;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Get;
 use Filament\Actions\ActionGroup;
 use Illuminate\Support\Facades\Auth;
+use Filament\Schemas\Components\Utilities\Get;
 
 class RequestPurchaseResource extends Resource
 {

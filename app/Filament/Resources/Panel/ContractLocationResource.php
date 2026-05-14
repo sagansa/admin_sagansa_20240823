@@ -3,9 +3,6 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Store;
-use Filament\Forms;
-use Filament\Tables;
-use Livewire\Component;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\ContractLocation;
@@ -15,10 +12,8 @@ use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\Panel\ContractLocationResource\Pages;
-use App\Filament\Resources\Panel\ContractLocationResource\RelationManagers;
 
 class ContractLocationResource extends Resource
 {

@@ -10,7 +10,6 @@ use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Filters\SelectStoreFilter;
 use App\Filament\Filters\DateFilter;
 use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Pages;
-use App\Models\DeliveryAddress;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
@@ -25,11 +24,9 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Tables\Columns\Summarizers\Sum;
 use App\Filament\Forms\BottomTotalPriceForm;
 use App\Filament\Forms\DateInput;
-use App\Filament\Forms\DeliveryAddressForm;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\SalesProductForm;
 use App\Filament\Forms\StoreSelect;
-use App\Filament\Resources\Panel\SalesOrderOnlinesResource\Widgets\SalesOrderOnlinesStat;
 use App\Models\SalesOrderOnline;
 use Filament\Forms\Components\Radio;
 use Filament\Actions\ActionGroup;
@@ -39,6 +36,11 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Collection;
 use JeffersonGoncalves\Filament\QrCodeField\Forms\Components\QrCodeInput;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\RestoreAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreBulkAction;
+use Filament\Actions\ForceDeleteBulkAction;
 
 class SalesOrderOnlinesResource extends Resource
 {
@@ -247,11 +249,11 @@ class SalesOrderOnlinesResource extends Resource
                         ->visible(fn(SalesOrderOnline $record) => !in_array($record->delivery_status, [2])),
                     \Filament\Actions\ViewAction::make()
                         ->visible(fn(SalesOrderOnline $record) => in_array($record->delivery_status, [2])),
-                    Tables\Actions\DeleteAction::make()
+                    DeleteAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
-                    Tables\Actions\RestoreAction::make()
+                    RestoreAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
-                    Tables\Actions\ForceDeleteAction::make()
+                    ForceDeleteAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
                 ])
             ])
@@ -259,9 +261,9 @@ class SalesOrderOnlinesResource extends Resource
                 \Filament\Actions\BulkActionGroup::make([
                     \Filament\Actions\DeleteBulkAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
-                    Tables\Actions\RestoreBulkAction::make()
+                    RestoreBulkAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
-                    Tables\Actions\ForceDeleteBulkAction::make()
+                    ForceDeleteBulkAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
                     BulkAction::make('Change Delivery Status')
                         ->icon('heroicon-m-check')

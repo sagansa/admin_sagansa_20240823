@@ -8,7 +8,6 @@ use App\Filament\Columns\StatusColumn;
 use App\Filament\Forms\CurrencyInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
-use Filament\Tables;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\ClosingCourier;
@@ -17,7 +16,6 @@ use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\ClosingCourierResource\Pages;
@@ -79,43 +77,43 @@ class ClosingCourierResource extends Resource
                         ->multiple()
                         ->relationship(
                             name: 'closingStores',
-                            modifyQueryUsing: fn (Builder $query, $get) => $query
+                            modifyQueryUsing: fn(Builder $query, $get) => $query
                                 ->where('transfer_by_id', Auth::id())
-                                // ->where('status', '1')
-                                // ->when($get('store_id'), fn ($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
+                            // ->where('status', '1')
+                            // ->when($get('store_id'), fn ($query, $storeId) => $query->where('store_id', $storeId)) // Menggunakan store_id yang dipilih
                         )
-                        ->getOptionLabelFromRecordUsing(fn (ClosingStore $record) => "{$record->closing_store_name}")
+                        ->getOptionLabelFromRecordUsing(fn(ClosingStore $record) => "{$record->closing_store_name}")
                         ->preload()
                         ->reactive(),
-                        // ->afterStateUpdated(function ($state, $set) {
-                        //     $totalAmount = 0;
-                        //     foreach ($state as $fuelServiceId) {
-                        //         $fuelService = ClosingStore::find($fuelServiceId);
-                        //         if ($fuelService) {
-                        //             $fuelService->status = 2;
-                        //             $fuelService->save();
-                        //             $totalAmount += $fuelService->amount;
-                        //         }
-                        //     }
-                        //     $set('total_amount', $totalAmount);
-                        // }),
+                    // ->afterStateUpdated(function ($state, $set) {
+                    //     $totalAmount = 0;
+                    //     foreach ($state as $fuelServiceId) {
+                    //         $fuelService = ClosingStore::find($fuelServiceId);
+                    //         if ($fuelService) {
+                    //             $fuelService->status = 2;
+                    //             $fuelService->save();
+                    //             $totalAmount += $fuelService->amount;
+                    //         }
+                    //     }
+                    //     $set('total_amount', $totalAmount);
+                    // }),
                 ])
             ]),
 
             Section::make()->schema([
                 Grid::make(['default' => 1])->schema([
                     Select::make('status')
-                    ->required()
-                    ->required(fn () => Auth::user()->hasRole('admin'))
-                    ->hidden(fn ($operation) => $operation === 'create')
-                    ->disabled(fn () => Auth::user()->hasRole('staff'))
-                    ->preload()
-                    ->options([
-                        '1' => 'belum diperiksa',
-                        '2' => 'valid',
-                        '3' => 'diperbaiki',
-                        '4' => 'periksa ulang',
-                    ]),
+                        ->required()
+                        ->required(fn() => Auth::user()->hasRole('admin'))
+                        ->hidden(fn($operation) => $operation === 'create')
+                        ->disabled(fn() => Auth::user()->hasRole('staff'))
+                        ->preload()
+                        ->options([
+                            '1' => 'belum diperiksa',
+                            '2' => 'valid',
+                            '3' => 'diperbaiki',
+                            '4' => 'periksa ulang',
+                        ]),
 
                     Notes::make('notes'),
                 ])

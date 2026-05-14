@@ -2,12 +2,8 @@
 
 namespace App\Filament\Resources\Panel;
 
-use App\Filament\Clusters\Cashlesses;
 use App\Filament\Clusters\Transaction\Settings;
 use App\Filament\Forms\BaseTextInput;
-use Filament\Forms;
-use Filament\Tables;
-use Livewire\Component;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\CashlessProvider;
@@ -15,10 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\CashlessProviderResource\Pages;
-use App\Filament\Resources\Panel\CashlessProviderResource\RelationManagers;
 use Filament\Actions\ActionGroup;
 
 class CashlessProviderResource extends Resource

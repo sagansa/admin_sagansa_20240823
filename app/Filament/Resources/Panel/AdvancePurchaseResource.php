@@ -11,28 +11,25 @@ use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
 use App\Filament\Forms\SupplierSelect;
-use Filament\Tables;
 use Filament\Schemas\Schema;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Tables\Table;
 use App\Models\AdvancePurchase;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
 use App\Filament\Resources\Panel\AdvancePurchaseResource\Pages;
 use App\Filament\Tables\AdvancePurchaseTable;
 use App\Models\CashAdvance;
 use Filament\Forms\Components\Repeater;
 use App\Models\Product;
-use App\Models\Supplier;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 
 class AdvancePurchaseResource extends Resource
 {
@@ -135,18 +132,18 @@ class AdvancePurchaseResource extends Resource
             SupplierSelect::make('supplier_id'),
 
             Select::make('cash_advance_id')
-                    ->required(fn () => Auth::user()->hasRole('staff'))
-                    ->disabled(fn () => Auth::user()->hasRole('admin'))
-                    ->label('Cash Advance')
-                    ->inlineLabel()
-                    ->relationship(
-                        name: 'cashAdvance',
-                        modifyQueryUsing: fn (Builder $query) =>
-                            Auth::user()->hasRole('staff')
-                                ? $query->where('user_id', Auth::id())->where('status', 1)
-                                : $query,
-                    )
-                    ->getOptionLabelFromRecordUsing(fn (CashAdvance $record) => "{$record->cash_advance_name}"),
+                ->required(fn() => Auth::user()->hasRole('staff'))
+                ->disabled(fn() => Auth::user()->hasRole('admin'))
+                ->label('Cash Advance')
+                ->inlineLabel()
+                ->relationship(
+                    name: 'cashAdvance',
+                    modifyQueryUsing: fn(Builder $query) =>
+                    Auth::user()->hasRole('staff')
+                    ? $query->where('user_id', Auth::id())->where('status', 1)
+                    : $query,
+                )
+                ->getOptionLabelFromRecordUsing(fn(CashAdvance $record) => "{$record->cash_advance_name}"),
 
             StoreSelect::make('store_id'),
 
@@ -155,9 +152,9 @@ class AdvancePurchaseResource extends Resource
             Select::make('status')
                 ->required()
                 ->inlineLabel()
-                ->required(fn () => Auth::user()->hasRole('admin'))
-                ->hidden(fn ($operation) => $operation === 'create')
-                ->disabled(fn () => Auth::user()->hasRole('staff'))
+                ->required(fn() => Auth::user()->hasRole('admin'))
+                ->hidden(fn($operation) => $operation === 'create')
+                ->disabled(fn() => Auth::user()->hasRole('staff'))
                 ->preload()
                 ->options([
                     '1' => 'belum diperiksa',
@@ -244,7 +241,7 @@ class AdvancePurchaseResource extends Resource
                 CurrencyInput::make('discount_price')
                     ->debounce(2000)
                     ->reactive()
-                    ->afterStateUpdated(fn ($state, callable $set, $get) => $set('total_price', $get('subtotal_price') - $state)),
+                    ->afterStateUpdated(fn($state, Set $set, Get $get) => $set('total_price', $get('subtotal_price') - $state)),
 
                 CurrencyInput::make('total_price')
                     ->readOnly()
@@ -262,7 +259,7 @@ class AdvancePurchaseResource extends Resource
         $quantity = $get('quantity') !== null ? (int) $get('quantity') : 1;
 
         // Cek jika quantity 0 untuk menghindari pembagian dengan 0
-         $unitPrice = $quantity > 0 ? $price / $quantity : 0;
+        $unitPrice = $quantity > 0 ? $price / $quantity : 0;
 
         // $unitPrice = $price / $quantity;
         $set('unit_price', number_format($unitPrice, 0, ',', ''));

@@ -100,7 +100,7 @@ class DeliveryAddressResource extends Resource
                             ->searchable()
                             ->preload()
                             ->reactive()
-                            ->afterStateUpdated(function ($state, callable $set) {
+                            ->afterStateUpdated(function ($state, Set $set) {
                                 $set('city_id', null);
                                 $set('district_id', null);
                                 $set('subdistrict_id', null);
@@ -113,11 +113,11 @@ class DeliveryAddressResource extends Resource
                             ->searchable()
                             ->preload()
                             ->reactive()
-                            ->options(function (callable $get) {
+                            ->options(function (Get $get) {
                                 $provinceId = $get('province_id');
                                 return \App\Models\City::where('province_id', $provinceId)->pluck('name', 'id');
                             })
-                            ->afterStateUpdated(function ($state, callable $set) {
+                            ->afterStateUpdated(function ($state, Set $set) {
                                 $set('district_id', null);
                                 $set('subdistrict_id', null);
                                 $set('postal_code_id', null);
@@ -129,11 +129,11 @@ class DeliveryAddressResource extends Resource
                             ->searchable()
                             ->preload()
                             ->reactive()
-                            ->options(function (callable $get) {
+                            ->options(function (Get $get) {
                                 $cityId = $get('city_id');
                                 return \App\Models\District::where('city_id', $cityId)->pluck('name', 'id');
                             })
-                            ->afterStateUpdated(function ($state, callable $set) {
+                            ->afterStateUpdated(function ($state, Set $set) {
                                 $set('subdistrict_id', null);
                                 $set('postal_code_id', null);
                             }),
@@ -144,11 +144,11 @@ class DeliveryAddressResource extends Resource
                             ->searchable()
                             ->preload()
                             ->reactive()
-                            ->options(function (callable $get) {
+                            ->options(function (Get $get) {
                                 $districtId = $get('district_id');
                                 return \App\Models\Subdistrict::where('district_id', $districtId)->pluck('name', 'id');
                             })
-                            ->afterStateUpdated(function ($state, callable $set) {
+                            ->afterStateUpdated(function ($state, Set $set) {
                                 $set('postal_code_id', null);
                             }),
 
@@ -157,7 +157,7 @@ class DeliveryAddressResource extends Resource
                             ->nullable()
                             ->preload()
                             ->reactive()
-                            ->options(function (callable $get) {
+                            ->options(function (Get $get) {
                                 $provinceId = $get('province_id');
                                 $cityId = $get('city_id');
                                 $districtId = $get('district_id');

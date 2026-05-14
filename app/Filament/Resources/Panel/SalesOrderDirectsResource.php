@@ -8,7 +8,6 @@ use App\Filament\Columns\DeliveryAddressColumn;
 use App\Filament\Columns\DeliveryStatusColumn;
 use App\Filament\Columns\ImageOpenUrlColumn;
 use App\Filament\Columns\PaymentStatusColumn;
-use App\Filament\Columns\StatusColumn;
 use App\Filament\Filters\SelectStoreFilter;
 use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Forms\BottomTotalPriceForm;
@@ -29,7 +28,6 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
 use App\Filament\Forms\SalesProductForm;
 use App\Filament\Forms\StoreSelect;
-use App\Filament\Resources\Panel\SalesOrderDirectsResource\Widgets\SalesOrderDirectsStat;
 use App\Models\DeliveryAddress;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ImageEntry;
@@ -37,7 +35,6 @@ use Filament\Schemas\Components\Section as InfoSection;
 use Filament\Schemas\Components\Grid as InfoGrid;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Support\Enums\FontWeight;
-use Filament\Infolists\Components\IconEntry;
 use App\Models\TransferToAccount;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Illuminate\Database\Eloquent\Builder;
@@ -45,6 +42,9 @@ use Filament\Forms\Components\Placeholder;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Illuminate\Support\HtmlString;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\RestoreAction;
+use Filament\Actions\ForceDeleteAction;
 
 class SalesOrderDirectsResource extends Resource
 {
@@ -232,11 +232,11 @@ class SalesOrderDirectsResource extends Resource
                             $record->update(['payment_status' => 2]);
                         })
                         ->requiresConfirmation(),
-                    Tables\Actions\DeleteAction::make()
+                    DeleteAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
-                    Tables\Actions\RestoreAction::make()
+                    RestoreAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
-                    Tables\Actions\ForceDeleteAction::make()
+                    ForceDeleteAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
                 ])
             ])
@@ -244,9 +244,9 @@ class SalesOrderDirectsResource extends Resource
                 \Filament\Actions\BulkActionGroup::make([
                     \Filament\Actions\DeleteBulkAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
-                    Tables\Actions\RestoreBulkAction::make()
+                    \Filament\Actions\RestoreBulkAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
-                    Tables\Actions\ForceDeleteBulkAction::make()
+                    \Filament\Actions\ForceDeleteBulkAction::make()
                         ->visible(fn () => Auth::user()->hasRole('admin')),
                 ]),
             ])

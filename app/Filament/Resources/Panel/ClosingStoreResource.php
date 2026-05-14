@@ -13,7 +13,6 @@ use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
 use App\Filament\Forms\Notes;
 use App\Filament\Forms\StoreSelect;
-use Filament\Tables;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\ClosingStore;
@@ -110,7 +109,7 @@ class ClosingStoreResource extends Resource
                         ->relationship('transferBy', 'name', fn(Builder $query) => $query
                             ->whereHas('roles', fn(Builder $query) => $query
                                 ->where('name', 'staff') || $query
-                                ->where('name', 'supervisor')))
+                                    ->where('name', 'supervisor')))
                         ->preload()
                         ->visible(fn($get) => $get('total_cash_transfer') !== 0),
                 ]),
