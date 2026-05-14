@@ -88,11 +88,11 @@ class SalesOrderOnlinesResource extends Resource
                 ImageOpenUrlColumn::make('image_payment')
                     ->disabled(fn() => Auth::user()->hasRole('staff') || Auth::user()->hasRole('storage-staff'))
                     ->label('Payment')
-                    ->url(fn($record) => \Illuminate\Support\Facades\Storage::disk('public')->url($record->image_payment)),
+                    ->url(fn($record) => 'https://sagansa.id/storage/' . $record->image_payment),
 
                 ImageOpenUrlColumn::make('image_delivery')
                     ->label('Delivery')
-                    ->url(fn($record) => \Illuminate\Support\Facades\Storage::disk('public')->url($record->image_delivery)),
+                    ->url(fn($record) => 'https://sagansa.id/storage/' . $record->image_delivery),
 
                 TextColumn::make('receipt_no')
                     ->label('Receipt No')

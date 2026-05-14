@@ -16,7 +16,7 @@ class FuelServiceTable
     {
         return [
             ImageOpenUrlColumn::make('image')
-                ->url(fn($record) => \Illuminate\Support\Facades\Storage::disk('public')->url($record->image)),
+                ->url(fn($record) => 'https://sagansa.id/storage/' . $record->image),
 
             TextColumn::make('fuel_service')
                 ->formatStateUsing(

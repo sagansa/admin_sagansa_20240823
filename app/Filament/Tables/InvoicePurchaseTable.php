@@ -17,7 +17,7 @@ class InvoicePurchaseTable
         return [
             ImageOpenUrlColumn::make('image')
                 ->visibility('public')
-                ->url(fn($record) => \Illuminate\Support\Facades\Storage::disk('public')->url($record->image)),
+                ->url(fn($record) => 'https://sagansa.id/storage/' . $record->image),
 
             TextColumn::make('date')
                 ->sortable(),
