@@ -4,9 +4,8 @@ namespace App\Filament\Forms;
 
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
-use Filament\Forms;
-use Filament\Infolists\Components\TextEntry;
-
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 
 class DeliveryAddressForm
 {
@@ -15,35 +14,34 @@ class DeliveryAddressForm
         return [
 
             TextInput::make('location')
-                ->label('Location')
-                ->showMarker()
-                ->draggable()
-                ->extraControl([
-                    'zoomDelta'           => 1,
-                    'zoomSnap'            => 0.25,
-                    'wheelPxPerZoomLevel' => 60
-                ])
-                ->afterStateHydrated(function (Forms\Get $get, Forms\Set $set, $record) {
-                    if ($record) {
-                        $latitude = $record->latitude;
-                        $longitude = $record->longitude;
-
-                        if ($latitude && $longitude) {
-                                $set('location', ['lat' => $latitude, 'lng' => $longitude]);
-                        }
+                ->label('Koordinat (Lat, Long)')
+                ->placeholder('-6.12345, 106.78910')
+                ->helperText('Paste koordinat langsung dari Google Maps (contoh: -6.123, 106.789)')
+                ->afterStateHydrated(function (Get $get, Set $set, $record) {
+                    if ($record && $record->latitude && $record->longitude) {
+                        $set('location', "{$record->latitude}, {$record->longitude}");
                     }
                 })
-                ->afterStateUpdated(function ($state, Forms\Get $get, Forms\Set $set) {
-                    $set('latitude', $state['lat']);
-                    $set('longitude', $state['lng']);
+                ->afterStateUpdated(function ($state, Set $set) {
+                    if (blank($state)) {
+                        $set('latitude', null);
+                        $set('longitude', null);
+                        return;
+                    }
+
+                    $coords = explode(',', $state);
+                    if (count($coords) === 2) {
+                        $set('latitude', trim($coords[0]));
+                        $set('longitude', trim($coords[1]));
+                    }
                 })
-                // tiles url (refer to https://www.spatialbias.com/2018/02/qgis-3.0-xyz-tile-layers/)
-                ->tilesUrl('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-            ),
+                ->live(onBlur: true),
 
-            TextInput::make('latitude')->readOnly(),
+            TextInput::make('latitude')
+                ->hidden(),
 
-            TextInput::make('longitude')->readOnly(),
+            TextInput::make('longitude')
+                ->hidden(),
 
             BaseTextInput::make('name')
                 ->placeholder('Rumah, Kantor, atau Lain-lain'),
@@ -65,7 +63,7 @@ class DeliveryAddressForm
                 ->searchable()
                 ->preload()
                 ->reactive()
-                ->afterStateUpdated(function ($state, callable $set) {
+                ->afterStateUpdated(function ($state, Set $set) {
                     $set('city_id', null);
                     $set('district_id', null);
                     $set('subdistrict_id', null);
@@ -78,11 +76,11 @@ class DeliveryAddressForm
                 ->searchable()
                 ->preload()
                 ->reactive()
-                ->options(function (callable $get) {
+                ->options(function (Get $get) {
                     $provinceId = $get('province_id');
                     return \App\Models\City::where('province_id', $provinceId)->pluck('name', 'id');
                 })
-                ->afterStateUpdated(function ($state, callable $set) {
+                ->afterStateUpdated(function ($state, Set $set) {
                     $set('district_id', null);
                     $set('subdistrict_id', null);
                     $set('postal_code_id', null);
@@ -94,11 +92,11 @@ class DeliveryAddressForm
                 ->searchable()
                 ->preload()
                 ->reactive()
-                ->options(function (callable $get) {
+                ->options(function (Get $get) {
                     $cityId = $get('city_id');
                     return \App\Models\District::where('city_id', $cityId)->pluck('name', 'id');
                 })
-                ->afterStateUpdated(function ($state, callable $set) {
+                ->afterStateUpdated(function ($state, Set $set) {
                     $set('subdistrict_id', null);
                     $set('postal_code_id', null);
                 }),
@@ -109,11 +107,11 @@ class DeliveryAddressForm
                 ->searchable()
                 ->preload()
                 ->reactive()
-                ->options(function (callable $get) {
+                ->options(function (Get $get) {
                     $districtId = $get('district_id');
                     return \App\Models\Subdistrict::where('district_id', $districtId)->pluck('name', 'id');
                 })
-                ->afterStateUpdated(function ($state, callable $set) {
+                ->afterStateUpdated(function ($state, Set $set) {
                     $set('postal_code_id', null);
                 }),
 
@@ -123,7 +121,7 @@ class DeliveryAddressForm
                 // ->relationship('postalCode', 'postal_code')
                 ->preload()
                 ->reactive()
-                ->options(function (callable $get) {
+                ->options(function (Get $get) {
                     $provinceId = $get('province_id');
                     $cityId = $get('city_id');
                     $districtId = $get('district_id');
