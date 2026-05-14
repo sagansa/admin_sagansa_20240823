@@ -35,6 +35,8 @@ class RemainingStorageResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
+    // protected static string|\UnitEnum|null $navigationIcon = 'heroicon-o-archive-box';
+
     protected static ?string $cluster = Stock::class;
 
     protected static string|\UnitEnum|null $navigationGroup = 'Stock';
@@ -72,7 +74,7 @@ class RemainingStorageResource extends Resource
         $query->where('for', 'remaining_storage');
 
         $actions = ValidAction::getAction(self::$model)['actions'];
-        
+
         // Add delete action for admin users
         if (Auth::user()->hasRole('admin')) {
             $actions = [
@@ -86,7 +88,7 @@ class RemainingStorageResource extends Resource
 
         $bulkActions = ValidAction::getAction(self::$model)['bulkActions'];
         $modelClass = self::$model;
-        
+
         // Add bulk delete action for admin users
         if (Auth::user()->hasRole('admin')) {
             $bulkActions = [
@@ -110,6 +112,7 @@ class RemainingStorageResource extends Resource
 
         return $table
             ->poll('60s')
+            ->striped()
             ->query($query)
             ->columns(
                 StockCardTable::schema(RemainingStorage::class)

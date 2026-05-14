@@ -28,20 +28,26 @@ class TransferCardHeadForm
                 ->searchable(),
 
             BaseSelect::make('from_store_id')
+                ->label('Dari Toko')
                 ->relationship(
                     name: 'storeFrom',
                     titleAttribute: 'nickname',
                     modifyQueryUsing: fn(Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),
                 )
-                ->searchable(),
+                ->different('to_store_id')
+                ->searchable()
+                ->required(),
 
             BaseSelect::make('to_store_id')
+                ->label('Ke Toko')
                 ->relationship(
                     name: 'storeTo',
                     titleAttribute: 'nickname',
                     modifyQueryUsing: fn(Builder $query) => $query->where('status', '<>', 8)->orderBy('name', 'asc'),
                 )
-                ->searchable(),
+                ->different('from_store_id')
+                ->searchable()
+                ->required(),
 
 
         ];

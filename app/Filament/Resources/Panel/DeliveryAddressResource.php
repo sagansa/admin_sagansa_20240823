@@ -16,8 +16,8 @@ use App\Filament\Resources\Panel\DeliveryAddressResource\Pages;
 use App\Filament\Resources\Panel\DeliveryAddressResource\RelationManagers;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
 
@@ -59,13 +59,6 @@ class DeliveryAddressResource extends Resource
                     ->schema([
                         TextInput::make('location')
                             ->label('Location')
-                            ->showMarker()
-                            ->draggable()
-                            ->extraControl([
-                                'zoomDelta'           => 1,
-                                'zoomSnap'            => 0.25,
-                                'wheelPxPerZoomLevel' => 60
-                            ])
                             ->afterStateHydrated(function (Get $get, Set $set, $record) {
                                 if ($record) {
                                     $latitude = $record->latitude;
@@ -79,10 +72,7 @@ class DeliveryAddressResource extends Resource
                             ->afterStateUpdated(function ($state, Get $get, Set $set) {
                                 $set('latitude', $state['lat']);
                                 $set('longitude', $state['lng']);
-                            })
-                            // tiles url (refer to https://www.spatialbias.com/2018/02/qgis-3.0-xyz-tile-layers/)
-                            ->tilesUrl('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-                        ),
+                            }),
 
                         TextInput::make('latitude')->readOnly(),
 

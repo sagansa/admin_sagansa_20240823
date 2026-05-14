@@ -12,30 +12,47 @@ class StockCardForm
     public static function getStockCardStorage(): array
     {
         return [
-            Section::make()->schema([
-                DateInput::make('date')->maxDate(now())->columnSpan(1),
+            Section::make('Informasi Laporan')
+                ->description('Pilih tanggal dan lokasi toko untuk pelaporan stok.')
+                ->icon('heroicon-o-calendar')
+                ->schema([
+                    DateInput::make('date')
+                        ->maxDate(now())
+                        ->columnSpan(1),
 
-                StoreSelect::make('store_id')->columnSpan(1),
-            ])->columns(2),
+                    StoreSelect::make('store_id')
+                        ->columnSpan(1),
+                ])->columns(2),
 
-            Section::make('Detail Stock')->schema([
-                StockRepeaterForm::getStorageRepeater(),
-            ])
+            Section::make('Detail Inventori')
+                ->description('Masukkan jumlah stok fisik yang tersedia saat ini.')
+                ->icon('heroicon-o-circle-stack')
+                ->schema([
+                    StockRepeaterForm::getStorageRepeater(),
+                ])
         ];
     }
 
     public static function getStockCardRemaining(): array
     {
         return [
-            Section::make()->schema([
-                DateInput::make('date')->columnSpan(1),
+            Section::make('Informasi Laporan')
+                ->description('Pilih tanggal dan lokasi toko untuk pelaporan sisa stok.')
+                ->icon('heroicon-o-calendar')
+                ->schema([
+                    DateInput::make('date')
+                        ->columnSpan(1),
 
-                StoreSelect::make('store_id')->columnSpan(1),
-            ])->columns(2),
+                    StoreSelect::make('store_id')
+                        ->columnSpan(1),
+                ])->columns(2),
 
-            Section::make('Detail Stock')->schema([
-                StockRepeaterForm::getRemainingRepeater(),
-            ])
+            Section::make('Detail Sisa Stok')
+                ->description('Masukkan sisa stok yang belum terjual.')
+                ->icon('heroicon-o-archive-box')
+                ->schema([
+                    StockRepeaterForm::getRemainingRepeater(),
+                ])
         ];
     }
 }

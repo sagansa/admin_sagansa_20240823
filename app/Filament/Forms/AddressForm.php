@@ -6,6 +6,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 
 
 class AddressForm
@@ -105,17 +107,8 @@ class AddressForm
                 }),
 
             TextInput::make('location')
-                // ->label('Location')
                 ->hiddenLabel()
-                // ->placeholder('Postal Code')
-                ->showMarker()
-                ->draggable()
-                ->extraControl([
-                    'zoomDelta'           => 1,
-                    'zoomSnap'            => 0.25,
-                    'wheelPxPerZoomLevel' => 60
-                ])
-                ->afterStateHydrated(function (Forms\Get $get, Forms\Set $set, $record) {
+                ->afterStateHydrated(function (Get $get, Set $set, $record) {
                     if ($record) {
                         $latitude = $record->latitude;
                         $longitude = $record->longitude;
@@ -125,13 +118,10 @@ class AddressForm
                         }
                     }
                 })
-                ->afterStateUpdated(function ($state, Forms\Get $get, Forms\Set $set) {
+                ->afterStateUpdated(function ($state, Get $get, Set $set) {
                     $set('latitude', $state['lat']);
                     $set('longitude', $state['lng']);
-                })
-                // tiles url (refer to https://www.spatialbias.com/2018/02/qgis-3.0-xyz-tile-layers/)
-                ->tilesUrl('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-            ),
+                }),
 
             TextInput::make('latitude')->readOnly()
                 ->hiddenLabel()

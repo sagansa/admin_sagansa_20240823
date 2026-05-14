@@ -7,7 +7,7 @@ use Filament\Resources\Pages\CreateRecord;
 use App\Filament\Resources\Panel\EmployeeConsumptionResource;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Filament\Notifications\Actions\Action;
+use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
 class CreateEmployeeConsumption extends CreateRecord

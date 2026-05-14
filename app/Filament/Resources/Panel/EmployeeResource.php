@@ -21,8 +21,8 @@ use App\Filament\Resources\Panel\EmployeeResource\Pages;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Actions\ActionGroup;
 use Filament\Tables\Columns\ToggleColumn;
 
@@ -115,13 +115,6 @@ class EmployeeResource extends Resource
                         BaseTextInput::make('siblings_no_telp'),
 
                         TextInput::make('location')
-                            ->showMarker()
-                            ->draggable()
-                            ->extraControl([
-                                'zoomDelta'           => 1,
-                                'zoomSnap'            => 0.25,
-                                'wheelPxPerZoomLevel' => 60
-                            ])
                             ->afterStateHydrated(function (Get $get, Set $set, $record) {
                                 if ($record) {
                                     $latitude = $record->latitude;
@@ -135,11 +128,7 @@ class EmployeeResource extends Resource
                             ->afterStateUpdated(function ($state, Get $get, Set $set) {
                                 $set('latitude', $state['lat']);
                                 $set('longitude', $state['lng']);
-                            })
-                            // tiles url (refer to https://www.spatialbias.com/2018/02/qgis-3.0-xyz-tile-layers/)
-                            ->tilesUrl(
-                                'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-                            ),
+                            }),
 
                         TextInput::make('latitude')->readOnly()
                             // ->hiddenLabel()

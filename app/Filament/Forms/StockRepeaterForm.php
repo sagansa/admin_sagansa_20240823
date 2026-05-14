@@ -25,17 +25,25 @@ class StockRepeaterForm
             ->relationship()
             ->addable(false)
             ->deletable(false)
+            ->columns(12)
             ->schema([
-                Grid::make(['default' => 2])->schema([
-                    BaseRepeaterSelect::make('product_id')
-                        ->relationship('product', 'name', fn (Builder $query) => $query->where('remaining','1')),
+                \Filament\Forms\Components\Hidden::make('product_id'),
 
-                    NominalRepeaterInput::make('quantity')
-                        ->suffix(function ($get) {
-                            $product = Product::find($get('product_id'));
-                            return $product ? $product->unit->unit : '';
-                        }),
-                ])
+                \Filament\Forms\Components\Placeholder::make('product_name')
+                    ->label('Produk')
+                    ->hiddenLabel()
+                    ->content(fn($get) => Product::find($get('product_id'))?->name)
+                    ->extraAttributes(['class' => 'pt-2 font-medium text-gray-700 dark:text-gray-200'])
+                    ->columnSpan(8),
+
+                NominalRepeaterInput::make('quantity')
+                    ->label('Jumlah')
+                    ->placeholder('0')
+                    ->suffix(function ($get) {
+                        $product = Product::find($get('product_id'));
+                        return $product ? $product->unit->unit : '';
+                    })
+                    ->columnSpan(4),
             ]);
     }
 
@@ -54,17 +62,25 @@ class StockRepeaterForm
             ->relationship()
             ->addable(false)
             ->deletable(false)
+            ->columns(12)
             ->schema([
-                Grid::make(['default' => 2])->schema([
-                    BaseRepeaterSelect::make('product_id')
-                        ->relationship('product', 'name', fn (Builder $query) => $query->where('request','1')),
+                \Filament\Forms\Components\Hidden::make('product_id'),
 
-                    NominalRepeaterInput::make('quantity')
-                        ->suffix(function ($get) {
-                            $product = Product::find($get('product_id'));
-                            return $product ? $product->unit->unit : '';
-                        }),
-                ])
+                \Filament\Forms\Components\Placeholder::make('product_name')
+                    ->label('Produk')
+                    ->hiddenLabel()
+                    ->content(fn($get) => Product::find($get('product_id'))?->name)
+                    ->extraAttributes(['class' => 'pt-2 font-medium text-gray-700 dark:text-gray-200'])
+                    ->columnSpan(8),
+
+                NominalRepeaterInput::make('quantity')
+                    ->label('Jumlah')
+                    ->placeholder('0')
+                    ->suffix(function ($get) {
+                        $product = Product::find($get('product_id'));
+                        return $product ? $product->unit->unit : '';
+                    })
+                    ->columnSpan(4),
             ]);
     }
 }

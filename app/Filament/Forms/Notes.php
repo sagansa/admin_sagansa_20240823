@@ -16,7 +16,6 @@ class Notes extends RichEditor
             ->hiddenLabel()
             ->placeholder('notes')
             ->nullable()
-            ->string()
             ->fileAttachmentsVisibility('public');
     }
 }
