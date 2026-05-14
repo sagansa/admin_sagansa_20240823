@@ -3,11 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\HRD;
-use App\Filament\Clusters\Salaries;
 use App\Filament\Forms\CurrencyInput;
-use Filament\Forms;
-use Filament\Tables;
-use Livewire\Component;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\MonthlySalary;
@@ -15,10 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\MonthlySalaryResource\Pages;
-use App\Filament\Resources\Panel\MonthlySalaryResource\RelationManagers;
 
 class MonthlySalaryResource extends Resource
 {

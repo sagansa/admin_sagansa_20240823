@@ -7,7 +7,6 @@ use App\Filament\Forms\BaseSelect;
 use App\Filament\Forms\BaseTextInput;
 use App\Filament\Forms\DateInput;
 use App\Filament\Forms\ImageInput;
-use Filament\Tables;
 use Filament\Schemas\Schema;
 use App\Models\Employee;
 use Filament\Tables\Table;
@@ -15,7 +14,6 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\DatePicker;
 use App\Filament\Resources\Panel\EmployeeResource\Pages;
 use Filament\Schemas\Components\Tabs;
@@ -24,7 +22,6 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Actions\ActionGroup;
-use Filament\Tables\Columns\ToggleColumn;
 
 use Illuminate\Support\Facades\Auth;
 

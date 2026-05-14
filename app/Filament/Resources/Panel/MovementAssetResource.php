@@ -3,11 +3,7 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Asset;
-use App\Filament\Clusters\Movements;
 use App\Filament\Forms\ImageInput;
-use Filament\Forms;
-use Filament\Tables;
-use Livewire\Component;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\MovementAsset;
@@ -19,7 +15,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\MovementAssetResource\Pages;
-use App\Filament\Resources\Panel\MovementAssetResource\RelationManagers;
 
 class MovementAssetResource extends Resource
 {

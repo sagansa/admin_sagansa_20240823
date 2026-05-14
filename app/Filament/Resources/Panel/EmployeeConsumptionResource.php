@@ -10,7 +10,6 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use App\Models\EmployeeConsumption;
 use App\Filament\Resources\Panel\EmployeeConsumptionResource\Pages;
-use App\Filament\Resources\Panel\EmployeeConsumptionResource\RelationManagers;
 use App\Filament\Tables\StockCardTable;
 use App\Filament\Tables\ValidAction;
 

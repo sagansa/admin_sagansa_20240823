@@ -10,7 +10,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Actions\ViewAction;
 use App\Filament\Resources\Panel\DetailSalesOrderResource\Pages;
-use Illuminate\Database\Eloquent\Builder;
 
 use App\Filament\Clusters\Sales;
 

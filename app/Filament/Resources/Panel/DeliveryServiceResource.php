@@ -2,26 +2,18 @@
 
 namespace App\Filament\Resources\Panel;
 
-use App\Filament\Clusters\Sales;
 use App\Filament\Clusters\Transaction\Settings;
 use App\Filament\Columns\ActiveColumn;
 use App\Filament\Forms\ActiveStatusSelect;
 use App\Filament\Forms\BaseTextInput;
-use Filament\Forms;
-use Filament\Tables;
-use Livewire\Component;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\DeliveryService;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Grid;
-use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\DeliveryServiceResource\Pages;
-use App\Filament\Resources\Panel\DeliveryServiceResource\RelationManagers;
 use Filament\Actions\ActionGroup;
 
 class DeliveryServiceResource extends Resource

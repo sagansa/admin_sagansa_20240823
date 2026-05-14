@@ -4,9 +4,6 @@ namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Store;
 use App\Filament\Forms\StoreSelect;
-use Filament\Forms;
-use Filament\Tables;
-use Livewire\Component;
 use Filament\Schemas\Schema;
 use App\Models\Location;
 use Filament\Tables\Table;
@@ -16,9 +13,7 @@ use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\Panel\LocationResource\Pages;
-use App\Filament\Resources\Panel\LocationResource\RelationManagers;
 
 class LocationResource extends Resource
 {

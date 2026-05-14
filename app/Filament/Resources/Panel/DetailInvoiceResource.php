@@ -11,7 +11,6 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Actions\ViewAction;
 use App\Filament\Resources\Panel\DetailInvoiceResource\Pages;
 use App\Filament\Clusters\Purchases;
-use Illuminate\Database\Eloquent\Builder;
 
 class DetailInvoiceResource extends Resource
 {

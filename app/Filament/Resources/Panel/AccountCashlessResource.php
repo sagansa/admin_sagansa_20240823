@@ -17,7 +17,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\Panel\AccountCashlessResource\Pages;
 use Filament\Actions\ActionGroup;
-use Filament\Forms\Form;
 use Filament\Tables\Filters\SelectFilter;
 
 class AccountCashlessResource extends Resource

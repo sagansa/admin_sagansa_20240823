@@ -3,8 +3,6 @@
 namespace App\Filament\Resources\Panel;
 
 use App\Filament\Clusters\Sales;
-use App\Filament\Forms\DeliveryAddressForm;
-use Filament\Tables;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use App\Models\DeliveryAddress;
@@ -20,8 +18,6 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Actions\ActionGroup;
 use Filament\Tables\Filters\SelectFilter;
-
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 
 class DeliveryAddressResource extends Resource
