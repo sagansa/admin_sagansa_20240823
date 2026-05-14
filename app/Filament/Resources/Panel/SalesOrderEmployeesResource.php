@@ -79,7 +79,7 @@ class SalesOrderEmployeesResource extends Resource
             ->columns([
                 ImageOpenUrlColumn::make('image_payment')
                     ->label('Transfer')
-                    ->url(fn($record) => asset('storage/' . $record->image_payment)),
+                    ->url(fn($record) => \Illuminate\Support\Facades\Storage::disk('public')->url($record->image_payment)),
 
                 TextColumn::make('delivery_date')
                     ->label('Date'),

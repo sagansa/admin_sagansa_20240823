@@ -116,7 +116,7 @@ class SupplierResource extends Resource
             ->columns([
 
                 ImageOpenUrlColumn::make('image')
-                    ->url(fn($record) => asset('storage/' . $record->image))
+                    ->url(fn($record) => \Illuminate\Support\Facades\Storage::disk('public')->url($record->image))
                     ->alignLeft(),
 
                 TextColumn::make('name')

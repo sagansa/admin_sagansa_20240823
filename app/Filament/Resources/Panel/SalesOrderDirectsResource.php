@@ -101,12 +101,12 @@ class SalesOrderDirectsResource extends Resource
 
                 ImageOpenUrlColumn::make('image_payment')
                     ->label('Payment')
-                    ->url(fn($record) => asset('storage/' . $record->image_payment))
+                    ->url(fn($record) => \Illuminate\Support\Facades\Storage::disk('public')->url($record->image_payment))
                     ->visible(fn () => Auth::user()->hasRole('admin') || Auth::user()->hasRole('customer')),
 
                 ImageOpenUrlColumn::make('image_delivery')
                     ->label('delivery')
-                    ->url(fn($record) => asset('storage/' . $record->image_delivery)),
+                    ->url(fn($record) => \Illuminate\Support\Facades\Storage::disk('public')->url($record->image_delivery)),
 
                 TextColumn::make('orderedBy.name')
                     ->searchable()

@@ -101,7 +101,7 @@ class UtilityUsageResource extends Resource
             ->columns([
                 ImageOpenUrlColumn::make('image')
                     ->visibility('public')
-                    ->url(fn($record) => asset('storage/' . $record->image)),
+                    ->url(fn($record) => \Illuminate\Support\Facades\Storage::disk('public')->url($record->image)),
 
                 TextColumn::make('created_at')
                     ->sortable()
