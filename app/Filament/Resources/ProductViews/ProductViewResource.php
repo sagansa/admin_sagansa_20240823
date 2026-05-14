@@ -4,29 +4,26 @@ namespace App\Filament\Resources\ProductViews;
 
 use App\Filament\Resources\ProductViews\Pages\ManageProductViews;
 use App\Models\ProductView;
-use BackedEnum;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
+use UnitEnum;
+use BackedEnum;
+use Filament\Schemas\Schema;
 
 class ProductViewResource extends Resource
 {
     protected static ?string $model = ProductView::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEye;
-    protected static string|\UnitEnum|null $navigationGroup = 'Master Data';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-eye';
+    protected static string|UnitEnum|null $navigationGroup = 'Master Data';
     protected static ?string $modelLabel = 'Product View';
     protected static ?string $pluralModelLabel = 'Product Views';
 
-    public static function form(Schema $schema): Schema
+    public static function form(Schema $form): Schema
     {
-        return $schema
-            ->components([
+        return $form
+            ->schema([
                 // Read-only
             ]);
     }
@@ -35,22 +32,22 @@ class ProductViewResource extends Resource
     {
         return $table
             ->columns([
-                \Filament\Tables\Columns\TextColumn::make('product.name')
+                TextColumn::make('product.name')
                     ->label('Product')
                     ->searchable()
                     ->sortable(),
-                \Filament\Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->label('User')
                     ->searchable()
                     ->sortable()
                     ->default('Guest'),
-                \Filament\Tables\Columns\TextColumn::make('ip_address')
+                TextColumn::make('ip_address')
                     ->label('IP Address')
                     ->searchable(),
-                \Filament\Tables\Columns\TextColumn::make('user_agent')
+                TextColumn::make('user_agent')
                     ->label('User Agent')
                     ->limit(30),
-                \Filament\Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Viewed At')
                     ->dateTime()
                     ->sortable(),
@@ -61,8 +58,8 @@ class ProductViewResource extends Resource
             ->recordActions([
             ])
             ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                \Filament\Tables\Actions\BulkActionGroup::make([
+                    \Filament\Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc');
