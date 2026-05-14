@@ -17,9 +17,6 @@ class ImageInput extends FileUpload
             ->image()
             ->imageEditor(false)
             ->disk('public')
-
-            ->extraAttributes([
-                'crossorigin' => 'anonymous',
-            ]);
+            ->fetchFileInformation(false);
     }
 }
