@@ -104,7 +104,7 @@ class SalesOrderDirectsResource extends Resource
                     ->formatStateUsing(fn ($state) => $state ? 'Lihat' : '-')
                     ->icon(fn ($state) => $state ? 'heroicon-o-photo' : null)
                     ->color('info')
-                    ->url(fn($record) => $record->image_payment ? 'https://sagansa.id/storage/' . $record->image_payment : null)
+                    ->url(fn($record) => $record->image_payment ? \Illuminate\Support\Facades\Storage::disk('public')->url($record->image_payment) : null)
                     ->openUrlInNewTab()
                     ->visible(fn () => Auth::user()->hasRole('admin') || Auth::user()->hasRole('customer')),
 
@@ -113,7 +113,7 @@ class SalesOrderDirectsResource extends Resource
                     ->formatStateUsing(fn ($state) => $state ? 'Lihat' : '-')
                     ->icon(fn ($state) => $state ? 'heroicon-o-photo' : null)
                     ->color('info')
-                    ->url(fn($record) => $record->image_delivery ? 'https://sagansa.id/storage/' . $record->image_delivery : null)
+                    ->url(fn($record) => $record->image_delivery ? \Illuminate\Support\Facades\Storage::disk('public')->url($record->image_delivery) : null)
                     ->openUrlInNewTab(),
 
                 TextColumn::make('orderedBy.name')
