@@ -5,10 +5,10 @@ namespace App\Filament\Resources\ProductViews;
 use App\Filament\Resources\ProductViews\Pages\ManageProductViews;
 use App\Models\ProductView;
 use BackedEnum;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\EditAction;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -19,7 +19,7 @@ class ProductViewResource extends Resource
     protected static ?string $model = ProductView::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedEye;
-    protected static ?string $navigationGroup = 'Master Data';
+    protected static string|\UnitEnum|null $navigationGroup = 'Master Data';
     protected static ?string $modelLabel = 'Product View';
     protected static ?string $pluralModelLabel = 'Product Views';
 
@@ -60,7 +60,7 @@ class ProductViewResource extends Resource
             ])
             ->recordActions([
             ])
-            ->toolbarActions([
+            ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
