@@ -13,6 +13,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Textarea;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Section as InfoSection;
@@ -177,17 +178,36 @@ class RecruitmentApplicantResource extends Resource
                 InfoSection::make('Work Experiences')
                     ->schema([
                         RepeatableEntry::make('user.workExperiences')
+                            ->label('Experience Records')
                             ->schema([
-                                TextEntry::make('company_name'),
+                                TextEntry::make('company_name')
+                                    ->weight('bold'),
                                 TextEntry::make('position'),
+                                TextEntry::make('salary')
+                                    ->money('IDR'),
                                 TextEntry::make('start_date')
                                     ->date(),
                                 TextEntry::make('end_date')
                                     ->date(),
+                                TextEntry::make('supervisor_name')
+                                    ->label('Supervisor'),
                                 TextEntry::make('description')
                                     ->columnSpanFull(),
-                            ])->columns(2)
-                    ])
+                            ])->columns(3)
+                    ]),
+
+                InfoSection::make('Documents')
+                    ->schema([
+                        InfoGrid::make(2)
+                            ->schema([
+                                ImageEntry::make('ktp_image')
+                                    ->label('KTP Image')
+                                    ->disk('public'),
+                                ImageEntry::make('selfie_image')
+                                    ->label('Selfie Image')
+                                    ->disk('public'),
+                            ]),
+                    ]),
             ]);
     }
 
