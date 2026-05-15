@@ -5,13 +5,18 @@ namespace App\Filament\Resources\Panel;
 use App\Filament\Clusters\HRD;
 use App\Filament\Resources\Panel\RecruitmentApplicantResource\Pages;
 use App\Models\ApplicantDetail;
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Infolists;
-use Filament\Infolists\Infolist;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Textarea;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\RepeatableEntry;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Section as InfoSection;
+use Filament\Schemas\Components\Grid as InfoGrid;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -21,59 +26,59 @@ class RecruitmentApplicantResource extends Resource
 
     protected static ?string $cluster = HRD::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-user-plus';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-user-plus';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $form): Schema
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('User Information')
+                Section::make('User Information')
                     ->schema([
-                        Forms\Components\TextInput::make('user.name')
+                        TextInput::make('user.name')
                             ->label('Full Name')
                             ->disabled(),
-                        Forms\Components\TextInput::make('user.email')
+                        TextInput::make('user.email')
                             ->label('Email')
                             ->disabled(),
-                        Forms\Components\TextInput::make('phone')
+                        TextInput::make('phone')
                             ->label('Phone Number')
                             ->disabled(),
                     ])->columns(2),
                 
-                Forms\Components\Section::make('Personal Details')
+                Section::make('Personal Details')
                     ->schema([
-                        Forms\Components\TextInput::make('nik')
+                        TextInput::make('nik')
                             ->label('NIK')
                             ->disabled(),
-                        Forms\Components\TextInput::make('gender')
+                        TextInput::make('gender')
                             ->disabled(),
-                        Forms\Components\TextInput::make('birth_place')
+                        TextInput::make('birth_place')
                             ->disabled(),
-                        Forms\Components\DatePicker::make('birth_date')
+                        DatePicker::make('birth_date')
                             ->disabled(),
-                        Forms\Components\TextInput::make('religion')
+                        TextInput::make('religion')
                             ->disabled(),
-                        Forms\Components\TextInput::make('marital_status')
+                        TextInput::make('marital_status')
                             ->disabled(),
-                        Forms\Components\TextInput::make('education_level')
+                        TextInput::make('education_level')
                             ->disabled(),
-                        Forms\Components\TextInput::make('education_major')
+                        TextInput::make('education_major')
                             ->disabled(),
                     ])->columns(2),
 
-                Forms\Components\Section::make('Address & Family')
+                Section::make('Address & Family')
                     ->schema([
-                        Forms\Components\Textarea::make('address')
+                        Textarea::make('address')
                             ->disabled()
                             ->columnSpanFull(),
-                        Forms\Components\TextInput::make('father_name')
+                        TextInput::make('father_name')
                             ->disabled(),
-                        Forms\Components\TextInput::make('mother_name')
+                        TextInput::make('mother_name')
                             ->disabled(),
-                        Forms\Components\TextInput::make('emergency_name')
+                        TextInput::make('emergency_name')
                             ->label('Emergency Contact Name')
                             ->disabled(),
-                        Forms\Components\TextInput::make('emergency_phone')
+                        TextInput::make('emergency_phone')
                             ->label('Emergency Contact Phone')
                             ->disabled(),
                     ])->columns(2),
@@ -131,19 +136,19 @@ class RecruitmentApplicantResource extends Resource
             ]);
     }
 
-    public static function infolist(Infolist $infolist): Infolist
+    public static function infolist(Schema $infolist): Schema
     {
         return $infolist
             ->schema([
-                Infolists\Components\Section::make('Applicant Information')
+                InfoSection::make('Applicant Information')
                     ->schema([
-                        Infolists\Components\TextEntry::make('user.name')
+                        TextEntry::make('user.name')
                             ->label('Full Name'),
-                        Infolists\Components\TextEntry::make('user.email')
+                        TextEntry::make('user.email')
                             ->label('Email'),
-                        Infolists\Components\TextEntry::make('phone')
+                        TextEntry::make('phone')
                             ->label('Phone Number'),
-                        Infolists\Components\TextEntry::make('status')
+                        TextEntry::make('status')
                             ->badge()
                             ->color(fn (string $state): string => match ($state) {
                                 'draft' => 'gray',
@@ -155,31 +160,31 @@ class RecruitmentApplicantResource extends Resource
                             }),
                     ])->columns(2),
 
-                Infolists\Components\Section::make('Personal Details')
+                InfoSection::make('Personal Details')
                     ->schema([
-                        Infolists\Components\TextEntry::make('nik')
+                        TextEntry::make('nik')
                             ->label('NIK'),
-                        Infolists\Components\TextEntry::make('gender'),
-                        Infolists\Components\TextEntry::make('birth_place'),
-                        Infolists\Components\TextEntry::make('birth_date')
+                        TextEntry::make('gender'),
+                        TextEntry::make('birth_place'),
+                        TextEntry::make('birth_date')
                             ->date(),
-                        Infolists\Components\TextEntry::make('religion'),
-                        Infolists\Components\TextEntry::make('marital_status'),
-                        Infolists\Components\TextEntry::make('education_level'),
-                        Infolists\Components\TextEntry::make('education_major'),
+                        TextEntry::make('religion'),
+                        TextEntry::make('marital_status'),
+                        TextEntry::make('education_level'),
+                        TextEntry::make('education_major'),
                     ])->columns(2),
 
-                Infolists\Components\Section::make('Work Experiences')
+                InfoSection::make('Work Experiences')
                     ->schema([
-                        Infolists\Components\RepeatableEntry::make('user.workExperiences')
+                        RepeatableEntry::make('user.workExperiences')
                             ->schema([
-                                Infolists\Components\TextEntry::make('company_name'),
-                                Infolists\Components\TextEntry::make('position'),
-                                Infolists\Components\TextEntry::make('start_date')
+                                TextEntry::make('company_name'),
+                                TextEntry::make('position'),
+                                TextEntry::make('start_date')
                                     ->date(),
-                                Infolists\Components\TextEntry::make('end_date')
+                                TextEntry::make('end_date')
                                     ->date(),
-                                Infolists\Components\TextEntry::make('description')
+                                TextEntry::make('description')
                                     ->columnSpanFull(),
                             ])->columns(2)
                     ])
