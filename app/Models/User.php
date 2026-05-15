@@ -603,6 +603,16 @@ class User extends Authenticatable implements FilamentUser
         return $this->belongsTo(Company::class);
     }
 
+    public function applicantDetail()
+    {
+        return $this->hasOne(ApplicantDetail::class);
+    }
+
+    public function workExperiences()
+    {
+        return $this->hasMany(WorkExperience::class);
+    }
+
     protected static function boot()
     {
         parent::boot();
